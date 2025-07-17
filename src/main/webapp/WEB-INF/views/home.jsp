@@ -9,5 +9,6 @@ session="false" %>
 
     <P> The time on the server is ${serverTime}. </P>
     <p>나현규 작성</p>
+    <p>브런치 테스트</p>
   </body>
 </html>

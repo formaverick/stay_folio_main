@@ -1,7 +1,9 @@
 .signup-page {
   max-width: 400px;
   margin: 5rem auto;
+  padding: 0 1.5rem;
   background-color: #fff;
+  font-family: "Pretendard", sans-serif;
 }
 
 .signup-title {
@@ -16,9 +18,84 @@
   font-size: 1rem;
   color: #888;
   text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 400;
+}
+
+/* 단계 표시 스타일 */
+.signup-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 2rem;
 }
 
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.step.active {
+  opacity: 1;
+}
+
+.step-number {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.step.active .step-number {
+  background-color: #111;
+}
+
+.step-text {
+  font-size: 0.8rem;
+  color: #666;
+  transition: color 0.3s ease;
+}
+
+.step.active .step-text {
+  color: #111;
+  font-weight: 500;
+}
+
+.step-divider {
+  width: 60px;
+  height: 1px;
+  background-color: #e0e0e0;
+  margin: 0 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* 섹션 스타일 */
+.signup-section {
+  display: none;
+}
+
+.signup-section.active {
+  display: block;
+}
+
+/* 섹션 제목 스타일 */
+
+.section-title:first-of-type {
+  margin-top: 1rem;
+}
+
+/* 회원 정보 폼 스타일 */
 .signup-form .form-group {
   margin-bottom: 1.5rem;
 }
@@ -52,8 +129,112 @@
   font-size: 0.75rem;
   margin-top: 0.5rem;
   line-height: 1.4;
+  display: none;
 }
 
+/* 약관 동의 폼 스타일 */
+.checkbox-group:first-of-type {
+  margin-top: 3.5rem;
+}
+
+.checkbox-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding: 0.5rem 0;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.5;
+  width: 100%;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.75rem;
+  cursor: pointer;
+  accent-color: #111;
+  flex-shrink: 0;
+}
+
+.checkbox-group.toggle-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.toggle-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem 0;
+}
+
+.toggle-header label {
+  margin: 0;
+  flex-grow: 1;
+  cursor: pointer;
+}
+
+.checkbox-group.toggle-box .toggle-icon {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+  font-size: 1.1rem;
+  color: #888;
+  flex-shrink: 0;
+}
+
+.checkbox-group.toggle-box.active .toggle-icon {
+  transform: rotate(90deg);
+}
+
+.terms-box {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  margin: 0;
+  padding: 0 1.75rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.checkbox-group.active .terms-box {
+  max-height: 300px;
+  padding: 1rem 1.75rem;
+  margin: 0.5rem 0;
+  overflow-y: auto;
+}
+
+.terms-content {
+  font-size: 0.85rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.terms-content p {
+  margin-bottom: 0.75rem;
+}
+
+.terms-content strong {
+  color: #333;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 1rem 0;
+}
+
+/* 버튼 스타일 */
+.btn-next,
 .btn-signup {
   width: 100%;
   background-color: #111;
@@ -66,6 +247,11 @@
   margin-top: 1.5rem;
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+.btn-next:hover,
+.btn-signup:hover {
+  background-color: #000;
 }
 
 .btn-login {
@@ -82,21 +268,51 @@
   transition: all 0.2s ease;
 }
 
-.signup-form .error-message {
-  color: #e63946;
-  font-size: 0.75rem;
-  margin-top: 0.5rem;
-  line-height: 1.4;
+.btn-login:hover {
+  background-color: #f9f9f9;
 }
 
-.btn-next {
-  width: 100%;
-  background-color: #111;
-  color: #fff;
-  font-size: 1rem;
-  padding: 0.75rem;
-  border: none;
-  border-radius: 4px;
-  margin-top: 1rem;
+.btn-back {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  color: #444;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  padding: 0.875rem;
+  border-radius: 8px;
   cursor: pointer;
+  transition: all 0.2s ease;
+  width: 48%;
+}
+
+.btn-back:hover {
+  background-color: #f9f9f9;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+}
+
+.button-group .btn-signup {
+  width: 100%;
+  margin-top: 0;
+}
+
+.button-group .btn-login {
+  margin-top: 0.75rem;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 480px) {
+  .signup-page {
+    padding: 0 1rem;
+    margin: 3rem auto;
+  }
+}
+
+.hr {
+  margin-top: 4rem;
+  margin-bottom: 1.5rem;
 }

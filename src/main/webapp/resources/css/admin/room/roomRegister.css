@@ -1,0 +1,587 @@
+/* 기본 스타일 */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui,
+    Roboto, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* 관리자 컨테이너 */
+.admin-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* 좌측 사이드바 */
+.admin-sidebar {
+  width: 250px;
+  background-color: #fff;
+  border-right: 1px solid #e9ecef;
+  padding: 2rem 0;
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.admin-logo {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 0 1.5rem;
+}
+
+.logo-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #000;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+.admin-text {
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+.admin-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-nav li {
+  margin: 0;
+}
+
+.nav-item {
+  display: block;
+  padding: 1rem 1.5rem;
+  color: #666;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.nav-item:hover {
+  background-color: #f8f9fa;
+  color: #000;
+}
+
+.nav-item.active {
+  background-color: #f8f9fa;
+  color: #000;
+  border-left-color: #000;
+  font-weight: 600;
+}
+
+/* 메인 컨텐츠 */
+.admin-main {
+  flex: 1;
+  margin-left: 250px;
+  padding: 0;
+  background-color: #f8f9fa;
+}
+
+/* 헤더 */
+.admin-header {
+  background-color: #fff;
+  border-bottom: 1px solid #e9ecef;
+  padding: 1.5rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header-left {
+  flex: 1;
+}
+
+.header-right {
+  display: flex;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #000;
+  margin: 0 0 0.3rem 0;
+}
+
+.page-subtitle {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* 버튼 스타일 */
+.btn-cancel,
+.btn-save {
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-cancel {
+  background-color: #fff;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.btn-cancel:hover {
+  background-color: #f8f9fa;
+  border-color: #999;
+  color: #333;
+}
+
+.btn-save {
+  background-color: #000;
+  color: #fff;
+  border: none;
+}
+
+.btn-save:hover {
+  background-color: #333;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 폼 컨테이너 */
+.register-form-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.register-form {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+/* 폼 섹션 */
+.form-section {
+  padding: 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.form-section:last-child {
+  border-bottom: none;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 1.2rem 0;
+  color: #333;
+}
+
+/* 폼 그리드 */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  color: #495057;
+  transition: border-color 0.2s ease;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: #959595;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #666;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+.form-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* 이미지 업로드 스타일 - 간소화된 디자인 */
+.simple-upload-container {
+  width: 100%;
+  margin: 1.25rem 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  border: 1px solid #e9ecef;
+  padding: 1.5rem;
+}
+
+.file-upload-wrapper {
+  position: relative;
+  margin-bottom: 1rem;
+  transition: all 0.2s ease;
+}
+
+.file-upload-wrapper:last-child {
+  margin-bottom: 0;
+}
+
+.file-input {
+  position: absolute;
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.file-upload-label {
+  display: flex;
+  align-items: center;
+  padding: 0.9rem 1.2rem;
+  background-color: #f8f9fa;
+  border: 1px dashed #d0d7de;
+  border-radius: 8px;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.3, 0, 0.5, 1);
+  font-size: 0.95rem;
+  width: 100%;
+  box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 50px;
+  position: relative;
+}
+
+.file-upload-label:hover {
+  border-color: #a8b1ff;
+  background-color: #f0f2ff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.file-upload-label:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.file-upload-label.has-file {
+  border-style: solid;
+  border-color: #d0d7de;
+  background-color: #f6f8fa;
+}
+
+.file-icon {
+  margin-right: 10px;
+  font-size: 1.2em;
+  flex-shrink: 0;
+  color: #4d6bff;
+  width: 24px;
+  text-align: center;
+}
+
+.file-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-grow: 1;
+  padding-right: 10px;
+}
+
+/* 추가 이미지 그리드 */
+.additional-images-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  margin-top: 0.75rem;
+}
+
+/* 파일 업로드 상태 표시 */
+.file-upload-status {
+  display: flex;
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+  align-items: center;
+  justify-content: space-between;
+  opacity: 0;
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  border-width: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.file-upload-status.visible {
+  opacity: 1;
+  max-height: 100px;
+  padding: 0.75rem;
+  margin-top: 0.75rem;
+  border-width: 1px;
+  overflow: visible;
+}
+
+.file-name {
+  flex: 1;
+  margin-right: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.btn-remove {
+  background: #fff;
+  border: 1px solid #ff4d4f;
+  color: #ff4d4f;
+  border-radius: 4px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-remove:hover {
+  background-color: #fff2f0;
+  border-color: #ff7875;
+  color: #ff4d4f;
+}
+
+/* 대표 이미지 스타일 - 평범한 스타일로 변경 */
+.main-image-wrapper .file-upload-label {
+  border: 1px solid #e9ecef;
+  background-color: #f8f9fa;
+  padding: 0.75rem 1rem;
+  min-height: 50px;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.main-image-wrapper .file-icon {
+  font-size: 1.1em;
+  margin: 0 0.5rem 0 0;
+  display: inline-block;
+  color: #6c757d;
+}
+
+.main-image-wrapper .file-text {
+  font-weight: normal;
+  color: #495057;
+  text-align: left;
+  padding: 0;
+  font-size: 0.95rem;
+}
+
+.main-image-wrapper .file-upload-label:hover {
+  border-color: #a8b1ff;
+  background-color: #f0f2ff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.main-image-wrapper .file-upload-label:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.main-image-wrapper .file-upload-status {
+  margin-top: 0.75rem;
+}
+
+/* 파일 업로드 영역 */
+.file-upload-wrapper {
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+/* 파일이 선택되면 라벨 숨기기 */
+.file-upload-wrapper.file-selected .file-upload-label {
+  display: none;
+}
+
+/* 추가 이미지 스타일 */
+.additional-images-grid .file-upload-wrapper {
+  margin-bottom: 1.25rem;
+}
+
+.additional-images-grid .file-upload-label {
+  min-height: 50px;
+  padding: 0.75rem 1rem;
+  justify-content: flex-start;
+  text-align: left;
+  flex-direction: row;
+  border-width: 1px;
+  background-color: #fff;
+}
+
+.additional-images-grid .file-upload-label:hover {
+  border-color: #a8b1ff;
+  background-color: #f8f9ff;
+}
+
+.additional-images-grid .file-icon {
+  font-size: 1.2em;
+  margin: 0 10px 0 0;
+  display: inline-block;
+}
+
+.additional-images-grid .file-text {
+  font-size: 0.9rem;
+  color: #555;
+  text-align: left;
+  padding: 0;
+  font-weight: normal;
+}
+
+/* 반응형 조정 */
+@media (max-width: 1200px) {
+  .additional-images-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .simple-upload-container {
+    padding: 1rem;
+  }
+
+  .additional-images-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .file-upload-label {
+    padding: 0.65rem 0.9rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* 매우 작은 화면에서의 추가 조정 */
+@media (max-width: 480px) {
+  .simple-upload-container {
+    padding: 0.75rem;
+  }
+
+  .file-upload-label {
+    padding: 0.6rem 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .file-icon {
+    margin-right: 6px;
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 992px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .image-upload-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-sidebar {
+    width: 200px;
+  }
+
+  .admin-main {
+    margin-left: 200px;
+  }
+
+  .image-upload-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 576px) {
+  .admin-header {
+    padding: 1rem;
+  }
+
+  .register-form-container {
+    padding: 1rem;
+  }
+
+  .form-section {
+    padding: 1rem;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .header-right {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .image-upload-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

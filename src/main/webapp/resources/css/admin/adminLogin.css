@@ -1,0 +1,156 @@
+/* 관리자 로그인 페이지 스타일 */
+
+.admin-login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background-color: #ffffff;
+  padding: 8rem 2rem 2rem 2rem;
+}
+
+.admin-login-content {
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+.admin-logo {
+  margin-bottom: 3rem;
+}
+
+.logo-text {
+  font-size: 2.5rem;
+  font-weight: 300;
+  letter-spacing: 0.8em;
+  color: #000;
+  line-height: 1.2;
+  margin: 0;
+}
+
+/* 관리자 타이틀 */
+.admin-title {
+  margin-bottom: 3rem;
+}
+
+.admin-title h2 {
+  font-size: 1.8rem;
+  font-weight: 300;
+  letter-spacing: 0.6em;
+  color: #000;
+  margin: 0 0 0.5rem 0;
+}
+
+.admin-subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+  font-weight: 300;
+}
+
+/* 폼 스타일 */
+.admin-login-form {
+  text-align: left;
+}
+
+.admin-login-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.admin-login-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 400;
+}
+
+.admin-login-form input {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background-color: #f9f9f9;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.admin-login-form input:focus {
+  outline: none;
+  border-color: #000;
+  background-color: #fff;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+.admin-login-form input::placeholder {
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+/* 에러 메시지 */
+.error-message {
+  display: none;
+  color: #e53e3e;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  line-height: 1.4;
+}
+
+.form-group.error .error-message {
+  display: block;
+}
+
+.form-group.error input {
+  border-color: #e53e3e;
+  background-color: #fef2f2;
+}
+
+/* 로그인 버튼 */
+.btn-admin-login {
+  width: 100%;
+  padding: 1rem;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 1rem;
+  font-family: inherit;
+}
+
+.btn-admin-login:hover {
+  background-color: #333;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-admin-login:active {
+  transform: translateY(0);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 480px) {
+  .admin-login-container {
+    padding: 1rem;
+  }
+
+  .logo-text {
+    font-size: 2rem;
+    letter-spacing: 0.6em;
+  }
+
+  .admin-title h2 {
+    font-size: 1.5rem;
+    letter-spacing: 0.4em;
+  }
+
+  .admin-login-form input,
+  .btn-admin-login {
+    padding: 0.875rem;
+  }
+}

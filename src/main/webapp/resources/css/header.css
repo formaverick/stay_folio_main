@@ -1,0 +1,161 @@
+.header {
+  background-color: white;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #eee;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+body {
+  padding-top: 80px;
+}
+
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1440px;
+  margin: 0 auto;
+  gap: 2rem;
+}
+
+.logo a {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 400;
+  line-height: 1.1;
+  color: #111;
+  text-align: center;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.search-box {
+  flex: 1;
+  max-width: 400px;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 30px;
+  padding: 0.5rem 1rem;
+}
+
+.search-icon {
+  margin-right: 0.5rem;
+  color: #666;
+  font-size: 1rem;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 1rem;
+  font-family: inherit;
+  background-color: transparent;
+}
+
+.gnb ul {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.gnb li a {
+  text-decoration: none;
+  color: #000;
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.2s ease;
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.gnb li:not(.login) a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #000;
+  transition: width 0.3s ease;
+}
+
+.gnb li:not(.login) a:hover::after {
+  width: 100%;
+}
+
+.gnb li a:hover {
+  color: #000;
+}
+
+.gnb li.separator {
+  color: #999;
+  padding: 0 0.75rem;
+  opacity: 0.6;
+  font-weight: 300;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .search-box {
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .gnb ul {
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+}
+
+.ph {
+  font-size: 1.1rem;
+}
+
+/* 로그아웃 상태 */
+.gnb li.logged-out a {
+  color: #767676;
+}
+
+.gnb li.logged-out a:hover {
+  color: #000;
+}
+
+/* 로그인 상태 */
+.gnb li.logged-in a {
+  color: #000;
+  font-weight: 600;
+}
+
+.gnb li.logged-in a:hover {
+  color: #000;
+}
+
+/* 로그인 상태에서의 아이콘 */
+.gnb li.logged-in .ph-user {
+  font-size: 1.2rem;
+  color: #767676;
+}

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -22,7 +21,8 @@ public class DataSourceTests {
 	@Test
 	public void testConnection() {
 		try (Connection con = dataSource.getConnection()) {
-			System.out.println("DB¿¬°á ¼º°ø");
+			System.out.println("DBì—°ê²° ì„±ê³µ");
+			log.info(con);
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}

@@ -52,7 +52,7 @@ function handleSubmit(e) {
   if (isEmailValid && isPasswordValid) {
     console.log("로그인 시도:", email);
     // 실제 서버로 폼을 제출하고 싶을 때 주석 해제
-    // $form[0].submit();
+    $form[0].submit();
   }
 }
 

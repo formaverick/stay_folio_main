@@ -27,7 +27,7 @@
                 <p>스테이폴리오와 함께 특별한 여행을 시작하세요</p>
             </div>
             
-            <form class="signup-form" id="signupForm">
+            <form class="signup-form" id="signupForm" >
                 <div class="input-group">
                     <label for="email">이메일</label>
                     <input type="email" id="email" name="email" placeholder="이메일을 입력하세요" required>

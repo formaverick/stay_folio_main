@@ -166,18 +166,12 @@
   height: 36px;
   border: none;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 2;
   transition: all 0.2s ease;
-}
-
-.stay-wishlist:hover {
-  background: rgba(0, 0, 0, 0.5);
-  transform: scale(1.05);
 }
 
 /* 찜하기 아이콘들의 기본 스타일 */

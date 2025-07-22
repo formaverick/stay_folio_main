@@ -73,42 +73,49 @@ function initWishlistEvents() {
   console.log("찜하기 버튼 개수:", wishlistButtons.length);
 
   wishlistButtons.forEach((button, index) => {
+    // 초기 상태 설정
+    const icon = button.querySelector("i");
+    const isWishlisted = button.getAttribute("data-wishlist") === "true";
+
+    if (isWishlisted) {
+      icon.className = "ph ph-heart-fill";
+    } else {
+      icon.className = "ph ph-heart";
+    }
+
     button.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
 
       console.log(`버튼 ${index} 클릭됨`);
 
-      const emptyIcon = this.querySelector(".wishlist-empty");
-      const filledIcon = this.querySelector(".wishlist-filled");
+      const icon = this.querySelector("i");
       const isWishlisted = this.getAttribute("data-wishlist") === "true";
 
-      console.log("빈 아이콘:", emptyIcon);
-      console.log("채워진 아이콘:", filledIcon);
+      console.log("아이콘:", icon);
       console.log("현재 찜하기 상태:", isWishlisted);
+      console.log("현재 아이콘 클래스:", icon.className);
 
-      if (!emptyIcon || !filledIcon) {
+      if (!icon) {
         console.error("아이콘을 찾을 수 없습니다!");
         return;
       }
 
       if (isWishlisted) {
         // 찜하기 해제
-        emptyIcon.style.display = "block";
-        filledIcon.style.display = "none";
+        icon.className = "ph ph-heart";
         this.setAttribute("data-wishlist", "false");
-        console.log("찜하기 해제 완료 - 빈 아이콘 표시");
+        console.log("찜하기 해제 완료 - 빈 하트로 변경");
       } else {
         // 찜하기 추가
-        emptyIcon.style.display = "none";
-        filledIcon.style.display = "block";
+        icon.className = "ph ph-heart-fill";
         this.setAttribute("data-wishlist", "true");
-        console.log("찜하기 추가 완료 - 채워진 아이콘 표시");
+        console.log("찜하기 추가 완료 - 채워진 하트로 변경");
       }
 
       // 변경 후 상태 확인
-      console.log("변경 후 빈 아이콘 display:", emptyIcon.style.display);
-      console.log("변경 후 채워진 아이콘 display:", filledIcon.style.display);
+      console.log("변경 후 아이콘 클래스:", icon.className);
+      console.log("변경 후 data-wishlist:", this.getAttribute("data-wishlist"));
     });
   });
 }

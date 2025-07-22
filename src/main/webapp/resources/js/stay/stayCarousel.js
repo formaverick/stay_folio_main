@@ -5,6 +5,8 @@ if (!window.StayFolioStayCarousel.initialized) {
   window.StayFolioStayCarousel.initialized = true;
 
   $(document).ready(function () {
+    // 북마크(하트) 기능 초기화
+    initBookmarkFeature();
     const $carousel = $(".carousel");
     const $track = $(".carousel-track");
     const $slides = $(".carousel-slide");
@@ -59,12 +61,12 @@ if (!window.StayFolioStayCarousel.initialized) {
       // 인디케이터 업데이트
       $indicators.removeClass("active");
       $indicators.eq(slideIndex).addClass("active");
-
-      // 트랜지션 완료 후 플래그 해제
-      setTimeout(() => {
+      
+      // 트랜지션 완료 후 상태 초기화
+      setTimeout(function() {
         isTransitioning = false;
-        console.log("Transition completed");
-      }, 500);
+        console.log("Transition completed, ready for next slide");
+      }, 500); // CSS transition 시간과 동일하게 설정
     }
 
     // 이전 슬라이드
@@ -153,27 +155,43 @@ if (!window.StayFolioStayCarousel.initialized) {
     $carousel.find("img").on("dragstart", function (e) {
       e.preventDefault();
     });
-
-    // 자동 슬라이드 기능
-    let autoSlideInterval;
-
-    function startAutoSlide() {
-      autoSlideInterval = setInterval(() => {
-        nextSlide();
-      }, 5000); // 5초마다 슬라이드 변경
-    }
-
-    function stopAutoSlide() {
-      clearInterval(autoSlideInterval);
-    }
-
-    // 사용자 상호작용 시 자동 슬라이드 일시 중지
-    $carousel.on("mouseenter", stopAutoSlide);
-    $carousel.on("mouseleave", startAutoSlide);
-    $carousel.on("touchstart", stopAutoSlide);
-
-    // 초기 슬라이드 설정 및 자동 슬라이드 시작
-    moveToSlide(0);
-    startAutoSlide();
   });
+
+  // 북마크(하트) 기능 구현
+  function initBookmarkFeature() {
+    const $heartBtn = $(".heart-btn");
+    console.log("북마크 기능 초기화");
+
+    // 초기 상태 설정
+    const $icon = $heartBtn.find("i");
+    const isBookmarked = $heartBtn.attr("data-bookmark") === "true";
+
+    if (isBookmarked) {
+      $icon.removeClass("ph-heart").addClass("ph-heart-fill");
+    } else {
+      $icon.removeClass("ph-heart-fill").addClass("ph-heart");
+    }
+
+    // 클릭 이벤트 설정
+    $heartBtn.off("click.bookmark").on("click.bookmark", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      console.log("북마크 버튼 클릭됨");
+      const $icon = $(this).find("i");
+      const isBookmarked = $(this).attr("data-bookmark") === "true";
+
+      if (isBookmarked) {
+        // 북마크 해제
+        $icon.removeClass("ph-heart-fill").addClass("ph-heart");
+        $(this).attr("data-bookmark", "false");
+        console.log("북마크 해제 완료 - 빈 하트로 변경");
+      } else {
+        // 북마크 추가
+        $icon.removeClass("ph-heart").addClass("ph-heart-fill");
+        $(this).attr("data-bookmark", "true");
+        console.log("북마크 추가 완료 - 채워진 하트로 변경");
+      }
+    });
+  }
 }

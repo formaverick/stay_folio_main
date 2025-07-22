@@ -1,0 +1,94 @@
+<link rel="stylesheet" href="../../css/common.css" />
+<link rel="stylesheet" href="../../css/header.css" />
+<link rel="stylesheet" href="../../css/stay/stay.css" />
+<link rel="stylesheet" href="../../css/stay/stayCarousel.css" />
+
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
+/>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Carousel JS -->
+<script src="../../js/stay/stayCarousel.js"></script>
+<script src="../../js/stay/stayNavigation.js"></script>
+<script src="../../js/stay/stay.js"></script>
+<header class="header">
+  <div class="header-inner">
+    <!-- 로고 -->
+    <h1 class="logo">
+      <a href="main.html">STAY<br />FOLIO</a>
+    </h1>
+
+    <!-- 검색창 -->
+    <a href="search.jsp" class="search-box">
+      <span class="search-icon"><i class="ph ph-magnifying-glass"></i></span>
+      <span class="search-placeholder">어디로 떠날까요?</span>
+    </a>
+
+    <!-- GNB -->
+    <nav class="gnb">
+      <ul>
+        <li><a href="#">FIND STAY</a></li>
+        <li><a href="#">PROMOTION</a></li>
+        <li><a href="#">JOURNAL</a></li>
+        <li><a href="#">PRE-ORDER</a></li>
+        <li class="separator">|</li>
+        <!-- 로그아웃 상태 -->
+        <li class="login logged-out">
+          <a href="#"><i class="ph ph-door"></i> LOGIN</a>
+        </li>
+        <!-- 로그인 상태 (처음에는 숨김) -->
+        <li class="login logged-in" style="display: none">
+          <a href="#"><i class="ph ph-user"></i> MY</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<!-- 헤더 끝 -->
+
+<!-- 숙소 캐러셀 시작 -->
+<section class="carousel-container">
+  <!-- 뒤로가기 버튼 -->
+  <a href="javascript:history.back()" class="back-button">
+    <i class="ph ph-arrow-left"></i>
+  </a>
+  <div class="carousel">
+    <div class="carousel-track">
+      <div class="carousel-slide active">
+        <img src="../../img/stay/stayimg1.jpg" alt="숙소이미지1" />
+      </div>
+      <div class="carousel-slide">
+        <img src="../../img/stay/stayDetail2.png" alt="숙소이미지2" />
+      </div>
+      <div class="carousel-slide">
+        <img src="../../img/stay/stayDetail3.png" alt="숙소이미지3" />
+      </div>
+      <div class="carousel-slide">
+        <img src="../../img/stay/stayDetail4.png" alt="숙소이미지4" />
+      </div>
+      <div class="carousel-slide">
+        <img src="../../img/stay/stayDetail5.png" alt="숙소이미지5" />
+      </div>
+    </div>
+
+    <!-- 네비게이션 버튼 -->
+    <button class="carousel-btn carousel-btn-prev" type="button">
+      <span>‹</span>
+    </button>
+    <button class="carousel-btn carousel-btn-next" type="button">
+      <span>›</span>
+    </button>
+
+    <!-- 인디케이터 -->
+    <div class="carousel-indicators">
+      <button class="indicator active" data-slide="0"></button>
+      <button class="indicator" data-slide="1"></button>
+      <button class="indicator" data-slide="2"></button>
+      <button class="indicator" data-slide="3"></button>
+      <button class="indicator" data-slide="4"></button>
+    </div>
+  </div>
+</section>
+<!-- 숙소 캐러셀 끝 -->

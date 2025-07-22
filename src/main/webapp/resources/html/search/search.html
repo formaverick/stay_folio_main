@@ -1,0 +1,147 @@
+<link rel="stylesheet" href="../../css/common.css" />
+<link rel="stylesheet" href="../../css/header.css" />
+<link rel="stylesheet" href="../../css/search/searchFilter.css" />
+
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
+/>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+/>
+
+<header class="header">
+  <div class="header-inner">
+    <!-- 로고 -->
+    <h1 class="logo">
+      <a href="main.html">STAY<br />FOLIO</a>
+    </h1>
+
+    <!-- 검색창 -->
+    <a href="search.jsp" class="search-box">
+      <span class="search-icon"><i class="ph ph-magnifying-glass"></i></span>
+      <span class="search-placeholder">어디로 떠날까요?</span>
+    </a>
+
+    <!-- GNB -->
+    <nav class="gnb">
+      <ul>
+        <li><a href="#">FIND STAY</a></li>
+        <li><a href="#">PROMOTION</a></li>
+        <li><a href="#">JOURNAL</a></li>
+        <li><a href="#">PRE-ORDER</a></li>
+        <li class="separator">|</li>
+        <!-- 로그아웃 상태 -->
+        <li class="login logged-out">
+          <a href="#"><i class="ph ph-door"></i> LOGIN</a>
+        </li>
+        <!-- 로그인 상태 (처음에는 숨김) -->
+        <li class="login logged-in" style="display: none">
+          <a href="#"><i class="ph ph-user"></i> MY</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<!-- 헤더 끝 -->
+
+<!-- 검색 필터 시작 -->
+<section class="search-filter-container">
+  <div class="search-filter-inner">
+    <div class="pill-filter">
+      <!-- 지역 선택 -->
+      <div class="filter-item region-filter">
+        <div class="filter-content" id="regionSelect">
+          <div class="selected-option">
+            <i class="ph ph-magnifying-glass"></i>
+            <span>전국</span>
+          </div>
+          <div class="dropdown-container">
+            <ul class="dropdown-options">
+              <li class="option" data-value="all">전국</li>
+              <li class="option" data-value="seoul">서울</li>
+              <li class="option" data-value="gyeonggi">경기</li>
+              <li class="option" data-value="incheon">인천</li>
+              <li class="option" data-value="gangwon">강원</li>
+              <li class="option" data-value="chungcheong">충청</li>
+              <li class="option" data-value="gyeongsang">경상</li>
+              <li class="option" data-value="jeolla">전라</li>
+              <li class="option" data-value="jeju">제주</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-divider"></div>
+
+      <!-- 일정 선택 -->
+      <div class="filter-item date-filter">
+        <div class="filter-content" id="dateSelect">
+          <div class="selected-option">
+            <i class="ph ph-calendar"></i>
+            <span id="dateDisplay"
+              ><span id="startDate"></span> - <span id="endDate"></span
+            ></span>
+          </div>
+          <div class="date-picker-container">
+            <div id="datePicker"></div>
+            <div class="date-picker-error" id="dateError"></div>
+            <div class="date-picker-footer">
+              <div class="date-picker-buttons">
+                <button type="button" class="date-picker-button date-picker-cancel" id="dateCancel">취소</button>
+                <button type="button" class="date-picker-button date-picker-apply" id="dateApply">적용</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-divider"></div>
+
+      <!-- 인원 선택 -->
+      <div class="filter-item people-filter">
+        <div class="filter-content" id="peopleSelect">
+          <div class="selected-option">
+            <i class="ph ph-user"></i>
+            <span id="peopleDisplay">성인 2명</span>
+          </div>
+          <div class="people-selector-container">
+            <div class="people-selector">
+              <div class="people-type">
+                <span>성인</span>
+                <div class="counter">
+                  <button class="counter-btn decrease" data-type="adult">
+                    -
+                  </button>
+                  <span class="count" id="adultCount">2</span>
+                  <button class="counter-btn increase" data-type="adult">
+                    +
+                  </button>
+                </div>
+              </div>
+              <div class="people-type">
+                <span>아동</span>
+                <div class="counter">
+                  <button class="counter-btn decrease" data-type="child">
+                    -
+                  </button>
+                  <span class="count" id="childCount">0</span>
+                  <button class="counter-btn increase" data-type="child">
+                    +
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- 검색 필터 끝 -->
+
+<script src="../../js/search/searchFilter.js"></script>

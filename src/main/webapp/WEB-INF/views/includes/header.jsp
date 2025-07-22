@@ -1,14 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css" />
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
 <header class="header">
     <div class="header-inner">
         <!-- 로고 -->
         <h1 class="logo">
-            <a href="${pageContext.request.contextPath}/home.jsp">STAY<br />FOLIO</a>
+            <a href="${pageContext.request.contextPath}/">STAY<br />FOLIO</a>
         </h1>
 
         <!-- 검색창 -->
@@ -25,14 +23,18 @@
                 <li><a href="#">JOURNAL</a></li>
                 <li><a href="#">PRE-ORDER</a></li>
                 <li class="separator">|</li>
-                <!-- 로그아웃 상태 -->
-                <li class="login logged-out">
-                    <a href="login/login.jsp"><i class="ph ph-door"></i> LOGIN</a>
-                </li>
-                <!-- 로그인 상태 (처음에는 숨김) -->
-                <li class="login logged-in" style="display: none">
-                    <a href="#"><i class="ph ph-user"></i> MY</a>
-                </li>
+				<sec:authorize access="!isAuthenticated()">
+					<!-- 로그아웃 상태 -->
+	                <li class="login logged-out">
+	                    <a href="/login"><i class="ph ph-door"></i> LOGIN</a>
+	                </li>
+				</sec:authorize>
+				<sec:authorize access="isAuthenticated()">
+	                <!-- 로그인 상태 -->
+	                <li class="login logged-in">
+	                    <a href="#"><i class="ph ph-user"></i> MY</a>
+	                </li>
+                </sec:authorize>
             </ul>
         </nav>
     </div>

@@ -1,0 +1,46 @@
+/* 숙소 페이지 기본 스타일 */
+body {
+  font-family: 'Pretendard', sans-serif;
+  color: #333;
+  line-height: 1.5;
+}
+
+/* 숙소 페이지 컨테이너 */
+.stay-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* 섹션 제목 스타일 */
+.section-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+/* 숙소 정보 영역 */
+.stay-info {
+  margin-top: 2rem;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+  .stay-container {
+    padding: 1.5rem 1rem;
+  }
+  
+  .section-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stay-container {
+    padding: 1rem;
+  }
+  
+  .section-title {
+    font-size: 1.25rem;
+  }
+}

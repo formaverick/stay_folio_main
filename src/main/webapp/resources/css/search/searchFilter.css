@@ -1,0 +1,917 @@
+/* 검색 필터 컨테이너 */
+.search-filter-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  background-color: transparent;
+  padding: 16px 0;
+  position: relative;
+  z-index: 10;
+}
+
+.search-filter-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 28px;
+}
+
+/* 필 필터 스타일 */
+.pill-filter {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 50px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 16px 36px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  height: 72px;
+  min-height: 72px;
+}
+
+/* 필터 아이템 공통 스타일 */
+.filter-item {
+  position: relative;
+  flex: 1;
+  transition: all 0.3s ease;
+}
+
+/* 필터 구분선 */
+.filter-divider {
+  width: 1px;
+  height: 40px;
+  background-color: #e0e0e0;
+  margin: 0 24px;
+}
+
+.filter-content {
+  position: relative;
+  cursor: pointer;
+}
+
+.selected-option {
+  padding: 8px 14px;
+  border: none;
+  background-color: transparent;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  transition: all 0.25s ease;
+  color: #333;
+  font-weight: 500;
+  cursor: pointer;
+  height: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.selected-option i {
+  font-size: 22px;
+  color: #666;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+/* 날짜 필터 특별 스타일링 */
+.date-filter .selected-option {
+  min-width: 200px;
+  flex: 1.2;
+}
+
+.date-filter .selected-option span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#dateDisplay {
+  display: inline-block;
+  min-width: 0;
+  flex: 1;
+}
+
+/* 지역 선택 드롭다운 */
+.dropdown-container {
+  position: absolute;
+  top: calc(100% + 24px);
+  left: 0;
+  width: 320px;
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  z-index: 100;
+  display: none;
+  animation: fadeIn 0.2s ease;
+}
+
+.dropdown-options {
+  list-style: none;
+  padding: 16px 0;
+  margin: 0;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.dropdown-options li {
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 14px;
+  color: #444;
+}
+
+.dropdown-options .option:hover {
+  background-color: #f7f7f7;
+  color: #000;
+}
+
+.dropdown-options .option.selected {
+  background-color: #f0f0f0;
+  font-weight: 600;
+  color: #222;
+}
+
+/* 날짜 선택 */
+.date-picker-container {
+  position: absolute;
+  top: calc(100% + 24px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 720px;
+  background-color: #fff;
+  border: none;
+  border-radius: 24px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.04);
+  z-index: 100;
+  display: none;
+  animation: slideUp 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  padding: 32px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* 인원 선택 */
+.people-selector-container {
+  position: absolute;
+  top: calc(100% + 24px);
+  right: 0;
+  width: 360px;
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  z-index: 100;
+  display: none;
+  animation: fadeIn 0.2s ease;
+}
+
+.people-selector {
+  padding: 24px;
+}
+
+.people-type {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.people-type:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.counter-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #e0e0e0;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.2s ease;
+  color: #555;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+.counter-btn:hover {
+  background-color: #f8f8f8;
+  border-color: #ccc;
+  color: #333;
+  transform: scale(1.05);
+}
+
+.counter-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.count {
+  margin: 0 12px;
+  font-size: 16px;
+  min-width: 20px;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+}
+
+.search-button {
+  display: none;
+  background-color: #000;
+}
+
+.search-button i {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+.filter-content.active .selected-option::after {
+  transform: rotate(180deg);
+  color: #333;
+}
+
+/* flatpickr 커스텀 스타일 */
+.flatpickr-calendar {
+  box-shadow: none !important;
+  border: none !important;
+  width: 100% !important;
+  background: transparent !important;
+  font-family: "Pretendard", sans-serif !important;
+}
+
+.flatpickr-months {
+  margin-bottom: 16px;
+  position: relative;
+  padding: 8px 0;
+  border-radius: 12px;
+  z-index: 1;
+}
+
+.flatpickr-months .flatpickr-month {
+  background: transparent !important;
+  color: #333 !important;
+  height: 44px !important;
+}
+
+.flatpickr-current-month {
+  font-size: 17px !important;
+  padding: 8px 0 0 0 !important;
+  font-weight: 600 !important;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months {
+  font-weight: 600 !important;
+  color: #333 !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 2px 8px !important;
+  border-radius: 6px !important;
+  transition: background 0.2s !important;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months:hover {
+  background: #f0f0f0 !important;
+}
+
+.flatpickr-weekdays {
+  background: transparent !important;
+  padding-bottom: 8px !important;
+  margin-bottom: 8px !important;
+  border-bottom: 1px solid #f0f0f0 !important;
+}
+
+.flatpickr-weekday {
+  font-size: 13px !important;
+  color: #888 !important;
+  font-weight: 500 !important;
+  background: transparent !important;
+}
+
+.flatpickr-days {
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+/* 두 개 달 레이아웃을 위한 기본 설정 */
+.flatpickr-calendar.showTimeInput.hasWeeks {
+  width: 100% !important;
+}
+
+.flatpickr-calendar .flatpickr-months {
+  position: relative !important;
+}
+
+.flatpickr-calendar .flatpickr-innerContainer {
+  display: block !important;
+}
+
+.dayContainer {
+  width: auto !important;
+  min-width: auto !important;
+  max-width: none !important;
+  display: inline-block !important;
+  vertical-align: top !important;
+  margin-right: 20px !important;
+}
+
+.dayContainer:last-child {
+  margin-right: 0 !important;
+}
+
+.flatpickr-day {
+  border-radius: 50% !important;
+  margin: 3px !important;
+  height: 38px !important;
+  width: 38px !important;
+  line-height: 38px !important;
+  color: #333 !important;
+  font-weight: 500 !important;
+  border: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+  background: #333 !important;
+  border-color: #333 !important;
+  color: #fff !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.flatpickr-day.startRange {
+  border-radius: 50% 0 0 50% !important;
+}
+
+.flatpickr-day.endRange {
+  border-radius: 0 50% 50% 0 !important;
+}
+
+.flatpickr-day.inRange {
+  background: #f0f0f0 !important;
+  border-color: #f0f0f0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+.flatpickr-day.today {
+  border: 2px solid #007bff !important;
+  color: #007bff !important;
+  font-weight: 600 !important;
+  background: #fff !important;
+}
+
+.flatpickr-day:hover {
+  background: #f5f5f5 !important;
+  transform: scale(1.05) !important;
+}
+
+.flatpickr-day.flatpickr-disabled,
+.flatpickr-day.flatpickr-disabled:hover {
+  color: #ddd !important;
+  background: transparent !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+.flatpickr-prev-month,
+.flatpickr-next-month {
+  padding: 8px !important;
+  border-radius: 50% !important;
+  transition: all 0.2s ease !important;
+  height: 36px !important;
+  width: 36px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  top: 7px !important;
+  cursor: pointer !important;
+  position: absolute !important;
+  z-index: 100 !important;
+  background: #fff !important;
+  border: 1px solid #e0e0e0 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  pointer-events: auto !important;
+}
+
+.flatpickr-prev-month:hover,
+.flatpickr-next-month:hover {
+  background: #f8f9fa !important;
+  border-color: #007bff !important;
+  transform: scale(1.05) !important;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.15) !important;
+}
+
+.flatpickr-prev-month svg,
+.flatpickr-next-month svg {
+  fill: #666 !important;
+  width: 18px !important;
+  height: 18px !important;
+  transition: fill 0.2s ease !important;
+}
+
+.flatpickr-prev-month:hover svg,
+.flatpickr-next-month:hover svg {
+  fill: #007bff !important;
+}
+
+/* 월 네비게이션 버튼 강제 활성화 */
+.flatpickr-prev-month,
+.flatpickr-next-month {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+}
+
+.flatpickr-prev-month *,
+.flatpickr-next-month * {
+  pointer-events: none !important;
+}
+
+/* 월 네비게이션 영역 클릭 가능하도록 설정 */
+.flatpickr-months .flatpickr-prev-month,
+.flatpickr-months .flatpickr-next-month {
+  pointer-events: auto !important;
+  touch-action: manipulation !important;
+}
+
+/* 검색 버튼 스타일 */
+.search-button-container {
+  margin-left: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.search-button {
+  background: linear-gradient(135deg, #333333 0%, #1a1a1a 100%);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 16px 32px;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 4px 16px rgba(51, 51, 51, 0.3);
+  min-width: 140px;
+  justify-content: center;
+  font-family: "Pretendard", sans-serif;
+  white-space: nowrap;
+}
+
+.search-button i {
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+
+/* 검색 중 상태 */
+.search-button.searching {
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.search-button.searching i {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.date-picker-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 24px;
+  margin-top: 24px;
+  border-top: 1px solid #f5f5f5;
+}
+
+.date-picker-error {
+  color: #ff4757;
+  font-size: 14px;
+  margin-top: 16px;
+  display: none;
+  text-align: center;
+  font-weight: 500;
+  padding: 12px 16px;
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.date-picker-error.shake {
+  animation: shake 0.5s ease-in-out;
+  animation: shake 0.3s ease-in-out;
+}
+
+.date-picker-buttons {
+  display: flex;
+  gap: 12px;
+  margin-left: auto;
+}
+
+.date-picker-button {
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+  min-width: 80px;
+}
+
+.date-picker-cancel {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.date-picker-cancel:hover {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(100, 116, 139, 0.15);
+  color: #475569;
+}
+
+.date-picker-apply {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(30, 41, 59, 0.2);
+  border: 1px solid #334155;
+}
+
+.date-picker-apply:hover {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(30, 41, 59, 0.3);
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange,
+.flatpickr-day.selected.inRange,
+.flatpickr-day.startRange.inRange,
+.flatpickr-day.endRange.inRange,
+.flatpickr-day.selected:focus,
+.flatpickr-day.startRange:focus,
+.flatpickr-day.endRange:focus,
+.flatpickr-day.selected:hover,
+.flatpickr-day.startRange:hover,
+.flatpickr-day.endRange:hover,
+.flatpickr-day.selected.prevMonthDay,
+.flatpickr-day.startRange.prevMonthDay,
+.flatpickr-day.endRange.prevMonthDay,
+.flatpickr-day.selected.nextMonthDay,
+.flatpickr-day.startRange.nextMonthDay,
+.flatpickr-day.endRange.nextMonthDay {
+  background: #333 !important;
+  border-color: #333 !important;
+}
+
+.flatpickr-day.inRange,
+.flatpickr-day.prevMonthDay.inRange,
+.flatpickr-day.nextMonthDay.inRange,
+.flatpickr-day:hover,
+.flatpickr-day.prevMonthDay:hover,
+.flatpickr-day.nextMonthDay:hover,
+.flatpickr-day:focus,
+.flatpickr-day.prevMonthDay:focus,
+.flatpickr-day.nextMonthDay:focus {
+  background: #f0f0f0 !important;
+  border-color: #f0f0f0 !important;
+}
+
+/* Today's date in range - special styling for visibility */
+.flatpickr-day.today.inRange,
+.flatpickr-day.prevMonthDay.today.inRange,
+.flatpickr-day.nextMonthDay.today.inRange {
+  background: #e3f2fd !important;
+  border: 2px solid #007bff !important;
+  color: #007bff !important;
+  font-weight: 600 !important;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months,
+.flatpickr-current-month input.cur-year {
+  font-weight: 600 !important;
+  color: #333 !important;
+}
+
+.flatpickr-weekday {
+  color: #666 !important;
+  font-weight: 500 !important;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .pill-filter {
+    flex-direction: column;
+    border-radius: 16px;
+    padding: 8px;
+  }
+
+  .filter-item {
+    width: 100%;
+    padding: 8px 0;
+  }
+
+  .filter-divider {
+    width: 100%;
+    height: 1px;
+    margin: 4px 0;
+  }
+
+  .date-picker-container,
+  .people-selector-container {
+    width: calc(100% - 32px);
+    left: 16px;
+    transform: none;
+    max-width: none;
+    padding: 24px 20px;
+    border-radius: 20px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.06);
+  }
+
+  .date-picker-footer {
+    padding-top: 20px;
+    margin-top: 20px;
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .date-picker-buttons {
+    margin-left: 0;
+    justify-content: center;
+  }
+
+  .date-picker-button {
+    flex: 1;
+    padding: 14px 20px;
+    font-size: 16px;
+  }
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-4px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+/* 반응형 미디어 쿼리 */
+
+/* 대형 데스크톱 (1600px 이상) */
+@media (min-width: 1600px) {
+  .search-filter-container {
+    max-width: 1800px;
+  }
+
+  .search-filter-inner {
+    max-width: 1800px;
+    padding: 0 32px;
+  }
+
+  .pill-filter {
+    max-width: 1800px;
+    padding: 24px 48px;
+    height: 80px;
+    min-height: 80px;
+  }
+}
+
+/* 중형 데스크톱 (1200px - 1599px) */
+@media (max-width: 1599px) {
+  .search-filter-container {
+    max-width: 1400px;
+  }
+
+  .search-filter-inner {
+    max-width: 1400px;
+  }
+
+  .pill-filter {
+    max-width: 1400px;
+  }
+}
+
+/* 소형 데스크톱 및 태블릿 (768px - 1199px) */
+@media (max-width: 1199px) {
+  .search-filter-container {
+    max-width: 1200px;
+  }
+
+  .search-filter-inner {
+    max-width: 1200px;
+    padding: 0 20px;
+  }
+
+  .pill-filter {
+    max-width: 1200px;
+    padding: 16px 32px;
+    height: 80px;
+    min-height: 80px;
+  }
+
+  .filter-item {
+    padding: 12px 16px;
+  }
+
+  .search-button {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+}
+
+/* 태블릿 (768px - 991px) */
+@media (max-width: 991px) {
+  .search-filter-inner {
+    padding: 0 16px;
+  }
+
+  .pill-filter {
+    padding: 12px 24px;
+    height: 72px;
+    min-height: 72px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .pill-filter::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter-item {
+    padding: 10px 14px;
+    min-width: fit-content;
+    flex-shrink: 0;
+  }
+
+  .search-button {
+    padding: 10px 16px;
+    font-size: 13px;
+    min-width: 80px;
+    flex-shrink: 0;
+  }
+}
+
+/* 모바일 (767px 이하) */
+@media (max-width: 767px) {
+  .search-filter-container {
+    padding: 16px 0;
+  }
+
+  .search-filter-inner {
+    padding: 0 12px;
+  }
+
+  .pill-filter {
+    flex-direction: column;
+    height: auto;
+    min-height: auto;
+    padding: 16px;
+    border-radius: 20px;
+    gap: 12px;
+  }
+
+  .filter-item {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+  }
+
+  .search-button {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 16px;
+    margin-top: 8px;
+  }
+
+  /* 모바일에서 드롭다운 위치 조정 */
+  .dropdown-container {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: auto;
+    bottom: 20px;
+    width: auto;
+    max-height: 50vh;
+    z-index: 9999;
+  }
+
+  .people-selector-container {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: auto;
+    bottom: 20px;
+    width: auto;
+    max-height: 50vh;
+    z-index: 9999;
+  }
+
+  .date-picker-container {
+    position: fixed;
+    left: 12px;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: auto;
+    max-height: 80vh;
+    z-index: 9999;
+  }
+}
+
+/* 초소형 모바일 (480px 이하) */
+@media (max-width: 480px) {
+  .search-filter-inner {
+    padding: 0 8px;
+  }
+
+  .pill-filter {
+    padding: 12px;
+  }
+
+  .filter-item {
+    padding: 10px 12px;
+  }
+
+  .search-button {
+    padding: 12px 16px;
+  }
+}

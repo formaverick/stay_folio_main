@@ -1,0 +1,319 @@
+/* 검색 결과 페이지 스타일 */
+
+/* 검색 결과 섹션 */
+.search-results-section {
+  padding: 2rem 0 4rem;
+  background: white;
+  min-height: 100vh;
+}
+
+.search-results-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* 검색 결과 헤더 */
+.search-results-header {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 1rem;
+}
+
+.search-results-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.search-results-count {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+}
+
+/* 검색 결과 그리드 */
+.search-results-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+/* 결과 그룹 (9개씩) */
+.results-group {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  width: 100%;
+}
+
+/* 숙소 카드 스타일 (기존 stayCard.css와 동일하게 적용) */
+.search-stay-item {
+  background: white;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 숙소 카드 이미지 */
+.search-stay-image {
+  position: relative;
+  border-radius: 12px;
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+}
+
+.search-stay-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 프로모션 태그 */
+.search-stay-promotion {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: #007aff;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 500;
+  z-index: 2;
+}
+
+/* 북마크 버튼 */
+.search-stay-wishlist {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: all 0.2s ease;
+}
+
+.search-stay-wishlist i {
+  font-size: 1.5rem;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.search-stay-wishlist[data-wishlist="true"] i {
+  color: #ff3b30;
+}
+
+/* 숙소 카드 콘텐츠 */
+.search-stay-content {
+  padding: 16px 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-stay-name {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 6px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.search-stay-location {
+  display: flex;
+  align-items: center;
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.search-stay-location i {
+  margin-right: 3px;
+  font-size: 12px;
+}
+
+.search-stay-price-original {
+  font-size: 0.9rem;
+  color: #999;
+  text-decoration: line-through;
+  margin-bottom: 3px;
+  display: block;
+}
+
+.search-stay-price-main {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.search-stay-price-discount {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #007aff;
+}
+
+.search-stay-price-current {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #333;
+}
+
+/* 배너 영역 */
+.search-banner {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  margin: 1rem 0;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 배너 배경 이미지 */
+.banner-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.banner-background img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 어두운 오버레이 */
+.banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+
+/* AD 라벨 */
+.banner-ad-label {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(255, 255, 255);
+  color: #333;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  opacity: 0.8;
+  z-index: 4;
+}
+
+/* 배너 콘텐츠 */
+.banner-content {
+  position: relative;
+  left: -24rem;
+  z-index: 3;
+  text-align: left;
+  color: white;
+  padding: 2rem;
+}
+
+.banner-content h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin: 0 0 0.5rem 0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
+.banner-content p {
+  font-size: 1rem;
+  opacity: 0.95;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* 더보기 섹션 */
+.load-more-section {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 1280px) {
+  .search-results-container {
+    padding: 0 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-results-container {
+    padding: 0 16px;
+  }
+
+  .search-results-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .results-group {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .search-stay-image {
+    height: 240px;
+  }
+
+  .search-banner {
+    padding: 1.5rem;
+  }
+
+  .banner-content h3 {
+    font-size: 1.3rem;
+  }
+
+  .banner-content p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-results-section {
+    padding: 1rem 0 2rem;
+  }
+
+  .search-results-title {
+    font-size: 1.5rem;
+  }
+
+  .search-stay-image {
+    height: 200px;
+  }
+}

@@ -67,55 +67,37 @@ function initStayCarouselEvents() {
   });
 }
 
-// 찜하기 기능 초기화
+// 찜하기 기능 초기화 - 검색 페이지와 동일한 방식으로 간소화
 function initWishlistEvents() {
   const wishlistButtons = document.querySelectorAll(".stay-wishlist");
   console.log("찜하기 버튼 개수:", wishlistButtons.length);
 
-  wishlistButtons.forEach((button, index) => {
-    // 초기 상태 설정
-    const icon = button.querySelector("i");
-    const isWishlisted = button.getAttribute("data-wishlist") === "true";
-
-    if (isWishlisted) {
-      icon.className = "ph ph-heart-fill";
-    } else {
-      icon.className = "ph ph-heart";
-    }
-
+  wishlistButtons.forEach((button) => {
     button.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
 
-      console.log(`버튼 ${index} 클릭됨`);
-
-      const icon = this.querySelector("i");
       const isWishlisted = this.getAttribute("data-wishlist") === "true";
-
-      console.log("아이콘:", icon);
-      console.log("현재 찜하기 상태:", isWishlisted);
-      console.log("현재 아이콘 클래스:", icon.className);
-
-      if (!icon) {
-        console.error("아이콘을 찾을 수 없습니다!");
-        return;
-      }
-
-      if (isWishlisted) {
-        // 찜하기 해제
-        icon.className = "ph ph-heart";
-        this.setAttribute("data-wishlist", "false");
-        console.log("찜하기 해제 완료 - 빈 하트로 변경");
+      
+      // 상태 토글
+      this.setAttribute("data-wishlist", !isWishlisted);
+      
+      // 간단한 피드백
+      if (!isWishlisted) {
+        console.log("찜 목록에 추가되었습니다.");
       } else {
-        // 찜하기 추가
-        icon.className = "ph ph-heart-fill";
-        this.setAttribute("data-wishlist", "true");
-        console.log("찜하기 추가 완료 - 채워진 하트로 변경");
+        console.log("찜 목록에서 제거되었습니다.");
       }
+    });
+  });
 
-      // 변경 후 상태 확인
-      console.log("변경 후 아이콘 클래스:", icon.className);
-      console.log("변경 후 data-wishlist:", this.getAttribute("data-wishlist"));
+  // 카드 클릭 이벤트 (상세 페이지로 이동)
+  const stayItems = document.querySelectorAll(".stay-item");
+  stayItems.forEach((item) => {
+    item.addEventListener("click", function() {
+      const stayId = this.getAttribute("data-stay-id");
+      console.log(`숙소 ${stayId} 상세 페이지로 이동`);
+      // window.location.href = `/stay/detail/${stayId}`;
     });
   });
 }

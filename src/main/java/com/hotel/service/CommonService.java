@@ -1,8 +1,11 @@
 package com.hotel.service;
 
+import java.util.Map;
 import com.hotel.domain.MemberVO;
 
 public interface CommonService {
+  
+  Map<String, Object> getRecommend(int rc_id);
 
 	int handleRegister(MemberVO vo);
 

@@ -32,7 +32,8 @@
 	</bean>
 
 	<!-- HikariCP를 사용한 데이터베이스 커넥션 풀을 생성하는 빈 -->
-	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource"
+		destroy-method="close">
 		<constructor-arg ref="hikariConfig" />
 	</bean>
 	<!-- MyBatis SqlSessionFactoryBean 설정 -->
@@ -40,7 +41,9 @@
 		class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-	
-	<mybatis-spring:scan base-package="com.hotel.mapper" />
 
+	<mybatis-spring:scan
+		base-package="com.hotel.mapper" />
+	<context:component-scan
+		base-package="com.hotel.service" />
 </beans>

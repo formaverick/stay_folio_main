@@ -37,8 +37,8 @@
 				</div>
 
 				<div class="form-group">
-					<label for="password">비밀번호</label> <input type="password"
-						id="password" name="password" placeholder="비밀번호를 입력해주세요." />
+					<label for="password">비밀번호</label>
+					<input type="password" id="password" name="password" placeholder="비밀번호를 입력해주세요." />
 					<p class="error-message" style="display: none">
 						8자 이상으로 입력해주세요<br />영문, 숫자, 특수문자를 조합하여 입력해 주세요.
 					</p>

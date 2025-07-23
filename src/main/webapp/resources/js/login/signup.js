@@ -194,7 +194,7 @@ $(document).ready(function () {
   );
 
   // 회원가입 폼 제출
-  $("#combined-form").on("submit", function (e) {
+  $("#signup-submit-btn").on("click", async function (e) {
     e.preventDefault();
 
     // 회원 정보 검증
@@ -215,12 +215,34 @@ $(document).ready(function () {
       password: $("#password").val().trim(),
       name: $("#name").val().trim(),
       phone: $("#phone").val().trim(),
-      isad: $("#terms4").is(":checked") ? "y" : "n",
+      isad: $("#terms4").is(":checked") ? "1" : "0",
     };
 
     console.log("회원가입 데이터:", userData);
     
+    try {	// 이메일 전화번호 중복검사
+      const emailRes = await fetch("/api/check/email?email=" + userData.email);
+      const emailText = await emailRes.text();
+      if (emailText === "true") {
+        console.log(emailText);
+        alert("이미 사용중인 이메일입니다.");
+        return;
+      }
+      
+      const phoneRes = await fetch("/api/check/phone?phone=" + userData.phone);
+      const phoneText = await phoneRes.text();
+      if (phoneText === "true") {
+        alert("이미 사용중인 전화번호입니다.");
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+      alert("서버와 통신 중 오류가 발생했습니다.");
+    }
+    
+    // 폼 제출
+    $("#combined-form").submit();
     // 로그인 성공 페이지로 이동
-    window.location.href = "signupSuccess.html";
+    // window.location.href = "signupSuccess.html";
   });
 });

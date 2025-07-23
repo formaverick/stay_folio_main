@@ -23,7 +23,7 @@ public class CustomUser extends User {
 	}
 	
 	public CustomUser(MemberVO vo) {
-		super(vo.getMi_id(), vo.getMi_pw(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
+		super(vo.getMiId(), vo.getMiPw(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
 		this.member = vo;
 	}
 	

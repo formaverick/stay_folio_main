@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hotel.mapper.RecommendMapper">
+
+	<select id="getRecommendTitle" resultType="String">
+		SELECT rc_detail_top
+		|| ' - ' || rc_detail_bottom
+		FROM t_recommend_category
+		WHERE rc_id =
+		#{rc_id}
+	</select>
+
+
+	<select id="getRecommend"
+		resultType="com.hotel.domain.StayVO">
+		SELECT
+		s.si_id AS si_id,
+		s.si_name AS si_name,
+		s.si_loca AS si_loca,
+		s.si_minprice AS si_minprice,
+		ROUND((1 - s.si_discount) * s.si_minprice) AS discountedPrice,
+		s.si_discount * 100 AS discount,
+		s.si_maxperson AS si_maxperson,
+		(
+		SELECT sp.sp_url
+		FROM t_stay_photo sp
+		WHERE sp.si_id = s.si_id
+		AND sp.ri_id IS NULL
+		AND ROWNUM = 1
+		) AS sp_url
+		FROM t_stay_info s
+		WHERE s.si_id IN (
+		SELECT sr.si_id
+		FROM t_stay_recommend sr
+		WHERE sr.rc_id = #{rc_id}
+		)
+	</select>
+
+
+</mapper>

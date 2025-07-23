@@ -174,29 +174,16 @@
   transition: all 0.2s ease;
 }
 
-/* 찜하기 아이콘들의 기본 스타일 */
-.stay-wishlist .wishlist-empty,
-.stay-wishlist .wishlist-filled {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1.5rem;
-  color: white;
-  transition: all 0.2s ease;
-  pointer-events: none;
-}
-
-/* 기본 아이콘 스타일 (하위 호환성을 위해 유지) */
+/* 찜하기 아이콘 기본 스타일 - 검색 페이지와 동일하게 간소화 */
 .stay-wishlist i {
   font-size: 1.5rem;
   color: white;
   transition: all 0.2s ease;
 }
 
-/* 북마크 선택 시 하얀색으로 채워짐 */
+/* 찜하기 선택 시 빨간색으로 변경 */
 .stay-wishlist[data-wishlist="true"] i {
-  color: white;
+  color: #ff3b30;
 }
 
 /* 숙소 카드 콘텐츠 */

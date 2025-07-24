@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class LocationCategoryVO {
-	private int lc_id;
-	private String lc_name;
+	private int lcId;
+	private String lcName;
 }

@@ -2,6 +2,8 @@
 <link rel="stylesheet" href="../../css/header.css" />
 <link rel="stylesheet" href="../../css/stay/stay.css" />
 <link rel="stylesheet" href="../../css/stay/stayCarousel.css" />
+<link rel="stylesheet" href="../../css/stay/stayDetail.css" />
+<link rel="stylesheet" href="../../css/stay/stayDetailFillter.css" />
 
 <link
   rel="stylesheet"
@@ -9,10 +11,16 @@
 />
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+/>
 <!-- Carousel JS -->
 <script src="../../js/stay/stayCarousel.js"></script>
 <script src="../../js/stay/stayNavigation.js"></script>
 <script src="../../js/stay/stay.js"></script>
+<script src="../../js/stay/stayDetailBooking.js"></script>
 <header class="header">
   <div class="header-inner">
     <!-- 로고 -->
@@ -47,6 +55,9 @@
   </div>
 </header>
 <!-- 헤더 끝 -->
+
+<!-- 모달 배경 오버레이 -->
+<div class="booking-modal-overlay" id="bookingModalOverlay"></div>
 
 <!-- 숙소 캐러셀 시작 -->
 <section class="carousel-container">
@@ -92,3 +103,205 @@
   </div>
 </section>
 <!-- 숙소 캐러셀 끝 -->
+
+<!-- 객실 상세 영역 시작 -->
+<div class="room-detail-container">
+  <div class="room-detail-content">
+    <!-- 좌측 영역 (70%) -->
+    <div class="room-detail-left">
+      <!-- 1. 숙소 제목 -->
+      <section class="room-header-section">
+        <h1 class="room-title">성북 은은한가</h1>
+        <p class="room-description">
+          마당, 마루, 거실, 주방, 2개의 침실(다락방 포함), 다도공간, 화장실, 세탁실로 구성되어 있습니다.
+        </p>
+      </section>
+
+      <!-- 2. 객실 규정 -->
+      <section class="room-rules-section">
+        <h2 class="section-title">객실 규정</h2>
+        <div class="rules-list">
+          <div class="rule-item">
+            <span class="rule-text">체크인 15:00 / 체크아웃 11:00</span>
+          </div>
+          <div class="rule-item">
+            <span class="rule-text">기준 4 명 (최대 4 명)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. 공간정보 -->
+      <section class="space-info-section">
+        <h2 class="section-title">공간정보</h2>
+        <div class="space-info-grid">
+          <div class="space-info-item">
+            <span class="space-label">객실 면적 75m²</span>
+          </div>
+          <div class="space-info-item">
+            <span class="space-label">퀸 침대 2</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. 편의시설 -->
+      <section class="facilities-section">
+        <h2 class="section-title">편의시설</h2>
+        <div class="facilities-grid">
+          <div class="facility-item">
+            <i class="ph ph-users"></i>
+            <span>공용 사우나</span>
+          </div>
+          <div class="facility-item">
+            <i class="ph ph-flower"></i>
+            <span>정원</span>
+          </div>
+          <div class="facility-item">
+            <i class="ph ph-bowl-food"></i>
+            <span>독립 화장실</span>
+          </div>
+          <div class="facility-item">
+            <i class="ph ph-mountain"></i>
+            <span>산책로</span>
+          </div>
+          <div class="facility-item">
+            <i class="ph ph-projector-screen"></i>
+            <span>빔 프로젝터</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. 어메니티 -->
+      <section class="amenities-section">
+        <h2 class="section-title">어메니티</h2>
+        <div class="amenities-grid">
+          <div class="amenity-column">
+            <div class="amenity-item">냉장고</div>
+            <div class="amenity-item">스피커</div>
+            <div class="amenity-item">다리미</div>
+            <div class="amenity-item">핸드워시</div>
+            <div class="amenity-item">와인잔</div>
+            <div class="amenity-item">조리도구</div>
+          </div>
+          <div class="amenity-column">
+            <div class="amenity-item">세탁기</div>
+            <div class="amenity-item">전기포트</div>
+            <div class="amenity-item">타월</div>
+            <div class="amenity-item">토스터기</div>
+            <div class="amenity-item">기본조미료</div>
+          </div>
+          <div class="amenity-column">
+            <div class="amenity-item">건조기</div>
+            <div class="amenity-item">전자레인지</div>
+            <div class="amenity-item">샴푸</div>
+            <div class="amenity-item">세탁세제</div>
+            <div class="amenity-item">커피드립백</div>
+          </div>
+          <div class="amenity-column">
+            <div class="amenity-item">헤어드라이어</div>
+            <div class="amenity-item">인덕션(하이라이트)</div>
+            <div class="amenity-item">바디워시</div>
+            <div class="amenity-item">와인오프너</div>
+            <div class="amenity-item">물 슬리퍼</div>
+          </div>
+          <div class="amenity-column">
+            <div class="amenity-item">다리</div>
+            <div class="amenity-item">물 슬리퍼</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- 우측 영역 (30%) -->
+    <div class="room-detail-right">
+      <!-- 예약 카드 (필터+요약 통합) -->
+      <div class="booking-card">
+        <form id="searchForm" method="POST" action="/search/results">
+          <!-- 숨겨진 입력 필드들 -->
+          <input type="hidden" id="regionInput" name="region" value="all" />
+          <input type="hidden" id="startDateInput" name="startDate" value="" />
+          <input type="hidden" id="endDateInput" name="endDate" value="" />
+          <input type="hidden" id="adultsInput" name="adults" value="2" />
+          <input type="hidden" id="childrenInput" name="children" value="0" />
+
+          <div class="pill-filter">
+            <!-- 일정 선택 -->
+            <div class="filter-item date-filter">
+              <div class="filter-content" id="dateSelect">
+                <div class="selected-option">
+
+                  <span id="dateDisplay">
+                    <span id="startDate"></span> - <span id="endDate"></span>
+                  </span>
+                </div>
+                <div class="date-picker-container">
+                  <div id="datePicker"></div>
+                  <div class="date-picker-error" id="dateError"></div>
+                  <div class="date-picker-footer">
+                    <div class="date-picker-buttons">
+                      <button type="button" class="date-picker-button date-picker-cancel" id="dateCancel">취소</button>
+                      <button type="button" class="date-picker-button date-picker-apply" id="dateApply">적용</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- 구분선 -->
+            <div class="filter-divider"></div>
+            <!-- 인원 선택 -->
+            <div class="filter-item people-filter">
+              <div class="filter-content" id="peopleSelect">
+                <div class="selected-option">
+                  <i class="ph ph-user"></i>
+                  <span id="peopleDisplay">성인 2명</span>
+                </div>
+                <div class="people-selector-container">
+                  <div class="people-selector">
+                    <div class="people-type">
+                      <span>성인</span>
+                      <div class="counter">
+                        <button type="button" class="counter-btn decrease" data-type="adult">-</button>
+                        <span class="count" id="adultCount">2</span>
+                        <button type="button" class="counter-btn increase" data-type="adult">+</button>
+                      </div>
+                    </div>
+                    <div class="people-type">
+                      <span>아동</span>
+                      <div class="counter">
+                        <button type="button" class="counter-btn decrease" data-type="child">-</button>
+                        <span class="count" id="childCount">0</span>
+                        <button type="button" class="counter-btn increase" data-type="child">+</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div class="booking-price-info">
+          <div class="stay-price-original">₩240,000</div>
+          <div class="stay-price-main">
+            <span class="stay-price-discount">10%</span>
+            <span class="stay-price-current">₩216,000</span>
+            <span class="per-night">/ 박</span>
+          </div>
+        </div>
+
+        <div class="booking-price-details">
+          <div class="price-detail-row">
+            <span>₩216,000 * 1박</span>
+          </div>
+          <div class="price-detail-row">
+            <span>총액</span>
+            <span>₩216,000</span>
+          </div>
+        </div>
+
+        <button class="booking-button">예약하기</button>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+<!-- 객실 상세 영역 끝 -->

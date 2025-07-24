@@ -283,21 +283,6 @@ $(document).ready(function () {
     $(".date-picker-container").hide();
   });
 
-  // 지역 선택 드롭다운 토글
-  $("#regionSelect").on("click", function (e) {
-    e.stopPropagation();
-    const dropdown = $(this).find(".dropdown-container");
-
-    // 다른 드롭다운 닫기
-    $(".dropdown-container, .date-picker-container, .people-selector-container")
-      .not(dropdown)
-      .hide();
-    $(".filter-content").not($(this)).removeClass("active");
-
-    dropdown.toggle();
-    $(this).toggleClass("active");
-  });
-
   // 인원 선택 드롭다운 토글
   $("#peopleSelect").on("click", function (e) {
     e.stopPropagation();
@@ -311,21 +296,6 @@ $(document).ready(function () {
 
     peopleSelector.toggle();
     $(this).toggleClass("active");
-  });
-
-  // 지역 옵션 선택 이벤트
-  $(".dropdown-options .option").on("click", function () {
-    const value = $(this).data("value");
-    const text = $(this).text();
-    selectedRegion = value;
-
-    $("#regionSelect .selected-option span").text(text);
-    $(".dropdown-options .option").removeClass("selected");
-    $(this).addClass("selected");
-
-    // 드롭다운 닫기
-    $("#regionSelect").removeClass("active");
-    $(".dropdown-container").hide();
   });
 
   // 인원 증감 버튼 이벤트
@@ -422,6 +392,40 @@ $(document).ready(function () {
       $(
         ".dropdown-container, .date-picker-container, .people-selector-container"
       ).hide();
+    }
+  });
+
+  // 외부 클릭 시 모든 드롭다운 닫기
+  $(document).on("click", function (e) {
+    if (
+      !$(e.target).closest(
+        ".dropdown-container, .date-picker-container, .people-selector-container"
+      ).length
+    ) {
+      $(
+        ".dropdown-container, .date-picker-container, .people-selector-container"
+      ).hide();
+    }
+  });
+
+  // 안내사항 아코디언 기능
+  $(".guideline-header").on("click", function () {
+    const $header = $(this);
+    const target = $header.data("target");
+    const $content = $("#" + target);
+    const $icon = $header.find("i");
+
+    // 현재 아이템이 활성화되어 있는지 확인
+    const isActive = $header.hasClass("active");
+
+    // 모든 아코디언 닫기
+    $(".guideline-header").removeClass("active");
+    $(".guideline-content").removeClass("active").slideUp(300);
+
+    // 현재 아이템이 비활성화 상태였다면 열기
+    if (!isActive) {
+      $header.addClass("active");
+      $content.addClass("active").slideDown(300);
     }
   });
 });

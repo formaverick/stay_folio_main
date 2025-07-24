@@ -26,7 +26,7 @@ public class CommonServiceImpl implements CommonService {
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
   
-  @Override
+	@Override
 	public Map<String, Object> getRecommend(int rc_id) {
 		String title = recommendMapper.getRecommendTitle(rc_id);
 	    List<StayVO> stays = recommendMapper.getRecommend(rc_id);

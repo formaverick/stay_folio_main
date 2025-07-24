@@ -17,20 +17,21 @@
 	<select id="getRecommend"
 		resultType="com.hotel.domain.StayVO">
 		SELECT
-		s.si_id AS si_id,
-		s.si_name AS si_name,
-		s.si_loca AS si_loca,
-		s.si_minprice AS si_minprice,
+		s.si_id AS siId,
+		s.si_name AS siName,
+		s.si_loca AS siLoca,
+		s.si_minperson AS siMinperson,
+		s.si_minprice AS siMinprice,
 		ROUND((1 - s.si_discount) * s.si_minprice) AS discountedPrice,
 		s.si_discount * 100 AS discount,
-		s.si_maxperson AS si_maxperson,
+		s.si_maxperson AS siMaxperson,
 		(
 		SELECT sp.sp_url
 		FROM t_stay_photo sp
 		WHERE sp.si_id = s.si_id
 		AND sp.ri_id IS NULL
 		AND ROWNUM = 1
-		) AS sp_url
+		) AS spUrl
 		FROM t_stay_info s
 		WHERE s.si_id IN (
 		SELECT sr.si_id

@@ -21,42 +21,42 @@ function loadRecommendations(rc_id) {
         stays.slice(i, i + 3).forEach(stay => {
           const item = document.createElement("div");
           item.className = "stay-item";
-          item.dataset.stayId = stay.si_id;
+          item.dataset.stayId = stay.siId;
 
           const discountSection = stay.discount > 0
             ? `
-              <span class="stay-price-original">₩${stay.si_minprice.toLocaleString()}</span>
+              <span class="stay-price-original">₩${stay.siMinprice.toLocaleString()}</span>
               <div class="stay-price-main">
                 <span class="stay-price-discount">${stay.discount}%</span>
                 <span class="stay-price-current">₩${stay.discountedPrice.toLocaleString()}~</span>
               </div>`
             : `
               <div class="stay-price-main">
-                <span class="stay-price-current">₩${stay.si_minprice.toLocaleString()}~</span>
+                <span class="stay-price-current">₩${stay.siMinprice.toLocaleString()}~</span>
               </div>`;
 
           const promoBadge = stay.discount > 0 ? `<div class="stay-promotion">프로모션</div>` : "";
 
           item.innerHTML = `
             <div class="stay-image">
-              <img src="${stay.sp_url}" alt="${stay.si_name}" />
+              <img src="${stay.spUrl}" alt="${stay.siName}" />
               ${promoBadge}
               <button class="stay-wishlist" data-wishlist="false">
                 <i class="ph ph-heart"></i>
               </button>
             </div>
             <div class="stay-content">
-              <h3 class="stay-name">${stay.si_name}</h3>
+              <h3 class="stay-name">${stay.siName}</h3>
               <div class="stay-location">
                 <i class="ph ph-map-pin"></i>
-                ${stay.si_loca}
+                ${stay.siLoca}
               </div>
               <div class="stay-price">${discountSection}</div>
             </div>
           `;
 
           item.addEventListener("click", () => {
-            window.location.href = `/stay/${stay.si_id}`;
+            window.location.href = `/stay/${stay.siId}`;
           });
 
           grid.appendChild(item);

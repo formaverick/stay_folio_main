@@ -6,7 +6,6 @@ function loadRecommendations(rc_id) {
       const subtitle = document.getElementById(`subtitle-${rc_id}`);
       const track = document.getElementById(`track-${rc_id}`);
 
-      // 제목
       const titleSplit = json.title.split(" - ");
       if (title) title.textContent = titleSplit[0] || "";
       if (subtitle) subtitle.textContent = titleSplit[1] || "";
@@ -39,7 +38,7 @@ function loadRecommendations(rc_id) {
 
           item.innerHTML = `
             <div class="stay-image">
-              <img src="${stay.spUrl}" alt="${stay.siName}" />
+              <img src="${stay.spUrl || '/resources/img/card1.png'}" alt="${stay.siName}" />
               ${promoBadge}
               <button class="stay-wishlist" data-wishlist="false">
                 <i class="ph ph-heart"></i>
@@ -64,13 +63,44 @@ function loadRecommendations(rc_id) {
 
         track.appendChild(grid);
       }
-      
-      initStayCarouselEvents();
+
+      initStayCarouselEvents(rc_id);
       initWishlistEvents();
     });
 }
 
-// 실제 호출 rc_id 기준
+// 동적 섹션 삽입 및 로딩 자동화
+const rcIdList = [1, 2, 3, 4, 5];
+
 document.addEventListener("DOMContentLoaded", () => {
-  loadRecommendations(1);
+  const container = document.getElementById("recommend-container");
+
+  rcIdList.forEach((rc_id) => {
+    const section = document.createElement("section");
+    section.className = "stay-section";
+    section.innerHTML = `
+      <div class="stay-container">
+        <div class="stay-header">
+          <div class="stay-title-area">
+            <h2 class="stay-main-title" id="title-${rc_id}"></h2>
+            <p class="stay-sub-title" id="subtitle-${rc_id}"></p>
+          </div>
+        </div>
+      </div>
+      <div class="stay-carousel-wrapper">
+        <button class="stay-nav-btn stay-nav-prev" id="stayPrevBtn-${rc_id}">
+          <i class="ph ph-caret-left"></i>
+        </button>
+        <div class="stay-carousel">
+          <div class="stay-carousel-track" id="track-${rc_id}"></div>
+        </div>
+        <button class="stay-nav-btn stay-nav-next" id="stayNextBtn-${rc_id}">
+          <i class="ph ph-caret-right"></i>
+        </button>
+      </div>
+    `;
+
+    container.appendChild(section);
+    loadRecommendations(rc_id);
+  });
 });

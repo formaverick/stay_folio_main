@@ -14,30 +14,40 @@
 	</select>
 
 
-	<select id="getRecommend"
-		resultType="com.hotel.domain.StayVO">
+	<select id="getRecommend" resultType="com.hotel.domain.StayVO">
 		SELECT
 		s.si_id AS siId,
 		s.si_name AS siName,
 		s.si_loca AS siLoca,
 		s.si_minperson AS siMinperson,
 		s.si_minprice AS siMinprice,
-		ROUND((1 - s.si_discount) * s.si_minprice) AS discountedPrice,
+		ROUND((1 - s.si_discount) * s.si_minprice)
+		AS discountedPrice,
 		s.si_discount * 100 AS discount,
-		s.si_maxperson AS siMaxperson,
-		(
-		SELECT sp.sp_url
-		FROM t_stay_photo sp
-		WHERE sp.si_id = s.si_id
-		AND sp.ri_id IS NULL
-		AND ROWNUM = 1
-		) AS spUrl
-		FROM t_stay_info s
-		WHERE s.si_id IN (
-		SELECT sr.si_id
-		FROM t_stay_recommend sr
+		s.si_maxperson AS
+		siMaxperson,
+		sp.sp_url AS spUrl
+		FROM (
+		SELECT sr.si_id, sr.sr_idx
+		FROM
+		t_stay_recommend sr
 		WHERE sr.rc_id = #{rc_id}
+		ORDER BY sr.sr_idx
+		) r
+		JOIN
+		t_stay_info s ON s.si_id = r.si_id
+		LEFT OUTER JOIN (
+		SELECT si_id,
+		sp_url FROM (
+		SELECT si_id, sp_url,
+		ROW_NUMBER() OVER (PARTITION BY
+		si_id ORDER BY sp_idx) AS rn
+		FROM t_stay_photo
+		WHERE ri_id IS NULL
 		)
+		WHERE rn = 1
+		) sp ON s.si_id = sp.si_id
+		ORDER BY r.sr_idx
 	</select>
 
 

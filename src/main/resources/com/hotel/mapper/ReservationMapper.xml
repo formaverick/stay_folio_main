@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hotel.mapper.ReservationMapper">
+
+<resultMap id="reservationPageMap" type="com.hotel.domain.ReservationPageVO">
+  <result property="riId" column="ri_id" />
+  <result property="riName" column="ri_name" />
+  <result property="riPerson" column="ri_person" />
+  <result property="riMaxperson" column="ri_maxperson" />
+  <result property="riBed" column="ri_bed" />
+  <result property="riBedcnt" column="ri_bedcnt" />
+  <result property="riBedroom" column="ri_bedroom" />
+  <result property="riBathroom" column="ri_bathroom" />
+  <result property="siId" column="si_id" />
+  <result property="siName" column="si_name" />
+  <result property="siPeak" column="si_peak" />
+  <result property="siOff" column="si_off" />
+  <result property="siDiscount" column="si_discount" />
+  <result property="miId" column="mi_id" />
+  <result property="miName" column="mi_name" />
+  <result property="miPhone" column="mi_phone" />
+</resultMap>
+
+<select id="getReservationPageInfo" resultMap="reservationPageMap">
+  SELECT 
+    r.ri_id,
+    r.ri_name,
+    r.ri_person,
+    r.ri_maxperson,
+    r.ri_bed,
+    r.ri_bedcnt,
+    r.ri_bedroom,
+    r.ri_bathroom,
+    s.si_id,
+    s.si_name,
+    s.si_peak,
+    s.si_off,
+    s.si_discount,
+    m.mi_id,
+    m.mi_name,
+    m.mi_phone
+  FROM t_room_info r
+  JOIN t_stay_info s ON r.si_id = s.si_id
+  LEFT JOIN t_member_info m ON 
+    <choose>
+      <when test="miId != null">
+        m.mi_id = #{miId}
+      </when>
+      <otherwise>
+        1 = 0
+      </otherwise>
+    </choose>
+  WHERE r.ri_id = #{riId}
+  AND s.si_id = #{siId}
+</select>
+
+
+
+<insert id="insertReservation" parameterType="com.hotel.domain.ReservationCreateDTO">
+ <selectKey resultType="string" keyProperty="srId" order="BEFORE">
+  SELECT TO_CHAR(SYSDATE, 'YYYYMMDD') || '-' || LPAD(seq_booking_no.NEXTVAL, 6, '0') AS sr_id FROM dual
+</selectKey>
+
+
+  INSERT INTO t_stay_reservation (
+    sr_id, si_id, ri_id, mi_id, sr_name, sr_email, sr_phone,
+    sr_request, sr_date, sr_adult, sr_child, sr_infant,
+    sr_checkin, sr_checkout, sr_roomprice, sr_discount,
+    sr_addperson_fee, sr_totalprice, sr_payment, sr_paydate, sr_status
+  )
+  VALUES (
+    #{srId}, #{siId}, #{riId}, #{miId,jdbcType=VARCHAR}, #{srName}, #{srEmail,jdbcType=VARCHAR}, #{srPhone},
+    #{srRequest,jdbcType=CLOB}, SYSDATE, #{srAdult}, #{srChild}, #{srInfant},
+    #{srCheckin}, #{srCheckout}, #{srRoomprice}, #{srDiscount},
+    #{srAddpersonFee}, #{srTotalprice}, #{srPayment}, SYSDATE, #{srStatus}
+  )
+</insert>
+
+
+
+
+
+
+  <!-- 2. 예약 조회 -->
+  <select id="selectReservationById" parameterType="string" resultType="com.hotel.domain.ReservationDTO">
+    SELECT *
+    FROM t_stay_reservation
+    WHERE sr_id = #{srId}
+  </select>
+
+  <!-- 3. 예약 취소 -->
+  <update id="cancelReservation" parameterType="com.hotel.domain.ReservationCancelDTO">
+    UPDATE t_stay_reservation
+    SET sr_status = #{srStatus},
+        sr_cancledate = #{srCancledate}
+    WHERE sr_id = #{srId}
+  </update>
+
+  <!-- 4. 중복 예약 체크 -->
+  <select id="checkDuplicateReservation" parameterType="com.hotel.domain.ReservationDTO" resultType="int">
+    SELECT COUNT(*)
+    FROM t_stay_reservation
+    WHERE ri_id = #{riId}
+      AND <![CDATA[
+        (sr_checkin <= #{srCheckout} AND sr_checkout >= #{srCheckin})
+      ]]>
+      AND sr_status = 'A'
+  </select>
+
+</mapper>

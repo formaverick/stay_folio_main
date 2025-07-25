@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hotel.mapper.ReservationPriceMapper">
+
+  
+  <resultMap id="ReservationPriceMap" type="com.hotel.domain.ReservationDTO">
+    <result column="ri_id" property="riId"/>
+    <result column="ri_name" property="riName"/>
+    <result column="ri_price" property="riPrice"/>
+    <result column="ri_person" property="riPerson"/>
+    <result column="ri_maxperson" property="riMaxperson"/>
+    <result column="si_id" property="siId"/>
+    <result column="si_peak" property="siPeak"/>
+    <result column="si_off" property="siOff"/>
+    <result column="si_discount" property="siDiscount"/>
+    <result column="si_extra" property="siExtra"/>
+  </resultMap>
+
+  <select id="getReservationPriceInfo" resultMap="ReservationPriceMap">
+    SELECT 
+      r.ri_id, r.ri_name, r.ri_price, r.ri_person,r.ri_maxperson,
+      s.si_id, s.si_peak, s.si_off, s.si_discount, s.si_extra
+    FROM 
+      t_room_info r
+      JOIN t_stay_info s ON r.si_id = s.si_id
+    WHERE 
+      r.ri_id = #{riId}
+      AND s.si_id = #{siId}
+  </select>
+	
+	
+	
+</mapper>

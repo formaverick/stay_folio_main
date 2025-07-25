@@ -53,7 +53,8 @@
 
     <!-- ✅ 결제 수단 -->
     <h3>결제 수단</h3>
-    <label><input type="radio" name="srPayment" value="CARD" checked> 카드결제</label><br/>
+    <label><input type="radio" name="srPayment" value="국민카드" checked> 국민카드</label><br/>
+    <label><input type="radio" name="srPayment" value="신한카드" checked> 신한카드</label><br/>
     <label><input type="radio" name="srPayment" value="BANK"> 무통장입금</label><br/>
 
     <!-- ✅ 약관 동의 -->
@@ -86,7 +87,7 @@
     <h3>결제 금액</h3>
     <c:choose>
       <c:when test="${info.nights > 0}">
-        <p>1박 요금: ₩<fmt:formatNumber value="${info.totalPrice / info.nights}" pattern="#,###" /></p>
+        <p>1박 요금: ₩<fmt:formatNumber value="${info.srRoomPrice/info.nights}" pattern="#,###" /></p>
       </c:when>
       <c:otherwise>
         <p>1박 요금: 계산 불가</p>
@@ -94,13 +95,13 @@
     </c:choose>
     
     <p>숙박일수: ${info.nights}박</p>
-    <p>추가 인원 요금: ₩<fmt:formatNumber value="${info.extraFee}" pattern="#,###" /></p>
-    <p>할인 금액: -₩<fmt:formatNumber value="${info.siDiscount}" pattern="#,###" /></p>
-    <p><strong>총 결제금액: ₩<fmt:formatNumber value="${info.totalPrice}" pattern="#,###" /></strong></p>
+    <p>추가 인원 요금: ₩<fmt:formatNumber value="${info.srAddpersonFee}" pattern="#,###" /></p>
+    <p>할인 금액: -₩<fmt:formatNumber value="${info.siDiscount}" pattern="#,###" /></p> 
+    <p><strong>총 결제금액: ₩<fmt:formatNumber value="${info.srtotalPrice}" pattern="#,###" /></strong></p>
 
     <hr />
-    <p style="color: gray; font-size: 0.9em;">성수기 요율: <fmt:formatNumber value="${info.siPeak}" pattern="0.0" />배</p>
-    <p style="color: gray; font-size: 0.9em;">비성수기 요율: <fmt:formatNumber value="${info.siOff}" pattern="0.0" />배</p>
+    <p style="color: gray; font-size: 0.9em;">성수기 %: <fmt:formatNumber value="${info.siPeak}" pattern="0.0" />배</p>
+    <p style="color: gray; font-size: 0.9em;">비성수기 %: <fmt:formatNumber value="${info.siOff}" pattern="0.0" />배</p>
 
     <button type="submit" style="width:100%; padding:10px;">결제하기</button>
   </aside>
@@ -113,10 +114,10 @@
   <input type="hidden" name="srChild" value="${srChild}" />
   <input type="hidden" name="srCheckin" value="${checkin}" />
   <input type="hidden" name="srCheckout" value="${checkout}" />
-  <input type="hidden" name="srRoomprice" value="${info.riPrice}" />
-  <input type="hidden" name="srDiscount" value="${info.siDiscount}" />
-  <input type="hidden" name="srAddpersonfee" value="${info.extraFee}" />
-  <input type="hidden" name="srTotalprice" value="${info.totalPrice}" />
+  <input type="hidden" name="srRoomPrice" value="${info.srRoomPrice}" />
+  <input type="hidden" name="srDiscount" value="${info.srDiscount}" />
+  <input type="hidden" name="srAddpersonFee" value="${info.srAddpersonFee}" />
+  <input type="hidden" name="srTotalprice" value="${info.srtotalPrice}" />
   <input type="hidden" name="srStatus" value="a" />
 
 </form>

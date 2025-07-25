@@ -54,14 +54,13 @@ public class ReservationControllerTest {
 	    dto.setSiId(1);
 	    dto.setMiId(null);
 	    dto.setSrEmail("test@example.com");
-	    dto.setSrRequest("꺠끗하게 청소 부탁드립니다"); // ✅ 또는 dto.setSrRequest("고객 요청 사항 없음");
+	    dto.setSrRequest("꺠끗하게 청소 부탁드립니다");
 	    dto.setSrName("테스트유저");
 	    dto.setSrPhone("010-1234-5678");
 	    dto.setSrCheckin(LocalDate.of(2025, 8, 10));
 	    dto.setSrCheckout(LocalDate.of(2025, 8, 12));
 	    dto.setSrAdult(2);
 	    dto.setSrChild(0);
-	    dto.setSrInfant(0);
 	    dto.setSrPayment("국민카드");
 	    dto.setSrStatus("a");
 
@@ -95,7 +94,7 @@ public class ReservationControllerTest {
 
 	    dto.setSrAdult(2);
 	    dto.setSrChild(1);
-	    dto.setSrInfant(0);
+	 
 
 	    dto.setSrCheckin(LocalDate.of(2025, 8, 15));
 	    dto.setSrCheckout(LocalDate.of(2025, 8, 17));
@@ -116,7 +115,7 @@ public class ReservationControllerTest {
 
 	    assertEquals(1, result);
 	    assertNotNull(dto.getSrId());
-	    assertEquals(dto.getMiId(), dto.getSrEmail()); // 자동 메일 반영 확인
+	    assertEquals(dto.getMiId(), dto.getSrEmail()); 
 	}
 
 }

@@ -25,9 +25,10 @@ public class ReservationPageVO {
     private String miName;
     private String miPhone;
     
-	// ✅ 추가
+    private int srRoomPrice; 	 // 숙박기본가격*성수기/비성수기*박
+    private int srAddpersonFee;  // 추가인원 요금
+    private int srtotalPrice;	 // 총금액	
 	private int riPrice;         // 1박 요금
 	private long nights;         // 숙박일수
-	private int extraFee;        // 추가 인원 요금
-	private double totalPrice;      // 총 결제 금액
+	private int srDiscount;		 // 할인금액
 }

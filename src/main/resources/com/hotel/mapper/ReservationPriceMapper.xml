@@ -5,7 +5,7 @@
 
 <mapper namespace="com.hotel.mapper.ReservationPriceMapper">
 
-  <!-- 명시적인 resultMap 정의 -->
+  
   <resultMap id="ReservationPriceMap" type="com.hotel.domain.ReservationDTO">
     <result column="ri_id" property="riId"/>
     <result column="ri_name" property="riName"/>
@@ -30,5 +30,7 @@
       r.ri_id = #{riId}
       AND s.si_id = #{siId}
   </select>
-
+	
+	
+	
 </mapper>

@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hotel.domain.ReservationCreateDTO;
 import com.hotel.domain.ReservationDTO;
+import com.hotel.domain.ReservationDetail;
 import com.hotel.domain.ReservationPageVO;
 import com.hotel.domain.ReservationPriceResultDTO;
 import com.hotel.service.ReservationService;
@@ -58,7 +59,7 @@ public class ReservationController {
 	        adult, child
 	    );
 
-	    // ✅ JSP에 넘길 값들
+	    // JSP에 넘길 값들
 	    model.addAttribute("info", pageInfo);
 	    model.addAttribute("checkin", checkin);
 	    model.addAttribute("checkout", checkout);
@@ -67,51 +68,40 @@ public class ReservationController {
 	    model.addAttribute("siId", siId);
 	    model.addAttribute("riId", riId);
 	    model.addAttribute("miId", miId);
-	    model.addAttribute("isLogin", principal != null); // ✅ 이거 꼭 필요
-
+	    model.addAttribute("isLogin", principal != null); 
+	   
 	    // 로그인 시 예약자 정보 미리 채우기
 	    if (pageInfo != null && pageInfo.getMiName() != null) {
 	        model.addAttribute("srName", pageInfo.getMiName());
 	        model.addAttribute("srEmail", pageInfo.getMiId());
 	        model.addAttribute("srPhone", pageInfo.getMiPhone());
 	    }
-
+	    
 	    return "reservation";
 	}
 
-
-
-
-
-
-
-	
 	// 예약 처리
-	
 	@PostMapping("/submit")
 	public String submitReservation(ReservationCreateDTO dto, RedirectAttributes rttr) {
+		log.info("submit");
 	    try {
-	        reservationService.reserve(dto); // 서비스 호출
-	        rttr.addFlashAttribute("message", "예약이 완료되었습니다!");
-	        return "redirect:/mypage/reservation"; // 예약 내역 페이지로 이동
+	        reservationService.reserve(dto);
+	       
+	        return "redirect:/reservation/complete/" + dto.getSrId(); //  완료 페이지로 리다이렉트
 	    } catch (Exception e) {
-	        rttr.addFlashAttribute("error", e.getMessage());
-	        return "redirect:/reservation"; // 에러 발생 시 다시 예약 페이지
+	        rttr.addFlashAttribute("error", "예약 실패: " + e.getMessage());
+	        return "redirect:/reservation/" + dto.getSiId() + "/" + dto.getRiId();
 	    }
 	}
 
-
-	// 예약 완료 페이지
-	@GetMapping("/complete/{id}")
-	public String reservationComplete(@PathVariable("id") String reservationId, Model model) {
-	    ReservationDTO reservation = reservationService.getReservation(reservationId);
+	// 예약 상세 페이지
+	@GetMapping("/complete/{sr_id}")
+	public String reservationComplete(@PathVariable("sr_id") String reservationId, Model model) {
+	    ReservationDetail reservation = reservationService.getReservation(reservationId);
 	    model.addAttribute("reservation", reservation);
 	    return "reservation/complete";
 	}
-	
-	
 
 
-	
 
 }

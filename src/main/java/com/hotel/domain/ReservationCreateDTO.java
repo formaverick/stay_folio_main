@@ -21,7 +21,7 @@ public class ReservationCreateDTO {
 
 	private int srAdult; // 어른
 	private int srChild; // 아동
-	private int srInfant; // 유아
+	
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate srCheckin;	//체크인

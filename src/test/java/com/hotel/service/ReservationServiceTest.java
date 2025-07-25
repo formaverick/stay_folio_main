@@ -35,7 +35,7 @@ public class ReservationServiceTest {
 
 		dto.setSrAdult(2);
 		dto.setSrChild(1);
-		dto.setSrInfant(0);
+		
 
 		dto.setSrName("test");
 		dto.setSrEmail("test@gmail.com");

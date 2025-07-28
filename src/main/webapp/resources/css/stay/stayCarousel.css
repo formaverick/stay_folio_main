@@ -4,6 +4,7 @@
   height: 40rem; /* 580px */
   position: relative;
   overflow: hidden;
+  z-index: 999;
 }
 
 /* 뒤로가기 버튼 */

@@ -242,7 +242,9 @@ $(document).ready(function () {
     
     // 폼 제출
     $("#combined-form").submit();
-    // 로그인 성공 페이지로 이동
-    // window.location.href = "signupSuccess.html";
+    // 로그인 버튼 클릭 이벤트
+  $(".btn-login").on("click", function () {
+    window.location.href = "login.html";
+  });
   });
 });

@@ -24,7 +24,7 @@ body {
   margin-bottom: 30px;
   overflow: hidden;
   border-radius: 8px;
-  max-width: 85%;
+  max-width: 70%;
   margin-right: auto;
 }
 
@@ -35,7 +35,7 @@ body {
   display: block;
 }
 .stay-description-main {
-  max-width: 85%;
+  max-width: 70%;
   margin-bottom: 50px;
   line-height: 1.7;
   color: #333;
@@ -55,7 +55,7 @@ body {
   margin: 50px 0 25px;
   padding-bottom: 10px;
   border-bottom: 1px solid #eee;
-  max-width: 85%;
+  max-width: 70%;
   letter-spacing: -0.03em;
 }
 
@@ -64,7 +64,7 @@ body {
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   margin-bottom: 25px;
-  max-width: 85%;
+  max-width: 70%;
 }
 
 .photo-item {
@@ -84,7 +84,7 @@ body {
 
 .feature-description {
   margin-bottom: 50px;
-  max-width: 85%;
+  max-width: 70%;
   font-weight: 400;
   padding-left: 2px;
 }
@@ -100,7 +100,7 @@ body {
 .feature-description p {
   line-height: 1.7;
   font-weight: 400;
-  color: #555;
+  color: #666;
   font-size: 15px;
   letter-spacing: -0.02em;
 }
@@ -120,13 +120,13 @@ body {
 
 /* 객실 선택 섹션 */
 .room-list {
-  max-width: 85%;
+  max-width: 70%;
   margin-bottom: 50px;
 }
 
 /* 위치 및 정보 섹션 */
 .location-info-container {
-  max-width: 85%;
+  max-width: 70%;
   margin-bottom: 30px;
 }
 
@@ -155,7 +155,7 @@ body {
 .contact-item i {
   font-size: 18px;
   margin-right: 10px;
-  color: #555;
+  color: #666;
 }
 
 .contact-item span {
@@ -165,7 +165,7 @@ body {
 }
 
 .location-map {
-  max-width: 85%;
+  max-width: 70%;
   margin-bottom: 50px;
   border-radius: 8px;
   overflow: hidden;
@@ -221,7 +221,7 @@ body {
 
 .room-capacity {
   font-size: 15px;
-  color: #555;
+  color: #666;
   margin-bottom: 5px;
 }
 
@@ -419,7 +419,7 @@ body {
 
 .amenity i {
   font-size: 1.25rem;
-  color: #555;
+  color: #666;
 }
 
 /* 편의시설 반응형 */
@@ -686,13 +686,13 @@ body {
 
 .location-item i {
   font-size: 1.25rem;
-  color: #555;
+  color: #666;
 }
 
 /* 안내사항 섹션 */
 .guidelines-content {
   margin-bottom: 50px;
-  max-width: 85%;
+  max-width: 70%;
 }
 
 /* 아코디언 스타일 */
@@ -747,7 +747,7 @@ body {
 .accordion-content p {
   font-size: 15px;
   line-height: 1.6;
-  color: #555;
+  color: #666;
   margin-bottom: 8px;
 }
 

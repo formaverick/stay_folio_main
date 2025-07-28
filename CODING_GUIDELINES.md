@@ -1,544 +1,150 @@
-# Stay Folio 코딩 가이드라인
+### **Stay Folio 프론트엔드 코딩 규약**
 
-## 📋 목차
-1. [프로젝트 구조](#프로젝트-구조)
-2. [네이밍 컨벤션](#네이밍-컨벤션)
-3. [HTML 가이드라인](#html-가이드라인)
-4. [CSS 가이드라인](#css-가이드라인)
-5. [JavaScript 가이드라인](#javascript-가이드라인)
-6. [파일 구조 규칙](#파일-구조-규칙)
-7. [코드 품질 규칙](#코드-품질-규칙)
+이 문서는 `stay_folio` 프로젝트의 프론트엔드 코드(HTML, CSS, JavaScript) 작성에 대한 규칙과 가이드라인을 정의합니다. 모든 팀원은 이 규약을 준수하여 코드의 일관성, 가독성, 유지보수성을 높여야 합니다.
 
----
+#### **1. 일반 원칙**
 
-## 🏗️ 프로젝트 구조
-
-### 디렉토리 구조
-```
-src/main/webapp/
-├── WEB-INF/views/          # JSP/HTML 뷰 파일
-│   ├── admin/              # 관리자 페이지
-│   ├── login/              # 로그인 관련 페이지
-│   ├── includes/           # 공통 컴포넌트 (header, footer)
-│   └── home.jsp            # 메인 페이지
-└── resources/
-    ├── css/                # 스타일시트
-    │   ├── common.css      # 공통 스타일
-    │   ├── header.css      # 헤더 전용
-    │   ├── footer.css      # 푸터 전용
-    │   └── [module]/       # 모듈별 CSS 폴더
-    ├── js/                 # JavaScript 파일
-    └── icons/              # 아이콘 리소스
-```
+- **일관성:** 프로젝트 내 기존 코드의 스타일과 패턴을 최우선으로 따릅니다.
+- **가독성:** 다른 사람이 코드를 쉽게 이해할 수 있도록 명확하고 간결하게 작성합니다.
+- **모듈화:** 기능별, 페이지별로 파일을 분리하여 관심사를 분리하고 재사용성을 높입니다.
 
 ---
 
-## 🏷️ 네이밍 컨벤션
+#### **2. HTML 규약**
 
-### 파일명
-- **HTML/JSP**: `camelCase.html` (예: `signupSuccess.html`)
-- **CSS**: `kebab-case.css` (예: `login-form.css`)
-- **JavaScript**: `camelCase.js` (예: `formValidator.js`)
+1.  **기본 구조**
+    - 모든 HTML 문서는 `<!DOCTYPE html>`으로 시작하고, `lang="ko"` 속성을 포함해야 합니다.
+    - 문자 인코딩은 `UTF-8`을 사용합니다.
+      ```html
+      <!DOCTYPE html>
+      <html lang="ko">
+        <head>
+          <meta charset="UTF-8" />
+          ...
+        </head>
+        ...
+      </html>
+      ```
 
-### CSS 클래스명
-```css
-/* BEM 방법론 기반 */
-.block-name {}              /* 블록 */
-.block-name__element {}     /* 요소 */
-.block-name--modifier {}    /* 수정자 */
+2.  **시맨틱 마크업**
+    - `header`, `footer`, `nav`, `main`, `section`, `article`, `aside` 등 시맨틱 태그를 의미에 맞게 적극적으로 사용합니다.
+    - 단순 `<div>` 남용을 지양하고, 콘텐츠의 구조를 명확히 표현합니다.
 
-/* 실제 예시 */
-.login-page {}              /* 페이지 블록 */
-.login-form {}              /* 폼 블록 */
-.login-form__input {}       /* 폼의 입력 요소 */
-.login-form__button {}      /* 폼의 버튼 요소 */
-.login-form--disabled {}    /* 비활성화된 폼 */
-```
+3.  **들여쓰기 및 형식**
+    - 들여쓰기는 **공백(Space) 2칸**을 사용합니다.
+    - 속성값은 항상 큰따옴표(`"`)로 감쌉니다.
 
-### JavaScript 변수/함수명
-```javascript
-// 변수: camelCase
-const userName = 'john';
-const isValidEmail = true;
+4.  **클래스 명명**
+    - CSS 규약의 명명 규칙(BEM 기반)을 따릅니다. (아래 CSS 섹션 참조)
+    - JavaScript에서 특정 요소를 선택하기 위한 목적으로만 클래스를 사용할 경우, `js-` 접두사를 붙여 스타일링 목적의 클래스와 구분합니다. (예: `class="js-modal-trigger"`)
 
-// 함수: camelCase (동사로 시작)
-function validateEmail() {}
-function handleSubmit() {}
-function toggleVisibility() {}
-
-// 상수: UPPER_SNAKE_CASE
-const MAX_PASSWORD_LENGTH = 20;
-const API_ENDPOINTS = {};
-
-// jQuery 객체: $ 접두사
-const $form = $('.login-form');
-const $errorMessage = $('.error-message');
-```
-
-### ID 및 Name 속성
-```html
-<!-- kebab-case 사용 -->
-<input id="user-email" name="user-email" />
-<input id="confirm-password" name="confirm-password" />
-<div id="error-message-container"></div>
-```
+5.  **주석**
+    - 복잡한 UI 구조나 특정 마크업이 필요한 이유를 설명할 때 주석을 사용합니다.
+    - 시작과 끝을 명시하여 가독성을 높입니다.
+      ```html
+      <!-- 메인 캐러셀 시작 -->
+      <section class="carousel-container">
+        ...
+      </section>
+      <!-- 메인 캐러셀 끝 -->
+      ```
 
 ---
 
-## 📄 HTML 가이드라인
+#### **3. CSS 규약**
 
-### 기본 구조
-```html
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>페이지명 - Stay Folio</title>
-    
-    <!-- CSS 로드 순서 -->
-    <link rel="stylesheet" href="../../../resources/css/common.css" />
-    <link rel="stylesheet" href="../../../resources/css/header.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
-    <link rel="stylesheet" href="../../../resources/css/[module]/[page].css" />
-</head>
-<body>
-    <!-- 헤더 include -->
-    <!-- 메인 콘텐츠 -->
-    <!-- 푸터 include -->
-    
-    <!-- JavaScript 로드 (body 끝) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="../../../resources/js/[module].js"></script>
-</body>
-</html>
-```
+1.  **파일 구조**
+    - **`common.css`**: 모든 페이지에 공통적으로 적용되는 스타일 (폰트, 리셋, 기본 레이아웃, 버튼 등)을 정의합니다.
+    - **페이지/컴포넌트별 분리**: 각 페이지나 주요 컴포넌트별로 CSS 파일을 분리하여 관리합니다.
+      - 예: `login/login.css`, `admin/room/roomList.css`, `stayCard.css`
 
-### 시맨틱 HTML 사용
-```html
-<!-- 좋은 예 -->
-<main class="login-page">
-    <section class="login-form-section">
-        <h2 class="login-title">LOGIN</h2>
-        <form class="login-form" role="form">
-            <fieldset>
-                <legend class="sr-only">로그인 정보</legend>
-                <div class="form-group">
-                    <label for="user-email">이메일</label>
-                    <input type="email" id="user-email" required />
-                </div>
-            </fieldset>
-        </form>
-    </section>
-</main>
+2.  **명명 규칙 (BEM 기반)**
+    - 클래스 이름은 **케밥 케이스(kebab-case)**를 사용합니다.
+    - 구조는 `[블록]-[요소]--[상태]` 형식을 따릅니다.
+    - **블록(Block):** 기능적으로 독립적인 최상위 컴포넌트. (예: `admin-login`, `search-filter`, `stay-card`)
+    - **요소(Element):** 블록을 구성하는 부분. 블록 이름 뒤에 하이픈(-)으로 연결합니다. (예: `admin-login-form`, `search-filter-container`, `stay-card-image`)
+    - **상태(Modifier):** 블록이나 요소의 상태나 변형. 점(`.`)으로 구분된 별도의 클래스로 정의합니다. (예: `.active`, `.error`, `.disabled`)
 
-<!-- 피해야 할 예 -->
-<div class="login-page">
-    <div class="login-form">
-        <div class="title">LOGIN</div>
-        <div class="form">
-            <div>이메일</div>
-            <input type="text" />
-        </div>
-    </div>
-</div>
-```
+      ```css
+      /* 블록 */
+      .admin-login-container { ... }
 
-### 접근성 고려사항
-```html
-<!-- ARIA 속성 사용 -->
-<input type="password" 
-       id="password" 
-       aria-describedby="password-help"
-       aria-invalid="false" />
-<div id="password-help" class="help-text">
-    8자 이상, 영문/숫자/특수문자 조합
-</div>
+      /* 요소 */
+      .admin-login-form { ... }
+      .admin-login-form .form-group { ... }
 
-<!-- 스크린 리더 전용 텍스트 -->
-<span class="sr-only">필수 입력 항목</span>
-```
+      /* 상태 */
+      .form-group.error input { ... }
+      .nav-item.active { ... }
+      ```
+
+3.  **선택자**
+    - ID 선택자(`#id`)는 스타일링에 사용하지 않습니다. 클래스 선택자를 사용하세요.
+    - 불필요한 태그 선택자 중첩을 피합니다. (예: `ul.nav` 대신 `.nav`)
+
+4.  **단위**
+    - **`rem`**: 폰트 크기, `padding`, `margin` 등 전체 레이아웃과 관련된 유동적인 크기에 사용합니다.
+    - **`px`**: `border` 두께 등 고정된 크기가 필요할 때 사용합니다.
+    - **`%`**: 부모 요소에 대한 상대적인 너비/높이를 지정할 때 사용합니다.
+
+5.  **주석**
+    - 파일 상단에 해당 파일의 역할을 명시합니다.
+    - 복잡한 스타일이나 특정 섹션을 구분할 때 주석을 사용합니다.
+      ```css
+      /* 관리자 로그인 페이지 스타일 */
+
+      .admin-login-container { ... }
+      ```
 
 ---
 
-## 🎨 CSS 가이드라인
+#### **4. JavaScript (jQuery 포함) 규약**
 
-### 기본 원칙
-1. **모바일 퍼스트**: 작은 화면부터 설계
-2. **모듈화**: 컴포넌트별 CSS 분리
-3. **일관성**: 통일된 디자인 시스템 사용
+1.  **파일 구조**
+    - CSS와 마찬가지로 기능 및 페이지 단위로 파일을 분리합니다.
+      - 예: `login/signup.js`, `main/carousel.js`, `search/searchFilter.js`
 
-### 색상 시스템
-```css
-:root {
-    /* Primary Colors */
-    --color-primary: #000000;
-    --color-secondary: #222222;
-    --color-accent: #888888;
-    
-    /* Background Colors */
-    --color-bg-primary: #ffffff;
-    --color-bg-secondary: #f9f9f9;
-    --color-bg-error: #fff5f5;
-    
-    /* Text Colors */
-    --color-text-primary: #222222;
-    --color-text-secondary: #888888;
-    --color-text-error: #e53e3e;
-    
-    /* Border Colors */
-    --color-border-default: #e0e0e0;
-    --color-border-focus: #111111;
-    --color-border-error: #e53e3e;
-}
-```
+2.  **변수 및 상수**
+    - 변수는 **카멜 케이스(camelCase)**를 사용합니다.
+    - 변수 선언은 `const`를 기본으로 사용하고, 재할당이 필요한 경우에만 `let`을 사용합니다. `var`는 사용하지 않습니다.
+    - **jQuery 객체를 담는 변수는 `$` 접두사**를 붙여 DOM 요소임을 명확히 합니다.
+      ```javascript
+      const $carousel = $(".carousel");
+      let currentSlide = 0;
+      ```
 
-### 타이포그래피
-```css
-:root {
-    /* Font Family */
-    --font-primary: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-    
-    /* Font Sizes */
-    --font-size-xs: 0.75rem;    /* 12px */
-    --font-size-sm: 0.875rem;   /* 14px */
-    --font-size-base: 1rem;     /* 16px */
-    --font-size-lg: 1.125rem;   /* 18px */
-    --font-size-xl: 1.25rem;    /* 20px */
-    --font-size-2xl: 1.5rem;    /* 24px */
-    
-    /* Font Weights */
-    --font-weight-normal: 400;
-    --font-weight-medium: 500;
-    --font-weight-semibold: 600;
-    --font-weight-bold: 700;
-    
-    /* Line Heights */
-    --line-height-tight: 1.25;
-    --line-height-normal: 1.5;
-    --line-height-relaxed: 1.75;
-}
-```
+3.  **함수**
+    - 함수명은 **카멜 케이스(camelCase)**를 사용하며, 동사로 시작하여 그 역할을 명확히 나타냅니다.
+      - 예: `validateEmail()`, `updateDateDisplay()`, `handleFormSubmit()`
+    - 하나의 함수는 하나의 기능만 수행하도록 작성합니다.
 
-### 간격 시스템
-```css
-:root {
-    /* Spacing Scale */
-    --space-xs: 0.25rem;   /* 4px */
-    --space-sm: 0.5rem;    /* 8px */
-    --space-md: 1rem;      /* 16px */
-    --space-lg: 1.5rem;    /* 24px */
-    --space-xl: 2rem;      /* 32px */
-    --space-2xl: 3rem;     /* 48px */
-    --space-3xl: 4rem;     /* 64px */
-}
-```
+4.  **jQuery 사용**
+    - 모든 코드는 `$(document).ready(function() { ... });` 내에 작성하여 DOM이 완전히 로드된 후 스크립트가 실행되도록 보장합니다.
+    - 이벤트 핸들러는 `.on()`을 사용합니다.
+      ```javascript
+      // Good
+      $(".btn-login").on("click", handleLogin);
 
-### 컴포넌트 스타일 예시
-```css
-/* 버튼 컴포넌트 */
-.btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-sm) var(--space-md);
-    border: 1px solid transparent;
-    border-radius: 8px;
-    font-family: var(--font-primary);
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-medium);
-    text-decoration: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
+      // Bad
+      $(".btn-login").click(handleLogin);
+      ```
 
-.btn--primary {
-    background-color: var(--color-primary);
-    color: var(--color-bg-primary);
-}
+5.  **유효성 검사**
+    - 모든 사용자 입력 폼에는 제출 전 클라이언트 사이드 유효성 검사를 구현합니다.
+    - 각 필드별 검사 함수(`validateEmail`, `validatePassword` 등)를 만들어 재사용성을 높입니다.
+    - 에러 메시지는 해당 입력 필드 바로 아래에 `.error-message` 클래스를 가진 요소를 통해 표시합니다.
 
-.btn--primary:hover {
-    background-color: var(--color-secondary);
-}
+6.  **이벤트 처리**
+    - `scroll`, `input`과 같이 빈번하게 발생하는 이벤트는 **디바운스(debounce)**를 적용하여 성능 저하를 방지합니다.
+      ```javascript
+      const debouncedValidate = debounce(function ($field) {
+        validateField($field, $field.val());
+      }, 500);
 
-.btn--secondary {
-    background-color: transparent;
-    color: var(--color-primary);
-    border-color: var(--color-border-default);
-}
-```
+      $field.on("input", function () {
+        debouncedValidate($(this));
+      });
+      ```
 
-### 반응형 디자인
-```css
-/* 브레이크포인트 */
-:root {
-    --breakpoint-sm: 576px;
-    --breakpoint-md: 768px;
-    --breakpoint-lg: 992px;
-    --breakpoint-xl: 1200px;
-}
-
-/* 미디어 쿼리 사용 */
-.container {
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
-    padding: var(--space-md);
-}
-
-@media (min-width: 768px) {
-    .container {
-        max-width: 600px;
-        padding: var(--space-lg);
-    }
-}
-```
-
----
-
-## ⚡ JavaScript 가이드라인
-
-### 기본 원칙
-1. **ES6+ 문법 사용** (const/let, arrow functions, destructuring)
-2. **함수형 프로그래밍** 지향
-3. **에러 핸들링** 필수
-4. **성능 최적화** (디바운싱, 쓰로틀링)
-
-### 코드 구조
-```javascript
-// 1. 상수 선언
-const VALIDATION_RULES = {
-    EMAIL: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
-    PASSWORD: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-    PHONE: /^\d{10,11}$/
-};
-
-// 2. 유틸리티 함수
-const debounce = (func, delay) => {
-    let timeoutId;
-    return (...args) => {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => func.apply(null, args), delay);
-    };
-};
-
-// 3. 검증 함수들
-const validateEmail = (email) => VALIDATION_RULES.EMAIL.test(email);
-const validatePassword = (password) => VALIDATION_RULES.PASSWORD.test(password);
-
-// 4. DOM 조작 함수들
-const showError = ($field, message) => {
-    const $errorElement = $field.siblings('.error-message');
-    $errorElement.text(message).show();
-    $field.addClass('error');
-};
-
-const hideError = ($field) => {
-    const $errorElement = $field.siblings('.error-message');
-    $errorElement.hide();
-    $field.removeClass('error');
-};
-
-// 5. 이벤트 핸들러
-const handleFormSubmit = (event) => {
-    event.preventDefault();
-    // 폼 처리 로직
-};
-
-// 6. 초기화 함수
-const initializeForm = () => {
-    const $form = $('.login-form');
-    const $inputs = $form.find('input');
-    
-    // 이벤트 리스너 등록
-    $form.on('submit', handleFormSubmit);
-    $inputs.on('blur', handleFieldBlur);
-    $inputs.on('input', debounce(handleFieldInput, 500));
-};
-
-// 7. DOM 준비 완료 시 실행
-$(document).ready(initializeForm);
-```
-
-### 에러 핸들링
-```javascript
-// try-catch 사용
-const submitForm = async (formData) => {
-    try {
-        const response = await fetch('/api/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData)
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const result = await response.json();
-        return result;
-    } catch (error) {
-        console.error('Form submission failed:', error);
-        showErrorMessage('로그인에 실패했습니다. 다시 시도해주세요.');
-        throw error;
-    }
-};
-```
-
-### jQuery 사용 규칙
-```javascript
-// jQuery 객체는 $ 접두사 사용
-const $form = $('.login-form');
-const $submitButton = $('#submit-btn');
-
-// 체이닝 활용
-$form
-    .find('input')
-    .addClass('form-control')
-    .on('focus', handleFocus)
-    .on('blur', handleBlur);
-
-// 성능을 위한 캐싱
-const $window = $(window);
-const $document = $(document);
-```
-
----
-
-## 📁 파일 구조 규칙
-
-### CSS 파일 구조
-```
-css/
-├── common.css              # 전역 스타일, 리셋, 유틸리티
-├── header.css              # 헤더 컴포넌트
-├── footer.css              # 푸터 컴포넌트
-├── login/                  # 로그인 모듈
-│   ├── login.css          # 로그인 페이지
-│   ├── signup.css         # 회원가입 페이지
-│   └── terms.css          # 약관 페이지
-├── admin/                  # 관리자 모듈
-│   └── dashboard.css
-└── components/             # 재사용 컴포넌트
-    ├── buttons.css
-    ├── forms.css
-    └── modals.css
-```
-
-### JavaScript 파일 구조
-```
-js/
-├── common.js               # 전역 유틸리티 함수
-├── login.js                # 로그인 관련 기능
-├── signup.js               # 회원가입 관련 기능
-├── term.js                 # 약관 관련 기능
-└── utils/                  # 유틸리티 모듈
-    ├── validation.js       # 검증 함수들
-    ├── api.js             # API 호출 함수들
-    └── dom.js             # DOM 조작 헬퍼들
-```
-
----
-
-## ✅ 코드 품질 규칙
-
-### 주석 작성 규칙
-```javascript
-/**
- * 이메일 유효성을 검사합니다.
- * @param {string} email - 검사할 이메일 주소
- * @returns {boolean} 유효한 이메일이면 true, 아니면 false
- */
-const validateEmail = (email) => {
-    // 이메일 정규식 패턴으로 검증
-    return VALIDATION_RULES.EMAIL.test(email);
-};
-```
-
-```css
-/* ==========================================================================
-   로그인 폼 스타일
-   ========================================================================== */
-
-.login-form {
-    /* 폼 기본 레이아웃 */
-    max-width: 400px;
-    margin: 0 auto;
-}
-
-.login-form__input {
-    /* 입력 필드 스타일 */
-    width: 100%;
-    padding: var(--space-sm);
-}
-```
-
-### 코드 포맷팅
-```javascript
-// 좋은 예: 일관된 들여쓰기와 간격
-const handleSubmit = (event) => {
-    event.preventDefault();
-    
-    const formData = {
-        email: $('#email').val().trim(),
-        password: $('#password').val().trim()
-    };
-    
-    if (validateForm(formData)) {
-        submitForm(formData);
-    }
-};
-
-// 피해야 할 예: 불일치한 포맷팅
-const handleSubmit=(event)=>{
-event.preventDefault();
-const formData={email:$('#email').val().trim(),password:$('#password').val().trim()};
-if(validateForm(formData)){submitForm(formData);}
-};
-```
-
-### 성능 최적화
-```javascript
-// 디바운싱 적용
-const debouncedValidation = debounce((field, value) => {
-    validateField(field, value);
-}, 500);
-
-// 이벤트 위임 사용
-$(document).on('input', '.form-control', function() {
-    const $this = $(this);
-    debouncedValidation($this, $this.val());
-});
-
-// DOM 쿼리 최소화
-const $form = $('.login-form');
-const $inputs = $form.find('input'); // 한 번만 쿼리
-```
-
----
-
-## 🔍 코드 리뷰 체크리스트
-
-### HTML
-- [ ] 시맨틱 태그 사용
-- [ ] 접근성 속성 (aria-*, role) 포함
-- [ ] 올바른 폼 구조 (label, fieldset)
-- [ ] 반응형 메타 태그 포함
-
-### CSS
-- [ ] BEM 네이밍 컨벤션 준수
-- [ ] CSS 변수 사용
-- [ ] 모바일 퍼스트 접근
-- [ ] 브라우저 호환성 고려
-
-### JavaScript
-- [ ] ES6+ 문법 사용
-- [ ] 에러 핸들링 포함
-- [ ] 성능 최적화 적용
-- [ ] 함수 단위 테스트 가능
-
----
-
-이 가이드라인을 따라 일관되고 유지보수 가능한 코드를 작성해주세요! 🚀
+7.  **주석**
+    - 복잡한 로직이나 알고리즘, 특정 해결 방법에 대한 이유를 설명할 때 주석을 작성합니다. "무엇을" 하는 코드인지보다 "**왜**" 그렇게 작성했는지를 설명하는 데 집중합니다.

@@ -1,0 +1,386 @@
+.price-detail-box {
+  margin-bottom: 60px;
+}
+
+.price-detail-box h3 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.price-detail-box .price-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+
+.price-detail-box .price-item.sub {
+  color: #aaa;
+  font-size: 0.9rem;
+  padding-left: 10px;
+}
+
+.price-detail-box .price-item.total {
+  border-top: 1px solid #ddd;
+  padding-top: 15px;
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: 1.05rem;
+}
+
+/* 결제 수단 */
+.payment-method-box {
+  margin-bottom: 20px;
+}
+
+.payment-method-box h3 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.payment-option {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease;
+}
+
+.payment-option:hover {
+  border-color: #000;
+}
+
+.payment-option.active {
+  border: 2px solid #000;
+}
+
+.payment-option span {
+  color: #999;
+  font-size: 0.85rem;
+}
+
+.reservation-box {
+  margin-bottom: 60px;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.reservation-dates {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #f6f6f6;
+  padding: 20px 20px;
+  border-radius: 12px;
+  font-size: 1rem;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.date-item {
+  font-weight: 400;
+  font-size: 1rem;
+  color: #333;
+  text-align: center;
+}
+.date-text {
+  font-weight: 500;
+  font-size: 1.25rem;
+  color: #333;
+  text-align: center;
+}
+.night {
+  font-weight: 400;
+  font-size: 1rem;
+  padding: 1rem 1.2rem;
+  color: #fff;
+  background-color: #333;
+  border-radius: 50%;
+  text-align: center;
+}
+
+.reservation-box .reservation-dates span {
+  font-weight: bold;
+}
+
+.reservation-box .info-item {
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.reservation-box .info-item span {
+  display: inline-block;
+  margin-left: 5px;
+  color: #333;
+}
+
+.reservation-box .edit-button {
+  float: right;
+  font-size: 0.9rem;
+  color: #999;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.main-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative;
+}
+
+.back-button {
+  position: absolute;
+  left: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #333;
+  font-size: 2rem;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.back-button i {
+  font-size: 2rem;
+  vertical-align: middle;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.left-section h2 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.left-section {
+  flex: 0 0 70%;
+  padding-right: 20px;
+  box-sizing: border-box;
+}
+
+.right-section {
+  width: 30%;
+  box-sizing: border-box;
+  position: sticky;
+  top: 100px;
+  margin-top: 60px;
+}
+
+.payment-summary-box {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background-color: #fff;
+}
+
+.stay-name {
+  font-size: 1.3rem;
+  margin-bottom: 0.8rem;
+  color: #333;
+}
+
+.payment-summary-box .room-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.payment-summary-box .room-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.payment-summary-box .room-name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.payment-summary-box .view-room-button {
+  background-color: #000000;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background-color 0.2s ease;
+}
+
+.payment-summary-box .view-room-button:hover {
+  background-color: #333;
+}
+
+.payment-summary-box .room-info p {
+  margin-bottom: 5px;
+  color: #666;
+  font-size: 0.8rem;
+}
+
+.payment-summary-box .payment-button {
+  width: 100%;
+  background-color: #000000;
+  color: white;
+  border: none;
+  padding: 12px 0;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.2s ease;
+}
+
+.payment-summary-box .payment-button:hover {
+  background-color: #333;
+}
+
+.payment-summary-box .room-details .view-button {
+  font-size: 0.8rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.payment-summary-box .room-info {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.request-textarea {
+  width: 100%;
+  height: 80px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  resize: none;
+}
+
+.payment-methods {
+  list-style: none;
+  padding: 0;
+}
+
+.payment-methods li {
+  margin-bottom: 10px;
+}
+
+.payment-methods input[type="radio"] {
+  margin-right: 10px;
+}
+
+.info-item.total-price span {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #000;
+}
+
+.left-wrapper-box {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 30px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  margin-bottom: 30px;
+}
+
+/* Terms Agreement Section */
+.terms-agreement-box {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.terms-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.terms-item:last-child {
+  border-bottom: none;
+}
+
+.terms-item.sub-terms {
+  padding-left: 20px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.terms-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  flex: 1;
+}
+
+.terms-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+.checkmark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.terms-checkbox input[type="checkbox"]:checked + .checkmark {
+  background-color: #000;
+  border-color: #000;
+}
+
+.terms-checkbox input[type="checkbox"]:checked + .checkmark::after {
+  content: "✓";
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.terms-arrow {
+  color: #999;
+  font-size: 16px;
+  margin-left: 10px;
+}
+
+.terms-item:first-child {
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 15px 0;
+}
+
+.terms-item:first-child .checkmark {
+  width: 22px;
+  height: 22px;
+}

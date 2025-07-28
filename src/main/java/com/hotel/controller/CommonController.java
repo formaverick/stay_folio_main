@@ -50,6 +50,7 @@ public class CommonController {
 		return map;
 	}
 
+	// 로그인 페이지
 	@GetMapping("/login")
 	public String loginPage(String error, Model model) {
 		log.info("CommonController - loginPage");
@@ -59,16 +60,19 @@ public class CommonController {
 		return "login/login";
 	}
 	
+	// 로그아웃 페이지
 	@GetMapping("/logout")
 	public void logout() {
-		
+		// 로그아웃 페이지로 이동 또는 페이지 없이 할건가?
 	}
 	
+	// 회원가입 페이지
 	@GetMapping("/register")
 	public String registerPage() {
 		return "login/signup";
 	}
 	
+	// 회원가입 처리
 	@PostMapping("/register")
 	public String handleRegister(MemberVO vo) {
 		log.info("CommonController - handleRegister");
@@ -83,16 +87,29 @@ public class CommonController {
 		return "/";
 	}
 	
+	// 이메일 중복 검사
 	@GetMapping("/api/check/email")
 	@ResponseBody
 	public String checkEmail(String email) {
 		return commonService.isEmailDuplicate(email) ? "true" : "false";
 	}
 
+	// 전화번호 중복 검사
 	@GetMapping("/api/check/phone")
 	@ResponseBody
 	public String checkPhone(String phone) {
 		return commonService.isPhoneDuplicate(phone) ? "true" : "false";
 	}
 	
+	// 비회원 예약 조회 페이지
+	@GetMapping("/guest/reservation")
+	public void guestReservationPage() {
+		// 예약자 명, 예약번호 입력 폼
+	}
+	
+	// 비회원 예약 조회
+	@PostMapping("/guest/reservation")
+	public void handleGuestReservationSearch() {
+		// 예약자 명, 예약번호 가지고 reservation detail jsp로 이동
+	}
 }

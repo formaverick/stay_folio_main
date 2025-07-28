@@ -3,4 +3,126 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hotel.mapper.MypageMapper">
+
+    <resultMap id="reservationList"
+        type="com.hotel.domain.ReservationListVO">
+        <id column="sr_id" property="srId" />
+        <result column="si_id" property="siId" />
+        <result column="si_name" property="siName" />
+        <result column="ri_id" property="riId" />
+        <result column="ri_name" property="riName" />
+        <result column="sp_url" property="spUrl" />
+        <result column="sr_checkin" property="srCheckin" />
+        <result column="sr_checkout" property="srCheckout" />
+        <result column="sr_adult" property="srAdult" />
+        <result column="sr_child" property="srChild" />
+        <result column="sr_totalprice" property="srTotalprice" />
+        <result column="sr_status" property="srStatus" />
+    </resultMap>
+
+    <resultMap id="reservationDetail" type="com.hotel.domain.ReservationDetailVO">
+        <id column="sr_id" property="srId" />
+        <result column="si_id" property="siId" />
+        <result column="si_name" property="siName" />
+        <result column="sp_url" property="spUrl" />
+        <result column="si_address" property="siAddress" />
+        <result column="si_phone" property="siPhone" />
+        <result column="si_email" property="siEmail" />
+        <result column="ri_id" property="riId" />
+        <result column="ri_name" property="riName" />
+        <result column="sr_name" property="srName" />
+        <result column="sr_email" property="srEmail" />
+        <result column="sr_phone" property="srPhone" />
+        <result column="sr_request" property="srRequest" />
+        <result column="sr_date" property="srDate" />
+        <result column="sr_adult" property="srAdult" />
+        <result column="sr_child" property="srChild" />
+        <result column="full_checkin" property="srCheckin" />
+        <result column="full_checkout" property="srCheckout" />
+        <result column="sr_roomprice" property="srRoomprice" />
+        <result column="sr_discount" property="srDiscount" />
+        <result column="sr_addperson_fee" property="srAddpersonFee" />
+        <result column="sr_totalprice" property="srTotalprice" />
+        <result column="sr_payment" property="srPayment" />
+        <result column="sr_paydate" property="srPaydate" />
+        <result column="sr_cancledate" property="srCancledate" />
+        <result column="sr_status" property="srStatus" />
+        <result column="sr_paymentstatus" property="srPaymentstatus" />
+    </resultMap>
+    
+    <resultMap id="bookmark" type="com.hotel.domain.BookmarkVO">
+        <result property="siId" column="si_id" />
+        <result property="sbRegdate" column="sb_regdate" />
+        <result property="siName" column="si_name" />
+        <result property="siLoca" column="si_loca" />
+        <result property="siMinperson" column="si_minperson" />
+        <result property="siMaxperson" column="si_maxperson" />
+        <result property="siMinprice" column="si_minprice" />
+        <result property="siPeak" column="si_peak" />
+        <result property="siOff" column="si_off" />
+        <result property="siDiscount" column="si_discount" />
+    </resultMap>
+
+
+    <select id="getCompletedStayCount">
+        <![CDATA[
+            SELECT count(*) FROM t_stay_reservation 
+            WHERE mi_id = #{id} AND sr_status = 'a' 
+            AND sr_checkout < SYSDATE
+        ]]>
+    </select>
+
+    <select id="getUpcomingReservationByMember" resultMap="reservationList">
+        <![CDATA[
+            SELECT sr_id, sr.si_id, si_name, sr.ri_id, ri_name, sp_url, sr_checkin, sr_checkout, sr_adult, sr_child, sr_totalprice, sr_status 
+            FROM t_stay_reservation sr 
+            LEFT JOIN t_stay_info si ON sr.si_id = si.si_id 
+            LEFT JOIN t_room_info ri ON sr.si_id = ri.si_id AND sr.ri_id = ri.ri_id 
+            LEFT JOIN t_stay_photo sp ON sr.si_id = sp.si_id AND sr.ri_id = sp.ri_id 
+            WHERE mi_id = #{id} AND sr_status = 'a' AND sr_checkin > SYSDATE 
+            ORDER BY sr_checkin 
+        ]]>
+    </select>
+
+    <select id="getCompletedReservationsByMember" resultMap="reservationList">
+        <![CDATA[
+            SELECT sr_id, sr.si_id, si_name, sr.ri_id, ri_name, sp_url, sr_checkin, sr_checkout, sr_adult, sr_child, sr_totalprice, sr_status 
+            FROM t_stay_reservation sr 
+            LEFT JOIN t_stay_info si ON sr.si_id = si.si_id 
+            LEFT JOIN t_room_info ri ON sr.si_id = ri.si_id AND sr.ri_id = ri.ri_id 
+            LEFT JOIN t_stay_photo sp ON sr.si_id = sp.si_id AND sr.ri_id = sp.ri_id AND sp.sp_idx = 0 
+            WHERE mi_id = #{id} AND sr_status = 'b' OR sr_status = 'c' OR sr_checkout < SYSDATE 
+            ORDER BY sr_date desc
+        ]]>
+    </select>
+
+    <select id="getReservationDetail" resultMap="reservationDetail">
+        SELECT  sr.sr_id, sr.si_id, si.si_name, sp.sp_url, si.sid_phone, si.sid_email, sid.si_address, sr.ri_id, 
+            ri.ri_name, sr.sr_name, sr.sr_email, sr.sr_phone, sr.sr_request, sr.sr_date, sr.sr_adult, sr.sr_child, 
+            TO_DATE(TO_CHAR(r.sr_checkin, 'YYYY-MM-DD') || ' ' || s.si_checkin, 'YYYY-MM-DD HH24:MI') AS full_checkin, 
+            TO_DATE(TO_CHAR(r.sr_checkout, 'YYYY-MM-DD') || ' ' || s.si_checkout, 'YYYY-MM-DD HH24:MI') AS full_checkout, 
+            sr.sr_roomprice, sr.sr_discount, sr.sr_addperson_fee, sr.sr_totalprice, 
+            sr.sr_payment, sr.sr_paydate, sr.sr_cancledate, sr.sr_status 
+        FROM t_stay_reservation sr
+        LEFT JOIN t_stay_info si ON sr.si_id = si.si_id
+        LEFT JOIN t_stay_info_detail sid ON sr.si_id = sid.si_id 
+        LEFT JOIN t_room_info ri ON sr.si_id = ri.si_id AND sr.ri_id = ri.ri_id
+        LEFT JOIN t_stay_photo sp ON sr.si_id = sp.si_id AND sp.ri_id = 0 AND sp.sp_idx = 0
+        WHERE sr.sr_id = #{id}
+    </select>
+    
+    <update id="cancelReservation">
+        UPDATE t_stay_reservation 
+        SET sr_status = 'b', sr_cancledate = SYSDATE, sr_paymentstatus = 'b'  
+        WHERE sr.sr_id = #{id}
+    </update>
+    
+    <select id="getBookMarkList" resultMap="bookmark">
+        SELECT sb.si_id, sb.sb_regdate, si.si_name, si.si_loca, si.si_minperson, si.si_maxperson, 
+            si.si_minprice, si.si_peak, si.si_off, si.si_discount
+        FROM t_stay_bookmarks sb 
+        LEFT JOIN t_stay_info si ON sb.si_id = si.si_id 
+        where sb.mi_id = #{id}
+    </select>
+
 </mapper>

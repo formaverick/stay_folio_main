@@ -97,6 +97,6 @@ $(document).ready(function () {
 
   // 회원가입 버튼 클릭 이벤트
   $(".btn-join").on("click", function () {
-    console.log("회원가입 클릭");
+    window.location.href = "signup.html";
   });
 });

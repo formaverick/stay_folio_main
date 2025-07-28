@@ -1,6 +1,5 @@
 <link rel="stylesheet" href="../../css/common.css" />
 <link rel="stylesheet" href="../../css/header.css" />
-<link rel="stylesheet" href="../../css/stay/stay.css" />
 <link rel="stylesheet" href="../../css/stay/stayCarousel.css" />
 <link rel="stylesheet" href="../../css/stay/stayDetail.css" />
 <link rel="stylesheet" href="../../css/stay/stayDetailFillter.css" />
@@ -21,6 +20,7 @@
 <script src="../../js/stay/stayNavigation.js"></script>
 <script src="../../js/stay/stay.js"></script>
 <script src="../../js/stay/stayDetailBooking.js"></script>
+<script src="../../js/stay/stayDetail.js"></script>
 <header class="header">
   <div class="header-inner">
     <!-- 로고 -->
@@ -119,93 +119,366 @@
 
       <!-- 2. 객실 규정 -->
       <section class="room-rules-section">
-        <h2 class="section-title">객실 규정</h2>
+        <div class="amenity-title">객실 규정</div>
         <div class="rules-list">
           <div class="rule-item">
-            <span class="rule-text">체크인 15:00 / 체크아웃 11:00</span>
+            <span class="rule-text">• 체크인 15:00 / 체크아웃 11:00</span>
           </div>
           <div class="rule-item">
-            <span class="rule-text">기준 4 명 (최대 4 명)</span>
+            <span class="rule-text">• 기준 4 명 (최대 4 명)</span>
           </div>
         </div>
       </section>
 
       <!-- 3. 공간정보 -->
       <section class="space-info-section">
-        <h2 class="section-title">공간정보</h2>
-        <div class="space-info-grid">
+        <div class="amenity-title">공간정보</div>
+        <div class="space-info-list">
           <div class="space-info-item">
-            <span class="space-label">객실 면적 75m²</span>
+            <span class="space-label">• 객실면적 59m²</span>
           </div>
           <div class="space-info-item">
-            <span class="space-label">퀸 침대 2</span>
+            <span class="space-label">• 퀸 침대</span>
           </div>
         </div>
       </section>
 
       <!-- 4. 편의시설 -->
       <section class="facilities-section">
-        <h2 class="section-title">편의시설</h2>
-        <div class="facilities-grid">
-          <div class="facility-item">
-            <i class="ph ph-users"></i>
-            <span>공용 사우나</span>
+        <div class="amenity-title">편의시설</div>
+        <div class="stay-amenities">
+          <div class="amenity">
+            <i class="ph ph-tree"></i>
+            <span>야외가구</span>
           </div>
-          <div class="facility-item">
-            <i class="ph ph-flower"></i>
-            <span>정원</span>
+          <div class="amenity">
+            <i class="ph ph-sun"></i>
+            <span>썸베드</span>
           </div>
-          <div class="facility-item">
-            <i class="ph ph-bowl-food"></i>
+          <div class="amenity">
+            <i class="ph ph-table"></i>
+            <span>빅테이블</span>
+          </div>
+          <div class="amenity">
+            <i class="ph ph-house"></i>
+            <span>테라스</span>
+          </div>
+          <div class="amenity">
+            <i class="ph ph-tent"></i>
+            <span>캐핑테이블체어</span>
+          </div>
+
+          <!-- 화장실/스파 -->
+          <div class="amenity">
+            <i class="ph ph-toilet"></i>
             <span>독립 화장실</span>
           </div>
-          <div class="facility-item">
-            <i class="ph ph-mountain"></i>
-            <span>산책로</span>
+          <div class="amenity">
+            <i class="ph ph-shower"></i>
+            <span>공용 샤워실</span>
           </div>
-          <div class="facility-item">
+          <div class="amenity">
+            <i class="ph ph-shower"></i>
+            <span>샤워실</span>
+          </div>
+          <div class="amenity">
+            <i class="ph ph-bathtub"></i>
+            <span>월풀 스파</span>
+          </div>
+          <div class="amenity">
+            <i class="ph ph-swimming-pool"></i>
+            <span>수영장</span>
+          </div>
+          <div class="amenity">
+            <i class="ph ph-swimming-pool"></i>
+            <span>공용 수영장</span>
+          </div>
+          <div class="amenity">
+            <i class="ph ph-bathtub"></i>
+            <span>노천탕</span>
+          </div>
+          <div class="amenity">
+            <i class="ph ph-bathtub"></i>
+            <span>반신욕</span>
+          </div>
+          <div class="amenity">
+            <i class="ph ph-bathtub"></i>
+            <span>오픈 배스</span>
+          </div>
+
+          <!-- 식사/취사 -->
+          <div class="amenity">
+            <i class="ph ph-coffee"></i>
+            <span>조식</span>
+          </div>
+          <div class="amenity">
+            <i class="ph ph-fork-knife"></i>
+            <span>아침식사</span>
+          </div>
+          <div class="amenity">
+            <i class="ph ph-coffee"></i>
+            <span>웰컴티</span>
+          </div>
+          <div class="amenity">
+            <i class="ph ph-cooking-pot"></i>
+            <span>취사</span>
+          </div>
+          <div class="amenity">
+            <i class="ph ph-knife"></i>
+            <span>독립 키친</span>
+          </div>
+          <div class="amenity">
+            <i class="ph ph-fire"></i>
+            <span>바베큐</span>
+          </div>
+          <div class="amenity">
+            <i class="ph ph-fire"></i>
+            <span>개별 BBQ데크</span>
+          </div>
+
+          <!-- 기타 편의시설 -->
+          <div class="amenity">
+            <i class="ph ph-car"></i>
+            <span>주차</span>
+          </div>
+          <div class="amenity">
             <i class="ph ph-projector-screen"></i>
             <span>빔 프로젝터</span>
+          </div>
+          <div class="amenity">
+            <i class="ph ph-television"></i>
+            <span>TV / 빔프로젝터</span>
+          </div>
+          <div class="amenity">
+            <i class="ph ph-tree"></i>
+            <span>정원</span>
+          </div>
+          <div class="amenity">
+            <i class="ph ph-footprints"></i>
+            <span>산책로</span>
+          </div>
+          <div class="amenity">
+            <i class="ph ph-dog"></i>
+            <span>반려동물</span>
           </div>
         </div>
       </section>
 
       <!-- 5. 어메니티 -->
       <section class="amenities-section">
-        <h2 class="section-title">어메니티</h2>
-        <div class="amenities-grid">
-          <div class="amenity-column">
-            <div class="amenity-item">냉장고</div>
-            <div class="amenity-item">스피커</div>
-            <div class="amenity-item">다리미</div>
-            <div class="amenity-item">핸드워시</div>
-            <div class="amenity-item">와인잔</div>
-            <div class="amenity-item">조리도구</div>
+        <div class="amenity-title">어메니티</div>
+        <div class="amenities-list">
+          <div class="amenity-item">• TV</div>
+          <div class="amenity-item">• 냉장고</div>
+          <div class="amenity-item">• 공용 냉장고</div>
+          <div class="amenity-item">• 헤어드라이어</div>
+          <div class="amenity-item">• 넷플릭스</div>
+          <div class="amenity-item">• 스피커</div>
+          <div class="amenity-item">• 태블릿 PC</div>
+          <div class="amenity-item">• 스타일러</div>
+          <div class="amenity-item">• 와인셀러</div>
+          <div class="amenity-item">• 식기세척기</div>
+          <div class="amenity-item">• 다리미</div>
+          <div class="amenity-item">• 공기청정기</div>
+          <div class="amenity-item">• 시스템 에어컨</div>
+          <div class="amenity-item">• 턴테이블</div>
+          <div class="amenity-item">• 빅 테이블</div>
+          <div class="amenity-item">• 룸 슬리퍼</div>
+          <div class="amenity-item">• 라운지체어</div>
+          <div class="amenity-item">• 소파</div>
+          <div class="amenity-item">• 욕조</div>
+          <div class="amenity-item">• 샴푸</div>
+          <div class="amenity-item">• 컨디셔너</div>
+          <div class="amenity-item">• 바디워시</div>
+          <div class="amenity-item">• 핸드워시</div>
+          <div class="amenity-item">• 치약</div>
+          <div class="amenity-item">• 칫솔</div>
+          <div class="amenity-item">• 면도기</div>
+          <div class="amenity-item">• 수건</div>
+          <div class="amenity-item">• 샤워가운</div>
+          <div class="amenity-item">• 빗</div>
+          <div class="amenity-item">• 샤워캐</div>
+          <div class="amenity-item">• 1회용 바디스폰지</div>
+          <div class="amenity-item">• 입욕소금</div>
+          <div class="amenity-item">• 수제비누</div>
+          <div class="amenity-item">• 페이스 타월</div>
+          <div class="amenity-item">• 바디 타월</div>
+          <div class="amenity-item">• 타월</div>
+          <div class="amenity-item">• 생수</div>
+          <div class="amenity-item">• 전기포트</div>
+          <div class="amenity-item">• 와인오프너</div>
+          <div class="amenity-item">• 와인잔</div>
+          <div class="amenity-item">• 티백</div>
+          <div class="amenity-item">• 커피드립백</div>
+          <div class="amenity-item">• 캐슐커피머신</div>
+          <div class="amenity-item">• 커피캐슐</div>
+          <div class="amenity-item">• 전기밥솥</div>
+          <div class="amenity-item">• 오븐 겨 전자레인지</div>
+          <div class="amenity-item">• 인덕션</div>
+          <div class="amenity-item">• 인덕션 (하이라이트)</div>
+          <div class="amenity-item">• 조리도구</div>
+          <div class="amenity-item">• 식기</div>
+          <div class="amenity-item">• 다도세트</div>
+          <div class="amenity-item">• 토스터기</div>
+          <div class="amenity-item">• 전자레인지</div>
+          <div class="amenity-item">• 기본조미료</div>
+          <div class="amenity-item">• 정수기</div>
+          <div class="amenity-item">• 1회용품(비닐 외)</div>
+          <div class="amenity-item">• 1회용 수세미</div>
+          <div class="amenity-item">• 오븐</div>
+          <div class="amenity-item">• 소화기</div>
+          <div class="amenity-item">• 냉난방기</div>
+        </div>
+      </section>
+
+      <!-- 6. 객실 선택 -->
+      <section id="room-select" class="stay-section">
+        <div class="amenity-title1">이 스테이의 다른 객실</div>
+        <div class="room-list">
+          <div class="room-card">
+            <div class="room-image">
+              <img src="../../img/stay/stayimg1.jpg" alt="Terrace Room" />
+            </div>
+            <div class="room-info">
+              <h3>Terrace Room</h3>
+              <p class="room-capacity">기본형 / 기준 2명 (최대 2명)</p>
+              <p class="room-amenity">침구 1</p>
+              <div class="room-price-container">
+                <div class="price-info">
+                  <div class="original-price">₩230,000</div>
+                  <div class="discount-price">
+                    <span class="discount-rate">2%</span>
+                    <span class="final-price">₩225,000 ~</span>
+                    <span class="per-night">/ 박</span>
+                  </div>
+                </div>
+                <button class="room-select-btn">객실 선택</button>
+              </div>
+            </div>
           </div>
-          <div class="amenity-column">
-            <div class="amenity-item">세탁기</div>
-            <div class="amenity-item">전기포트</div>
-            <div class="amenity-item">타월</div>
-            <div class="amenity-item">토스터기</div>
-            <div class="amenity-item">기본조미료</div>
+          <div class="room-card">
+            <div class="room-image">
+              <img src="../../img/stay/stayimg1.jpg" alt="Terrace Room" />
+            </div>
+            <div class="room-info">
+              <h3>Terrace Room</h3>
+              <p class="room-capacity">기본형 / 기준 2명 (최대 2명)</p>
+              <p class="room-amenity">침구 1</p>
+              <div class="room-price-container">
+                <div class="price-info">
+                  <div class="original-price">₩230,000</div>
+                  <div class="discount-price">
+                    <span class="discount-rate">2%</span>
+                    <span class="final-price">₩225,000 ~</span>
+                    <span class="per-night">/ 박</span>
+                  </div>
+                </div>
+                <button class="room-select-btn">객실 선택</button>
+              </div>
+            </div>
           </div>
-          <div class="amenity-column">
-            <div class="amenity-item">건조기</div>
-            <div class="amenity-item">전자레인지</div>
-            <div class="amenity-item">샴푸</div>
-            <div class="amenity-item">세탁세제</div>
-            <div class="amenity-item">커피드립백</div>
+          <div class="room-card">
+            <div class="room-image">
+              <img src="../../img/stay/stayimg1.jpg" alt="Terrace Room" />
+            </div>
+            <div class="room-info">
+              <h3>Terrace Room</h3>
+              <p class="room-capacity">기본형 / 기준 2명 (최대 2명)</p>
+              <p class="room-amenity">침구 1</p>
+              <div class="room-price-container">
+                <div class="price-info">
+                  <div class="original-price">₩230,000</div>
+                  <div class="discount-price">
+                    <span class="discount-rate">2%</span>
+                    <span class="final-price">₩225,000 ~</span>
+                    <span class="per-night">/ 박</span>
+                  </div>
+                </div>
+                <button class="room-select-btn">객실 선택</button>
+              </div>
+            </div>
           </div>
-          <div class="amenity-column">
-            <div class="amenity-item">헤어드라이어</div>
-            <div class="amenity-item">인덕션(하이라이트)</div>
-            <div class="amenity-item">바디워시</div>
-            <div class="amenity-item">와인오프너</div>
-            <div class="amenity-item">물 슬리퍼</div>
+        </div>
+      </section>
+
+      <section id="guidelines" class="stay-section">
+        <div class="amenity-title">안내사항</div>
+        <div class="guidelines-content">
+          <!-- 예약 안내 아코디언 -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              <h3>예약 안내</h3>
+              <span class="accordion-icon"><i class="ph ph-caret-down"></i></span>
+            </div>
+            <div class="accordion-content">
+              <p>기준인원 초과 시 추가 금액이 부과될 수 있습니다.</p>
+              <p>기준인원을 초과한 예약에는 추가 침구가 제공됩니다.</p>
+              <p>반려 동물 동반이 [가능/불가능] 한 숙소입니다.</p>
+            </div>
           </div>
-          <div class="amenity-column">
-            <div class="amenity-item">다리</div>
-            <div class="amenity-item">물 슬리퍼</div>
+  
+          <!-- 이용 안내 아코디언 -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              <h3>이용 안내</h3>
+              <span class="accordion-icon"><i class="ph ph-caret-down"></i></span>
+            </div>
+            <div class="accordion-content">
+              <p>
+                체크인은 [체크인 시간]시, 체크아웃은 [체크아웃 시간]시 입니다.
+              </p>
+              <p>
+                미성년자의 경우 보호자(법정대리인)의 동행 없이 투숙이
+                불가능합니다.
+              </p>
+              <p>
+                화재 위험 및 쾌적한 환경 유지를 위해 실내 흡연은 절대 불가합니다.
+              </p>
+              <p>침구나 비품의 오염, 파손 및 분실 시 변상비가 청구됩니다.</p>
+              <p>귀중품 분실에 대해서는 책임지지 않습니다.</p>
+              <p>주차 [가능/불가능]한 숙소입니다.</p>
+              <p>취식이 [가능/불가능]한 숙소입니다.</p>
+            </div>
+          </div>
+  
+          <!-- 환불 안내 아코디언 -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              <h3>환불 안내</h3>
+              <span class="accordion-icon"><i class="ph ph-caret-down"></i></span>
+            </div>
+            <div class="accordion-content">
+              <p>
+                <strong
+                  >숙박권의 재판매를 비롯하여 양도, 양수, 교환을
+                  금지합니다.</strong
+                >
+              </p>
+              <p>체크인 7일 전: 100% 환불</p>
+              <p>체크인 3일 전: 50% 환불</p>
+              <p>체크인 당일: 환불 불가</p>
+              <p>천재지변, 기상 악화로 인한 예약 취소: 100% 환불</p>
+              <p>숙소 사정으로 인한 예약 취소: 100% 환불 또는 대체 숙소 제공</p>
+            </div>
+          </div>
+          
+          <!-- 판매자 안내 아코디언 -->
+          <div class="accordion-item">
+            <div class="accordion-header">
+              <h3>판매자 안내</h3>
+              <span class="accordion-icon"><i class="ph ph-caret-down"></i></span>
+            </div>
+            <div class="accordion-content">
+              <ul>
+                <p><strong>상호</strong><p> 나무호텔</p></p>
+                <p><strong>대표자명</strong><p> 박종현외 2명</p></p>
+                <p><strong>주소</strong><p> 서울특별시 광진구 아차산로76가길 12 (광장동)</p></p>
+                <p><strong>전화번호</strong><p> 02-456-3271</p></p>
+                <p><strong>이메일주소</strong><p> info@namuhotel.com</p></p>
+                <p><strong>사업자번호</strong><p> 221-41-00371</p></p>
+                <p><strong>통신판매업 신고번호</strong><p> 2021-서울광진-2355</p></p>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
@@ -304,4 +577,58 @@
     </div>
   </div>
 </div>
-<!-- 객실 상세 영역 끝 -->
+
+<!-- 푸터 시작 -->
+<link rel="stylesheet" href="../../css/common.css" />
+<link rel="stylesheet" href="../../css/footer.css" />
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
+/>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-left">
+        <p class="footer-time">
+          <strong>고객 센터</strong> 평일 10:00 ~ 19:00 / 주말 및 공휴일 제외
+        </p>
+        <div class="footer-buttons">
+          <button>입점 문의</button>
+          <button>제휴 문의</button>
+          <button>B2B 구매</button>
+          <button>1:1 문의</button>
+        </div>
+      </div>
+      <div class="footer-logo">STAY<br />FOLIO</div>
+    </div>
+
+    <div class="footer-info">
+      <p class="footer-links">
+        ABOUT · 4 POINT APPROACH · NEWSLETTER · CAREERS · 이용약관 ·
+        <strong>개인정보 처리방침</strong>
+      </p>
+      <p class="footer-company">
+        상호명 : (주) 스테이폴리오 | 대표자 : 장인성 | 주소 : 서울특별시 종로구
+        자하문로9길 24, 2층(통인동) | 사업자등록번호 : 676-87-00055 |
+        통신판매업신고 : 제2015-서울종로-0499호 | 관광사업자등록 : 일반여행업
+        2018-000004호(종로구청) | 전화 : 1670-4123 | 전자우편 :
+        help@stayfolio.com
+      </p>
+      <p class="footer-disclaimer">
+        (주)스테이폴리오는 통신판매 중개자로서 통신판매의 당사자가 아니며,
+        상품의 예약, 이용 및 환불 등과 관련한 의무와 책임은 각 판매자에게
+        있습니다.
+      </p>
+      <p class="footer-copy">CopyrightⓒSTAYFOLIO</p>
+    </div>
+
+    <div class="footer-icons">
+      <i class="ph ph-facebook-logo"></i>
+      <i class="ph ph-instagram-logo"></i>
+      <i class="ph ph-youtube-logo"></i>
+    </div>
+  </div>
+</footer>
+<!-- 푸터 끝 -->

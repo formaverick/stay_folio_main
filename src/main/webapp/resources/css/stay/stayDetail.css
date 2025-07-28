@@ -14,12 +14,12 @@
   display: flex;
   align-items: flex-start;
 }
+d
 
 /* 좌측 영역 (70%) */
 .room-detail-left {
   flex: 0 0 70%;
   background-color: #ffffff;
-
   padding: 24px;
 }
 
@@ -36,13 +36,6 @@
   line-height: 1.6;
 }
 
-/* 가격 관련 스타일은 stayDetailFilter.css로 이동됨 */
-
-/* 좌측 영역 스타일 (stay.css와 완전 통일) */
-
-/* Left section styles */
-
-/* Room header section */
 .room-header-section {
   margin-bottom: 40px;
 }
@@ -50,123 +43,83 @@
 .room-title {
   font-size: 28px;
   font-weight: 700;
-  color: #333;
+  color: #222;
   margin-bottom: 16px;
   line-height: 1.3;
 }
 
-.room-description {
+/* 섹션 공통 스타일 */
+.room-detail-left section {
+  padding-bottom: 32px;
+}
+
+.room-detail-left section:last-child {
+  border-bottom: none;
+}
+
+/* 편의시설 - stay.css 스타일 적용 */
+.amenity-title {
+  font-weight: 700;
+  font-size: 1.125rem;
+  margin: 2rem 0 0 0;
+  color: #666;
+  padding: 8px 0;
+}
+
+.stay-amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid #f0f0f0;
+  max-width: 100%;
+}
+
+.amenity {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  padding: 0.5rem 0;
+  min-width: 120px;
+  flex: 0 0 calc(25% - 1.5rem);
+}
+
+.amenity i {
+  font-size: 1.25rem;
+  color: #666;
+}
+
+/* 어메니티 섹션 */
+.amenities-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px 24px;
+  padding: 24px 0;
+  border-top: 1px solid #f0f0f0;
+}
+
+.amenity-item {
+  font-size: 14px;
+  color: #666;
+  padding: 8px 0;
+}
+
+.room-detail-left .room-description {
   font-size: 16px;
   color: #666;
   line-height: 1.6;
   margin: 0;
 }
 
-/* Section titles */
-.section-title {
-  font-size: 20px;
-  font-weight: 700;
+.rules-list,
+.space-info-list {
+  padding: 20px 0;
+  line-height: 1.7;
+  font-size: 1rem;
   color: #333;
-  margin-bottom: 20px;
-  margin-top: 0;
 }
 
-/* Room rules section */
-.room-rules-section {
-  margin-bottom: 40px;
-}
-
-.rules-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.rule-item {
-  display: flex;
-  align-items: center;
-}
-
-.rule-text {
-  font-size: 16px;
-  color: #333;
-  line-height: 1.5;
-}
-
-/* Space info section */
-.space-info-section {
-  margin-bottom: 40px;
-}
-
-.space-info-grid {
-  display: flex;
-  gap: 40px;
-}
-
-.space-info-item {
-  display: flex;
-  align-items: center;
-}
-
-.space-label {
-  font-size: 16px;
-  color: #333;
-  line-height: 1.5;
-}
-
-/* Facilities section */
-.facilities-section {
-  margin-bottom: 40px;
-}
-
-.facilities-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.facility-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
-  background: #f8f9fa;
-  border-radius: 20px;
-  font-size: 14px;
-  color: #333;
-  white-space: nowrap;
-}
-
-.facility-item i {
-  font-size: 16px;
-  color: #666;
-}
-
-/* Amenities section */
-.amenities-section {
-  margin-bottom: 40px;
-}
-
-.amenities-grid {
-  display: flex;
-  gap: 40px;
-}
-
-.amenity-column {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.amenity-item {
-  font-size: 14px;
-  color: #333;
-  line-height: 1.5;
-  padding: 8px 0;
-}
-
-/* Responsive design */
 @media (max-width: 768px) {
   .room-detail-left {
     width: 100%;
@@ -200,7 +153,7 @@
 }
 
 .accordion-item.active .accordion-content {
-  max-height: 500px;
+  max-height: 1000px; /* 충분히 큰 값으로 설정하여 내용에 따라 높이 조절 */
   padding: 1.8rem;
   background-color: #f8f8f8;
   border-radius: 4px;
@@ -209,7 +162,7 @@
 .accordion-content p {
   font-size: 15px;
   line-height: 1.6;
-  color: #555;
+  color: #666;
   margin-bottom: 10px;
   letter-spacing: -0.02em;
 }
@@ -223,7 +176,7 @@
 .accordion-content li {
   font-size: 15px;
   line-height: 1.6;
-  color: #555;
+  color: #666;
   margin-bottom: 10px;
   letter-spacing: -0.02em;
 }
@@ -275,5 +228,380 @@
 
   .section-title {
     font-size: 1.25rem;
+  }
+}
+
+.stay-section {
+  width: 100%;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.price-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.discount-price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.per-night {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.room-select-btn {
+  align-self: flex-start;
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.room-select-btn:hover {
+  background-color: #222;
+}
+
+@media (max-width: 768px) {
+  .amenities-grid {
+    flex-direction: column;
+    gap: 20px;
+  }
+}
+
+/* Styles moved from stay.css */
+body {
+  font-family: "Pretendard", sans-serif;
+  color: #222;
+  line-height: 1.5;
+}
+
+.stay-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.section-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.amenity-title {
+  font-weight: 700;
+  font-size: 1.125rem;
+  margin: 0;
+  color: #222;
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.amenity-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 4rem;
+  height: 1px;
+  background-color: #222;
+}
+
+.amenity-title1 {
+  font-weight: 700;
+  font-size: 1.125rem;
+  margin: 0;
+  color: #222;
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.amenity-title1::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 10rem;
+  height: 1px;
+  background-color: #222;
+}
+
+.stay-amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid #f0f0f0;
+  max-width: 100%;
+}
+
+.room-list {
+  max-width: 95%;
+  margin-bottom: 50px;
+  padding: 1.5rem 0;
+}
+
+/* Information List Styles */
+.info-list {
+  padding: 1.5rem 0;
+  line-height: 1.7;
+  font-size: 1rem;
+  color: #333;
+}
+
+.info-item {
+  margin-bottom: 0.5rem;
+}
+
+.info-item p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+/* Guidelines Section Styles */
+.section-title {
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: #222;
+  position: relative;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 10rem;
+  height: 1px;
+  background-color: #222;
+}
+
+.guidelines-content {
+  margin-top: 1.5rem;
+  width: 95%;
+}
+
+.accordion-item {
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 1rem;
+}
+
+.accordion-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  cursor: pointer;
+}
+
+.accordion-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.accordion-icon {
+  font-size: 1.25rem;
+  color: #666;
+  transition: transform 0.3s ease;
+}
+
+.accordion-item.active .accordion-icon {
+  transform: rotate(180deg);
+}
+
+.accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+
+.accordion-item.active .accordion-content {
+  max-height: 1000px; /* Reverted to a large max-height for smooth transition */
+  transition: max-height 0.3s ease-in;
+}
+
+.accordion-content p {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+
+.accordion-content p:last-child {
+  margin-bottom: 1rem;
+}
+
+.room-card {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.room-image {
+  position: relative;
+  width: 40%;
+  min-width: 300px;
+  overflow: hidden;
+}
+
+.room-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.room-carousel-dots {
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.room-info {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.room-info h3 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.room-detail-left .room-capacity {
+  font-size: 15px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.room-detail-left .room-amenity {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.room-price-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 15px;
+}
+
+.price-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.original-price {
+  font-size: 14px;
+  color: #999;
+  text-decoration: line-through;
+  /* margin-bottom: 2px; */
+}
+
+.discount-price {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.discount-rate {
+  font-size: 16px;
+  font-weight: 600;
+  color: #0080ff;
+}
+
+.final-price {
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+}
+
+.per-night {
+  font-size: 14px;
+  color: #777;
+}
+
+.room-select-btn {
+  background-color: #222;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.room-select-btn:hover {
+  background-color: #222;
+}
+
+@media (max-width: 768px) {
+  .room-card {
+    flex-direction: column;
+    margin-bottom: 1rem;
+  }
+
+  .room-image {
+    flex: none;
+    height: 200px;
+    width: 100%;
+  }
+
+  .room-info {
+    padding: 1.5rem;
+    min-height: auto;
+  }
+
+  .room-info h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .room-price-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .room-select-btn {
+    align-self: stretch;
+    text-align: center;
   }
 }

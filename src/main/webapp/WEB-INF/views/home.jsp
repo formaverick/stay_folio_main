@@ -27,9 +27,9 @@
 	src="${pageContext.request.contextPath}/resources/js/main/carousel.js"></script>
 <!-- Stay Card Carousel JS -->
 <script
+	src="${pageContext.request.contextPath}/resources/js/main/recommendSection.js"></script>
+<script
 	src="${pageContext.request.contextPath}/resources/js/main/stayCardCarousel.js"></script>
-
-<script src="${pageContext.request.contextPath}/resources/js/main/recommendSection.js"></script>
 </head>
 <body>
 	<!-- Header Include -->
@@ -155,29 +155,7 @@
 	<!-- 메인 캐러셀 끝 -->
 
 	<!-- 숙소 카드 캐러셀 섹션 -->
-	<section class="stay-section">
-		<div class="stay-container">
-			<div class="stay-header">
-				<div class="stay-title-area">
-					<h2 class="stay-main-title" id="title-1"></h2>
-					<p class="stay-sub-title" id="subtitle-1"></p>
-				</div>
-			</div>
-		</div>
-		<div class="stay-carousel-wrapper">
-			<button class="stay-nav-btn stay-nav-prev" id="stayPrevBtn">
-				<i class="ph ph-caret-left"></i>
-			</button>
-			<div class="stay-carousel">
-				<div class="stay-carousel-track" id="track-1">
-					<!-- 숙소 카드 렌더링 -->
-				</div>
-			</div>
-			<button class="stay-nav-btn stay-nav-next" id="stayNextBtn">
-				<i class="ph ph-caret-right"></i>
-			</button>
-		</div>
-	</section>
+	<div id="recommend-container"></div>
 	<!-- 숙소 카드 캐러셀 섹션 끝 -->
 
 	<!-- Footer Include -->

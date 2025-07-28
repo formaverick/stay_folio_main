@@ -45,14 +45,12 @@
   justify-content: center;
 }
 
-/* 필 필터 스타일 */
-/* Modern elegant pill filter styling */
 .pill-filter {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   background-color: #ffffff;
-  padding: 0;
+  padding: 4px 0;
   border-radius: 8px;
   border: 1px solid #d0d0d0;
   width: 100%;
@@ -120,6 +118,7 @@
 
 #dateDisplay {
   display: inline-block;
+  font-size: 14px;
   min-width: 0;
 }
 
@@ -204,7 +203,9 @@
 .people-selector {
   padding: 24px;
 }
-
+#peopleDisplay {
+  font-size: 14px;
+}
 .people-type {
   display: flex;
   justify-content: space-between;
@@ -768,7 +769,6 @@
 
   .pill-filter {
     max-width: 1800px;
-    padding: 12px 0px;
   }
 }
 
@@ -865,7 +865,6 @@
     flex-direction: column;
     height: auto;
     min-height: auto;
-    padding: 16px;
     border-radius: 20px;
     gap: 12px;
   }
@@ -943,7 +942,6 @@
   background: #fff;
   border-radius: 4px;
   padding: 16px;
-
   border: 1px solid #d0d0d0;
   width: 100%;
   display: flex;
@@ -952,19 +950,15 @@
 
 /* 가격 정보 섹션 */
 .booking-price-info {
-  margin-bottom: 20px;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #f0f0f0;
+  margin: 12px 0 24px;
 }
 
 /* 가격 영역 스타일 (stayCard.css 참고) */
-.stay-price-original,
-.original-price {
-  font-size: 15px;
-  color: #bbb;
-  text-decoration: line-through;
+.stay-price-original {
   margin-bottom: 4px;
   margin-top: 16px;
+  color: #999;
+  text-decoration: line-through;
   display: block;
 }
 
@@ -982,8 +976,7 @@
   margin-right: 4px;
 }
 
-.stay-price-current,
-.final-price {
+.stay-price-current {
   font-size: 22px;
   font-weight: 500;
   color: #1a1a1a;

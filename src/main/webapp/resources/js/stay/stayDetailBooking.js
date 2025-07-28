@@ -67,6 +67,31 @@ $(document).ready(function () {
   // 초기 날짜 표시
   updateDateDisplay();
 
+  // 초기화 함수 호출
+  function initializeBookingForm() {}
+
+  // 아코디언 기능 구현
+  const accordionItems = document.querySelectorAll(".accordion-item");
+
+  accordionItems.forEach((item) => {
+    const header = item.querySelector(".accordion-header");
+
+    header.addEventListener("click", () => {
+      // 현재 아이템의 활성화 상태 토글
+      const isActive = item.classList.contains("active");
+
+      // 모든 아이템 비활성화
+      accordionItems.forEach((otherItem) => {
+        otherItem.classList.remove("active");
+      });
+
+      // 클릭한 아이템이 이미 활성화되어 있지 않았다면 활성화
+      if (!isActive) {
+        item.classList.add("active");
+      }
+    });
+  });
+
   // 플랫피커 초기화
   const datePicker = flatpickr("#datePicker", {
     mode: "range",
@@ -79,15 +104,15 @@ $(document).ready(function () {
     monthSelectorType: "static", // 월 선택 방식 개선
     enableTime: false,
     animate: true,
-    onDayCreate: function(dObj, dStr, fp, dayElem) {
+    onDayCreate: function (dObj, dStr, fp, dayElem) {
       // 첫 번째 날짜가 선택된 경우, 그 이전 날짜들을 비활성화
       if (fp.selectedDates.length === 1) {
         const firstSelectedDate = fp.selectedDates[0];
         const dayDate = dayElem.dateObj;
-        
+
         if (dayDate < firstSelectedDate) {
-          dayElem.classList.add('flatpickr-disabled');
-          dayElem.setAttribute('aria-disabled', 'true');
+          dayElem.classList.add("flatpickr-disabled");
+          dayElem.setAttribute("aria-disabled", "true");
         }
       }
     },
@@ -156,7 +181,7 @@ $(document).ready(function () {
         tempStartDate = selectedDates[0];
         $("#dateError").hide();
         $("#dateApply").prop("disabled", true).css("opacity", 0.5);
-        
+
         // 첫 번째 날짜 선택 후 달력 다시 렌더링하여 이전 날짜들 비활성화
         setTimeout(() => {
           this.redraw();
@@ -405,27 +430,6 @@ $(document).ready(function () {
       $(
         ".dropdown-container, .date-picker-container, .people-selector-container"
       ).hide();
-    }
-  });
-
-  // 안내사항 아코디언 기능
-  $(".guideline-header").on("click", function () {
-    const $header = $(this);
-    const target = $header.data("target");
-    const $content = $("#" + target);
-    const $icon = $header.find("i");
-
-    // 현재 아이템이 활성화되어 있는지 확인
-    const isActive = $header.hasClass("active");
-
-    // 모든 아코디언 닫기
-    $(".guideline-header").removeClass("active");
-    $(".guideline-content").removeClass("active").slideUp(300);
-
-    // 현재 아이템이 비활성화 상태였다면 열기
-    if (!isActive) {
-      $header.addClass("active");
-      $content.addClass("active").slideDown(300);
     }
   });
 });

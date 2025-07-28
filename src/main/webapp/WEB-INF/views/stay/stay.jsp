@@ -21,6 +21,9 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
+<!-- kakao api -->
+<script type="text/javascript"
+	src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=23c99c1ca832c53450f37e55c5731901&libraries=services"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Carousel JS -->
 <script
@@ -30,6 +33,7 @@
 <script
 	src="${pageContext.request.contextPath}/resources/js/stay/stay.js"></script>
 </head>
+
 <body>
 	<!-- 헤더 인클루드 -->
 	<jsp:include page="../includes/header.jsp" />
@@ -308,21 +312,30 @@
 				<h2 class="section-title">위치 및 정보</h2>
 				<div class="location-info-container">
 					<div class="location-details">
-						<p>${stay.siName}의위치는 [ ${detail.siAddress} ] 입니다.</p>
+						<p>${stay.siName}의위치는[${detail.siAddress}]입니다.</p>
 						<p>${detail.siAddrdesc}</p>
 						<div class="contact-info">
-							<div class="contact-item">
-								<i class="ph ph-phone"></i> <span>${detail.siPhone}</span>
-							</div>
-							<div class="contact-item">
-								<i class="ph ph-envelope"></i> <span>${detail.siEmail}</span>
-							</div>
-							<div class="contact-item">
-								<i class="ph ph-instagram-logo"></i> <span>${detail.siInstagram}</span>
-							</div>
+							<c:if test="${not empty detail.siPhone}">
+								<div class="contact-item">
+									<i class="ph ph-phone"></i> <span>${detail.siPhone}</span>
+								</div>
+							</c:if>
+
+							<c:if test="${not empty detail.siEmail}">
+								<div class="contact-item">
+									<i class="ph ph-envelope"></i> <span>${detail.siEmail}</span>
+								</div>
+							</c:if>
+
+							<c:if test="${not empty detail.siInstagram}">
+								<div class="contact-item">
+									<i class="ph ph-instagram-logo"></i> <span>${detail.siInstagram}</span>
+								</div>
+							</c:if>
 						</div>
 					</div>
 				</div>
+
 				<!-- 카카오맵 영역 -->
 				<div class="location-map">
 					<div id="map" style="width: 100%; height: 400px"></div>
@@ -390,25 +403,45 @@
 	<jsp:include page="../includes/footer.jsp" />
 
 	<!-- 카카오맵 API -->
-	<script type="text/javascript"
-		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_APP_KEY"></script>
 	<script>
-		$(document).ready(function() {
-			// 카카오맵 초기화
-			var container = document.getElementById("map");
-			var options = {
-				center : new kakao.maps.LatLng(37.6095, 126.9268), // 은평구 좌표
+		window.onload = function() {
+			if (typeof kakao === 'undefined') {
+				alert("카카오맵이 아직 로딩되지 않았습니다.");
+				return;
+			}
+
+			const container = document.getElementById("map");
+			const options = {
+				center : new kakao.maps.LatLng(33.450701, 126.570667),
 				level : 3,
 			};
-			var map = new kakao.maps.Map(container, options);
+			const map = new kakao.maps.Map(container, options);
 
-			// 마커 추가
-			var markerPosition = new kakao.maps.LatLng(37.6095, 126.9268);
-			var marker = new kakao.maps.Marker({
-				position : markerPosition,
-			});
-			marker.setMap(map);
-		});
+			const geocoder = new kakao.maps.services.Geocoder();
+			const address = '${detail.siAddress}';
+
+			geocoder
+					.addressSearch(
+							address,
+							function(result, status) {
+								if (status === kakao.maps.services.Status.OK) {
+									const coords = new kakao.maps.LatLng(
+											result[0].y, result[0].x);
+									map.setCenter(coords);
+
+									const marker = new kakao.maps.Marker({
+										map : map,
+										position : coords,
+									});
+
+									const infowindow = new kakao.maps.InfoWindow(
+											{
+												content : `<div style="padding:5px;">${stay.siName}</div>`,
+											});
+									infowindow.open(map, marker);
+								}
+							});
+		};
 	</script>
 </body>
 </html>

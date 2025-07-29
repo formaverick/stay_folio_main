@@ -17,6 +17,9 @@
   overflow: hidden;
 }
 
+.reserv-box img {
+  border-radius: 12px;
+}
 .reserv-info {
   flex: 0 0 50%;
   display: flex;

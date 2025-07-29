@@ -1,13 +1,17 @@
 @charset "UTF-8";
 .mypage-page {
   max-width: 1100px;
-  margin: 0 auto;
+  height: auto;
+  margin: 6rem auto;
+  display: flex;
+  flex-direction: row;
 }
 
 .mypage-header {
-  width: 100%;
+  width: 1100px;
   padding: 6rem 0 5rem;
-  margin-bottom: 4rem;
+  margin: 0 auto;
+
   border-bottom: 2px solid #000;
   text-align: center;
 }
@@ -26,8 +30,7 @@
 }
 
 .mypage-submenu {
-  width: 25%;
-  float: left;
+  width: 40%;
 }
 
 .mypage-submenu .active {
@@ -47,9 +50,4 @@
   line-height: 3;
   font-size: 0.875rem;
   display: inline-block;
-}
-
-.mypage-main {
-  width: 75%;
-  float: right;
 }

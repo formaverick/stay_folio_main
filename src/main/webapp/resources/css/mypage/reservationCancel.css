@@ -1,0 +1,120 @@
+.reservation-cancel-section,
+.refund-policy-section {
+  background-color: #fff;
+
+  margin-top: 4rem;
+}
+
+.reservation-cancel-section h3,
+.refund-policy-section h3 {
+  position: relative;
+  font-size: 1.3rem;
+  font-weight: 600;
+  padding-left: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.reservation-cancel-section h3::before,
+.refund-policy-section h3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.2rem;
+  width: 3px;
+  height: 1.2em;
+  background-color: #333;
+}
+
+.cancel-question {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.cancel-reason-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.cancel-reason-list label {
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.cancel-textarea {
+  width: 100%;
+  height: 120px;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  resize: vertical;
+}
+
+.refund-desc {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.refund-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.refund-table th,
+.refund-table td {
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.refund-table th {
+  background-color: #f8f8f8;
+  font-weight: 600;
+}
+
+.refund-check {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.refund-check label {
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.cancel-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  margin: 4rem 0;
+}
+
+.cancel-back {
+  min-width: 160px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background-color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.cancel-submit {
+  min-width: 160px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 6px;
+  color: white;
+  background-color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}

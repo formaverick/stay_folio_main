@@ -67,6 +67,7 @@
 		resultType="com.hotel.domain.RoomVO">
 		SELECT
 		ri_id AS riId,
+		si_id AS siId,
 		ri_type AS riType,
 		ri_name AS riName,
 		ri_desc AS riDesc,
@@ -77,6 +78,10 @@
 		ri_bedcnt AS riBedcnt,
 		ri_price AS
 		riPrice,
+		ri_show AS riShow,
+		ri_delete
+		AS riDelete,
+		ri_date AS riDate,
 		ri_bedroom AS riBedroom,
 		ri_bathroom AS
 		riBathroom
@@ -100,90 +105,11 @@
 	</select>
 
 
-	<!-- 객실 상세페이지 -->
-	<select id="getRoomById" resultType="com.hotel.domain.RoomVO">
-		SELECT
-		ri_id AS riId,
-		ri_type
-		AS riType,
-		ri_name AS riName,
-		ri_desc AS riDesc,
-		ri_person AS riPerson,
-		ri_maxperson AS riMaxperson,
-		ri_area AS riArea,
-		ri_bed AS riBed,
-		ri_bedcnt AS riBedcnt,
-		ri_price AS
-		riPrice,
-		ri_bedroom AS riBedroom,
-		ri_bathroom AS
-		riBathroom
-		FROM t_room_info
-		WHERE si_id = #{siId} AND
-		ri_id = #{riId}
-	</select>
-
-	<!-- 객실 편의시설 목록 조회 -->
-	<select id="getFacilitiesByRoomId"
-		resultType="com.hotel.domain.FacilityVO">
-		SELECT
-		f.fi_id AS fiId,
-		f.fi_name AS fiName,
-		f.fi_icon AS
-		fiIcon
-		FROM t_facility_info f
-		JOIN t_room_facility_rel rfr ON f.fi_id =
-		rfr.fi_id
-		WHERE rfr.ri_id = #{riId}
-		AND rfr.si_id = #{siId}
-	</select>
-
-	<!-- 객실 어메니티 목록 조회 -->
-	<select id="getAmenitiesByRoomId"
-		resultType="com.hotel.domain.AmenityVO">
-		SELECT
-		a.ai_idx AS aiIdx,
-		a.ra_name AS raName
-		FROM
-		t_amenities_info a
-		JOIN
-		t_room_amenities ra ON a.ai_idx = ra.ai_idx
-		WHERE
-		ra.si_id = #{siId}
-		AND
-		ra.ri_id = #{riId}
-	</select>
-
-	<!-- 상세페이지 객실 제외 나머지 객실 목록 조회 -->
-	<select id="getOtherRoomsByStayId"
-		resultType="com.hotel.domain.RoomVO">
-		SELECT
-		ri_id AS riId,
-		ri_type AS riType,
-		ri_name AS riName,
-		ri_desc AS riDesc,
-		ri_person AS riPerson,
-		ri_maxperson AS riMaxperson,
-		ri_area AS riArea,
-		ri_bed AS riBed,
-		ri_bedcnt AS riBedcnt,
-		ri_price AS
-		riPrice,
-		ri_bedroom AS riBedroom,
-		ri_bathroom AS
-		riBathroom
-		FROM
-		t_room_info
-		WHERE si_id = #{siId}
-		AND ri_id != #{riId}
-	</select>
-
-
-	<!-- admin 숙소 정보 insert 시작 -->
+	<!-- admin insert 시작 -->
 	<!-- 지역 목록 조회 -->
 	<select id="getAllLocations"
 		resultType="com.hotel.domain.LocationCategoryVO">
-		SELECT lc_id AS lcId, lc_name AS lcName lc_id
+		SELECT lc_id AS lcId, lc_name AS lcName, lc_id AS lcId
 		FROM
 		t_location_category ORDER BY lc_id
 	</select>
@@ -253,6 +179,134 @@
 		VALUES
 		(#{siId}, #{fiId})
 	</insert>
+
+	<!-- 이미지 insert -->
+	<insert id="insertStayPhoto"
+		parameterType="com.hotel.domain.PhotoVO">
+		INSERT INTO t_stay_photo (si_id, ri_id, sp_idx, sp_url)
+		VALUES (#{siId}, #{riId, jdbcType=NULL}, #{spIdx}, #{spUrl})
+	</insert>
+
 	<!-- admin insert 끝 -->
+
+
+	<select id="getAllStays" resultType="com.hotel.domain.StayVO">
+		SELECT
+		si_id AS siId,
+		si_name
+		AS siName,
+		si_loca AS siLoca
+		FROM
+		t_stay_info
+		ORDER BY
+		si_id DESC
+	</select>
+
+	<select id="getStayPhotos" resultType="com.hotel.domain.PhotoVO">
+		SELECT sp_idx AS spIdx,
+		sp_url AS spUrl, si_id AS siId, ri_id AS riId
+		FROM t_stay_photo
+		WHERE
+		si_id = #{siId}
+		ORDER BY sp_idx
+	</select>
+
+	<update id="updateStay">
+		UPDATE t_stay_info
+		SET
+		si_name = #{siName},
+		si_loca =
+		#{siLoca},
+		si_desc = #{siDesc},
+		si_minperson = #{siMinperson},
+		si_maxperson = #{siMaxperson},
+		si_minprice = #{siMinprice},
+		si_extra =
+		#{siExtra},
+		si_peak = #{siPeak},
+		si_off = #{siOff},
+		si_discount =
+		#{siDiscount},
+		si_show = #{siShow}
+		WHERE si_id = #{siId}
+	</update>
+
+	<update id="updateStayDetail">
+		UPDATE t_stay_info_detail
+		SET
+		si_notice = #{siNotice},
+		si_desc1 = #{siDesc1},
+		si_desc2 = #{siDesc2},
+		si_feat1 = #{siFeat1},
+		si_feat2 = #{siFeat2},
+		si_address = #{siAddress},
+		si_addrdesc =
+		#{siAddrdesc},
+		si_phone = #{siPhone},
+		si_email =
+		#{siEmail},
+		si_instagram
+		= #{siInstagram},
+		si_bizname = #{siBizname},
+		si_biznum = #{siBiznum},
+		si_ceo = #{siCeo},
+		si_pet = #{siPet},
+		si_parking = #{siParking},
+		si_food
+		= #{siFood},
+		si_checkin =
+		#{siCheckin},
+		si_checkout = #{siCheckout},
+		si_feat_title1 =
+		#{siFeatTitle1},
+		si_feat_title2 = #{siFeatTitle2}
+		WHERE
+		si_id = #{siId}
+	</update>
+
+	<delete id="deleteFacilitiesByStayId">
+		DELETE FROM t_stay_facility_rel WHERE si_id = #{siId}
+	</delete>
+
+	<insert id="insertFacility">
+		INSERT INTO t_stay_facility_rel (si_id, fi_id)
+		VALUES
+		(#{siId}, #{fiId})
+	</insert>
+
+	<select id="existsStayPhoto" resultType="boolean"
+		parameterType="com.hotel.domain.PhotoVO">
+		SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+		FROM t_stay_photo
+		WHERE
+		si_id = #{siId}
+		AND sp_idx = #{spIdx}
+		<choose>
+			<when test="riId == null">
+				AND ri_id IS NULL
+			</when>
+			<otherwise>
+				AND ri_id = #{riId}
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<update id="updateStayPhoto"
+		parameterType="com.hotel.domain.PhotoVO">
+		UPDATE t_stay_photo
+		SET sp_url = #{spUrl}
+		WHERE si_id = #{siId}
+		AND sp_idx = #{spIdx}
+		<choose>
+			<when test="riId == null">
+				AND ri_id IS NULL
+			</when>
+			<otherwise>
+				AND ri_id = #{riId}
+			</otherwise>
+		</choose>
+	</update>
+
 
 </mapper>

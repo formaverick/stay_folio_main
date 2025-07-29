@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.hotel.domain.AmenityVO;
 import com.hotel.domain.FacilityVO;
 import com.hotel.domain.LocationCategoryVO;
+import com.hotel.domain.PhotoVO;
 import com.hotel.domain.RoomVO;
 import com.hotel.domain.StayDetailVO;
 import com.hotel.domain.StayVO;
@@ -26,7 +27,8 @@ public interface StayMapper {
 	// 숙소 상세페이지 - 편의시설
 	List<FacilityVO> getFacilitiesByStayId(int siId);
 
-	// admin insert 시작
+	
+	// admin - 숙소 등록
 	// 목록 조회
 	List<LocationCategoryVO> getAllLocations();
 
@@ -40,16 +42,23 @@ public interface StayMapper {
 	void insertStayDetail(StayDetailVO detail);
 
 	void insertFacilityRel(@Param("siId") int siId, @Param("fiId") int fiId);
-	// admin insert 끝
 
-	// 객실 상세페이지
-	RoomVO getRoomById(@Param("siId") int siId, @Param("riId") int riId);
-
-	// 객실 상세페이지 - 편의시설
-	List<FacilityVO> getFacilitiesByRoomId(@Param("siId") int siId, @Param("riId") int riId);
-	// 객실 상세페이지 - 어메니티
-	List<AmenityVO> getAmenitiesByRoomId(@Param("siId") int siId, @Param("riId") int riId);
-	// 객실 상세페이지 - 다른 객실
-	List<RoomVO> getOtherRoomsByStayId(@Param("siId") int siId, @Param("riId") int riId);
+	void insertStayPhoto(PhotoVO photo);
+	// admin - 숙소 등록 끝
+	
+	// 모든 숙소 불러오기
+	List<StayVO> getAllStays();
+	
+	// 숙소 이미지 불러오기
+	List<PhotoVO> getStayPhotos(int siId);
+	
+	
+	// admin update
+	void updateStay(StayVO stay);
+	void updateStayDetail(StayDetailVO detail);
+	void deleteFacilitiesByStayId(int siId);
+	void insertFacility(@Param("siId") int siId, @Param("fiId") int fiId);
+	boolean existsStayPhoto(PhotoVO photo);
+	void updateStayPhoto(PhotoVO photo);
 
 }

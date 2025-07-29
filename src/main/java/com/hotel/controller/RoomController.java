@@ -14,6 +14,7 @@ import com.hotel.domain.FacilityVO;
 import com.hotel.domain.RoomVO;
 import com.hotel.domain.StayDetailVO;
 import com.hotel.domain.StayVO;
+import com.hotel.service.RoomService;
 import com.hotel.service.StayService;
 
 @Controller
@@ -22,14 +23,18 @@ public class RoomController {
 
 	@Autowired
 	private StayService stayService;
+	
+	@Autowired
+	private RoomService roomService;
 
+	// 숙소 상세페이지
 	@GetMapping("/{siId}")
 	public String StayDetail(@PathVariable("siId") Integer siId, Model model) {
 		StayVO stayInfo = stayService.getStayInfo(siId);
 		StayDetailVO stayDetail = stayService.getStayDetail(siId);
 		List<RoomVO> rooms = stayService.getRoomsByStayId(siId);
 		List<FacilityVO> stayFacilities = stayService.getFacilitiesByStayId(siId);
-		
+
 		double discount = stayInfo.getSiDiscount();
 	    for (RoomVO room : rooms) {
 	        if (discount > 0) {
@@ -39,7 +44,7 @@ public class RoomController {
 	            room.setDiscountedPrice(room.getRiPrice());
 	        }
 	    }
-
+	    
 		model.addAttribute("stay", stayInfo);
 		model.addAttribute("detail", stayDetail);
 		model.addAttribute("rooms", rooms);
@@ -47,15 +52,16 @@ public class RoomController {
 		return "stay/stay";
 	}
 
+	// 객실 상세페이지
 	@GetMapping("/{siId}/{riId}")
 	public String getRoomDetail(@PathVariable("siId") int siId, @PathVariable("riId") int riId, Model model) {
-
+		
 		StayVO stay = stayService.getStayInfo(siId);
 		StayDetailVO stayDetail = stayService.getStayDetail(siId);
-		RoomVO room = stayService.getRoomById(siId, riId);
-		List<FacilityVO> roomFacilities = stayService.getFacilitiesByRoomId(siId, riId);
-		List<AmenityVO> roomAmenities = stayService.getAmenitiesByRoomId(siId, riId);
-		List<RoomVO> otherRooms = stayService.getOtherRoomsByStayId(siId, riId);
+		RoomVO room = roomService.getRoomById(siId, riId);
+		List<FacilityVO> roomFacilities =roomService.getFacilitiesByRoomId(siId, riId);
+		List<AmenityVO> roomAmenities = roomService.getAmenitiesByRoomId(siId, riId);
+		List<RoomVO> otherRooms = roomService.getOtherRoomsByStayId(siId, riId);
 
 		model.addAttribute("stay", stay);
 		model.addAttribute("detail", stayDetail);

@@ -109,3 +109,4 @@ hs_err_pid*
 
 # Ignore db.properties specifically
 src/main/resources/db.properties
+src/main/resources/application.properties

@@ -1,48 +1,46 @@
 @charset "EUC-KR";
 
-
-
 .no-reserv {
-	text-align: center;
+  text-align: center;
 }
 
 .no-reserv img {
-	width: 320px;
-	height: 320px;
-	margin-bottom: 2rem;
-	display: inline-block;
+  width: 320px;
+  height: 320px;
+  margin-bottom: 2rem;
+  display: inline-block;
 }
 
 .reserv-box {
-	display: flex;
-	margin-bottom: 5rem;
-	overflow: hidden;
+  display: flex;
+  margin-bottom: 5rem;
+  overflow: hidden;
 }
 
 .reserv-info {
-	flex: 0 0 50%;
-	display: flex;
-	flex-direction: column;
-	margin-right: 1.5rem;
+  flex: 0 0 50%;
+  display: flex;
+  flex-direction: column;
+  margin-right: 1.5rem;
 }
 
 .reserv-info .label {
-	border-radius: 4px;
-	padding: 0 6px;
-	font-size: 0.75rem;
-	line-height: 1rem;
-	margin-bottom: 1rem;
-	display: inline-block;
+  border-radius: 4px;
+  padding: 0 6px;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  margin-bottom: 1rem;
+  display: inline-block;
 }
 
 .ready {
-	border: 1px solid #333;
+  border: 1px solid #333;
 }
 
 .cancle {
-	border: 1px solid #666;
-	background: #666;
-	color: #fff;
+  border: 1px solid #666;
+  background: #666;
+  color: #fff;
 }
 
 .reserv-info h3 {
@@ -52,15 +50,15 @@
 }
 
 .reserv-info .reserv-option {
-	font-size: 0.875rem;
-	color: #222222;
+  font-size: 0.875rem;
+  color: #222222;
 }
 
 .reserv-info .buttom {
-	margin: auto 0 0 0;
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-end;
+  margin: auto 0 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 
 .reserv-price {
@@ -72,15 +70,15 @@
 }
 
 .btn-detail {
-	line-height: 1.5;
-	font-size: 1rem;
-	border-bottom: 1px solid #e0e0e0;
+  line-height: 1.5;
+  font-size: 1rem;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .reserv-image {
-	flex: 1;
-	max-height: 250px;
-	overflow: hidden;
+  flex: 1;
+  max-height: 250px;
+  overflow: hidden;
 }
 
 .reserv-image img {

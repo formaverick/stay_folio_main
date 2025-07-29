@@ -35,10 +35,14 @@ function loadRecommendations(rc_id) {
               </div>`;
 
           const promoBadge = stay.discount > 0 ? `<div class="stay-promotion">프로모션</div>` : "";
+          
+          const imageUrl = stay.spUrl
+  								? `https://stayfolio-upload-bucket.s3.us-east-1.amazonaws.com/${stay.spUrl}`
+  								: '/resources/img/card1.png';
 
           item.innerHTML = `
             <div class="stay-image">
-              <img src="${stay.spUrl || '/resources/img/card1.png'}" alt="${stay.siName}" />
+              <img src="${imageUrl}" alt="${stay.siName}" />
               ${promoBadge}
               <button class="stay-wishlist" data-wishlist="false">
                 <i class="ph ph-heart"></i>

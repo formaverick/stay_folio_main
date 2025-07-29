@@ -4,6 +4,7 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:security="http://www.springframework.org/schema/security"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-5.2.xsd
@@ -18,6 +19,9 @@
 	<context:property-placeholder
 		location="classpath:db.properties" />
 
+	<context:property-placeholder
+		location="classpath:application.properties" />
+
 	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
 		<property name="driverClassName" value="${jdbc.driver}" />
 		<property name="jdbcUrl" value="${jdbc.url}" />
@@ -25,10 +29,10 @@
 		<property name="password" value="${jdbc.password}" />
 		<property name="maximumPoolSize" value="7" />
 		<property name="minimumIdle" value="1" />
-	    <property name="idleTimeout" value="300000" />         <!-- 5분 -->
-	    <property name="maxLifetime" value="600000" />          <!-- 10분 -->
-	    <property name="connectionTimeout" value="30000" />     <!-- 30초 -->
-	    <property name="validationTimeout" value="5000" />
+		<property name="idleTimeout" value="300000" />         <!-- 5분 -->
+		<property name="maxLifetime" value="600000" />          <!-- 10분 -->
+		<property name="connectionTimeout" value="30000" />     <!-- 30초 -->
+		<property name="validationTimeout" value="5000" />
 	</bean>
 
 	<!-- HikariCP를 사용한 데이터베이스 커넥션 풀을 생성하는 빈 -->
@@ -46,7 +50,11 @@
 		base-package="com.hotel.mapper" />
 	<context:component-scan
 		base-package="com.hotel.service" />
-		
-	
+	<context:component-scan
+		base-package="com.hotel.config" />
+
+	<!-- 파일 업로드를 처리하는데 쓰이는 StandardServletMultipartResolver 빈 설정 -->
+	<beans:bean id="multipartResolver"
+		class="org.springframework.web.multipart.support.StandardServletMultipartResolver" />
 </beans>
 

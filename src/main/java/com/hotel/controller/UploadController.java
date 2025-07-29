@@ -1,72 +1,77 @@
 package com.hotel.controller;
 
-import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.hotel.domain.PhotoVO;
-import com.hotel.mapper.photoMapper;
+import com.hotel.service.S3Uploader;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/admin")
 public class UploadController {
-	@Autowired
-	private photoMapper photoMapper;
 
-	@PostMapping("/uploadPhoto")
+	private final S3Uploader s3Uploader;
+
+	@PostMapping("/stay/imageUpload")
 	@ResponseBody
-	public ResponseEntity<String> uploadPhoto(HttpServletRequest request,
-			@RequestParam("uploadFile") MultipartFile[] uploadFiles, @RequestParam("siId") int siId,
-			@RequestParam(value = "riId") int riId, @RequestParam("spIdx") int spIdx) {
+	public String uploadStayImages(@RequestParam("siId") int siId,
+			@RequestParam(value = "riId", required = false) Integer riId,
+			@RequestParam("imageFiles") List<MultipartFile> imageFiles, @RequestParam("spIdxes") List<Integer> spIdxes)
+			throws IOException {
 
-		String uploadFolder = request.getServletContext().getRealPath("/resources/upload");
-		String uploadFolderPath = getFolder();
-		File uploadPath = new File(uploadFolder, uploadFolderPath);
+		System.out.println("==== 이미지 업로드 컨트롤러 진입 ====");
+		System.out.println("siId: " + siId);
+		System.out.println("riId: " + riId);
+		System.out.println("imageFiles.size(): " + imageFiles.size());
+		System.out.println("spIdxes.size(): " + spIdxes.size());
 
-		if (!uploadPath.exists())
-			uploadPath.mkdirs();
+		for (int i = 0; i < imageFiles.size(); i++) {
+			MultipartFile file = imageFiles.get(i);
+			int spIdx = spIdxes.get(i);
+			System.out.println("▶️ 업로드 이미지 spIdx: " + spIdx + ", 파일명: " + file.getOriginalFilename());
 
-		for (MultipartFile file : uploadFiles) {
-			String originalName = file.getOriginalFilename();
-			String uuid = UUID.randomUUID().toString();
-			String saveName = uuid + "_" + originalName;
-			File saveFile = new File(uploadPath, saveName);
-
-			try {
-				file.transferTo(saveFile);
-				String spUrl = "/resources/upload/" + uploadFolderPath + "/" + saveName;
-
-				PhotoVO vo = new PhotoVO();
-				vo.setSiId(siId);
-				vo.setRiId(riId == 0 ? null : riId);
-				vo.setSpIdx(spIdx);
-				vo.setSpUrl(spUrl);
-				photoMapper.insert(vo);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-				return new ResponseEntity<>("fail", HttpStatus.INTERNAL_SERVER_ERROR);
+			if (!file.isEmpty()) {
+				s3Uploader.uploadStayPhoto(siId, riId, spIdx, file);
 			}
 		}
 
-		return new ResponseEntity<>("success", HttpStatus.OK);
+		return "success";
 	}
+	
+	@PostMapping("/room/imageUpload")
+	@ResponseBody
+	public String uploadRoomImages(@RequestParam("siId") int siId,
+			@RequestParam(value = "riId", required = false) Integer riId,
+			@RequestParam("imageFiles") List<MultipartFile> imageFiles, @RequestParam("spIdxes") List<Integer> spIdxes)
+			throws IOException {
 
-	private String getFolder() {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-		Date date = new Date();
-		return sdf.format(date); // "2025/07/22"
+		System.out.println("==== 이미지 업로드 컨트롤러 진입 ====");
+		System.out.println("siId: " + siId);
+		System.out.println("riId: " + riId);
+		System.out.println("imageFiles.size(): " + imageFiles.size());
+		System.out.println("spIdxes.size(): " + spIdxes.size());
+
+		for (int i = 0; i < imageFiles.size(); i++) {
+			MultipartFile file = imageFiles.get(i);
+			int spIdx = spIdxes.get(i);
+			System.out.println("▶️ 업로드 이미지 spIdx: " + spIdx + ", 파일명: " + file.getOriginalFilename());
+
+			if (!file.isEmpty()) {
+				s3Uploader.uploadRoomPhoto(siId, riId, spIdx, file);
+			}
+		}
+
+		return "success";
 	}
 
 }

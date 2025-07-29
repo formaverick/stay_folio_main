@@ -1,13 +1,16 @@
 package com.hotel.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hotel.domain.AmenityVO;
 import com.hotel.domain.FacilityVO;
 import com.hotel.domain.LocationCategoryVO;
+import com.hotel.domain.PhotoVO;
 import com.hotel.domain.RoomVO;
 import com.hotel.domain.StayDetailVO;
 import com.hotel.domain.StayVO;
@@ -24,20 +27,18 @@ public class StayServiceImpl implements StayService {
 	public StayVO getStayInfo(int siId) {
 		return stayMapper.selectStayInfo(siId);
 	}
-	
-	
+
 // 	숙소 상세페이지
 	@Override
 	public StayDetailVO getStayDetail(int siId) {
 		return stayMapper.selectStayDetail(siId);
 	}
-	
+
 	// 숙소 상세페이지 - 객실 출력
 	@Override
 	public List<RoomVO> getRoomsByStayId(int siId) {
 		return stayMapper.getRoomsByStayId(siId);
 	}
-
 
 	// 숙소 상세페이지 - 편의시설
 	@Override
@@ -45,9 +46,7 @@ public class StayServiceImpl implements StayService {
 		return stayMapper.getFacilitiesByStayId(siId);
 	}
 
-	
-
-//	admin insert
+//	admin - 숙소 등록
 
 	@Override
 	public List<LocationCategoryVO> getAllLocations() {
@@ -58,46 +57,96 @@ public class StayServiceImpl implements StayService {
 	public List<FacilityVO> getAllFacilities() {
 		return stayMapper.getAllFacilities();
 	}
-	
+
 	@Override
 	public void insertStayInfo(StayVO stay, StayDetailVO detail, List<Integer> facilityIds) {
 		stayMapper.insertStayInfo(stay);
-		
+
 		int siId = stayMapper.getLastInsertId();
 
-		detail.setSiId((long)siId);
+		detail.setSiId((long) siId);
 		stayMapper.insertStayDetail(detail);
 
-		for (Integer fiId : facilityIds) {
-			stayMapper.insertFacilityRel(siId, fiId);
+		if (facilityIds != null) {
+			for (Integer fiId : facilityIds) {
+				stayMapper.insertFacilityRel(siId, fiId);
+			}
 		}
 	}
 
-	
-	
-	// 객실 상세페이지
 	@Override
-	public RoomVO getRoomById(int siId, int riId) {
-	    return stayMapper.getRoomById(siId, riId);
-	}
-	
-	// 객실 상세페이지 - 편의시설
-	@Override
-	public List<FacilityVO> getFacilitiesByRoomId(int siId, int riId) {
-		return stayMapper.getFacilitiesByRoomId(siId, riId);
-	}
-	
-	// 객실 상세페이지 - 어메니티
-	@Override
-	public List<AmenityVO> getAmenitiesByRoomId(int siId, int riId) {
-	    return stayMapper.getAmenitiesByRoomId(siId, riId);
+	public int getLastInsertId() {
+		return stayMapper.getLastInsertId();
 	}
 
-	// 객실 상세페이지 - 다른 객실
 	@Override
-	public List<RoomVO> getOtherRoomsByStayId(int siId, int riId) {
-	    return stayMapper.getOtherRoomsByStayId(siId, riId);
+	public void insertStayDetail(StayDetailVO detail) {
+		stayMapper.insertStayDetail(detail);
 	}
 
+	@Override
+	public void insertFacilityRel(int siId, int fiId) {
+		stayMapper.insertFacilityRel(siId, fiId);
+	}
+
+	@Override
+	public List<StayVO> getAllStays() {
+		return stayMapper.getAllStays();
+	}
+	
+	@Override
+	public Map<String, List<PhotoVO>> getStayPhotosByCategory(int siId) {
+		List<PhotoVO> photos = stayMapper.getStayPhotos(siId);
+
+		Map<String, List<PhotoVO>> photoMap = new HashMap<>();
+
+		photoMap.put("main", new ArrayList<>());
+		photoMap.put("additional", new ArrayList<>());
+		photoMap.put("feature", new ArrayList<>());
+		photoMap.put("feat1", new ArrayList<>());
+		photoMap.put("feat2", new ArrayList<>());
+
+		for (PhotoVO photo : photos) {
+			int idx = photo.getSpIdx();
+			if (idx == 0)
+				photoMap.get("main").add(photo);
+			else if (idx <= 2)
+				photoMap.get("additional").add(photo);
+			else if (idx <= 5)
+				photoMap.get("feature").add(photo);
+			else if (idx <= 8)
+				photoMap.get("feat1").add(photo);
+			else
+				photoMap.get("feat2").add(photo);
+		}
+
+		return photoMap;
+	}
+	
+	@Override
+	public List<PhotoVO> getAllStayPhotos(int siId) {
+		return stayMapper.getStayPhotos(siId);
+	}
+	
+	@Override
+	public void updateStay(StayVO stay) {
+		stayMapper.updateStay(stay);
+	}
+	
+	@Override
+	public void updateStayDetail(StayDetailVO detail) {
+		stayMapper.updateStayDetail(detail);
+	}
+
+	@Override
+	public void updateStayFacilities(int siId, List<Integer> facilityIds) {
+		// 먼저 기존 데이터 삭제
+		stayMapper.deleteFacilitiesByStayId(siId);
+
+		// 다시 insert
+		for (Integer fiId : facilityIds) {
+			stayMapper.insertFacility(siId, fiId);
+		}
+	}
 
 }

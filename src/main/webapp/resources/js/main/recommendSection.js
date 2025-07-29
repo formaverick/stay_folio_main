@@ -12,6 +12,7 @@ function loadRecommendations(rc_id) {
 
       track.innerHTML = "";
 
+	  console.log(json);
       const stays = json.stays;
       for (let i = 0; i < stays.length; i += 3) {
         const grid = document.createElement("div");

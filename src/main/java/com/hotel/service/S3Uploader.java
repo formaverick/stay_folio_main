@@ -53,7 +53,7 @@ public class S3Uploader {
 	
 	// 객실 이미지 업로드
 	public void uploadRoomPhoto(int siId, int riId, int spIdx, MultipartFile file) throws IOException {
-		String fileName = "room/" + riId + "/" + UUID.randomUUID();
+		String fileName = "stay/" + siId + "/" + riId + "/" + UUID.randomUUID();
 		ObjectMetadata metadata = new ObjectMetadata();
 		metadata.setContentType(file.getContentType());
 		metadata.setContentDisposition("inline");

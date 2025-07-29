@@ -3,6 +3,9 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<c:set var="s3BaseUrl"
+	value="https://stayfolio-upload-bucket.s3.us-east-1.amazonaws.com/" />
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -46,31 +49,22 @@
 		</a>
 		<div class="carousel">
 			<div class="carousel-track">
-				<div class="carousel-slide active">
-					<img
-						src="${pageContext.request.contextPath}/resources/img/stay/staycarousel1.jpg"
-						alt="숙소이미지1" />
-				</div>
-				<div class="carousel-slide">
-					<img
-						src="${pageContext.request.contextPath}/resources/img/stay/staycarousel2.jpg"
-						alt="숙소이미지2" />
-				</div>
-				<div class="carousel-slide">
-					<img
-						src="${pageContext.request.contextPath}/resources/img/stay/staycarousel3.jpg"
-						alt="숙소이미지3" />
-				</div>
-				<div class="carousel-slide">
-					<img
-						src="${pageContext.request.contextPath}/resources/img/stay/staycarousel4.jpg"
-						alt="숙소이미지4" />
-				</div>
-				<div class="carousel-slide">
-					<img
-						src="${pageContext.request.contextPath}/resources/img/stay/staycarousel5.jpg"
-						alt="숙소이미지5" />
-				</div>
+				<c:forEach var="photo" items="${stayPhotos.main}" varStatus="status">
+					<div class="carousel-slide ${status.first ? 'active' : ''}">
+						<img class="preview" src="${s3BaseUrl}${photo.spUrl}" alt="대표 이미지" />
+					</div>
+				</c:forEach>
+				<c:forEach var="photo" items="${stayPhotos.additional}">
+					<div class="carousel-slide">
+						<img class="preview" src="${s3BaseUrl}${photo.spUrl}" alt="추가 이미지" />
+					</div>
+				</c:forEach>
+				<c:forEach var="photo" items="${stayPhotos.feature}">
+					<div class="carousel-slide">
+						<img class="preview" src="${s3BaseUrl}${photo.spUrl}"
+							alt="주요 특징 이미지" />
+					</div>
+				</c:forEach>
 			</div>
 
 			<!-- 네비게이션 버튼 -->
@@ -83,12 +77,22 @@
 
 			<!-- 인디케이터 -->
 			<div class="carousel-indicators">
-				<button class="indicator active" data-slide="0"></button>
-				<button class="indicator" data-slide="1"></button>
-				<button class="indicator" data-slide="2"></button>
-				<button class="indicator" data-slide="3"></button>
-				<button class="indicator" data-slide="4"></button>
+				<c:forEach var="photo" items="${stayPhotos.main}" varStatus="status">
+					<button class="indicator ${status.first ? 'active' : ''}"
+						data-slide="${status.index}"></button>
+				</c:forEach>
+				<c:forEach var="photo" items="${stayPhotos.additional}"
+					varStatus="status">
+					<button class="indicator"
+						data-slide="${status.index + stayPhotos.main.size()}"></button>
+				</c:forEach>
+				<c:forEach var="photo" items="${stayPhotos.feature}"
+					varStatus="status">
+					<button class="indicator"
+						data-slide="${status.index + stayPhotos.main.size() + stayPhotos.additional.size()}"></button>
+				</c:forEach>
 			</div>
+
 		</div>
 	</section>
 	<!-- 숙소 캐러셀 끝 -->
@@ -139,11 +143,15 @@
 				<h2 class="section-title">${stay.siDesc}</h2>
 
 				<!-- 2. 대표이미지 1 -->
-				<div class="stay-main-image">
-					<img
-						src="${pageContext.request.contextPath}/resources/img/stay/staycarousel2.jpg"
-						alt="오포짓 스탠다드 외관" class="full-width-image" />
-				</div>
+				<c:forEach var="photo" items="${stayPhotos.additional}"
+					varStatus="status">
+					<c:if test="${status.index == 0}">
+						<div class="stay-main-image">
+							<img class="preview" src="${s3BaseUrl}${photo.spUrl}"
+								alt="대표 이미지 2" class="full-width-image" />
+						</div>
+					</c:if>
+				</c:forEach>
 
 				<!-- 3. 대표이미지 1 설명 -->
 				<div class="stay-description-main">
@@ -151,11 +159,15 @@
 				</div>
 
 				<!-- 4. 대표이미지 2 -->
-				<div class="stay-main-image">
-					<img
-						src="${pageContext.request.contextPath}/resources/img/stay/staycarousel3.jpg"
-						alt="오포짓 스탠다드 내부" class="full-width-image" />
-				</div>
+				<c:forEach var="photo" items="${stayPhotos.additional}"
+					varStatus="status">
+					<c:if test="${status.index == 1}">
+						<div class="stay-main-image">
+							<img class="preview" src="${s3BaseUrl}${photo.spUrl}"
+								alt="대표 이미지 2" class="full-width-image" />
+						</div>
+					</c:if>
+				</c:forEach>
 
 				<!-- 5. 대표이미지 2 설명 -->
 				<div class="stay-description-main">
@@ -167,21 +179,11 @@
 
 				<!-- 7. 사진 3개 영역 1 -->
 				<div class="photo-group">
-					<div class="photo-item">
-						<img
-							src="${pageContext.request.contextPath}/resources/img/stay/stayimg1.jpg"
-							alt="특징 1-1" />
-					</div>
-					<div class="photo-item">
-						<img
-							src="${pageContext.request.contextPath}/resources/img/stay/stayimg2.jpg"
-							alt="특징 1-2" />
-					</div>
-					<div class="photo-item">
-						<img
-							src="${pageContext.request.contextPath}/resources/img/stay/stayimg3.jpg"
-							alt="특징 1-3" />
-					</div>
+					<c:forEach var="photo" items="${stayPhotos.feature}">
+						<div class="photo-item">
+							<img class="preview" src="${s3BaseUrl}${photo.spUrl}" />
+						</div>
+					</c:forEach>
 				</div>
 
 				<!-- 8. 설명 1 -->
@@ -192,21 +194,11 @@
 
 				<!-- 9. 사진 3개 영역 2 -->
 				<div class="photo-group">
-					<div class="photo-item">
-						<img
-							src="${pageContext.request.contextPath}/resources/img/stay/stayimg4.jpg"
-							alt="특징 2-1" />
-					</div>
-					<div class="photo-item">
-						<img
-							src="${pageContext.request.contextPath}/resources/img/stay/stayimg5.jpg"
-							alt="특징 2-2" />
-					</div>
-					<div class="photo-item">
-						<img
-							src="${pageContext.request.contextPath}/resources/img/stay/stayimg6.jpg"
-							alt="특징 2-3" />
-					</div>
+					<c:forEach var="photo" items="${stayPhotos.feat1}">
+						<div class="photo-item">
+							<img class="preview" src="${s3BaseUrl}${photo.spUrl}" />
+						</div>
+					</c:forEach>
 				</div>
 
 				<!-- 10. 설명 2 -->
@@ -215,24 +207,15 @@
 					<p>${detail.siFeat2}</p>
 				</div>
 
-				<!-- 11. 사진 3개 영역 3
+				<!-- 11. 사진 3개 영역 3-->
 				<div class="photo-group">
-					<div class="photo-item">
-						<img
-							src="${pageContext.request.contextPath}/resources/img/stay/stayimg7.jpg"
-							alt="특징 3-1" />
-					</div>
-					<div class="photo-item">
-						<img
-							src="${pageContext.request.contextPath}/resources/img/stay/stayimg8.jpg"
-							alt="특징 3-2" />
-					</div>
-					<div class="photo-item">
-						<img
-							src="${pageContext.request.contextPath}/resources/img/stay/stayimg9.jpg"
-							alt="특징 3-3" />
-					</div>
+					<c:forEach var="photo" items="${stayPhotos.feat2}">
+						<div class="photo-item">
+							<img class="preview" src="${s3BaseUrl}${photo.spUrl}" />
+						</div>
+					</c:forEach>
 				</div>
+
 
 				<!-- 12. 설명 3
 				<div class="feature-description">
@@ -398,6 +381,7 @@
 		</div>
 	</section>
 	<!-- 숙소 정보 끝 -->
+
 
 	<!-- 푸터 인클루드 -->
 	<jsp:include page="../includes/footer.jsp" />

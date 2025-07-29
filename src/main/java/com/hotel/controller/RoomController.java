@@ -1,6 +1,7 @@
 package com.hotel.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.hotel.domain.AmenityVO;
 import com.hotel.domain.FacilityVO;
+import com.hotel.domain.PhotoVO;
 import com.hotel.domain.RoomVO;
 import com.hotel.domain.StayDetailVO;
 import com.hotel.domain.StayVO;
@@ -28,29 +30,37 @@ public class RoomController {
 	private RoomService roomService;
 
 	// 숙소 상세페이지
-	@GetMapping("/{siId}")
-	public String StayDetail(@PathVariable("siId") Integer siId, Model model) {
-		StayVO stayInfo = stayService.getStayInfo(siId);
-		StayDetailVO stayDetail = stayService.getStayDetail(siId);
-		List<RoomVO> rooms = stayService.getRoomsByStayId(siId);
-		List<FacilityVO> stayFacilities = stayService.getFacilitiesByStayId(siId);
+		@GetMapping("/{siId}")
+		public String StayDetail(@PathVariable("siId") Integer siId, Model model) {
+			StayVO stayInfo = stayService.getStayInfo(siId);
+			StayDetailVO stayDetail = stayService.getStayDetail(siId);
+			List<RoomVO> rooms = stayService.getRoomsByStayId(siId);
+			List<FacilityVO> stayFacilities = stayService.getFacilitiesByStayId(siId);
+			Map<String, List<PhotoVO>> stayPhotos = stayService.getStayPhotosByCategory(siId);
 
-		double discount = stayInfo.getSiDiscount();
-	    for (RoomVO room : rooms) {
-	        if (discount > 0) {
-	            int discountedPrice = (int) Math.floor(room.getRiPrice() * (1 - discount / 100));
-	            room.setDiscountedPrice(discountedPrice);
-	        } else {
-	            room.setDiscountedPrice(room.getRiPrice());
-	        }
-	    }
-	    
-		model.addAttribute("stay", stayInfo);
-		model.addAttribute("detail", stayDetail);
-		model.addAttribute("rooms", rooms);
-		model.addAttribute("stayFacilities", stayFacilities);
-		return "stay/stay";
-	}
+			double discount = stayInfo.getSiDiscount();
+		    for (RoomVO room : rooms) {
+		        if (discount > 0) {
+		            int discountedPrice = (int) Math.floor(room.getRiPrice() * (1 - discount / 100));
+		            room.setDiscountedPrice(discountedPrice);
+		        } else {
+		            room.setDiscountedPrice(room.getRiPrice());
+		        }
+		    }
+		    
+		    System.out.println("== stayPhotos ==");
+		    stayPhotos.forEach((k, v) -> {
+		        System.out.println(k + " => " + v.size() + "개");
+		    });
+		    
+			model.addAttribute("stay", stayInfo);
+			model.addAttribute("detail", stayDetail);
+			model.addAttribute("rooms", rooms);
+			model.addAttribute("stayFacilities", stayFacilities);
+			model.addAttribute("stayPhotos", stayPhotos);
+			
+			return "stay/stay";
+		}
 
 	// 객실 상세페이지
 	@GetMapping("/{siId}/{riId}")

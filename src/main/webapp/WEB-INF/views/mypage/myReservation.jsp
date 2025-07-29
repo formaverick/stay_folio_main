@@ -24,14 +24,13 @@
 	<jsp:include page="../includes/header.jsp" />
 
 	<main class="login-main">
+		<div class="mypage-header">
+			<sec:authentication property="principal" var="pinfo"/>
+			<h2 class="mypage-title">${pinfo.member.miName}님 반가워요!</h2>
+			<p class="mypage-subtitle">
+			<fmt:formatDate value="${pinfo.member.miDate}" pattern="yyyy년 MM월" />부터 ${travelCount}번의 여행을 했어요.</p>
+		</div>
 		<div class="mypage-page">
-			<div class="mypage-header">
-				<sec:authentication property="principal" var="pinfo"/>
-				<h2 class="mypage-title">${pinfo.member.miName}님 반가워요!</h2>
-				<p class="mypage-subtitle">
-					<fmt:formatDate value="${pinfo.member.miDate}" pattern="yyyy년 MM월" />부터 ${travelCount}번의 여행을 했어요.</p>
-			</div>
-
 			<div class="mypage-submenu">
 				<ul>
 					<li class="active"><a href="#">예약 정보</a></li>

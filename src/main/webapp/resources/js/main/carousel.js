@@ -21,7 +21,6 @@ if (!window.StayFolioCarousel.initialized) {
     // 슬라이드 이동 함수
     function moveToSlide(slideIndex) {
       if (isTransitioning) {
-        console.log("Transition in progress, ignoring moveToSlide call");
         return;
       }
 

@@ -1,0 +1,135 @@
+.reservation-status {
+  margin-top: 2rem;
+}
+
+.reservation-status .status-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.reservation-status .status-steps {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.reservation-status .step {
+  flex: 1;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 8px;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+
+.reservation-status .step.active {
+  opacity: 1;
+}
+
+.reservation-status .step .icon {
+  margin-bottom: 0.5rem;
+}
+
+.reservation-status .step .icon i {
+  font-size: 24px;
+}
+
+.reservation-status .step-title {
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.reservation-status .step-desc {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+  text-align: left;
+}
+/* 예약 상세 정보 */
+.reservation-detail-section {
+  margin-top: 4rem;
+  line-height: 1.6;
+}
+
+.reservation-detail-section h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  border-bottom: 2px solid #000;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.reservation-info-table,
+.payment-info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.reservation-info-table td,
+.payment-info-table td {
+  padding: 1rem 0;
+
+  vertical-align: top;
+  font-size: 0.95rem;
+}
+
+.reservation-info-title {
+  width: 280px;
+  color: #333;
+  font-weight: 700;
+  padding-right: 1.5rem;
+}
+
+.reservation-info-content {
+  padding-left: 1.5rem;
+  color: #666;
+}
+
+.payment-summary {
+  margin-top: 1rem;
+  text-align: right;
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 2rem 0;
+  border-top: 2px solid #000;
+  border-bottom: 1px solid #000;
+}
+
+.payment-summary span {
+  display: inline-block;
+  min-width: 100px;
+  text-align: right;
+}
+
+/* 하단 버튼 */
+.detail-bottom-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  margin-top: 4rem;
+}
+
+.detail-bottom-buttons button {
+  min-width: 200px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #fff;
+  border: 1px solid #222;
+  transition: all 0.3s ease;
+}
+
+.detail-bottom-buttons button:hover {
+  background-color: #f5f5f5;
+}
+
+.payment-add {
+  color: #666;
+  margin-top: 0.5rem;
+}

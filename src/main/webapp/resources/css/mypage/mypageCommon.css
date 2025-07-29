@@ -1,26 +1,36 @@
 @charset "UTF-8";
 .mypage-page {
-  width: 1100px;
-  margin: 0 auto;
+  max-width: 1100px;
+  height: auto;
+  margin: 6rem auto;
+  display: flex;
+  flex-direction: row;
 }
 
 .mypage-header {
-  width: 100%;
+  width: 1100px;
   padding: 6rem 0 5rem;
-  margin-bottom: 4rem;
-  border-bottom: 3px solid #000;
+  margin: 0 auto;
+
+  border-bottom: 2px solid #000;
   text-align: center;
 }
 
-.mypage-header h2 {
+.mypage-title {
   font-size: 1.875rem;
-  font-weight: 400;
+  font-weight: 500;
   margin-bottom: 0.5rem;
 }
 
+.mypage-subtitle {
+  font-size: 1rem;
+  color: #999;
+  text-align: center;
+  font-weight: 400;
+}
+
 .mypage-submenu {
-  width: 25%;
-  float: left;
+  width: 40%;
 }
 
 .mypage-submenu .active {
@@ -40,9 +50,4 @@
   line-height: 3;
   font-size: 0.875rem;
   display: inline-block;
-}
-
-.mypage-main {
-  width: 75%;
-  float: right;
 }

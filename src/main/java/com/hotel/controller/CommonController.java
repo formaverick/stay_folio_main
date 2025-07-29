@@ -45,6 +45,7 @@ public class CommonController {
 	@GetMapping(value ="/recommend/{rc_id}", produces = "application/json; charset=UTF-8")
 	@ResponseBody
 	public Map<String, Object> getRecommendStays(@PathVariable("rc_id") int rc_id) {
+		log.info("rcid : " + rc_id);
 		Map<String, Object> map = commonService.getRecommend(rc_id);
 		map.put("success", true);
 		return map;

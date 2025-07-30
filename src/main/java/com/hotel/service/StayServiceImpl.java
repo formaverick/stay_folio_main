@@ -46,6 +46,17 @@ public class StayServiceImpl implements StayService {
 		return stayMapper.getFacilitiesByStayId(siId);
 	}
 
+	// 숙소 검색 - 지역별
+	@Override
+	public List<StayVO> getStayListByLcId(int lcId) {
+		return stayMapper.selectStayListByLcId(lcId);
+	}
+
+	@Override
+	public List<StayVO> getRandomStayList() {
+		return stayMapper.selectRandomStayList();
+	}
+
 //	admin - 숙소 등록
 
 	@Override
@@ -93,7 +104,7 @@ public class StayServiceImpl implements StayService {
 	public List<StayVO> getAllStays() {
 		return stayMapper.getAllStays();
 	}
-	
+
 	@Override
 	public Map<String, List<PhotoVO>> getStayPhotosByCategory(int siId) {
 		List<PhotoVO> photos = stayMapper.getStayPhotos(siId);
@@ -122,17 +133,17 @@ public class StayServiceImpl implements StayService {
 
 		return photoMap;
 	}
-	
+
 	@Override
 	public List<PhotoVO> getAllStayPhotos(int siId) {
 		return stayMapper.getStayPhotos(siId);
 	}
-	
+
 	@Override
 	public void updateStay(StayVO stay) {
 		stayMapper.updateStay(stay);
 	}
-	
+
 	@Override
 	public void updateStayDetail(StayDetailVO detail) {
 		stayMapper.updateStayDetail(detail);

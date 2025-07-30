@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const selectedPayment = activePayment.getAttribute("data-payment");
     srPaymentInput.value = selectedPayment;
 
-    if (selectedPayment === "무통장입금") {
+    if (selectedPayment === "무통장입금") {				//무통입 사용안함
       srStatusInput.value = "d";         // 입금대기
       srPaymentstatusInput.value = "a";  // 결제대기
     } else {
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
   //결제 수단 클릭 시 변경 처리
   paymentOptions.forEach((option) => {
     option.addEventListener("click", function () {
-      paymentOptions.forEach((opt) => opt.classList.remove("active"));
+      paymentOptions.forEach((opt) => opt.classList.remove("active"));	// 무통입 사용안함
       this.classList.add("active");
 
       const selectedPayment = this.getAttribute("data-payment");

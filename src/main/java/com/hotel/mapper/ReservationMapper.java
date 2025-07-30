@@ -1,5 +1,8 @@
 package com.hotel.mapper;
 
+import java.sql.Date;
+import java.time.LocalDate;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,7 +14,10 @@ import com.hotel.domain.ReservationPageVO;
 public interface ReservationMapper {
 	ReservationPageVO getReservationPageInfo(@Param("riId") int riId, @Param("siId") int siId, @Param("miId") String miId); //예약페이지 
 	int insertReservation(ReservationCreateDTO dto);	//예약 등록
-	int checkDuplicateReservation(ReservationCreateDTO dto);	//중복 예약 체크
+	int checkDuplicateReservation(@Param("siId") int siId,	//중복예약 
+            @Param("riId") int riId,
+            @Param("checkin") Date checkin,
+            @Param("checkout") Date checkout);
 	ReservationDetail selectReservationById(String srId);//예약 상세 조회
 	
 	

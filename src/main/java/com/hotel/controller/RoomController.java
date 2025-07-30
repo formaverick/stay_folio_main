@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.hotel.domain.AmenityVO;
 import com.hotel.domain.FacilityVO;
 import com.hotel.domain.PhotoVO;
+import com.hotel.domain.RoomPhotoVO;
 import com.hotel.domain.RoomVO;
 import com.hotel.domain.StayDetailVO;
 import com.hotel.domain.StayVO;
@@ -37,6 +38,7 @@ public class RoomController {
 			List<RoomVO> rooms = stayService.getRoomsByStayId(siId);
 			List<FacilityVO> stayFacilities = stayService.getFacilitiesByStayId(siId);
 			Map<String, List<PhotoVO>> stayPhotos = stayService.getStayPhotosByCategory(siId);
+			Map<Integer, RoomPhotoVO> roomMainPhotos = roomService.getMainPhotoForRooms(siId);
 
 			double discount = stayInfo.getSiDiscount();
 		    for (RoomVO room : rooms) {
@@ -58,6 +60,7 @@ public class RoomController {
 			model.addAttribute("rooms", rooms);
 			model.addAttribute("stayFacilities", stayFacilities);
 			model.addAttribute("stayPhotos", stayPhotos);
+			model.addAttribute("roomMainPhotos", roomMainPhotos);
 			
 			return "stay/stay";
 		}
@@ -72,6 +75,8 @@ public class RoomController {
 		List<FacilityVO> roomFacilities =roomService.getFacilitiesByRoomId(siId, riId);
 		List<AmenityVO> roomAmenities = roomService.getAmenitiesByRoomId(siId, riId);
 		List<RoomVO> otherRooms = roomService.getOtherRoomsByStayId(siId, riId);
+		Map<String, List<RoomPhotoVO>> roomPhotos = roomService.getRoomPhotosByCategory(siId, riId);
+		Map<Integer, RoomPhotoVO> roomMainPhotos = roomService.getMainPhotoForRooms(siId);
 
 		model.addAttribute("stay", stay);
 		model.addAttribute("detail", stayDetail);
@@ -79,6 +84,8 @@ public class RoomController {
 		model.addAttribute("roomFacilities", roomFacilities);
 		model.addAttribute("roomAmenities", roomAmenities);
 		model.addAttribute("otherRooms", otherRooms);
+		model.addAttribute("roomPhotos", roomPhotos);
+		model.addAttribute("roomMainPhotos", roomMainPhotos);
 
 		return "stay/stayDetail";
 	}

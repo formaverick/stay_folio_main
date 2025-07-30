@@ -2,6 +2,8 @@ package com.hotel.service;
 
 import com.hotel.domain.AmenityVO;
 import com.hotel.domain.FacilityVO;
+import com.hotel.domain.PhotoVO;
+import com.hotel.domain.RoomPhotoVO;
 import com.hotel.domain.RoomVO;
 import com.hotel.mapper.RoomMapper;
 
@@ -10,7 +12,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +46,48 @@ public class RoomServiceImpl implements RoomService {
 	public List<RoomVO> getOtherRoomsByStayId(int siId, int riId) {
 	    return roomMapper.getOtherRoomsByStayId(siId, riId);
 	}
+	
+	@Override
+	public Map<String, List<RoomPhotoVO>> getRoomPhotosByCategory(int siId, int riId) {
+		List<RoomPhotoVO> photos = roomMapper.getRoomPhotos(siId, riId);
+
+		Map<String, List<RoomPhotoVO>> photoMap = new HashMap<>();
+
+		photoMap.put("main", new ArrayList<>());
+		photoMap.put("additional", new ArrayList<>());
+		photoMap.put("feature", new ArrayList<>());
+		photoMap.put("feat1", new ArrayList<>());
+		photoMap.put("feat2", new ArrayList<>());
+
+		for (RoomPhotoVO photo : photos) {
+			int idx = photo.getSpIdx();
+			if (idx == 0)
+				photoMap.get("main").add(photo);
+			else if (idx <= 2)
+				photoMap.get("additional").add(photo);
+			else if (idx <= 5)
+				photoMap.get("feature").add(photo);
+			else if (idx <= 8)
+				photoMap.get("feat1").add(photo);
+			else
+				photoMap.get("feat2").add(photo);
+		}
+
+		return photoMap;
+	}
+	
+	@Override
+	public Map<Integer, RoomPhotoVO> getMainPhotoForRooms(int siId) {
+	    List<RoomPhotoVO> photos = roomMapper.getMainPhotosForAllRooms(siId);
+	    Map<Integer, RoomPhotoVO> map = new HashMap<>();
+
+	    for (RoomPhotoVO photo : photos) {
+	        map.put(photo.getRiId(), photo);  // 각 객실 번호의 대표 이미지 1장만
+	    }
+
+	    return map;
+	}
+
 	
 	// admin - 객실 등록
 	@Override

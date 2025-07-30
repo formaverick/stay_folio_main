@@ -235,8 +235,7 @@
 					<c:forEach var="room" items="${rooms}">
 						<div class="room-card">
 							<div class="room-image">
-								<img
-									src="${pageContext.request.contextPath}/resources/img/stay/stayimg1.jpg"
+								<img src="${s3BaseUrl}${roomMainPhotos[room.riId].spUrl}"
 									alt="${room.riName}" />
 							</div>
 							<div class="room-info">

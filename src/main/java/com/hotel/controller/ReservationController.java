@@ -77,13 +77,17 @@ public class ReservationController {
 	        model.addAttribute("srPhone", pageInfo.getMiPhone());
 	    }
 	    
-	    return "reservation";
+	    return "reservation/reservation";
 	}
 
 	// 예약 처리
 	@PostMapping("/submit")
 	public String submitReservation(ReservationCreateDTO dto, RedirectAttributes rttr) {
-		log.info("submit");
+		log.info("submit 호출됨!");
+		log.info("srPayment: " + dto.getSrPayment());
+		log.info("srPayment: " + dto.getSrStatus());
+		log.info("srPayment: " + dto.getSrPaymentstatus());
+	    
 	    try {
 	        reservationService.reserve(dto);
 	       

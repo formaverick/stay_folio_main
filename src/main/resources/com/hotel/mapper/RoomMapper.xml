@@ -90,6 +90,30 @@
 		t_amenities_info ORDER BY ai_idx
 	</select>
 
+	<select id="getRoomPhotos"
+		resultType="com.hotel.domain.RoomPhotoVO">
+		SELECT sp_idx AS spIdx,
+		sp_url AS spUrl, si_id AS siId,
+		ri_id AS riId
+		FROM t_room_photo
+		WHERE
+		si_id = #{siId}
+		AND ri_id = #{riId}
+		ORDER BY sp_idx
+	</select>
+
+	<select id="getMainPhotosForAllRooms"
+		resultType="com.hotel.domain.RoomPhotoVO">
+		SELECT sp_idx AS spIdx,
+		sp_url AS spUrl,
+		si_id AS siId,
+		ri_id AS riId
+		FROM t_room_photo
+		WHERE si_id = #{siId}
+		AND sp_idx = 0
+	</select>
+
+
 	<!-- admin 객실 등록 -->
 	<insert id="insertRoom" parameterType="com.hotel.domain.RoomVO">
 		<!-- siId에서 riId 최대값+1 조회 -->
@@ -97,9 +121,10 @@
 			order="BEFORE">
 			SELECT NVL(MAX(ri_id), 0) + 1
 			FROM t_room_info
-			WHERE si_id = #{siId}
+			WHERE si_id =
+			#{siId}
 		</selectKey>
-		
+
 		INSERT INTO t_room_info (
 		si_id, ri_id, ri_type, ri_name, ri_desc,
 		ri_person,
@@ -114,10 +139,12 @@
 		#{riId}, #{riType},
 		#{riName}, #{riDesc},
 		#{riPerson},
-		#{riMaxperson}, #{riArea}, #{riBed},
+		#{riMaxperson},
+		#{riArea}, #{riBed},
 		#{riBedcnt},
 		#{riPrice},
-		#{riBedroom}, #{riBathroom}, #{riShow},
+		#{riBedroom},
+		#{riBathroom}, #{riShow},
 		#{riDelete},
 		SYSDATE
 		)

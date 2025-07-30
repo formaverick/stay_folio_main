@@ -37,7 +37,7 @@ public class ReservationCreateDTO {
 	private String srPayment; // 결제 방법
 
 	private String srStatus; // 예약 상태
-	
+	private String srPaymentstatus; // 결제 상태
 	private String srId; // 예약 번호
 
 }

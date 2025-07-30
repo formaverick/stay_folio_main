@@ -9,7 +9,7 @@
 		type="com.hotel.domain.ReservationPageVO">
 		<result property="riId" column="ri_id" />
 		<result property="riName" column="ri_name" />
-		<result property="riType" column="ri_type"/>
+		<result property="riType" column="ri_type" />
 		<result property="riPerson" column="ri_person" />
 		<result property="riMaxperson" column="ri_maxperson" />
 		<result property="riBed" column="ri_bed" />
@@ -27,7 +27,7 @@
 		<result property="siCheckin" column="si_checkin" />
 		<result property="siCheckout" column="si_checkout" />
 		<result property="siName" column="si_name" />
-		<result property="spUrl" column="sp_url"/>
+		<result property="spUrl" column="sp_url" />
 	</resultMap>
 
 	<select id="getReservationPageInfo"
@@ -49,20 +49,24 @@
 		s.si_off,
 		s.si_discount,
 
-		d.si_checkin,        
-		d.si_checkout,       
+		d.si_checkin,
+		d.si_checkout,
 
 		m.mi_id,
 		m.mi_name,
 		m.mi_phone,
-		
+
 		sp.sp_url
 
 		FROM t_room_info r
-		JOIN t_stay_info s ON r.si_id = s.si_id
-		JOIN t_stay_info_detail d ON s.si_id = d.si_id  
-		JOIN t_stay_photo sp ON s.si_id = sp.si_id and sp.sp_idx = 0
-		LEFT JOIN t_member_info m
+		JOIN t_stay_info s ON
+		r.si_id = s.si_id
+		JOIN
+		t_stay_info_detail d ON s.si_id = d.si_id
+		JOIN
+		t_stay_photo sp ON s.si_id = sp.si_id and sp.sp_idx = 0
+		LEFT JOIN
+		t_member_info m
 		<choose>
 			<when test="miId != null">
 				ON m.mi_id = #{miId}
@@ -105,7 +109,8 @@
 		#{srCheckin}, #{srCheckout},
 		#{srRoomprice}, #{srDiscount},
 		#{srAddpersonFee}, #{srTotalprice},
-		#{srPayment}, SYSDATE, #{srStatus}, #{srPaymentstatus,jdbcType=VARCHAR}
+		#{srPayment}, SYSDATE, #{srStatus},
+		#{srPaymentstatus,jdbcType=VARCHAR}
 		)
 	</insert>
 
@@ -148,18 +153,36 @@
 		sr.sr_totalprice,
 		sr.sr_discount,
 		sr.sr_payment,
-		TO_CHAR(sr.sr_paydate, 'YYYY-MM-DD') AS sr_paydate,
+		TO_CHAR(sr.sr_paydate, 'YYYY-MM-DD') AS
+		sr_paydate,
 		TO_CHAR(sr.sr_cancledate, 'YYYY-MM-DD') AS sr_cancledate
 		FROM
 		t_stay_reservation sr
 		JOIN t_room_info r ON sr.ri_id = r.ri_id
-		JOIN t_stay_info_detail sid ON sr.si_id = sid.si_id
-		LEFT JOIN t_stay_photo sp ON sr.si_id = sp.si_id AND sp.sp_idx = 1 
+		JOIN
+		t_stay_info_detail sid ON sr.si_id = sid.si_id
+		LEFT JOIN t_stay_photo
+		sp ON sr.si_id = sp.si_id AND sp.sp_idx = 1
 		WHERE
 		sr.sr_id = #{srId}
-		AND ROWNUM = 1
+		AND
+		ROWNUM = 1
 	</select>
 
+
+	<select id="checkDuplicateReservation" resultType="int">
+  <![CDATA[
+    SELECT COUNT(*)
+    FROM t_stay_reservation
+    WHERE si_id = #{siId}
+      AND ri_id = #{riId}
+      AND sr_status IN ('a', 'd')
+      AND (
+        sr_checkin < #{checkout}
+        AND sr_checkout > #{checkin}
+      )
+  ]]>
+	</select>
 
 
 

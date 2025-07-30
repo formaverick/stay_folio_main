@@ -33,7 +33,18 @@
 
 <body>
 	<jsp:include page="../includes/header.jsp" />
-
+	<!-- 중복예약, 최대인원 알람 -->
+	<c:if test="${not empty duplicate}">
+    <script>
+        alert("이미 해당 날짜에 예약된 객실입니다.");
+    </script>
+</c:if>
+	<c:if test="${not empty error}">
+    <script>
+        alert("${error}");
+    </script>
+</c:if>
+	
 	<div class="main-container">
 		<div class="content-wrapper">
 			<!-- left -->
@@ -87,13 +98,19 @@
 									<div class="info-item">
 										+82 <span>${srPhone}</span>
 									</div>
+
+
+									<input type="hidden" name="srName" value="${srName}" />
+									<input type="hidden" name="srEmail" value="${srEmail}" />
+									<input type="hidden" name="srPhone" value="${srPhone}" />
 								</c:when>
 								<c:otherwise>
 									<div class="info-item" style="color: red; margin-bottom: 10px;">
 										비로그인 상태입니다. 예약자 정보를 입력해주세요.</div>
 									<input type="text" name="srName" placeholder="예약자 이름" required />
 									<input type="email" name="srEmail" placeholder="이메일" required />
-									<input type="text" name="srPhone" placeholder="전화번호" required />
+									<input type="text" maxlength="13" name="srPhone"
+										placeholder="전화번호" required />
 								</c:otherwise>
 							</c:choose>
 						</div>
@@ -141,9 +158,10 @@
 
 
 						<div class="payment-method-box">
-							<div class="payment-option active" data-payment="무통장입금">무통장입금</div>
-							<div class="payment-option" data-payment="카드결제">카드 결제</div>
-							<div class="payment-option" data-payment="현금">현금</div>
+							<!-- <div class="payment-option active" data-payment="무통장입금">무통장입금</div> -->
+							<div class="payment-option active" data-payment="카드결제">카드
+								결제</div>
+							<!-- <div class="payment-option" data-payment="현금">현금</div> -->
 							<div class="payment-option" data-payment="카카오페이">카카오페이</div>
 							<div class="payment-option" data-payment="토스페이">토스페이</div>
 						</div>
@@ -193,10 +211,11 @@
 						<input type="hidden" name="srDiscount" value="${info.srDiscount}" />
 						<input type="hidden" name="srAddpersonFee"
 							value="${info.srAddpersonFee}" /> <input type="hidden"
-							name="srTotalprice" value="${info.srtotalPrice}" /> 
-							<input type="hidden" id="srStatus" name="srStatus" value="" />
-							<input type="hidden" id="srPaymentstatus" name="srPaymentstatus" value="" />
-							<input type="hidden" id="srPayment" name="srPayment" value="" />
+							name="srTotalprice" value="${info.srtotalPrice}" /> <input
+							type="hidden" id="srStatus" name="srStatus" value="" /> <input
+							type="hidden" id="srPaymentstatus" name="srPaymentstatus"
+							value="" /> <input type="hidden" id="srPayment" name="srPayment"
+							value="" />
 					</div>
 			</div>
 
@@ -204,16 +223,13 @@
 			<div class="right-section">
 				<div class="payment-summary-box">
 					<h3 class="stay-name">${info.siName}</h3>
-					<img
-						src="${s3BaseUrl}${info.spUrl}"
-						alt="객실 사진" class="room-image" />
+					<img src="${s3BaseUrl}${info.spUrl}" alt="객실 사진" class="room-image" />
 					<div class="room-details">
 						<p class="room-name">${info.riName}</p>
 						<button class="view-room-button">객실 보기</button>
 					</div>
 					<div class="room-info">
-						<p>${info.riType}/기준${info.riPerson}명 (최대
-							${info.riMaxperson}명)</p>
+						<p>${info.riType}/기준${info.riPerson}명(최대${info.riMaxperson}명)</p>
 						<p>침대${info.riBedcnt} | 침구${info.riBedroom} |
 							욕실${info.riBathroom}</p>
 					</div>
@@ -231,5 +247,6 @@
 	</div>
 	<!-- 푸터 인클루드 -->
 	<jsp:include page="../includes/footer.jsp" />
+
 </body>
 </html>

@@ -1,14 +1,27 @@
 $(document).ready(function () {
+	function getQueryParam(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+  	}
+
   // 초기값 설정
   let selectedRegion = "all";
-  let adultCount = 2;
-  let childCount = 0;
-
+  let queryAdult = getQueryParam("adult");
+  let queryChild = getQueryParam("child");
+  let queryCheckin = getQueryParam("checkin");
+  let queryCheckout = getQueryParam("checkout");
+  
+  let adultCount = queryAdult ? parseInt(queryAdult) : 2;
+  let childCount = queryChild ? parseInt(queryChild) : 0;
+  
+  $("#adultCount").text(adultCount);
+  $("#childCount").text(childCount);
+  updatePeopleDisplay();
+  
   // 날짜 관련 변수
-  let startDate = new Date();
-  let endDate = new Date();
-  startDate.setDate(startDate.getDate()); // 오늘
-  endDate.setDate(endDate.getDate() + 1); // 내일
+  let startDate = queryCheckin ? new Date(queryCheckin) : new Date();
+  let endDate = queryCheckout ? new Date(queryCheckout) : new Date(new Date().setDate(new Date().getDate() + 1));
+
 
   // 임시 날짜 변수 (적용 버튼 누르기 전까지 실제로 적용되지 않음)
   let tempStartDate = new Date(startDate);
@@ -302,6 +315,11 @@ $(document).ready(function () {
     startDate = tempStartDate;
     endDate = tempEndDate;
     updateDateDisplay();
+    
+    //날짜 적용 버튼클릭시 url 쿼리
+    const path = window.location.pathname;
+  	const query = `?checkin=${formatDateForServer(startDate)}&checkout=${formatDateForServer(endDate)}&adult=${adultCount}&child=${childCount}`;
+  	window.location.href = path + query;
 
     // 드롭다운 닫기
     $("#dateSelect").removeClass("active");
@@ -326,29 +344,51 @@ $(document).ready(function () {
   // 인원 증감 버튼 이벤트
   $(".counter-btn").on("click", function (e) {
     e.stopPropagation();
-
+	
     const type = $(this).data("type");
     const isIncrease = $(this).hasClass("increase");
-
-    if (type === "adult") {
-      if (isIncrease) {
-        if (adultCount < 10) adultCount++;
-      } else {
-        if (adultCount > 1) adultCount--;
-      }
-      $("#adultCount").text(adultCount);
-    } else if (type === "child") {
-      if (isIncrease) {
-        if (childCount < 6) childCount++;
-      } else {
-        if (childCount > 0) childCount--;
-      }
-      $("#childCount").text(childCount);
+	const maxPerson = parseInt($("#maxPerson").val()); //최대인원
+	
+	let newAdult = adultCount;
+  	let newChild = childCount;
+	
+     // 먼저 미리 계산
+  if (type === "adult") {
+    if (isIncrease) {
+      newAdult++;
+    } else {
+      newAdult = Math.max(1, newAdult - 1); // 성인은 최소 1명
     }
+  } else if (type === "child") {
+    if (isIncrease) {
+      newChild++;
+    } else {
+      newChild = Math.max(0, newChild - 1); // 아동은 최소 0명
+    }
+  }
 
-    // 인원 정보 업데이트
-    updatePeopleDisplay();
-  });
+  const newTotal = newAdult + newChild;
+
+  // 최대 인원 초과 체크
+  if (newTotal > maxPerson) {
+    alert(`최대 인원은 ${maxPerson}명까지 가능합니다.`);
+    return; // 버튼 눌러도 아무 일 없음
+  }
+
+  // 인원 업데이트 반영
+  adultCount = newAdult;
+  childCount = newChild;
+  $("#adultCount").text(adultCount);
+  $("#childCount").text(childCount);
+
+  // 인원 정보 업데이트
+  updatePeopleDisplay();
+
+  // 쿼리 업데이트
+  const path = window.location.pathname;
+  const query = `?checkin=${formatDateForServer(startDate)}&checkout=${formatDateForServer(endDate)}&adult=${adultCount}&child=${childCount}`;
+  window.location.href = path + query;
+});
 
   // 인원 표시 업데이트
   function updatePeopleDisplay() {
@@ -409,7 +449,7 @@ $(document).ready(function () {
     // 폼 제출
     $("#searchForm").submit();
   });
-
+  
   // 바깥 영역 클릭 시 드롭다운 닫기
   $(document).on("click", function (e) {
     if (!$(e.target).closest(".filter-content").length) {
@@ -419,6 +459,23 @@ $(document).ready(function () {
       ).hide();
     }
   });
+  //예약하기 버튼 클릭시 
+   const bookingBtn = document.querySelector(".booking-button");
+  if (bookingBtn) {
+    bookingBtn.addEventListener("click", function () {
+      const siId = this.dataset.siId;
+      const riId = this.dataset.riId;
+
+      const checkin = getQueryParam("checkin");
+      const checkout = getQueryParam("checkout");
+      const basePerson = parseInt(document.getElementById("basePerson").value) || 2;
+	  const adult = getQueryParam("adult") || (basePerson < 2 ? 1 : 2);
+	  const child = getQueryParam("child") || 0;
+
+      const query = `?checkin=${checkin}&checkout=${checkout}&adult=${adult}&child=${child}`;
+      window.location.href = `/reservation/${siId}/${riId}${query}`;
+    });
+  }
 
   // 외부 클릭 시 모든 드롭다운 닫기
   $(document).on("click", function (e) {

@@ -14,6 +14,8 @@ public class ReservationPriceResultDTO {
 		private Map<String, Integer> dailyPrices;
 		private int riPrice;           // 기본 1박 요금
 		private long nights;           // 숙박일 수
+		private double DiscountRate;
+		
 		
 
 }

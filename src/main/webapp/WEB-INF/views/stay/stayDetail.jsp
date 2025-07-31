@@ -354,11 +354,12 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 				<div class="booking-card">
 					<form id="searchForm" method="POST" action="/search/results">
 						<!-- 숨겨진 입력 필드들 -->
-						<input type="hidden" id="regionInput" name="region" value="all" />
-						<input type="hidden" id="startDateInput" name="startDate" value="" />
-						<input type="hidden" id="endDateInput" name="endDate" value="" />
-						<input type="hidden" id="adultsInput" name="adults" value="2" />
-						<input type="hidden" id="childrenInput" name="children" value="0" />
+						<input type="hidden" name="checkin" id="checkinInput"
+							value="${checkin}" /> <input type="hidden" name="checkout"
+							id="checkoutInput" value="${checkout}" /> <input type="hidden"
+							name="adult" id="adultInput" value="${param.adult}" /> <input
+							type="hidden" name="child" id="childInput" value="${param.child}" />
+						<input type="hidden" id="maxPerson" value="${room.riMaxperson}" />
 
 						<div class="pill-filter">
 							<!-- 일정 선택 -->
@@ -424,24 +425,39 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 					</form>
 
 					<div class="booking-price-info">
-						<div class="stay-price-original">₩240,000</div>
+						<c:if test="${discountRate > 0}">
+							<div class="stay-price-original">₩<fmt:formatNumber value="${roomPrice}" type="number"/></div>
+						</c:if>
 						<div class="stay-price-main">
-							<span class="stay-price-discount">10%</span> <span
-								class="stay-price-current">₩216,000</span> <span
+							<c:if test="${discountRate > 0}">
+								<span class="stay-price-discount"> <fmt:formatNumber
+										value="${discountRate * 100}" type="number"
+										maxFractionDigits="0" />%
+								</span>
+							</c:if>
+
+							<span class="stay-price-current"><fmt:formatNumber value="${totalPrice}" type="number"/></span> <span
 								class="per-night">/ 박</span>
 						</div>
 					</div>
 
 					<div class="booking-price-details">
 						<div class="price-detail-row">
-							<span>₩216,000 * 1박</span>
+							<c:set var="perNightPrice" value="${totalPrice / nights}" />
+							<span>₩<fmt:formatNumber value="${perNightPrice}"
+									type="number" /> * ${nights}</span>
 						</div>
 						<div class="price-detail-row">
-							<span>총액</span> <span>₩216,000</span>
+							<span>총액</span> <span>₩<fmt:formatNumber value="${totalPrice}" type="number"/></span>
 						</div>
 					</div>
 
-					<button class="booking-button">예약하기</button>
+					<button 
+  class="booking-button"
+  data-si-id="${stay.siId}" 
+  data-ri-id="${room.riId}">
+  예약하기
+</button>
 				</div>
 			</div>
 		</div>
@@ -450,5 +466,27 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 	<!-- 푸터 인클루드 -->
 	<jsp:include page="../includes/footer.jsp" />
+	
+	<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const bookingBtn = document.querySelector(".booking-button");
+    if (!bookingBtn) return;
+
+    // JSP에서만 작동하는 EL 표현식
+    const siId = "${stay.siId}";
+    const riId = "${room.riId}";
+
+    bookingBtn.addEventListener("click", function () {
+      const checkin = document.getElementById("checkinInput").value;
+      const checkout = document.getElementById("checkoutInput").value;
+      const adult = document.getElementById("adultInput").value;
+      const child = document.getElementById("childInput").value;
+
+      const query = `?checkin=${checkin}&checkout=${checkout}&adult=${adult}&child=${child}`;
+      window.location.href = `/reservation/${siId}/${riId}${query}`;
+    });
+  });
+</script>
+
 </body>
 </html>

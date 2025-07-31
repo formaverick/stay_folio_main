@@ -322,11 +322,30 @@ $(document).ready(function () {
     $("#regionSelect .selected-option span").text(text);
     $(".dropdown-options .option").removeClass("selected");
     $(this).addClass("selected");
-
-    // 드롭다운 닫기
-    $("#regionSelect").removeClass("active");
-    $(".dropdown-container").hide();
+    
+    // 선택된 숙소 불러오기
+    const lcId = $(this).data("lc-id") || 0;
+    
+    $.ajax({
+    	url: `/stay/search?lcId=${lcId}`,
+    	method: "GET",
+    	success: function (data) {
+      		// 전체 HTML에서 검색 결과 부분만 추출
+      		const newSection = $(data).find("#searchResultsSection").html();
+      		$("#searchResultsSection").html(newSection);
+    	},
+    	error: function () {
+      		alert("숙소 목록을 불러오지 못했습니다.");
+    	},
+  	});
+  	
+  	// 드롭다운 닫기
+    setTimeout(() => {
+  		$("#regionSelect").removeClass("active");
+  		$(".dropdown-container").hide();
+	}, 10);
   });
+  
 
   // 인원 증감 버튼 이벤트
   $(".counter-btn").on("click", function (e) {

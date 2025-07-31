@@ -26,6 +26,11 @@ public interface StayMapper {
 
 	// 숙소 상세페이지 - 편의시설
 	List<FacilityVO> getFacilitiesByStayId(int siId);
+	
+	
+	// 숙소 검색 - 지역별
+	List<StayVO> selectStayListByLcId(int lcId);
+	List<StayVO> selectRandomStayList();
 
 	
 	// admin - 숙소 등록

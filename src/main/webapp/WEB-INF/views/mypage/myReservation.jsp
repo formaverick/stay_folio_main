@@ -51,6 +51,7 @@
 						<div class="reserv-info">
 							<div>
 								<span class="label ready">예약 완료</span>
+
 								<h3>${reserv.siName }</h3>
 								<p class="reserv-day">
 									<fmt:formatDate value="${reserv.srCheckin }" pattern="yyyy.MM.dd"/> ~ 

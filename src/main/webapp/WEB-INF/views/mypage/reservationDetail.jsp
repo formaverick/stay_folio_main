@@ -73,31 +73,24 @@ pageEncoding="UTF-8"%>
               <div class="icon">
                 <i class="ph ph-file-plus"></i>
               </div>
-              <div class="step-title">STEP 01<br />예약 신청</div>
+              <div class="step-title">STEP 01<br />예약 확정</div>
               <p class="step-desc">
                 예약 신청이 완료되었으며, 호스트의 예약 확정 대기 상태입니다.
-                스테이의 예약 상황에 따라 취소/환불될 수 있습니다.
               </p>
             </div>
             <div class="step step-02 active">
               <div class="icon">
                 <i class="ph ph-check-circle"></i>
               </div>
-              <div class="step-title">STEP 02<br />예약 확정</div>
-              <p class="step-desc">
-                호스트가 예약을 최종 확정한 상태입니다. 예약 취소 시 각 스테이의
-                환불규정에 따라 환불이 진행됩니다.
-              </p>
+              <div class="step-title">STEP 02<br />체크인</div>
+              <p class="step-desc">예약이 최종 확정된 상태입니다.</p>
             </div>
             <div class="step step-03">
               <div class="icon">
                 <i class="ph ph-suitcase-simple"></i>
               </div>
-              <div class="step-title">STEP 03<br />체크인</div>
-              <p class="step-desc">
-                예약 내용에 따라 스테이를 이용할 수 있습니다. 예약 당일 오전
-                체크인 안내를 드리고 있습니다.
-              </p>
+              <div class="step-title">STEP 03<br />체크아웃</div>
+              <p class="step-desc">체크아웃이 완료된 상태입니다.</p>
             </div>
           </div>
         </div>

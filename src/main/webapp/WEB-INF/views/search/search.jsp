@@ -8,33 +8,46 @@
 	value="https://stayfolio-upload-bucket.s3.us-east-1.amazonaws.com/" />
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>검색 결과 - STAY FOLIO</title>
-<!-- CSS -->
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/common.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/header.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/search/searchFilter.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/search/search.css" />
-<!-- 폰트 -->
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
-<!-- 아이콘 -->
-<script src="https://unpkg.com/@phosphor-icons/web"></script>
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
-</head>
-<body>
-	<%@ include file="../includes/header.jsp"%>
-	<!-- 헤더 끝 -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>검색 결과 - STAY FOLIO</title>
+    <!-- CSS -->
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/common.css"
+    />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/header.css"
+    />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/search/searchFilter.css"
+    />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/search/search.css"
+    />
+    <!-- 폰트 -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
+    />
+
+    <!-- 아이콘 -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+  </head>
+  <body>
+    <%@ include file="../includes/header.jsp" %>
+    <!-- 헤더 끝 -->
 
 	<!-- 검색 필터 시작 -->
 	<section class="search-filter-container">
@@ -138,27 +151,90 @@
 						</div>
 					</div>
 
-					<!-- 검색 버튼 -->
-					<div class="search-button-container">
-						<button type="submit" class="search-button" id="searchButton">
-							<i class="ph ph-magnifying-glass"></i> <span>검색하기</span>
-						</button>
-					</div>
-				</div>
-			</form>
-		</div>
-	</section>
-	<!-- 검색 필터 끝 -->
-
-	<!-- 검색 결과 섹션 시작 -->
-	<section class="search-results-section">
-		<div class="search-results-container" id="searchResultsSection">
-			<div class="search-results-header">
-				<h2 class="search-results-title">검색 결과</h2>
-				<p class="search-results-count">
-					총 <span id="resultsCount">${fn:length(stayList)}</span>개의 숙소
-				</p>
-			</div>
+            <!-- 검색 버튼 -->
+            <div class="search-button-container">
+              <button type="submit" class="search-button" id="searchButton">
+                <i class="ph ph-magnifying-glass"></i>
+                <span>검색하기</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+    <!-- 검색 필터 끝 -->
+    <!-- 카테고리 섹션 시작 -->
+    <section class="category-section">
+      <div class="category-container">
+        <div class="category-list">
+          <button class="category-item active" data-category="all">
+            <div class="category-icon">
+              <i class="fas fa-home"></i>
+            </div>
+            <span class="category-text">모두</span>
+          </button>
+          <button class="category-item" data-category="new">
+            <div class="category-icon">
+              <i class="fas fa-star"></i>
+            </div>
+            <span class="category-text">신규오픈</span>
+          </button>
+          <button class="category-item" data-category="exclusive">
+            <div class="category-icon">
+              <i class="fas fa-crown"></i>
+            </div>
+            <span class="category-text">단독소개</span>
+          </button>
+          <button class="category-item" data-category="best">
+            <div class="category-icon">
+              <i class="fas fa-trophy"></i>
+            </div>
+            <span class="category-text">베스트 스테이</span>
+          </button>
+          <button class="category-item" data-category="steady">
+            <div class="category-icon">
+              <i class="fas fa-fire"></i>
+            </div>
+            <span class="category-text">스테디셀러</span>
+          </button>
+          <button class="category-item" data-category="emotional">
+            <div class="category-icon">
+              <i class="fas fa-heart"></i>
+            </div>
+            <span class="category-text">감성 숙소</span>
+          </button>
+          <button class="category-item" data-category="nature">
+            <div class="category-icon">
+              <i class="fas fa-tree"></i>
+            </div>
+            <span class="category-text">자연속에서</span>
+          </button>
+          <button class="category-item" data-category="ocean">
+            <div class="category-icon">
+              <i class="fas fa-water"></i>
+            </div>
+            <span class="category-text">바다와 함께</span>
+          </button>
+          <button class="category-item" data-category="couple">
+            <div class="category-icon">
+              <i class="fas fa-kiss-wink-heart"></i>
+            </div>
+            <span class="category-text">연인과 함께</span>
+          </button>
+        </div>
+      </div>
+    </section>
+    <!-- 카테고리 섹션 끝 -->
+    <!-- 검색 결과 섹션 시작 -->
+    <section class="search-results-section">
+      <div class="search-results-container">
+        <!-- 검색 결과 헤더 -->
+        <div class="search-results-header">
+          <h2 class="search-results-title">검색 결과</h2>
+          <p class="search-results-count">
+            총 <span id="resultsCount">27</span>개의 숙소
+          </p>
+        </div>
 
 			<div class="search-results-grid" id="searchResultsGrid">
 				<c:if test="${not empty stayList}">
@@ -259,11 +335,9 @@
 
 	<!-- 검색 결과 섹션 끝 -->
 
-	<script
-		src="${pageContext.request.contextPath}/resources/js/search/searchFilter.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/js/search/search.js"></script>
-
-	<%@ include file="../includes/footer.jsp"%>
-</body>
+    <script src="${pageContext.request.contextPath}/resources/js/search/searchFilter.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/search/search.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/search/searchCategory.js"></script>
+    <%@ include file="../includes/footer.jsp" %>
+  </body>
 </html>

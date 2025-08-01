@@ -1,0 +1,318 @@
+@charset "UTF-8";
+.mypage-page {
+  max-width: 1100px;
+  height: auto;
+  margin: 6rem auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.mypage-header {
+  max-width: 800px;
+  padding: 6rem 0 5rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.mypage-title {
+  font-size: 1.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.mypage-main {
+  margin: 4rem auto;
+  max-width: 800px;
+}
+.mypage-subtitle {
+  font-size: 1rem;
+  color: #999;
+  text-align: center;
+  font-weight: 400;
+}
+
+.mypage-submenu {
+  width: 40%;
+}
+
+.mypage-submenu .active {
+  font-weight: 700;
+}
+
+.mypage-submenu .active:after {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  background: #000;
+  margin: 0 0 4px 10px;
+}
+
+.mypage-submenu a {
+  line-height: 3;
+  font-size: 0.875rem;
+  display: inline-block;
+}
+
+.reservation-status {
+  margin-top: 2rem;
+}
+
+.reservation-status .status-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.reservation-status .status-steps {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.reservation-status .step {
+  flex: 1;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 8px;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+
+.reservation-status .step.active {
+  opacity: 1;
+}
+
+.reservation-status .step .icon {
+  margin-bottom: 0.5rem;
+}
+
+.reservation-status .step .icon i {
+  font-size: 24px;
+}
+
+.reservation-status .step-title {
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.reservation-status .step-desc {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+  text-align: left;
+}
+/* 예약 상세 정보 */
+.reservation-detail-section {
+  margin-top: 4rem;
+  line-height: 1.6;
+}
+
+.reservation-detail-section h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  border-bottom: 2px solid #000;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.reservation-info-table,
+.payment-info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.reservation-info-table td,
+.payment-info-table td {
+  padding: 1rem 0;
+
+  vertical-align: top;
+  font-size: 0.95rem;
+}
+
+.reservation-info-title {
+  width: 280px;
+  color: #333;
+  font-weight: 700;
+  padding-right: 1.5rem;
+}
+
+.reservation-info-content {
+  padding-left: 1.5rem;
+  color: #666;
+}
+
+.payment-summary {
+  margin-top: 1rem;
+  text-align: right;
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 2rem 0;
+  border-top: 2px solid #000;
+  border-bottom: 1px solid #000;
+}
+
+.payment-summary span {
+  display: inline-block;
+  min-width: 100px;
+  text-align: right;
+}
+
+/* 하단 버튼 */
+.detail-bottom-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 4rem;
+}
+
+.detail-bottom-buttons button {
+  min-width: 200px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #fff;
+  border: 1px solid #222;
+  transition: all 0.3s ease;
+}
+
+.detail-bottom-buttons button:hover {
+  background-color: #f5f5f5;
+}
+
+.payment-add {
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+.no-reserv {
+  text-align: center;
+}
+
+.no-reserv img {
+  width: 320px;
+  height: 320px;
+  margin-bottom: 2rem;
+  display: inline-block;
+}
+
+.reserv-box {
+  display: flex;
+  margin-bottom: 5rem;
+  overflow: hidden;
+}
+
+.reserv-box img {
+  border-radius: 12px;
+}
+.reserv-info {
+  flex: 0 0 50%;
+  display: flex;
+  flex-direction: column;
+  margin-right: 1.5rem;
+}
+
+.reserv-info .label {
+  border-radius: 4px;
+  padding: 0 6px;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.ready {
+  border: 1px solid #333;
+}
+
+.cancle {
+  border: 1px solid #666;
+  background: #666;
+  color: #fff;
+}
+
+.reserv-info h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.reserv-info .reserv-option {
+  font-size: 0.875rem;
+  color: #222222;
+}
+
+.reserv-info .buttom {
+  margin: auto 0 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.reserv-price {
+  font-weight: 600;
+  display: inline-block;
+  float: right;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.btn-detail {
+  line-height: 1.5;
+  font-size: 1rem;
+  color: #666;
+  padding: 0.2rem;
+  border-bottom: 0.5px solid #666;
+}
+
+.reserv-image {
+  flex: 1;
+  max-height: 250px;
+  overflow: hidden;
+}
+
+.reserv-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.success-icon {
+  font-size: 40px;
+  color: #4caf50;
+
+  animation: bounceIn 1s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.success-icon i {
+  font-size: 1em;
+  width: 1em;
+  height: 1em;
+}
+/* 애니메이션 */
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

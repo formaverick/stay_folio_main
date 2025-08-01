@@ -1,42 +1,98 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게스트 로그인 - STAY FOLIO</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/login/guestLogin.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>로그인 - STAY FOLIO</title>
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/common.css"
+    />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/header.css"
+    />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/login/login.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
+    />
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-</head>
-<body>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
     <!-- Header Include -->
     <jsp:include page="../includes/header.jsp" />
+    <div class="login-page">
+      <h2 class="login-title">LOGIN</h2>
+      <p class="login-subtitle">비회원 로그인</p>
 
-    <!-- 게스트 로그인 -->
-    <main class="guest-login-main">
-        <div class="guest-login-container">
-            <div class="guest-login-header">
-                <h1>게스트로 이용하기</h1>
-                <p>회원가입 없이 간편하게 숙소를 둘러보세요</p>
-            </div>
-            
-            <div class="guest-options">
-                <button class="guest-btn" onclick="location.href='${pageContext.request.contextPath}/home.jsp'">
-                    <i class="ph ph-house"></i>
-                    <span>게스트로 둘러보기</span>
-                </button>
-                
-                <div class="divider">또는</div>
-                
-                <div class="login-options">
-                    <a href="login.jsp" class="btn btn-primary">로그인</a>
-                    <a href="signup.jsp" class="btn btn-secondary">회원가입</a>
-                </div>
-            </div>
+      <form class="login-form">
+        <div class="form-group">
+          <label for="username">예약자 성명</label>
+          <input
+            type="text"
+            id="username"
+            placeholder="예약자 성명을 입력해주세요."
+          />
+          <p class="error-message" style="display: none">
+            예약자 성명을 입력해주세요.
+          </p>
         </div>
-    </main>
-</body>
+
+        <div class="form-group">
+          <label for="password">예약 번호</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="예약 번호를 입력해주세요."
+          />
+        </div>
+
+        <button type="submit" class="btn-login">예약 조회</button>
+        <button type="button" class="btn-join">로그인</button>
+        <button type="button" class="btn-join">신규 회원 가입</button>
+      </form>
+      <div class="modal-overlay" id="commonModal">
+        <div class="modal-content">
+          <p class="modal-message">
+            올바른 예약자 성명과<br />
+            예약 번호를 입력해주세요.
+          </p>
+          <div class="modal-buttons">
+            <button class="btn btn-confirm" onclick="closeModal()">확인</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
+
+<script>
+  function guestCheck(event) {
+    event.preventDefault();
+
+    const userName = $("#username").val().trim();
+    const password = $("#password").val().trim();
+
+    if (!userName || !password) {
+      openModal();
+    }
+  }
+  function openModal() {
+    document.getElementById("commonModal").style.display = "flex";
+  }
+
+  function closeModal() {
+    document.getElementById("commonModal").style.display = "none";
+  }
+  $(document).ready(function () {
+    $(".login-form").on("submit", guestCheck);
+  });
+</script>

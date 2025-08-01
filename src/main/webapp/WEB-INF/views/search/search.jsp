@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8"%> <%@ taglib prefix="c"
-uri="http://java.sun.com/jsp/jstl/core" %>
+	pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<c:set var="s3BaseUrl"
+	value="https://stayfolio-upload-bucket.s3.us-east-1.amazonaws.com/" />
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -8,15 +13,28 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>검색 결과 - STAY FOLIO</title>
     <!-- CSS -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search/searchFilter.css" />
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/search/search.css" />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/common.css"
+    />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/header.css"
+    />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/search/searchFilter.css"
+    />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/search/search.css"
+    />
     <!-- 폰트 -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
     />
+
     <!-- 아이콘 -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <!-- jQuery -->
@@ -31,132 +49,107 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     <%@ include file="../includes/header.jsp" %>
     <!-- 헤더 끝 -->
 
-    <!-- 검색 필터 시작 -->
-    <section class="search-filter-container">
-      <div class="search-filter-inner">
-        <form id="searchForm" method="POST" action="/search/results">
-          <!-- 숨겨진 입력 필드들 -->
-          <input type="hidden" id="regionInput" name="region" value="all" />
-          <input type="hidden" id="startDateInput" name="startDate" value="" />
-          <input type="hidden" id="endDateInput" name="endDate" value="" />
-          <input type="hidden" id="adultsInput" name="adults" value="2" />
-          <input type="hidden" id="childrenInput" name="children" value="0" />
+	<!-- 검색 필터 시작 -->
+	<section class="search-filter-container">
+		<div class="search-filter-inner">
+			<form id="searchForm" method="POST" action="/search/results">
+				<!-- 숨겨진 입력 필드들 -->
+				<input type="hidden" id="regionInput" name="region" value="all" />
+				<input type="hidden" id="startDateInput" name="startDate" value="" />
+				<input type="hidden" id="endDateInput" name="endDate" value="" /> <input
+					type="hidden" id="adultsInput" name="adults" value="2" /> <input
+					type="hidden" id="childrenInput" name="children" value="0" />
 
-          <div class="pill-filter">
-            <!-- 지역 선택 -->
-            <div class="filter-item region-filter">
-              <div class="filter-content" id="regionSelect">
-                <div class="selected-option">
-                  <i class="ph ph-magnifying-glass"></i>
-                  <span>전국</span>
-                </div>
-                <div class="dropdown-container">
-                  <ul class="dropdown-options">
-                    <li class="option" data-value="all">전국</li>
-                    <li class="option" data-value="seoul">서울</li>
-                    <li class="option" data-value="gyeonggi">경기</li>
-                    <li class="option" data-value="incheon">인천</li>
-                    <li class="option" data-value="gangwon">강원</li>
-                    <li class="option" data-value="chungcheong">충청</li>
-                    <li class="option" data-value="gyeongsang">경상</li>
-                    <li class="option" data-value="jeolla">전라</li>
-                    <li class="option" data-value="jeju">제주</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+				<div class="pill-filter">
+					<!-- 지역 선택 -->
+					<div class="filter-item region-filter">
+						<div class="filter-content" id="regionSelect">
+							<div class="selected-option">
+								<i class="ph ph-magnifying-glass"></i> <span>전국</span>
+							</div>
+							<div class="dropdown-container">
+								<ul class="dropdown-options">
+									<li class="option" data-value="all">전국</li>
+									<li class="option" data-value="seoul" data-lc-id="1">서울</li>
+									<li class="option" data-value="gyeonggi" data-lc-id="2">경기도</li>
+									<li class="option" data-value="incheon" data-lc-id="13">인천</li>
+									<li class="option" data-value="gangwon" data-lc-id="3">강원도</li>
+									<li class="option" data-value="chungcheong" data-lc-id="4">충청남도</li>
+									<li class="option" data-value="chungcheong" data-lc-id="5">충청북도</li>
+									<li class="option" data-value="jeolla" data-lc-id="6">전라남도</li>
+									<li class="option" data-value="jeolla" data-lc-id="7">전라북도</li>
+									<li class="option" data-value="gyeongsang" data-lc-id="9">경상남도</li>
+									<li class="option" data-value="chungcheong" data-lc-id="8">경상북도</li>
+									<li class="option" data-value="chungcheong" data-lc-id="10">부산</li>
+									<li class="option" data-value="jeju" data-lc-id="11">제주</li>
+									<li class="option" data-value="chungcheong" data-lc-id="12">대전</li>
+									<li class="option" data-value="chungcheong" data-lc-id="14">대구</li>
+									<li class="option" data-value="chungcheong" data-lc-id="15">광주</li>
+								</ul>
+							</div>
+						</div>
+					</div>
 
-            <div class="filter-divider"></div>
+					<div class="filter-divider"></div>
 
-            <!-- 일정 선택 -->
-            <div class="filter-item date-filter">
-              <div class="filter-content" id="dateSelect">
-                <div class="selected-option">
-                  <i class="ph ph-calendar"></i>
-                  <span id="dateDisplay"
-                    ><span id="startDate"></span> - <span id="endDate"></span
-                  ></span>
-                </div>
-                <div class="date-picker-container">
-                  <div id="datePicker"></div>
-                  <div class="date-picker-error" id="dateError"></div>
-                  <div class="date-picker-footer">
-                    <div class="date-picker-buttons">
-                      <button
-                        type="button"
-                        class="date-picker-button date-picker-cancel"
-                        id="dateCancel"
-                      >
-                        취소
-                      </button>
-                      <button
-                        type="button"
-                        class="date-picker-button date-picker-apply"
-                        id="dateApply"
-                      >
-                        적용
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+					<!-- 일정 선택 -->
+					<div class="filter-item date-filter">
+						<div class="filter-content" id="dateSelect">
+							<div class="selected-option">
+								<i class="ph ph-calendar"></i> <span id="dateDisplay"><span
+									id="startDate"></span> - <span id="endDate"></span></span>
+							</div>
+							<div class="date-picker-container">
+								<div id="datePicker"></div>
+								<div class="date-picker-error" id="dateError"></div>
+								<div class="date-picker-footer">
+									<div class="date-picker-buttons">
+										<button type="button"
+											class="date-picker-button date-picker-cancel" id="dateCancel">
+											취소</button>
+										<button type="button"
+											class="date-picker-button date-picker-apply" id="dateApply">
+											적용</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
-            <div class="filter-divider"></div>
+					<div class="filter-divider"></div>
 
-            <!-- 인원 선택 -->
-            <div class="filter-item people-filter">
-              <div class="filter-content" id="peopleSelect">
-                <div class="selected-option">
-                  <i class="ph ph-user"></i>
-                  <span id="peopleDisplay">성인 2명</span>
-                </div>
-                <div class="people-selector-container">
-                  <div class="people-selector">
-                    <div class="people-type">
-                      <span>성인</span>
-                      <div class="counter">
-                        <button
-                          type="button"
-                          class="counter-btn decrease"
-                          data-type="adult"
-                        >
-                          -
-                        </button>
-                        <span class="count" id="adultCount">2</span>
-                        <button
-                          type="button"
-                          class="counter-btn increase"
-                          data-type="adult"
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-                    <div class="people-type">
-                      <span>아동</span>
-                      <div class="counter">
-                        <button
-                          type="button"
-                          class="counter-btn decrease"
-                          data-type="child"
-                        >
-                          -
-                        </button>
-                        <span class="count" id="childCount">0</span>
-                        <button
-                          type="button"
-                          class="counter-btn increase"
-                          data-type="child"
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+					<!-- 인원 선택 -->
+					<div class="filter-item people-filter">
+						<div class="filter-content" id="peopleSelect">
+							<div class="selected-option">
+								<i class="ph ph-user"></i> <span id="peopleDisplay">성인 2명</span>
+							</div>
+							<div class="people-selector-container">
+								<div class="people-selector">
+									<div class="people-type">
+										<span>성인</span>
+										<div class="counter">
+											<button type="button" class="counter-btn decrease"
+												data-type="adult">-</button>
+											<span class="count" id="adultCount">2</span>
+											<button type="button" class="counter-btn increase"
+												data-type="adult">+</button>
+										</div>
+									</div>
+									<div class="people-type">
+										<span>아동</span>
+										<div class="counter">
+											<button type="button" class="counter-btn decrease"
+												data-type="child">-</button>
+											<span class="count" id="childCount">0</span>
+											<button type="button" class="counter-btn increase"
+												data-type="child">+</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 
             <!-- 검색 버튼 -->
             <div class="search-button-container">
@@ -170,7 +163,68 @@ uri="http://java.sun.com/jsp/jstl/core" %>
       </div>
     </section>
     <!-- 검색 필터 끝 -->
-
+    <!-- 카테고리 섹션 시작 -->
+    <section class="category-section">
+      <div class="category-container">
+        <div class="category-list">
+          <button class="category-item active" data-category="all">
+            <div class="category-icon">
+              <i class="fas fa-home"></i>
+            </div>
+            <span class="category-text">모두</span>
+          </button>
+          <button class="category-item" data-category="new">
+            <div class="category-icon">
+              <i class="fas fa-star"></i>
+            </div>
+            <span class="category-text">신규오픈</span>
+          </button>
+          <button class="category-item" data-category="exclusive">
+            <div class="category-icon">
+              <i class="fas fa-crown"></i>
+            </div>
+            <span class="category-text">단독소개</span>
+          </button>
+          <button class="category-item" data-category="best">
+            <div class="category-icon">
+              <i class="fas fa-trophy"></i>
+            </div>
+            <span class="category-text">베스트 스테이</span>
+          </button>
+          <button class="category-item" data-category="steady">
+            <div class="category-icon">
+              <i class="fas fa-fire"></i>
+            </div>
+            <span class="category-text">스테디셀러</span>
+          </button>
+          <button class="category-item" data-category="emotional">
+            <div class="category-icon">
+              <i class="fas fa-heart"></i>
+            </div>
+            <span class="category-text">감성 숙소</span>
+          </button>
+          <button class="category-item" data-category="nature">
+            <div class="category-icon">
+              <i class="fas fa-tree"></i>
+            </div>
+            <span class="category-text">자연속에서</span>
+          </button>
+          <button class="category-item" data-category="ocean">
+            <div class="category-icon">
+              <i class="fas fa-water"></i>
+            </div>
+            <span class="category-text">바다와 함께</span>
+          </button>
+          <button class="category-item" data-category="couple">
+            <div class="category-icon">
+              <i class="fas fa-kiss-wink-heart"></i>
+            </div>
+            <span class="category-text">연인과 함께</span>
+          </button>
+        </div>
+      </div>
+    </section>
+    <!-- 카테고리 섹션 끝 -->
     <!-- 검색 결과 섹션 시작 -->
     <section class="search-results-section">
       <div class="search-results-container">
@@ -182,512 +236,108 @@ uri="http://java.sun.com/jsp/jstl/core" %>
           </p>
         </div>
 
-        <!-- 검색 결과 그리드 -->
-        <div class="search-results-grid" id="searchResultsGrid">
-          <!-- 첫 번째 그룹 (9개) -->
-          <div class="results-group">
-            <div class="search-stay-item" data-stay-id="1">
-              <div class="search-stay-image">
-                <img
-                  src="${pageContext.request.contextPath}/resources/img/card1.png"
-                  alt="강남 럭셔리 호텔"
-                />
-                <button class="search-stay-wishlist" data-wishlist="false">
-                  <i class="ph ph-heart"></i>
-                </button>
-              </div>
-              <div class="search-stay-content">
-                <h3 class="search-stay-name">강남 럭셔리 호텔</h3>
-                <div class="search-stay-location">
-                  <i class="ph ph-map-pin"></i>
-                  서울 / 강남구
-                </div>
-                <div class="search-stay-price">
-                  <div class="search-stay-price-main">
-                    <span class="search-stay-price-current">₩180,000~</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+			<div class="search-results-grid" id="searchResultsGrid">
+				<c:if test="${not empty stayList}">
+					<c:set var="bannerCount" value="0" />
+					<c:forEach var="stay" items="${stayList}" varStatus="loop">
 
-            <div class="search-stay-item" data-stay-id="2">
-              <div class="search-stay-image">
-                <img
-                  src="<c:url value='/resources/img/card1.png'/>"
-                  alt="홍대 부티크 호텔"
-                />
-                <div class="search-stay-promotion">프로모션</div>
-                <button class="search-stay-wishlist" data-wishlist="false">
-                  <i class="ph ph-heart"></i>
-                </button>
-              </div>
-              <div class="search-stay-content">
-                <h3 class="search-stay-name">홍대 부티크 호텔</h3>
-                <div class="search-stay-location">
-                  <i class="ph ph-map-pin"></i>
-                  서울 / 마포구
-                </div>
-                <div class="search-stay-price">
-                  <span class="search-stay-price-original">₩140,000</span>
-                  <div class="search-stay-price-main">
-                    <span class="search-stay-price-discount">20%</span>
-                    <span class="search-stay-price-current">₩112,000~</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+						<%-- 9개마다 그룹 시작 --%>
+						<c:if test="${loop.index % 9 == 0}">
+							<div class="results-group">
+						</c:if>
 
-            <div class="search-stay-item" data-stay-id="3">
-              <div class="search-stay-image">
-                <img
-                  src="<c:url value='/resources/img/card1.png'/>"
-                  alt="이태원 부티크 호텔"
-                />
-                <div class="search-stay-promotion">프로모션</div>
-                <button class="search-stay-wishlist" data-wishlist="true">
-                  <i class="ph ph-heart"></i>
-                </button>
-              </div>
-              <div class="search-stay-content">
-                <h3 class="search-stay-name">이태원 부티크 호텔</h3>
-                <div class="search-stay-location">
-                  <i class="ph ph-map-pin"></i>
-                  서울 / 용산구
-                </div>
-                <div class="search-stay-price">
-                  <span class="search-stay-price-original">₩160,000</span>
-                  <div class="search-stay-price-main">
-                    <span class="search-stay-price-discount">25%</span>
-                    <span class="search-stay-price-current">₩120,000~</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+						<!-- 숙소 카드 -->
+						<div class="search-stay-item">
+							<div class="search-stay-image" onclick="location.href='/stay/${stay.siId}'">
+								<img src="${s3BaseUrl}${stay.spUrl}" alt="${stay.siName}" />
+								<button class="search-stay-wishlist" data-wishlist="false">
+									<i class="ph ph-heart"></i>
+								</button>
+								<c:if test="${stay.siDiscount > 0}">
+									<div class="search-stay-promotion">프로모션</div>
+								</c:if>
+							</div>
+							<div class="search-stay-content">
+								<h3 class="search-stay-name">${stay.siName}</h3>
+								<div class="search-stay-location">
+									<i class="ph ph-map-pin"></i> ${stay.siLoca}
+								</div>
+								<div class="search-stay-price">
+									<c:choose>
+										<c:when test="${stay.siDiscount > 0}">
+											<span class="search-stay-price-original"> ₩<fmt:formatNumber
+													value="${stay.siMinprice}" type="number"
+													groupingUsed="true" />
+											</span>
+											<div class="search-stay-price-main">
+												<span class="search-stay-price-discount">
+													${stay.siDiscount * 100}% </span> <span
+													class="search-stay-price-current"> ₩<fmt:formatNumber
+														value="${stay.siMinprice * (1 - stay.siDiscount)}"
+														type="number" groupingUsed="true" />~
+												</span>
+											</div>
+										</c:when>
+										<c:otherwise>
+											<div class="search-stay-price-main">
+												<span class="search-stay-price-current"> ₩<fmt:formatNumber
+														value="${stay.siMinprice}" type="number"
+														groupingUsed="true" />~
+												</span>
+											</div>
+										</c:otherwise>
+									</c:choose>
+								</div>
+							</div>
+						</div>
 
-            <div class="search-stay-item" data-stay-id="4">
-              <div class="search-stay-image">
-                <img
-                  src="<c:url value='/resources/img/card1.png'/>"
-                  alt="잠실 패밀리 호텔"
-                />
-                <button class="search-stay-wishlist" data-wishlist="false">
-                  <i class="ph ph-heart"></i>
-                </button>
-              </div>
-              <div class="search-stay-content">
-                <h3 class="search-stay-name">잠실 패밀리 호텔</h3>
-                <div class="search-stay-location">
-                  <i class="ph ph-map-pin"></i>
-                  서울 / 송파구
-                </div>
-                <div class="search-stay-price">
-                  <div class="search-stay-price-main">
-                    <span class="search-stay-price-current">₩150,000~</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+						<%-- 9개마다 그룹 끝 --%>
+						<c:if test="${(loop.index + 1) % 9 == 0 or loop.last}">
+			</div>
+			<%-- .results-group 끝 --%>
 
-            <div class="search-stay-item" data-stay-id="5">
-              <div class="search-stay-image">
-                <img
-                  src="<c:url value='/resources/img/card1.png'/>"
-                  alt="여의도 비즈니스 호텔"
-                />
-                <div class="search-stay-promotion">프로모션</div>
-                <button class="search-stay-wishlist" data-wishlist="false">
-                  <i class="ph ph-heart"></i>
-                </button>
-              </div>
-              <div class="search-stay-content">
-                <h3 class="search-stay-name">여의도 비즈니스 호텔</h3>
-                <div class="search-stay-location">
-                  <i class="ph ph-map-pin"></i>
-                  서울 / 영등포구
-                </div>
-                <div class="search-stay-price">
-                  <span class="search-stay-price-original">₩200,000</span>
-                  <div class="search-stay-price-main">
-                    <span class="search-stay-price-discount">30%</span>
-                    <span class="search-stay-price-current">₩140,000~</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+			<%-- 배너 출력: 최대 3개까지 --%>
+			<c:if test="${bannerCount lt 3}">
+				<c:set var="bannerCount" value="${bannerCount + 1}" />
+				<div class="search-banner">
+					<div class="banner-background">
+						<img
+							src="${pageContext.request.contextPath}/resources/img/stay/ad${bannerCount}.png"
+							alt="배너${bannerCount}" />
+						<div class="banner-overlay"></div>
+					</div>
+					<div class="banner-ad-label">AD</div>
+					<div class="banner-content">
+						<c:choose>
+							<c:when test="${bannerCount == 1}">
+								<h3>제주 신규 스테이, 20% 할인</h3>
+								<p>오픈 기념, 모든 일자 할인 중이에요!</p>
+							</c:when>
+							<c:when test="${bannerCount == 2}">
+								<h3>프리미엄 숙소 추천</h3>
+								<p>럭셔리한 휴식을 경험해보세요</p>
+							</c:when>
+							<c:when test="${bannerCount == 3}">
+								<h3>지금 예약 시 무료 조식</h3>
+								<p>조식 포함 상품, 한정 수량!</p>
+							</c:when>
+						</c:choose>
+					</div>
+				</div>
+			</c:if>
+			</c:if>
 
-            <div class="search-stay-item" data-stay-id="6">
-              <div class="search-stay-image">
-                <img
-                  src="<c:url value='/resources/img/card1.png'/>"
-                  alt="건대 유스 호스텔"
-                />
-                <div class="search-stay-promotion">프로모션</div>
-                <button class="search-stay-wishlist" data-wishlist="false">
-                  <i class="ph ph-heart"></i>
-                </button>
-              </div>
-              <div class="search-stay-content">
-                <h3 class="search-stay-name">건대 유스 호스텔</h3>
-                <div class="search-stay-location">
-                  <i class="ph ph-map-pin"></i>
-                  서울 / 광진구
-                </div>
-                <div class="search-stay-price">
-                  <div class="search-stay-price-main">
-                    <span class="search-stay-price-current">₩80,000~</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+			</c:forEach>
+			</c:if>
+		</div>
+		</div>
+	</section>
 
-            <div class="search-stay-item" data-stay-id="7">
-              <div class="search-stay-image">
-                <img
-                  src="<c:url value='/resources/img/card1.png'/>"
-                  alt="명동 시티 호텔"
-                />
-                <button class="search-stay-wishlist" data-wishlist="true">
-                  <i class="ph ph-heart"></i>
-                </button>
-              </div>
-              <div class="search-stay-content">
-                <h3 class="search-stay-name">명동 시티 호텔</h3>
-                <div class="search-stay-location">
-                  <i class="ph ph-map-pin"></i>
-                  서울 / 중구
-                </div>
-                <div class="search-stay-price">
-                  <span class="search-stay-price-original">₩180,000</span>
-                  <div class="search-stay-price-main">
-                    <span class="search-stay-price-discount">25%</span>
-                    <span class="search-stay-price-current">₩135,000~</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="search-stay-item" data-stay-id="8">
-              <div class="search-stay-image">
-                <img
-                  src="<c:url value='/resources/img/card1.png'/>"
-                  alt="신촌 게스트하우스"
-                />
-                <button class="search-stay-wishlist" data-wishlist="false">
-                  <i class="ph ph-heart"></i>
-                </button>
-              </div>
-              <div class="search-stay-content">
-                <h3 class="search-stay-name">신촌 게스트하우스</h3>
-                <div class="search-stay-location">
-                  <i class="ph ph-map-pin"></i>
-                  서울 / 서대문구
-                </div>
-                <div class="search-stay-price">
-                  <div class="search-stay-price-main">
-                    <span class="search-stay-price-current">₩65,000~</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="search-stay-item" data-stay-id="9">
-              <div class="search-stay-image">
-                <img
-                  src="<c:url value='/resources/img/card1.png'/>"
-                  alt="압구정 프리미엄 호텔"
-                />
-                <div class="search-stay-promotion">프로모션</div>
-                <button class="search-stay-wishlist" data-wishlist="false">
-                  <i class="ph ph-heart"></i>
-                </button>
-              </div>
-              <div class="search-stay-content">
-                <h3 class="search-stay-name">압구정 프리미엄 호텔</h3>
-                <div class="search-stay-location">
-                  <i class="ph ph-map-pin"></i>
-                  서울 / 강남구
-                </div>
-                <div class="search-stay-price">
-                  <span class="search-stay-price-original">₩250,000</span>
-                  <div class="search-stay-price-main">
-                    <span class="search-stay-price-discount">20%</span>
-                    <span class="search-stay-price-current">₩200,000~</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 배너 영역 -->
-          <div class="search-banner">
-            <div class="banner-background">
-              <img
-                src="<c:url value='/resources/img/stay/ad1.png'/>"
-                alt="특별 할인 이벤트 배너"
-              />
-              <div class="banner-overlay"></div>
-            </div>
-            <div class="banner-ad-label">AD</div>
-            <div class="banner-content">
-              <h3>제주 신규 스테이, 20% 할인</h3>
-              <p>오픈 기념, 모든 일자 할인 중이에요!</p>
-            </div>
-          </div>
-
-          <!-- 두 번째 그룹 (9개) -->
-          <div class="results-group">
-            <div class="search-stay-item" data-stay-id="10">
-              <div class="search-stay-image">
-                <img
-                  src="<c:url value='/resources/img/card1.png'/>"
-                  alt="성수동 부티크 호텔"
-                />
-                <button class="search-stay-wishlist" data-wishlist="false">
-                  <i class="ph ph-heart"></i>
-                </button>
-              </div>
-              <div class="search-stay-content">
-                <h3 class="search-stay-name">성수동 부티크 호텔</h3>
-                <div class="search-stay-location">
-                  <i class="ph ph-map-pin"></i>
-                  서울 / 성동구
-                </div>
-                <div class="search-stay-price">
-                  <div class="search-stay-price-main">
-                    <span class="search-stay-price-current">₩120,000~</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="search-stay-item" data-stay-id="11">
-              <div class="search-stay-image">
-                <img
-                  src="<c:url value='/resources/img/card1.png'/>"
-                  alt="용산 비즈니스 호텔"
-                />
-                <div class="search-stay-promotion">프로모션</div>
-                <button class="search-stay-wishlist" data-wishlist="true">
-                  <i class="ph ph-heart"></i>
-                </button>
-              </div>
-              <div class="search-stay-content">
-                <h3 class="search-stay-name">용산 비즈니스 호텔</h3>
-                <div class="search-stay-location">
-                  <i class="ph ph-map-pin"></i>
-                  서울 / 용산구
-                </div>
-                <div class="search-stay-price">
-                  <span class="search-stay-price-original">₩170,000</span>
-                  <div class="search-stay-price-main">
-                    <span class="search-stay-price-discount">30%</span>
-                    <span class="search-stay-price-current">₩119,000~</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="search-stay-item" data-stay-id="12">
-              <div class="search-stay-image">
-                <img
-                  src="<c:url value='/resources/img/card1.png'/>"
-                  alt="종로 전통 한옥"
-                />
-                <button class="search-stay-wishlist" data-wishlist="false">
-                  <i class="ph ph-heart"></i>
-                </button>
-              </div>
-              <div class="search-stay-content">
-                <h3 class="search-stay-name">종로 전통 한옥</h3>
-                <div class="search-stay-location">
-                  <i class="ph ph-map-pin"></i>
-                  서울 / 종로구
-                </div>
-                <div class="search-stay-price">
-                  <div class="search-stay-price-main">
-                    <span class="search-stay-price-current">₩95,000~</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="search-stay-item" data-stay-id="13">
-              <div class="search-stay-image">
-                <img
-                  src="<c:url value='/resources/img/card1.png'/>"
-                  alt="가로수길 디자인 호텔"
-                />
-                <div class="search-stay-promotion">프로모션</div>
-                <button class="search-stay-wishlist" data-wishlist="false">
-                  <i class="ph ph-heart"></i>
-                </button>
-              </div>
-              <div class="search-stay-content">
-                <h3 class="search-stay-name">가로수길 디자인 호텔</h3>
-                <div class="search-stay-location">
-                  <i class="ph ph-map-pin"></i>
-                  서울 / 강남구
-                </div>
-                <div class="search-stay-price">
-                  <span class="search-stay-price-original">₩220,000</span>
-                  <div class="search-stay-price-main">
-                    <span class="search-stay-price-discount">20%</span>
-                    <span class="search-stay-price-current">₩176,000~</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="search-stay-item" data-stay-id="14">
-              <div class="search-stay-image">
-                <img
-                  src="<c:url value='/resources/img/card1.png'/>"
-                  alt="한강뷰 리조트"
-                />
-                <button class="search-stay-wishlist" data-wishlist="false">
-                  <i class="ph ph-heart"></i>
-                </button>
-              </div>
-              <div class="search-stay-content">
-                <h3 class="search-stay-name">한강뷰 리조트</h3>
-                <div class="search-stay-location">
-                  <i class="ph ph-map-pin"></i>
-                  서울 / 마포구
-                </div>
-                <div class="search-stay-price">
-                  <div class="search-stay-price-main">
-                    <span class="search-stay-price-current">₩280,000~</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="search-stay-item" data-stay-id="15">
-              <div class="search-stay-image">
-                <img
-                  src="<c:url value='/resources/img/card1.png'/>"
-                  alt="동대문 쇼핑 호텔"
-                />
-                <div class="search-stay-promotion">프로모션</div>
-                <button class="search-stay-wishlist" data-wishlist="true">
-                  <i class="ph ph-heart"></i>
-                </button>
-              </div>
-              <div class="search-stay-content">
-                <h3 class="search-stay-name">동대문 쇼핑 호텔</h3>
-                <div class="search-stay-location">
-                  <i class="ph ph-map-pin"></i>
-                  서울 / 중구
-                </div>
-                <div class="search-stay-price">
-                  <span class="search-stay-price-original">₩130,000</span>
-                  <div class="search-stay-price-main">
-                    <span class="search-stay-price-discount">30%</span>
-                    <span class="search-stay-price-current">₩91,000~</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="search-stay-item" data-stay-id="16">
-              <div class="search-stay-image">
-                <img
-                  src="<c:url value='/resources/img/card1.png'/>"
-                  alt="청담동 럭셔리 스위트"
-                />
-                <button class="search-stay-wishlist" data-wishlist="false">
-                  <i class="ph ph-heart"></i>
-                </button>
-              </div>
-              <div class="search-stay-content">
-                <h3 class="search-stay-name">청담동 럭셔리 스위트</h3>
-                <div class="search-stay-location">
-                  <i class="ph ph-map-pin"></i>
-                  서울 / 강남구
-                </div>
-                <div class="search-stay-price">
-                  <div class="search-stay-price-main">
-                    <span class="search-stay-price-current">₩350,000~</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="search-stay-item" data-stay-id="17">
-              <div class="search-stay-image">
-                <img
-                  src="<c:url value='/resources/img/card1.png'/>"
-                  alt="서촌 문화 게스트하우스"
-                />
-                <button class="search-stay-wishlist" data-wishlist="false">
-                  <i class="ph ph-heart"></i>
-                </button>
-              </div>
-              <div class="search-stay-content">
-                <h3 class="search-stay-name">서촌 문화 게스트하우스</h3>
-                <div class="search-stay-location">
-                  <i class="ph ph-map-pin"></i>
-                  서울 / 종로구
-                </div>
-                <div class="search-stay-price">
-                  <span class="search-stay-price-original">₩85,000</span>
-                  <div class="search-stay-price-main">
-                    <span class="search-stay-price-discount">20%</span>
-                    <span class="search-stay-price-current">₩68,000~</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="search-stay-item" data-stay-id="18">
-              <div class="search-stay-image">
-                <img
-                  src="<c:url value='/resources/img/card1.png'/>"
-                  alt="삼성동 비즈니스 호텔"
-                />
-                <div class="search-stay-promotion">프로모션</div>
-                <button class="search-stay-wishlist" data-wishlist="false">
-                  <i class="ph ph-heart"></i>
-                </button>
-              </div>
-              <div class="search-stay-content">
-                <h3 class="search-stay-name">삼성동 비즈니스 호텔</h3>
-                <div class="search-stay-location">
-                  <i class="ph ph-map-pin"></i>
-                  서울 / 강남구
-                </div>
-                <div class="search-stay-price">
-                  <div class="search-stay-price-main">
-                    <span class="search-stay-price-current">₩190,000~</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 배너 영역 -->
-          <div class="search-banner">
-            <div class="banner-background">
-              <img
-                src="<c:url value='/resources/img/stay/ad2.png'/>"
-                alt="프리미엄 숙소 추천 배너"
-              />
-              <div class="banner-overlay"></div>
-            </div>
-            <div class="banner-ad-label">AD</div>
-            <div class="banner-content">
-              <h3>프리미엄 숙소 추천</h3>
-              <p>럭셔리한 휴식을 경험해보세요</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- 검색 결과 섹션 끝 -->
+	<!-- 검색 결과 섹션 끝 -->
 
     <script src="${pageContext.request.contextPath}/resources/js/search/searchFilter.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/search/search.js"></script>
-
+    <script src="${pageContext.request.contextPath}/resources/js/search/searchCategory.js"></script>
     <%@ include file="../includes/footer.jsp" %>
   </body>
 </html>

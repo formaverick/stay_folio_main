@@ -105,6 +105,65 @@
 	</select>
 
 
+	<!-- 특정 지역(lc_id) 숙소 조회 -->
+	<select id="selectStayListByLcId"
+		resultType="com.hotel.domain.StayVO">
+		SELECT
+		s.si_id AS siId,
+		s.si_name AS siName,
+		s.si_loca AS
+		siLoca,
+		s.si_minprice
+		AS siMinprice,
+		s.si_discount AS siDiscount,
+		(
+		SELECT
+		sp_url
+		FROM t_stay_photo
+		WHERE si_id = s.si_id
+		AND sp_idx = 0
+		AND ROWNUM =
+		1
+		) AS spUrl
+		FROM t_stay_info s
+		WHERE s.lc_id = #{lcId}
+		AND s.si_show =
+		'1'
+		ORDER BY s.si_date DESC
+	</select>
+
+
+
+	<!-- 전체 랜덤 숙소 조회 -->
+	<select id="selectRandomStayList"
+		resultType="com.hotel.domain.StayVO">
+		SELECT
+		s.si_id AS siId,
+		s.si_name AS siName,
+		s.si_loca AS
+		siLoca,
+		s.si_minprice
+		AS siMinprice,
+		s.si_discount AS siDiscount,
+		(
+		SELECT
+		sp_url
+		FROM t_stay_photo
+		WHERE si_id = s.si_id
+		AND sp_idx = 0
+		AND ROWNUM =
+		1
+		) AS spUrl
+		FROM t_stay_info s
+		WHERE s.si_show = '1'
+		ORDER BY
+		DBMS_RANDOM.VALUE
+	</select>
+
+
+
+
+
 	<!-- admin insert 시작 -->
 	<!-- 지역 목록 조회 -->
 	<select id="getAllLocations"
@@ -297,7 +356,8 @@
 		UPDATE t_stay_photo
 		SET sp_url = #{spUrl}
 		WHERE si_id = #{siId}
-		AND sp_idx = #{spIdx}
+		AND
+		sp_idx = #{spIdx}
 		<choose>
 			<when test="riId == null">
 				AND ri_id IS NULL

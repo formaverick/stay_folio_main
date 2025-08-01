@@ -8,6 +8,10 @@
   href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
 />
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+/>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <link
@@ -189,6 +193,69 @@
   </div>
 </section>
 <!-- 검색 필터 끝 -->
+
+<!-- 카테고리 섹션 시작 -->
+<section class="category-section">
+  <div class="category-container">
+    <div class="category-list">
+      <button class="category-item active" data-category="all">
+        <div class="category-icon">
+          <i class="fas fa-home"></i>
+        </div>
+        <span class="category-text">모두</span>
+      </button>
+      <button class="category-item" data-category="new">
+        <div class="category-icon">
+          <i class="fas fa-star"></i>
+        </div>
+        <span class="category-text">신규오픈</span>
+      </button>
+      <button class="category-item" data-category="exclusive">
+        <div class="category-icon">
+          <i class="fas fa-crown"></i>
+        </div>
+        <span class="category-text">단독소개</span>
+      </button>
+      <button class="category-item" data-category="best">
+        <div class="category-icon">
+          <i class="fas fa-trophy"></i>
+        </div>
+        <span class="category-text">베스트 스테이</span>
+      </button>
+      <button class="category-item" data-category="steady">
+        <div class="category-icon">
+          <i class="fas fa-fire"></i>
+        </div>
+        <span class="category-text">스테디셀러</span>
+      </button>
+      <button class="category-item" data-category="emotional">
+        <div class="category-icon">
+          <i class="fas fa-heart"></i>
+        </div>
+        <span class="category-text">감성 숙소</span>
+      </button>
+      <button class="category-item" data-category="nature">
+        <div class="category-icon">
+          <i class="fas fa-tree"></i>
+        </div>
+        <span class="category-text">자연속에서</span>
+      </button>
+      <button class="category-item" data-category="ocean">
+        <div class="category-icon">
+          <i class="fas fa-water"></i>
+        </div>
+        <span class="category-text">바다와 함께</span>
+      </button>
+      <button class="category-item" data-category="couple">
+        <div class="category-icon">
+          <i class="fas fa-kiss-wink-heart"></i>
+        </div>
+        <span class="category-text">연인과 함께</span>
+      </button>
+    </div>
+  </div>
+</section>
+<!-- 카테고리 섹션 끝 -->
 
 <!-- 검색 결과 섹션 시작 -->
 <section class="search-results-section">
@@ -851,4 +918,5 @@
 <!-- 검색 결과 섹션 끝 -->
 
 <script src="../../js/search/searchFilter.js"></script>
+<script src="../../js/search/searchCategory.js"></script>
 <script src="../../js/search/search.js"></script>

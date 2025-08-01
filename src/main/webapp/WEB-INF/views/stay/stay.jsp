@@ -235,8 +235,7 @@
 					<c:forEach var="room" items="${rooms}">
 						<div class="room-card">
 							<div class="room-image">
-								<img
-									src="${pageContext.request.contextPath}/resources/img/stay/stayimg1.jpg"
+								<img src="${s3BaseUrl}${roomMainPhotos[room.riId].spUrl}"
 									alt="${room.riName}" />
 							</div>
 							<div class="room-info">
@@ -281,7 +280,7 @@
 										</c:choose>
 									</div>
 									<button class="room-select-btn"
-										onclick="location.href='/stay/${stay.siId}/${room.riId}'">객실
+										onclick="location.href='/stay/${stay.siId}/${room.riId}?checkin=${checkin}&checkout=${checkout}&adult=1&child=0'">객실
 										선택</button>
 								</div>
 							</div>

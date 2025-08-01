@@ -3,6 +3,8 @@ package com.hotel.controller;
 import java.security.Principal;
 import java.time.LocalDate;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.ui.Model;
@@ -14,10 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hotel.domain.ReservationCreateDTO;
-import com.hotel.domain.ReservationDTO;
 import com.hotel.domain.ReservationDetail;
 import com.hotel.domain.ReservationPageVO;
-import com.hotel.domain.ReservationPriceResultDTO;
 import com.hotel.service.ReservationService;
 
 import lombok.RequiredArgsConstructor;
@@ -39,61 +39,77 @@ public class ReservationController {
 	        @PathVariable("ri_id") int riId,
 	        @RequestParam(required = false) String checkin,
 	        @RequestParam(required = false) String checkout,
-	        @RequestParam(required = false, defaultValue = "2") int adult,
+	        @RequestParam(required = false, defaultValue = "1") int adult,
 	        @RequestParam(required = false, defaultValue = "0") int child,
 	        Model model,
-	        Principal principal) {
+	        Principal principal,
+	        HttpServletRequest request,
+	        RedirectAttributes rttr) {
 
-	    // 체크인/체크아웃 기본값 설정
 	    if (checkin == null) checkin = LocalDate.now().toString();
 	    if (checkout == null) checkout = LocalDate.now().plusDays(1).toString();
 
-	    // 로그인 사용자 ID (이메일)
 	    String miId = (principal != null) ? principal.getName() : null;
 
-	    // 예약 정보 + 요금 계산 포함
-	    ReservationPageVO pageInfo = reservationService.getReservationPageInfo(
-	        riId, siId, miId,
-	        LocalDate.parse(checkin),
-	        LocalDate.parse(checkout),
-	        adult, child
-	    );
+	    try {
+	        ReservationPageVO pageInfo = reservationService.getReservationPageInfo(
+	            riId, siId, miId,
+	            LocalDate.parse(checkin),
+	            LocalDate.parse(checkout),
+	            adult, child
+	        );
 
-	    // JSP에 넘길 값들
-	    model.addAttribute("info", pageInfo);
-	    model.addAttribute("checkin", checkin);
-	    model.addAttribute("checkout", checkout);
-	    model.addAttribute("srAdult", adult);
-	    model.addAttribute("srChild", child);
-	    model.addAttribute("siId", siId);
-	    model.addAttribute("riId", riId);
-	    model.addAttribute("miId", miId);
-	    model.addAttribute("isLogin", principal != null); 
-	   
-	    // 로그인 시 예약자 정보 미리 채우기
-	    if (pageInfo != null && pageInfo.getMiName() != null) {
-	        model.addAttribute("srName", pageInfo.getMiName());
-	        model.addAttribute("srEmail", pageInfo.getMiId());
-	        model.addAttribute("srPhone", pageInfo.getMiPhone());
+	        model.addAttribute("info", pageInfo);
+	        model.addAttribute("checkin", checkin);
+	        model.addAttribute("checkout", checkout);
+	        model.addAttribute("srAdult", adult);
+	        model.addAttribute("srChild", child);
+	        model.addAttribute("siId", siId);
+	        model.addAttribute("riId", riId);
+	        model.addAttribute("miId", miId);
+	        model.addAttribute("isLogin", principal != null);
+
+	        if (pageInfo != null && pageInfo.getMiName() != null) {
+	            model.addAttribute("srName", pageInfo.getMiName());
+	            model.addAttribute("srEmail", pageInfo.getMiId());
+	            model.addAttribute("srPhone", pageInfo.getMiPhone());
+	        }
+
+	        return "reservation/reservation";
+
+	    } catch (IllegalArgumentException e) {
+	        rttr.addFlashAttribute("error", e.getMessage());
+	        String referer = request.getHeader("Referer");
+	        return "redirect:" + (referer != null ? referer : "/");
 	    }
-	    
-	    return "reservation";
 	}
+
 
 	// 예약 처리
 	@PostMapping("/submit")
 	public String submitReservation(ReservationCreateDTO dto, RedirectAttributes rttr) {
-		log.info("submit");
+	    log.info("submit 호출됨");
+	    dto.setSrId(null);
+
+	    // 중복 예약 검사
+	    boolean isDup = reservationService.isDuplicateReservation(
+	        dto.getSiId(), dto.getRiId(), dto.getSrCheckin(), dto.getSrCheckout()
+	    );
+
+	    if (isDup) {
+	        rttr.addFlashAttribute("duplicate", true);
+	        return "redirect:/reservation/" + dto.getSiId() + "/" + dto.getRiId();
+	    }
+
 	    try {
 	        reservationService.reserve(dto);
-	       
-	        return "redirect:/reservation/complete/" + dto.getSrId(); //  완료 페이지로 리다이렉트
+	        return "redirect:/reservation/complete/" + dto.getSrId();
 	    } catch (Exception e) {
+	        log.error("예약 실패: " + e.getMessage(), e);
 	        rttr.addFlashAttribute("error", "예약 실패: " + e.getMessage());
 	        return "redirect:/reservation/" + dto.getSiId() + "/" + dto.getRiId();
 	    }
 	}
-
 	// 예약 상세 페이지
 	@GetMapping("/complete/{sr_id}")
 	public String reservationComplete(@PathVariable("sr_id") String reservationId, Model model) {
@@ -101,7 +117,4 @@ public class ReservationController {
 	    model.addAttribute("reservation", reservation);
 	    return "reservation/complete";
 	}
-
-
-
 }

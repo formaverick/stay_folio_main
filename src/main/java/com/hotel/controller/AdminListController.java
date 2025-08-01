@@ -47,5 +47,6 @@ public class AdminListController {
 		
 	    return "admin/room/stayDetail";
 	}
-
+	
+	
 }

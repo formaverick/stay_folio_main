@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hotel.mapper.AdminMapper">
+
+    <resultMap id="memberMap" type="com.hotel.domain.MemberVO">
+        <id column="mi_id" property="miId"/>
+        <result column="mi_pw" property="miPw"/>
+        <result column="mi_name" property="miName"/>
+        <result column="mi_gender" property="miGender"/>
+        <result column="mi_birth" property="miBirth"/>
+        <result column="mi_phone" property="miPhone"/>
+        <result column="mi_isad" property="miIsad"/>
+        <result column="mi_date" property="miDate"/>
+        <result column="mi_enabled" property="miEnabled"/>
+    </resultMap>
+
+	<select id="selectMembersWithPaging" resultMap="memberMap" parameterType="com.hotel.domain.Criteria">
+	    SELECT * 
+	    FROM 
+	       t_member_info 
+	            ORDER BY mi_date DESC
+	       
+	     
+	   
+	
+	</select>
+	
+
+
+    <select id="getTotalMemberCount" resultType="int">
+        SELECT COUNT(*) FROM t_member_info
+    </select>
+
+</mapper>

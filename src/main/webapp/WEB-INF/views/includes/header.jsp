@@ -32,7 +32,7 @@
 				<sec:authorize access="isAuthenticated()">
 	                <!-- 로그인 상태 -->
 	                <li class="login logged-in">
-	                    <a href="#"><i class="ph ph-user"></i> MY</a>
+	                    <a href="/mypage/reservations"><i class="ph ph-user"></i> MY</a>
 	                </li>
                 </sec:authorize>
             </ul>

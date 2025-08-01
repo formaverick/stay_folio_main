@@ -49,20 +49,6 @@
         <result column="sr_status" property="srStatus" />
         <result column="sr_paymentstatus" property="srPaymentstatus" />
     </resultMap>
-    
-    <resultMap id="bookmark" type="com.hotel.domain.BookmarkVO">
-        <result property="siId" column="si_id" />
-        <result property="sbRegdate" column="sb_regdate" />
-        <result property="siName" column="si_name" />
-        <result property="siLoca" column="si_loca" />
-        <result property="siMinperson" column="si_minperson" />
-        <result property="siMaxperson" column="si_maxperson" />
-        <result property="siMinprice" column="si_minprice" />
-        <result property="siPeak" column="si_peak" />
-        <result property="siOff" column="si_off" />
-        <result property="siDiscount" column="si_discount" />
-    </resultMap>
-
 
     <select id="getCompletedStayCount">
         <![CDATA[
@@ -74,13 +60,14 @@
 
     <select id="getUpcomingReservationByMember" resultMap="reservationList">
         <![CDATA[
-            SELECT sr_id, sr.si_id, si_name, sr.ri_id, ri_name, sp_url, sr_checkin, sr_checkout, sr_adult, sr_child, sr_totalprice, sr_status 
+            SELECT sr.sr_id, sr.si_id, si.si_name, sr.ri_id, ri.ri_name, sp.sp_url, sr.sr_checkin, sr.sr_checkout, 
+            	sr.sr_adult, sr.sr_child, sr.sr_totalprice, sr.sr_status 
             FROM t_stay_reservation sr 
             LEFT JOIN t_stay_info si ON sr.si_id = si.si_id 
             LEFT JOIN t_room_info ri ON sr.si_id = ri.si_id AND sr.ri_id = ri.ri_id 
-            LEFT JOIN t_stay_photo sp ON sr.si_id = sp.si_id AND sr.ri_id = sp.ri_id 
-            WHERE mi_id = #{id} AND sr_status = 'a' AND sr_checkin > SYSDATE 
-            ORDER BY sr_checkin 
+            LEFT JOIN t_room_photo sp ON sr.si_id = sp.si_id AND sr.ri_id = sp.ri_id AND sp.sp_idx = 0 
+            WHERE sr.mi_id = #{id} AND sr.sr_status = 'a' AND sr.sr_checkin > SYSDATE 
+            ORDER BY sr.sr_checkin 
         ]]>
     </select>
 
@@ -90,24 +77,24 @@
             FROM t_stay_reservation sr 
             LEFT JOIN t_stay_info si ON sr.si_id = si.si_id 
             LEFT JOIN t_room_info ri ON sr.si_id = ri.si_id AND sr.ri_id = ri.ri_id 
-            LEFT JOIN t_stay_photo sp ON sr.si_id = sp.si_id AND sr.ri_id = sp.ri_id AND sp.sp_idx = 0 
+            LEFT JOIN t_room_photo sp ON sr.si_id = sp.si_id AND sr.ri_id = sp.ri_id AND sp.sp_idx = 0 
             WHERE mi_id = #{id} AND sr_status = 'b' OR sr_status = 'c' OR sr_checkout < SYSDATE 
             ORDER BY sr_date desc
         ]]>
     </select>
 
     <select id="getReservationDetail" resultMap="reservationDetail">
-        SELECT  sr.sr_id, sr.si_id, si.si_name, sp.sp_url, si.sid_phone, si.sid_email, sid.si_address, sr.ri_id, 
+        SELECT  sr.sr_id, sr.si_id, si.si_name, sp.sp_url, sid.si_phone, sid.si_email, sid.si_address, sr.ri_id, 
             ri.ri_name, sr.sr_name, sr.sr_email, sr.sr_phone, sr.sr_request, sr.sr_date, sr.sr_adult, sr.sr_child, 
-            TO_DATE(TO_CHAR(r.sr_checkin, 'YYYY-MM-DD') || ' ' || s.si_checkin, 'YYYY-MM-DD HH24:MI') AS full_checkin, 
-            TO_DATE(TO_CHAR(r.sr_checkout, 'YYYY-MM-DD') || ' ' || s.si_checkout, 'YYYY-MM-DD HH24:MI') AS full_checkout, 
+            TO_DATE(TO_CHAR(sr.sr_checkin, 'YYYY-MM-DD') || ' ' || sid.si_checkin, 'YYYY-MM-DD HH24:MI') AS full_checkin, 
+            TO_DATE(TO_CHAR(sr.sr_checkout, 'YYYY-MM-DD') || ' ' || sid.si_checkout, 'YYYY-MM-DD HH24:MI') AS full_checkout, 
             sr.sr_roomprice, sr.sr_discount, sr.sr_addperson_fee, sr.sr_totalprice, 
-            sr.sr_payment, sr.sr_paydate, sr.sr_cancledate, sr.sr_status 
+            sr.sr_payment, sr.sr_paydate, sr.sr_cancledate, sr.sr_status, sr.sr_paymentstatus 
         FROM t_stay_reservation sr
         LEFT JOIN t_stay_info si ON sr.si_id = si.si_id
         LEFT JOIN t_stay_info_detail sid ON sr.si_id = sid.si_id 
         LEFT JOIN t_room_info ri ON sr.si_id = ri.si_id AND sr.ri_id = ri.ri_id
-        LEFT JOIN t_stay_photo sp ON sr.si_id = sp.si_id AND sp.ri_id = 0 AND sp.sp_idx = 0
+        LEFT JOIN t_stay_photo sp ON sr.si_id = sp.si_id AND sp.sp_idx = 0
         WHERE sr.sr_id = #{id}
     </select>
     
@@ -117,12 +104,21 @@
         WHERE sr.sr_id = #{id}
     </update>
     
-    <select id="getBookMarkList" resultMap="bookmark">
-        SELECT sb.si_id, sb.sb_regdate, si.si_name, si.si_loca, si.si_minperson, si.si_maxperson, 
-            si.si_minprice, si.si_peak, si.si_off, si.si_discount
-        FROM t_stay_bookmarks sb 
-        LEFT JOIN t_stay_info si ON sb.si_id = si.si_id 
-        where sb.mi_id = #{id}
+    <select id="getBookMarkList" resultType="com.hotel.domain.StayVO">
+        SELECT
+			si.si_id AS siId,
+			si.si_name AS siName,
+			si.si_loca AS siLoca,
+			si.si_minperson AS siMinperson,
+			si.si_minprice AS siMinprice,
+			ROUND((1 - si.si_discount) * si.si_minprice) AS discountedPrice,
+			si.si_discount * 100 AS discount,
+			si.si_maxperson AS siMaxperson,
+			sp.sp_url AS spUrl
+		FROM t_stay_bookmarks sb 
+		LEFT JOIN t_stay_info si on sb.si_id = si.si_id 
+		LEFT JOIN t_stay_photo sp on sb.si_id = sp.si_id AND sp.sp_idx = 0 
+		WHERE sb.mi_id = #{id}
     </select>
 
 </mapper>

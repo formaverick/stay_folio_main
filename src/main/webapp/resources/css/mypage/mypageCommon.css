@@ -30,7 +30,7 @@
 }
 
 .mypage-submenu {
-  width: 40%;
+  flex: 0 0 20%;
 }
 
 .mypage-submenu .active {

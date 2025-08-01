@@ -2,9 +2,9 @@ package com.hotel.mapper;
 
 import java.util.List;
 
-import com.hotel.domain.BookmarkVO;
 import com.hotel.domain.ReservationDetailVO;
 import com.hotel.domain.ReservationListVO;
+import com.hotel.domain.StayVO;
 
 public interface MypageMapper {
 	public int getCompletedStayCount(String id);
@@ -17,5 +17,5 @@ public interface MypageMapper {
 	
 	public int cancelReservation(String id);
 	
-	public List<BookmarkVO> getBookMarkList(String id);
+	public List<StayVO> getBookMarkList(String id);
 }

@@ -41,7 +41,7 @@ pageEncoding="UTF-8"%>
   </head>
   <body>
     <!-- Header Include -->
-    <jsp:include page="includes/header.jsp" />
+    <jsp:include page="../includes/header.jsp" />
     <div class="mypage-header">
       <h2 class="mypage-title">이지선님 반가워요!</h2>
       <p class="mypage-subtitle">2025년 7월부터 0번의 여행을 했어요.</p>
@@ -144,6 +144,6 @@ pageEncoding="UTF-8"%>
         </div>
       </div>
     </div>
-    <jsp:include page="includes/footer.jsp" />
+    <jsp:include page="../includes/footer.jsp" />
   </body>
 </html>

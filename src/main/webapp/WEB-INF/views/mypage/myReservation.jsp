@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<c:set var="s3BaseUrl" value="https://stayfolio-upload-bucket.s3.us-east-1.amazonaws.com/" />
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -23,7 +24,7 @@
 	<!-- Header Include -->
 	<jsp:include page="../includes/header.jsp" />
 
-	<main class="login-main">
+	<main class="mypage-main">
 		<div class="mypage-header">
 			<sec:authentication property="principal" var="pinfo"/>
 			<h2 class="mypage-title">${pinfo.member.miName}님 반가워요!</h2>
@@ -33,20 +34,20 @@
 		<div class="mypage-page">
 			<div class="mypage-submenu">
 				<ul>
-					<li class="active"><a href="#">예약 정보</a></li>
-					<li><a href="#">북마크</a></li>
+					<li class="active"><a href="/mypage/reservations">예약 정보</a></li>
+					<li><a href="/mypage/bookmarks">북마크</a></li>
 					<li><a href="#">회원정보 수정</a></li>
 				</ul>
 			</div>
 
 			<div class="mypage-main">
-				<c:if test="${empty upComingList and empty completedList }">
+				<c:if test="${empty upcomingList and empty completedList }">
 					<div class="no-reserv" style="display: none">
-						<img src=""> <br>
-						<p>아직 예약 정보가 없습니다. 새로운 스테이를 찾아 떠나보세요.
+						<img src="${pageContext.request.contextPath}/resources/img/img-booking-waiting.png"> <br>
+						<p>아직 예약 정보가 없습니다. 새로운 스테이를 찾아 떠나보세요.</p>
 					</div>
 				</c:if>
-				<c:forEach var="reserv" items="${upComingList }">
+				<c:forEach var="reserv" items="${upcomingList }">
 					<div class="reserv-box">
 						<div class="reserv-info">
 							<div>
@@ -54,8 +55,10 @@
 
 								<h3>${reserv.siName }</h3>
 								<p class="reserv-day">
-									<fmt:formatDate value="${reserv.srCheckin }" pattern="yyyy.MM.dd"/> ~ 
-									<fmt:formatDate value="${reserv.srCheckout }" pattern="yyyy.MM.dd"/> (${reserv.nights }박)
+									<fmt:formatDate value="${reserv.srCheckin}" pattern="yyyy.MM.dd"/>
+									~
+									<fmt:formatDate value="${reserv.srCheckout}" pattern="yyyy.MM.dd"/>
+									(${reserv.nights }박)
 								</p>
 								<p class="reserv-option">
 									${reserv.riName } / 
@@ -68,12 +71,12 @@
 								</p>
 							</div>
 							<div class="buttom">
-								<button class="btn-detail">예약 상세 확인</button>
+								<button class="btn-detail" onclick="location.href='${pageContext.request.contextPath}/mypage/reservations/${reserv.srId}'">예약 상세 확인</button>
 								<p class="reserv-price"><fmt:formatNumber value="${reserv.srTotalprice}" type="currency" /></p>
 							</div>
 						</div>
 						<div class="reserv-image">
-							<img src="${pageContext.request.contextPath}/resources/img/stay/staycarousel1.jpg" alt="${reserv.siName }" />
+							<img src="${s3BaseUrl}${reserv.spUrl}" alt="${reserv.siName }" />
 						</div>
 					</div>
 				</c:forEach>
@@ -90,9 +93,10 @@
 								</c:if>
 								<h3>${reserv.siName }</h3>
 								<p class="reserv-day">
-									${reserv.srCheckin } ~ 
-									${reserv.srCheckout } (${reserv.nights }박)
-									
+									<fmt:formatDate value="${reserv.srCheckin}" pattern="yyyy.MM.dd"/>
+									~
+									<fmt:formatDate value="${reserv.srCheckout}" pattern="yyyy.MM.dd"/>
+									(${reserv.nights }박)
 								</p>
 								<p class="reserv-option">
 									${reserv.riName } / 
@@ -105,12 +109,12 @@
 								</p>
 							</div>
 							<div class="buttom">
-								<button class="btn-detail">예약 상세 확인</button>
+								<button class="btn-detail" onclick="location.href='${pageContext.request.contextPath}/mypage/reservations/${reserv.srId}'">예약 상세 확인</button>
 								<p class="reserv-price"><fmt:formatNumber value="${reserv.srTotalprice}" type="currency" /></p>
 							</div>
 						</div>
 						<div class="reserv-image">
-							<img src="${pageContext.request.contextPath}/resources/img/stay/staycarousel1.jpg" alt="${reserv.siName }" />
+							<img src="${s3BaseUrl}${reserv.spUrl}" alt="${reserv.siName }" />
 						</div>
 					</div>
 				</c:forEach>

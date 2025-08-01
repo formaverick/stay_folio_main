@@ -33,7 +33,7 @@
 }
 
 .mypage-submenu {
-  width: 40%;
+  flex: 0 0 20%;
 }
 
 .mypage-submenu .active {
@@ -53,4 +53,8 @@
   line-height: 3;
   font-size: 0.875rem;
   display: inline-block;
+}
+
+.mypage-main {
+	flex: 0 0 80%;
 }

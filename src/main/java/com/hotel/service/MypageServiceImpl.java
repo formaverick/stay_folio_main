@@ -8,9 +8,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hotel.domain.BookmarkVO;
 import com.hotel.domain.ReservationDetailVO;
 import com.hotel.domain.ReservationListVO;
+import com.hotel.domain.StayVO;
 import com.hotel.mapper.MypageMapper;
 
 @Service
@@ -60,13 +60,7 @@ public class MypageServiceImpl implements MypageService {
 	}
 
 	@Override
-	public int cancelReservation(String id) {
-		int result = mypageMapper.cancelReservation(id);
-		return result;
-	}
-
-	@Override
-	public List<BookmarkVO> getBookMarkList(String id) {
+	public List<StayVO> getBookMarkList(String id) {
 		return mypageMapper.getBookMarkList(id);
 	}
 

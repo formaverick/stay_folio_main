@@ -16,7 +16,5 @@ public interface MypageService {
 	
 	ReservationDetailVO getReservationDetail(String id);
 	
-	int cancelReservation(String id);
-	
 	List<StayVO> getBookMarkList(String id);
 }

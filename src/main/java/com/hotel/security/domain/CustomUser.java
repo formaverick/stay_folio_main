@@ -17,6 +17,10 @@ public class CustomUser extends User {
 	private static final long serialVersionUID = 1L;
 	private MemberVO member;
 	//private AdminVO admin;
+	
+	public CustomUser() {
+	    super("anonymous", "anonymous", List.of(new SimpleGrantedAuthority("ROLE_ANONYMOUS")));
+	}
 
 	public CustomUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
 		super(username, password, authorities);

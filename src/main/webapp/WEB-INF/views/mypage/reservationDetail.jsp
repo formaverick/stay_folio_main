@@ -191,7 +191,10 @@
 									<c:when test="${reserv.srPaymentstatus eq 'b'}">결제 완료</c:when>
 									<c:when test="${reserv.srPaymentstatus eq 'c'}">결제 취소</c:when>
 								</c:choose> : 
-								<fmt:formatDate value="${reserv.srPaydate }" pattern="yyyy.MM.dd HH:mm"/>
+								<c:choose>
+									<c:when test="${reserv.srPaymentstatus eq 'c' }"><fmt:formatDate value="${reserv.srCancledate }" pattern="yyyy.MM.dd HH:mm"/></c:when>
+									<c:otherwise><fmt:formatDate value="${reserv.srPaydate }" pattern="yyyy.MM.dd HH:mm"/></c:otherwise>
+								</c:choose>
 								)
 							</td>
 						</tr>
@@ -199,7 +202,9 @@
 				</div>
 				<div class="reservation-detail-section">
 					<div class="detail-bottom-buttons">
-						<button>예약 취소</button>
+						<c:if test="${reserv.srCheckin gt now }">
+							<button onclick="location.href='${pageContext.request.contextPath}/mypage/reservations/${reserv.srId }/cancel'">예약 취소</button>
+						</c:if>
 						<button>이용 안내 및 환불 규정</button>
 					</div>
 				</div>

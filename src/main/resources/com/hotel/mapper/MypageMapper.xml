@@ -98,12 +98,6 @@
         WHERE sr.sr_id = #{id}
     </select>
     
-    <update id="cancelReservation">
-        UPDATE t_stay_reservation 
-        SET sr_status = 'b', sr_cancledate = SYSDATE, sr_paymentstatus = 'b'  
-        WHERE sr.sr_id = #{id}
-    </update>
-    
     <select id="getBookMarkList" resultType="com.hotel.domain.StayVO">
         SELECT
 			si.si_id AS siId,

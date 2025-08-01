@@ -60,12 +60,6 @@ public class MypageServiceImpl implements MypageService {
 	}
 
 	@Override
-	public int cancelReservation(String id) {
-		int result = mypageMapper.cancelReservation(id);
-		return result;
-	}
-
-	@Override
 	public List<StayVO> getBookMarkList(String id) {
 		return mypageMapper.getBookMarkList(id);
 	}

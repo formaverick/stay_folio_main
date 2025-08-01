@@ -41,13 +41,13 @@
 			</div>
 
 			<div class="mypage-main">
-				<c:if test="${empty upComingList and empty completedList }">
+				<c:if test="${empty upcomingList and empty completedList }">
 					<div class="no-reserv" style="display: none">
 						<img src="${pageContext.request.contextPath}/resources/img/img-booking-waiting.png"> <br>
 						<p>아직 예약 정보가 없습니다. 새로운 스테이를 찾아 떠나보세요.</p>
 					</div>
 				</c:if>
-				<c:forEach var="reserv" items="${upComingList }">
+				<c:forEach var="reserv" items="${upcomingList }">
 					<div class="reserv-box">
 						<div class="reserv-info">
 							<div>
@@ -70,7 +70,7 @@
 								</p>
 							</div>
 							<div class="buttom">
-								<button class="btn-detail" onclick="location.href='mypage/reservations/${reserv.srId}'">예약 상세 확인</button>
+								<button class="btn-detail" onclick="location.href='${pageContext.request.contextPath}/mypage/reservations/${reserv.srId}'">예약 상세 확인</button>
 								<p class="reserv-price"><fmt:formatNumber value="${reserv.srTotalprice}" type="currency" /></p>
 							</div>
 						</div>

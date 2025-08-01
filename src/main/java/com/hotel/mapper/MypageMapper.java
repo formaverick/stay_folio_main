@@ -15,7 +15,5 @@ public interface MypageMapper {
 	
 	public ReservationDetailVO getReservationDetail(String id);
 	
-	public int cancelReservation(String id);
-	
 	public List<StayVO> getBookMarkList(String id);
 }

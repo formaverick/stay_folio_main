@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -95,10 +98,12 @@
               <tbody>
                 <c:forEach var="member" items="${memberList}" varStatus="status">
                   <tr>
-                    <td>${status.count}</td>
+                    <td>${pageMaker.total - (pageMaker.cri.page - 1) * pageMaker.cri.perPageNum - status.index}</td>
                     <td>${member.miName}</td>
                     <td>${member.miId}</td>
-                    <td>${member.miDate}</td>
+                    <td>
+                      <fmt:formatDate value="${member.miDate}" pattern="yyyy-MM-dd" />
+                    </td>
                     <td>${member.miIsad}</td>
                     <td>${member.miEnabled}</td>
                   </tr>
@@ -108,19 +113,28 @@
           </div>
 
           <!-- 페이지네이션 -->
-          <div class="pagination">
-            <button class="page-btn" data-page="1">1</button>
-            <button class="page-btn" data-page="2">2</button>
-            <button class="page-btn" data-page="3">3</button>
-            <button class="page-btn" data-page="4">4</button>
-            <button class="page-btn" data-page="5">5</button>
-            <button class="page-btn" data-page="6">6</button>
-            <button class="page-btn" data-page="7">7</button>
-            <button class="page-btn" data-page="8">8</button>
-            <button class="page-btn" data-page="9">9</button>
-            <button class="page-btn" data-page="10">10</button>
-            <button class="page-btn next" data-page="next">></button>
-          </div>
+         <div class="pagination">
+		  <c:if test="${not empty pageMaker && pageMaker.prev}">
+		    <a href="?page=${pageMaker.startPage - 1}">&laquo;</a>
+		  </c:if>
+		
+		  <c:forEach var="i" begin="${pageMaker.startPage}" end="${pageMaker.endPage}">
+		    <c:choose>
+		      <c:when test="${i == cri.page}">
+		        <a class="active" href="?page=${i}">${i}</a>
+		      </c:when>
+		      <c:otherwise>
+		        <a href="?page=${i}">${i}</a>
+		      </c:otherwise>
+		    </c:choose>
+		  </c:forEach>
+		
+		  <c:if test="${pageMaker.next}">
+		    <a href="?page=${pageMaker.endPage + 1}">&raquo;</a>
+		  </c:if>
+		</div>
+
+
         </div>
       </main>
     </div>

@@ -17,21 +17,17 @@
         <result column="mi_enabled" property="miEnabled"/>
     </resultMap>
 
-	<select id="selectMembersWithPaging" resultMap="memberMap" parameterType="com.hotel.domain.Criteria">
-	    SELECT * 
-	    FROM 
-	       t_member_info 
-	            ORDER BY mi_date DESC
-	       
-	     
-	   
-	
+	<!-- 회원 목록 페이징 조회 -->
+	<select id="selectMembersWithPaging" resultMap="memberMap">
+	  SELECT * FROM t_member_info 
+	  ORDER BY mi_date DESC
+	  OFFSET #{pageStart} ROWS FETCH NEXT #{perPageNum} ROWS ONLY
 	</select>
-	
 
-
-    <select id="getTotalMemberCount" resultType="int">
-        SELECT COUNT(*) FROM t_member_info
-    </select>
+	<!-- 전체 회원 수 -->
+	<select id="getTotalMemberCount" resultType="int">
+	  SELECT COUNT(*) FROM t_member_info
+	</select>
+		
 
 </mapper>

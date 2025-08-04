@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.hotel.domain.Criteria;
 import com.hotel.domain.MemberVO;
-import com.hotel.service.AdminService;
 import com.hotel.mapper.AdminMapper;
 
 @Service

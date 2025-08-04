@@ -94,6 +94,7 @@ public class AdminController {
 
 	    model.addAttribute("memberList", memberList);
 	    model.addAttribute("pageMaker", new PageDTO(cri, total));
+	    model.addAttribute("cri", cri); 
 	    return "admin/member/memberList";
 	}
 

@@ -1,9 +1,12 @@
 package com.hotel.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,10 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.hotel.domain.AmenityVO;
 import com.hotel.domain.FacilityVO;
 import com.hotel.domain.PhotoVO;
+import com.hotel.domain.ReservationPriceResultDTO;
 import com.hotel.domain.RoomPhotoVO;
 import com.hotel.domain.RoomVO;
 import com.hotel.domain.StayDetailVO;
 import com.hotel.domain.StayVO;
+import com.hotel.service.ReservationService;
 import com.hotel.service.RoomService;
 import com.hotel.service.StayService;
 
@@ -65,11 +70,37 @@ public class RoomController {
 
 		return "stay/stay";
 	}
-
+	@Autowired
+	private ReservationService reservationService;
+	
 	// 객실 상세페이지
 	@GetMapping("/{siId}/{riId}")
-	public String getRoomDetail(@PathVariable("siId") int siId, @PathVariable("riId") int riId, Model model) {
+	public String getRoomDetail(@PathVariable("siId") int siId, @PathVariable("riId") int riId, @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate checkin,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate checkout,
+            @RequestParam(required = false) Integer adult,
+            @RequestParam(required = false) Integer child, Model model) {
+		
+		
+		if (checkin == null || checkout == null) {
+	        checkin = LocalDate.now();
+	        checkout = checkin.plusDays(1);
+	    }
+		
+		RoomVO roomperson = roomService.getRoomById(siId, riId);
+	    int basePerson = roomperson.getRiPerson();  // 기준 인원 (예: 1 또는 2)
 
+	    if (adult == null) adult = basePerson < 2 ? 1 : 2;
+	    if (child == null) child = 0;
+	    
+		ReservationPriceResultDTO priceResult = reservationService.calculateRoomPrice(
+	            riId, siId, checkin, checkout, adult, child);
+		model.addAttribute("roomPrice", priceResult.getSrRoomPrice()); // 기본 가격
+		model.addAttribute("addpersonFee", priceResult.getSrAddpersonFee()); // 인원추가 가격
+		model.addAttribute("discount", priceResult.getSrtotalPrice() - priceResult.getSrRoomPrice() - priceResult.getSrAddpersonFee()); // 할인율
+		model.addAttribute("totalPrice", priceResult.getSrtotalPrice()); // 총 가격
+		model.addAttribute("nights", priceResult.getNights()); // 숙박 일 수
+		model.addAttribute("discountRate", priceResult.getDiscountRate()); // 할인율 *100
+	
 		StayVO stay = stayService.getStayInfo(siId);
 		StayDetailVO stayDetail = stayService.getStayDetail(siId);
 		RoomVO room = roomService.getRoomById(siId, riId);
@@ -88,7 +119,7 @@ public class RoomController {
 				rooms.setDiscountedPrice(rooms.getRiPrice());
 			}
 		}
-
+		
 		model.addAttribute("stay", stay);
 		model.addAttribute("detail", stayDetail);
 		model.addAttribute("room", room);
@@ -97,6 +128,9 @@ public class RoomController {
 		model.addAttribute("otherRooms", otherRooms);
 		model.addAttribute("roomPhotos", roomPhotos);
 		model.addAttribute("roomMainPhotos", roomMainPhotos);
+		model.addAttribute("checkin", checkin);
+		model.addAttribute("checkout", checkout);
+
 
 		return "stay/stayDetail";
 	}

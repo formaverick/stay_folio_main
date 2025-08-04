@@ -2,9 +2,9 @@ package com.hotel.service;
 
 import java.util.List;
 
-import com.hotel.domain.BookmarkVO;
 import com.hotel.domain.ReservationDetailVO;
 import com.hotel.domain.ReservationListVO;
+import com.hotel.domain.StayVO;
 
 public interface MypageService {
 
@@ -16,7 +16,5 @@ public interface MypageService {
 	
 	ReservationDetailVO getReservationDetail(String id);
 	
-	int cancelReservation(String id);
-	
-	List<BookmarkVO> getBookMarkList(String id);
+	List<StayVO> getBookMarkList(String id);
 }

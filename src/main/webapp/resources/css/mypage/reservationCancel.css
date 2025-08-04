@@ -1,3 +1,19 @@
+.reserv-title {
+    padding-top: 0.875rem;
+    margin-bottom: 2.5rem;
+    line-height: 1;
+}
+
+.reserv-title h2 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.reserv-title a {
+  color: #666;
+  font-weight: 400;
+}
+
 .reservation-cancel-section,
 .refund-policy-section {
   background-color: #fff;

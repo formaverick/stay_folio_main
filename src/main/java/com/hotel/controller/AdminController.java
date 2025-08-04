@@ -12,9 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.hotel.domain.Criteria;
+import com.hotel.domain.MemberVO;
+import com.hotel.domain.PageDTO;
 import com.hotel.domain.RoomVO;
 import com.hotel.domain.StayDetailVO;
 import com.hotel.domain.StayVO;
+import com.hotel.service.AdminService;
 import com.hotel.service.RoomService;
 import com.hotel.service.StayService;
 
@@ -27,6 +31,9 @@ public class AdminController {
 
 	@Autowired
 	private RoomService roomService;
+	
+	@Autowired
+	private AdminService adminService;
 	
 	@GetMapping("/stay/add")
 	public String StayForm(Model model) {
@@ -78,6 +85,17 @@ public class AdminController {
 	@ResponseBody
 	public List<RoomVO> getRoomList(@RequestParam("siId") int siId) {
 		return stayService.getRoomsByStayId(siId);
+	}
+
+	@GetMapping("/member/list")
+	public String memberList(Criteria cri, Model model) {
+	    List<MemberVO> memberList = adminService.getMemberList(cri);
+	    int total = adminService.getTotalMemberCount(cri); // 총 회원 수
+
+	    model.addAttribute("memberList", memberList);
+	    model.addAttribute("pageMaker", new PageDTO(cri, total));
+	    model.addAttribute("cri", cri); 
+	    return "admin/member/memberList";
 	}
 
 }

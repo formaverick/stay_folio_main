@@ -130,7 +130,8 @@ public class RoomController {
 		model.addAttribute("roomMainPhotos", roomMainPhotos);
 		model.addAttribute("checkin", checkin);
 		model.addAttribute("checkout", checkout);
-
+		model.addAttribute("adult", adult);
+		model.addAttribute("child", child);
 
 		return "stay/stayDetail";
 	}

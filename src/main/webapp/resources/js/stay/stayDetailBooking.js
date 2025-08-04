@@ -459,24 +459,7 @@ $(document).ready(function () {
       ).hide();
     }
   });
-  //예약하기 버튼 클릭시 
-   const bookingBtn = document.querySelector(".booking-button");
-  if (bookingBtn) {
-    bookingBtn.addEventListener("click", function () {
-      const siId = this.dataset.siId;
-      const riId = this.dataset.riId;
-
-      const checkin = getQueryParam("checkin");
-      const checkout = getQueryParam("checkout");
-      const basePerson = parseInt(document.getElementById("basePerson").value) || 2;
-	  const adult = getQueryParam("adult") || (basePerson < 2 ? 1 : 2);
-	  const child = getQueryParam("child") || 0;
-
-      const query = `?checkin=${checkin}&checkout=${checkout}&adult=${adult}&child=${child}`;
-      window.location.href = `/reservation/${siId}/${riId}${query}`;
-    });
-  }
-
+  
   // 외부 클릭 시 모든 드롭다운 닫기
   $(document).on("click", function (e) {
     if (

@@ -27,6 +27,8 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/reservation/reservation.js"></script>
+<script src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+<script src="/resources/js/reservation/pay.js"></script>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
 </head>
@@ -35,16 +37,16 @@
 	<jsp:include page="../includes/header.jsp" />
 	<!-- 중복예약, 최대인원 알람 -->
 	<c:if test="${not empty duplicate}">
-    <script>
-        alert("이미 해당 날짜에 예약된 객실입니다.");
-    </script>
-</c:if>
+		<script>
+			alert("이미 해당 날짜에 예약된 객실입니다.");
+		</script>
+	</c:if>
 	<c:if test="${not empty error}">
-    <script>
-        alert("${error}");
-    </script>
-</c:if>
-	
+		<script>
+			alert("${error}");
+		</script>
+	</c:if>
+
 	<div class="main-container">
 		<div class="content-wrapper">
 			<!-- left -->
@@ -92,6 +94,7 @@
 							<div class="section-title">예약자 정보</div>
 							<c:choose>
 								<c:when test="${isLogin}">
+									<input type="hidden" id="isLogin" value="${isLogin}" />
 									<div class="info-item">${srName},
 										<span>${srEmail}</span>
 									</div>
@@ -105,12 +108,16 @@
 									<input type="hidden" name="srPhone" value="${srPhone}" />
 								</c:when>
 								<c:otherwise>
-									<div class="info-item" style="color: red; margin-bottom: 10px;">
+									<input type="text" name="srName" id="srName"
+										placeholder="예약자 이름" required />
+									<input type="email" name="srEmail" id="srEmail"
+										placeholder="이메일" required />
+									<input type="text" maxlength="13" name="srPhone" id="srPhone"
+										placeholder="전화번호" class="phone-input" required
+										pattern="\d{3}-\d{3,4}-\d{4}" />
+									<div class="info-item"
+										style="color: red; margin-top: 10px; font-size: 12px;">
 										비로그인 상태입니다. 예약자 정보를 입력해주세요.</div>
-									<input type="text" name="srName" placeholder="예약자 이름" required />
-									<input type="email" name="srEmail" placeholder="이메일" required />
-									<input type="text" maxlength="13" name="srPhone"
-										placeholder="전화번호" required />
 								</c:otherwise>
 							</c:choose>
 						</div>
@@ -125,6 +132,7 @@
 
 						<div class="price-detail-box">
 							<h3>요금 상세</h3>
+
 							<div class="price-item">
 								객실 요금
 								<div>
@@ -132,6 +140,22 @@
 									<fmt:formatNumber value="${info.srRoomPrice}" pattern="#,###" />
 								</div>
 							</div>
+							<c:if test="${not empty priceResult.dailyPrices}">
+								<div style="margin-top: 10px; font-size: 14px; color:gray; margin-bottom:10px;">
+									<c:forEach var="entry" items="${priceResult.dailyPrices}">
+										<div
+											style="display: flex; justify-content: space-between; padding: 2px 0;">
+											<span> <fmt:parseDate value="${entry.key}" var="day"
+													pattern="yyyy-MM-dd" /> <fmt:formatDate value="${day}"
+													pattern="yyyy-MM-dd" />
+											</span> <span> ₩<fmt:formatNumber value="${entry.value}"
+													pattern="#,###" />
+											</span>
+										</div>
+									</c:forEach>
+								</div>
+							</c:if>
+
 							<div class="price-item">
 								인원 추가
 								<div>
@@ -157,14 +181,14 @@
 						</div>
 
 
-						<div class="payment-method-box">
-							<!-- <div class="payment-option active" data-payment="무통장입금">무통장입금</div> -->
+						<!-- <div class="payment-method-box">
+							<div class="payment-option active" data-payment="무통장입금">무통장입금</div>
 							<div class="payment-option active" data-payment="카드결제">카드
 								결제</div>
-							<!-- <div class="payment-option" data-payment="현금">현금</div> -->
+							<div class="payment-option" data-payment="현금">현금</div>
 							<div class="payment-option" data-payment="카카오페이">카카오페이</div>
 							<div class="payment-option" data-payment="토스페이">토스페이</div>
-						</div>
+						</div> -->
 
 
 						<div class="terms-agreement-box">
@@ -187,14 +211,14 @@
 							</div>
 							<div class="terms-item sub-terms">
 								<label class="terms-checkbox"> <input type="checkbox"
-									class="sub-checkbox" /> <span class="checkmark"></span> (필수)
-									스테이 환불 규정
+									class="sub-checkbox" data-required="true" /> <span
+									class="checkmark"></span> (필수) 스테이 환불 규정
 								</label> <i class="ph ph-caret-right terms-arrow"></i>
 							</div>
 							<div class="terms-item sub-terms">
 								<label class="terms-checkbox"> <input type="checkbox"
-									class="sub-checkbox" /> <span class="checkmark"></span> (필수)
-									스테이 이용규칙
+									class="sub-checkbox" data-required="true" /> <span
+									class="checkmark"></span> (필수) 스테이 이용규칙
 								</label> <i class="ph ph-caret-right terms-arrow"></i>
 							</div>
 						</div>
@@ -233,10 +257,11 @@
 						<p>침대${info.riBedcnt} | 침구${info.riBedroom} |
 							욕실${info.riBathroom}</p>
 					</div>
-					<button type="submit" class="payment-button">
+					<button type="button" class="payment-button">
 						<p>
-							<span class="payment-price">₩<fmt:formatNumber
-									value="${info.srtotalPrice}" pattern="#,###" /></span> 결제하기
+							<span class="payment-price" data-amount="${info.srtotalPrice}">
+								₩<fmt:formatNumber value="${info.srtotalPrice}" pattern="#,###" />
+							</span> 결제하기
 						</p>
 					</button>
 					</form>
@@ -249,4 +274,24 @@
 	<jsp:include page="../includes/footer.jsp" />
 
 </body>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const phoneInputs = document.querySelectorAll(".phone-input");
+
+    phoneInputs.forEach(input => {
+      input.addEventListener("input", function (e) {
+        let value = e.target.value.replace(/\D/g, ''); // 숫자만 추출
+        if (value.length < 4) {
+          e.target.value = value;
+        } else if (value.length < 8) {
+          e.target.value = value.replace(/(\d{3})(\d{1,4})/, '$1-$2');
+        } else {
+          e.target.value = value.replace(/(\d{3})(\d{4})(\d{0,4})/, '$1-$2-$3');
+        }
+      });
+    });
+  });
+</script>
+
 </html>

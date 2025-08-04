@@ -39,7 +39,6 @@ public class stayUpdateController {
 		StayDetailVO stayDetail = stayService.getStayDetail(siId);
 		List<FacilityVO> allFacilities = stayService.getAllFacilities();
 		List<FacilityVO> checkedFacilities = stayService.getFacilitiesByStayId(siId); // 선택된 것
-		Map<String, List<PhotoVO>> stayPhotos = stayService.getStayPhotosByCategory(siId);
 
 		Map<Integer, PhotoVO> photoMap = stayService.getAllStayPhotos(siId).stream()
 				.collect(Collectors.toMap(PhotoVO::getSpIdx, photo -> photo, (oldVal, newVal) -> oldVal));
@@ -50,9 +49,9 @@ public class stayUpdateController {
 
 		model.addAttribute("stay", stay);
 		model.addAttribute("detail", stayDetail);
+		model.addAttribute("locationList", stayService.getAllLocations());
 		model.addAttribute("allFacilities", allFacilities);
 		model.addAttribute("selectedFacilityIds", selectedFacilityIds);
-		model.addAttribute("stayPhotos", stayPhotos);
 		model.addAttribute("photoMap", photoMap);
 		return "admin/room/stayUpdateForm";
 	}

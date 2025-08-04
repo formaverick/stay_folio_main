@@ -22,31 +22,31 @@ import java.util.Map;
 public class RoomServiceImpl implements RoomService {
 	@Autowired
 	private RoomMapper roomMapper;
-	
+
 	// 객실 상세페이지
 	@Override
 	public RoomVO getRoomById(int siId, int riId) {
-	    return roomMapper.getRoomById(siId, riId);
+		return roomMapper.getRoomById(siId, riId);
 	}
-	
+
 	// 객실 상세페이지 - 편의시설
 	@Override
 	public List<FacilityVO> getFacilitiesByRoomId(int siId, int riId) {
 		return roomMapper.getFacilitiesByRoomId(siId, riId);
 	}
-	
+
 	// 객실 상세페이지 - 어메니티
 	@Override
 	public List<AmenityVO> getAmenitiesByRoomId(int siId, int riId) {
-	    return roomMapper.getAmenitiesByRoomId(siId, riId);
+		return roomMapper.getAmenitiesByRoomId(siId, riId);
 	}
 
 	// 객실 상세페이지 - 다른 객실
 	@Override
 	public List<RoomVO> getOtherRoomsByStayId(int siId, int riId) {
-	    return roomMapper.getOtherRoomsByStayId(siId, riId);
+		return roomMapper.getOtherRoomsByStayId(siId, riId);
 	}
-	
+
 	@Override
 	public Map<String, List<RoomPhotoVO>> getRoomPhotosByCategory(int siId, int riId) {
 		List<RoomPhotoVO> photos = roomMapper.getRoomPhotos(siId, riId);
@@ -75,33 +75,37 @@ public class RoomServiceImpl implements RoomService {
 
 		return photoMap;
 	}
-	
+
 	@Override
 	public Map<Integer, RoomPhotoVO> getMainPhotoForRooms(int siId) {
-	    List<RoomPhotoVO> photos = roomMapper.getMainPhotosForAllRooms(siId);
-	    Map<Integer, RoomPhotoVO> map = new HashMap<>();
+		List<RoomPhotoVO> photos = roomMapper.getMainPhotosForAllRooms(siId);
+		Map<Integer, RoomPhotoVO> map = new HashMap<>();
 
-	    for (RoomPhotoVO photo : photos) {
-	        map.put(photo.getRiId(), photo);  // 각 객실 번호의 대표 이미지 1장만
-	    }
+		for (RoomPhotoVO photo : photos) {
+			map.put(photo.getRiId(), photo); // 각 객실 번호의 대표 이미지 1장만
+		}
 
-	    return map;
+		return map;
 	}
 
+	@Override
+	public List<RoomPhotoVO> getAllRoomPhotos(int siId, int riId) {
+		return roomMapper.getRoomPhotos(siId, riId);
+	}
 	
-	// admin - 객실 등록
 	@Override
 	public List<AmenityVO> getAllAmenities() {
 		return roomMapper.getAllAmenities();
 	}
-	
+
+	// admin - 객실 등록
 	@Override
 	public int insertRoom(RoomVO vo, List<Integer> facilities, List<Integer> amenities) {
 		roomMapper.insertRoom(vo);
-		
+
 		int riId = vo.getRiId();
 		int siId = vo.getSiId();
-		
+
 		// 객실 편의시설 insert
 		if (facilities != null) {
 			for (Integer fiId : facilities) {
@@ -115,7 +119,50 @@ public class RoomServiceImpl implements RoomService {
 				roomMapper.insertRoomAmenity(siId, riId, aiIdx);
 			}
 		}
-		
+
 		return riId;
+	}
+
+	// 객실 수정
+	@Override
+	public void updateRoom(RoomVO room) {
+		roomMapper.updateRoom(room);
+	}
+
+	@Override
+	public void updateRoomFacilities(int siId, int riId, List<Integer> facilityIds) {
+		// 선택 전부 해지했을 경우
+		if (facilityIds == null || facilityIds.isEmpty()) {
+			System.out.println("❗ 시설 선택 없음");
+			roomMapper.deleteFacilitiesByRoomId(siId, riId); // 기존 것만 삭제
+			return;
+		}
+
+		// 먼저 기존 데이터 삭제
+		roomMapper.deleteFacilitiesByRoomId(siId, riId);
+
+		// 다시 insert
+		for (Integer fiId : facilityIds) {
+			roomMapper.insertRoomFacility(siId, riId, fiId);
+		}
+
+	}
+
+	@Override
+	public void updateRoomAmenities(int siId, int riId, List<Integer> amenityIds) {
+		// 선택 전부 해지했을 경우
+		if (amenityIds == null || amenityIds.isEmpty()) {
+			System.out.println("❗ 시설 선택 없음");
+			roomMapper.deleteAmenitiesByRoomId(siId, riId); // 기존 것만 삭제
+			return;
+		}
+
+		// 먼저 기존 데이터 삭제
+		roomMapper.deleteAmenitiesByRoomId(siId, riId);
+
+		// 다시 insert
+		for (Integer aiIdx : amenityIds) {
+			roomMapper.insertRoomAmenity(siId, riId, aiIdx);
+		}
 	}
 }

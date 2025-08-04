@@ -6,7 +6,7 @@ import lombok.Data;
 public class RoomVO {
 	// t_room_info
     private Integer riId;          // 객실 번호
-    private String siId;           // 숙소 번호 (FK)
+    private Integer siId;           // 숙소 번호 (FK)
     private String riType;         // 객실 형태
     private String riName;         // 객실 이름
     private String riDesc;         // 객실 설명

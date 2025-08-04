@@ -151,12 +151,19 @@ public class StayServiceImpl implements StayService {
 
 	@Override
 	public void updateStayFacilities(int siId, List<Integer> facilityIds) {
+		// null이면 skip, 선택 전부 해지했을 경우
+		if (facilityIds == null || facilityIds.isEmpty()) {
+			System.out.println("❗ 시설 선택 없음");
+			stayMapper.deleteFacilitiesByStayId(siId); // 기존 것만 삭제
+			return;
+		}
+
 		// 먼저 기존 데이터 삭제
 		stayMapper.deleteFacilitiesByStayId(siId);
 
 		// 다시 insert
 		for (Integer fiId : facilityIds) {
-			stayMapper.insertFacility(siId, fiId);
+			stayMapper.insertFacilityRel(siId, fiId);
 		}
 	}
 

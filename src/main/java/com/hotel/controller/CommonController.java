@@ -1,7 +1,9 @@
 package com.hotel.controller;
 
+import java.security.Principal;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hotel.domain.MemberVO;
+import com.hotel.service.BookmarkService;
 import com.hotel.service.CommonService;
 
 import lombok.extern.log4j.Log4j;
@@ -27,6 +30,9 @@ public class CommonController {
 	
 	@Autowired
 	private CommonService commonService;
+	
+	@Autowired
+	private BookmarkService bookmarkService;
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
@@ -44,9 +50,16 @@ public class CommonController {
 	
 	@GetMapping(value ="/recommend/{rc_id}", produces = "application/json; charset=UTF-8")
 	@ResponseBody
-	public Map<String, Object> getRecommendStays(@PathVariable("rc_id") int rc_id) {
+	public Map<String, Object> getRecommendStays(@PathVariable("rc_id") int rc_id, Principal principal) {
 		log.info("rcid : " + rc_id);
-		Map<String, Object> map = commonService.getRecommend(rc_id);
+		
+		// 로그인 ID
+	    String miId = (principal != null) ? principal.getName() : null;
+	    
+		Map<String, Object> map = commonService.getRecommend(rc_id, miId);
+		
+		log.info(map);
+		
 		map.put("success", true);
 		return map;
 	}

@@ -11,7 +11,12 @@
 	
 	<delete id="deleteBookmark">
 		delete from t_stay_bookmarks 
-		where mi_id = ${miId} and si_id = ${siId} 
+		where mi_id = #{miId} and si_id = #{siId} 
 	</delete>
+	
+	<select id="getBookmarkList">
+		select si_id from t_stay_bookmarks 
+		where mi_id = #{miId}
+	</select>
 
 </mapper>

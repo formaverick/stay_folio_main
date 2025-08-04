@@ -27,4 +27,6 @@ public class StayVO {
     private Double discount;         // 할인율 (%)
 
     private String spUrl;			 // 숙소 card 용 1장 가져오기
+    
+    private boolean Bookmarked;	// 북마크 정보
 }

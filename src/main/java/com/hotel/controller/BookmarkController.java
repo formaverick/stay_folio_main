@@ -1,6 +1,8 @@
 package com.hotel.controller;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,22 +24,26 @@ public class BookmarkController {
 	@Autowired
 	private BookmarkService bookmarkService;
 
-	@PostMapping("/add")
-	public ResponseEntity<?> addBookmark(@RequestParam int siId, Principal principal) {
+	@PostMapping(value = "/add", produces = "application/json")
+	public ResponseEntity<Map<String, Object>> addBookmark(@RequestParam int siId, Principal principal) {
 
 		String miId = principal.getName();
 		int result = bookmarkService.addBookmark(miId, siId);
 
-		return ResponseEntity.ok(result);
+		Map<String, Object> res = new HashMap<>();
+	    res.put("success", result > 0);
+		return ResponseEntity.ok(res);
 	}
 	
-	@DeleteMapping("/remove")
-	public ResponseEntity<?> removeBookmark(@RequestParam int siId, Principal principal) {
+	@DeleteMapping(value = "/remove", produces = "application/json")
+	public ResponseEntity<Map<String, Object>> removeBookmark(@RequestParam int siId, Principal principal) {
 
 		String miId = principal.getName();
 		int result = bookmarkService.deleteBookmark(miId, siId);
 
-		return ResponseEntity.ok(result);
+		Map<String, Object> res = new HashMap<>();
+	    res.put("success", result > 0);
+		return ResponseEntity.ok(res);
 	}
 
 }

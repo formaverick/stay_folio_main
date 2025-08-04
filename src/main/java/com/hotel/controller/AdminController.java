@@ -54,7 +54,7 @@ public class AdminController {
 
 		model.addAttribute("newSiId", siId);
 
-		return "/admin/room/stayRegister"; // 같은 페이지로 돌아가서 이미지 등록 진
+		return "/admin/room/stayRegister"; // 같은 페이지로 돌아가서 이미지 등록 진행
 	}
 
 	@GetMapping("/rooms") // 숙소 등록에서 객실 등록 페이지 이동

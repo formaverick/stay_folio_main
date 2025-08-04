@@ -64,10 +64,6 @@ function loadRecommendations(rc_id) {
             </div>
           `;
 
-          item.addEventListener("click", () => {
-            window.location.href = `/stay/${stay.siId}`;
-          });
-
           grid.appendChild(item);
         });
 
@@ -75,7 +71,7 @@ function loadRecommendations(rc_id) {
       }
 
       initStayCarouselEvents(rc_id);
-      initWishlistEvents();
+      wishEvent();
     });
 }
 

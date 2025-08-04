@@ -247,10 +247,10 @@
 						</c:if>
 
 						<!-- 숙소 카드 -->
-						<div class="search-stay-item">
-							<div class="search-stay-image" onclick="location.href='/stay/${stay.siId}'">
+						<div class="search-stay-item stay-item" data-stay-id="${stay.siId }">
+							<div class="search-stay-image">
 								<img src="${s3BaseUrl}${stay.spUrl}" alt="${stay.siName}" />
-								<button class="search-stay-wishlist" data-wishlist="false">
+								<button class="search-stay-wishlist stay-wishlist" data-wishlist="${stay.bookmarked }">
 									<i class="ph ph-heart"></i>
 								</button>
 								<c:if test="${stay.siDiscount > 0}">
@@ -334,7 +334,28 @@
 	</section>
 
 	<!-- 검색 결과 섹션 끝 -->
+	<!-- 모달 시작 -->
+    <div class="modal-overlay" id="commonModal">
+      <div class="modal-content">
+        <p class="modal-message">로그인 후 사용 가능합니다.<br/>로그인 하시겠습니까?</p>
+        <div class="modal-buttons">
+          <button class="btn btn-cancel" onclick="closeModal()">취소</button>
+          <button class="btn btn-confirm" onclick="location.href='${pageContext.request.contextPath}/login'">확인</button>
+        </div>
+      </div>
+    </div>
+    <!-- 모달 끝 -->
+    <script>
+    	function openModal() {
+    		document.getElementById("commonModal").style.display = "flex";
+    	}
 
+    	function closeModal() {
+    		document.getElementById("commonModal").style.display = "none";
+    	}
+    </script>
+
+    <script src="${pageContext.request.contextPath}/resources/js/bookmark/bookmark.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/search/searchFilter.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/search/search.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/search/searchCategory.js"></script>

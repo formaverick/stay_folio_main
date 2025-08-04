@@ -1,5 +1,6 @@
 package com.hotel.controller;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -22,10 +23,14 @@ import com.hotel.domain.RoomPhotoVO;
 import com.hotel.domain.RoomVO;
 import com.hotel.domain.StayDetailVO;
 import com.hotel.domain.StayVO;
+import com.hotel.service.BookmarkService;
 import com.hotel.service.ReservationService;
 import com.hotel.service.RoomService;
 import com.hotel.service.StayService;
 
+import lombok.extern.log4j.Log4j;
+
+@Log4j
 @Controller
 @RequestMapping("/stay")
 public class RoomController {
@@ -35,6 +40,9 @@ public class RoomController {
 
 	@Autowired
 	private RoomService roomService;
+	
+	@Autowired
+	private BookmarkService bookmarkService;
 
 	// 숙소 상세페이지
 	@GetMapping("/{siId}")
@@ -137,10 +145,17 @@ public class RoomController {
 
 	// 숙소 검색 - 지역별
 	@GetMapping("/search")
-	public String searchPage(@RequestParam(name = "lcId", required = false, defaultValue = "0") int lcId, Model model) {
+	public String searchPage(@RequestParam(name = "lcId", required = false, defaultValue = "0") int lcId, Model model, Principal principal) {
 
 		List<StayVO> stayList = (lcId == 0) ? stayService.getRandomStayList() : stayService.getStayListByLcId(lcId);
+		
+		if (principal != null) {
+			List<Long> bookmarkList = bookmarkService.getBookmarkList(principal.getName());
+			stayList.forEach(stay -> stay.setBookmarked(bookmarkList.contains(stay.getSiId())));
+		}
 
+		log.info(stayList);
+		
 		model.addAttribute("stayList", stayList);
 
 		return "search/search";

@@ -28,5 +28,5 @@ public class StayVO {
 
     private String spUrl;			 // 숙소 card 용 1장 가져오기
     
-    private boolean Bookmarked;	// 북마크 정보
+    private boolean bookmarked;	// 북마크 정보
 }

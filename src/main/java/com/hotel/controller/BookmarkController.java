@@ -26,7 +26,11 @@ public class BookmarkController {
 
 	@PostMapping(value = "/add", produces = "application/json")
 	public ResponseEntity<Map<String, Object>> addBookmark(@RequestParam int siId, Principal principal) {
-
+		
+		if (principal == null) {
+			return ResponseEntity.badRequest().build();
+		}
+		
 		String miId = principal.getName();
 		int result = bookmarkService.addBookmark(miId, siId);
 
@@ -38,6 +42,10 @@ public class BookmarkController {
 	@DeleteMapping(value = "/remove", produces = "application/json")
 	public ResponseEntity<Map<String, Object>> removeBookmark(@RequestParam int siId, Principal principal) {
 
+		if (principal == null) {
+			return ResponseEntity.badRequest().build();
+		}
+		
 		String miId = principal.getName();
 		int result = bookmarkService.deleteBookmark(miId, siId);
 

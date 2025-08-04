@@ -31,9 +31,6 @@ public class CommonController {
 	@Autowired
 	private CommonService commonService;
 	
-	@Autowired
-	private BookmarkService bookmarkService;
-	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		log.info("Welcome home! The client locale is " + locale);

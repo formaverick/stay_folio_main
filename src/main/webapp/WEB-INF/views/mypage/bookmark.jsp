@@ -20,6 +20,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/bookmark/bookmark.js" ></script>
+<script>
+	$(document).ready(function() {
+		wishEvent();
+	});
+</script>
 </head>
 <body>
 	<!-- Header Include -->
@@ -47,7 +53,7 @@
 						<div class="stay-item" data-stay-id="${stay.siId }">
 							<div class="search-stay-image">
 								<img src="${s3BaseUrl}${stay.spUrl}" alt="${stay.siName }" />
-								<button class="search-stay-wishlist" data-wishlist="true">
+								<button class="search-stay-wishlist stay-wishlist" data-wishlist="true" data-si-id="${stay.siId}">
 									<i class="ph ph-heart"></i>
 								</button>
 							</div>
@@ -85,5 +91,6 @@
 	</main>
 	
 	<jsp:include page="../includes/footer.jsp" />
+	
 </body>
 </html>

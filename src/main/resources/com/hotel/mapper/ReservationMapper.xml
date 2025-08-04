@@ -30,8 +30,7 @@
 		<result property="spUrl" column="sp_url" />
 	</resultMap>
 
-	<select id="getReservationPageInfo"
-		resultMap="reservationPageMap">
+	<select id="getReservationPageInfo" resultMap="reservationPageMap">
 		SELECT
 		r.ri_id,
 		r.ri_type,
@@ -79,9 +78,6 @@
 		AND s.si_id = #{siId}
 	</select>
 
-
-
-
 	<insert id="insertReservation"
 		parameterType="com.hotel.domain.ReservationCreateDTO">
 		<selectKey resultType="string" keyProperty="srId"
@@ -89,6 +85,7 @@
 			SELECT TO_CHAR(SYSDATE, 'YYYYMMDD') || '-' ||
 			LPAD(seq_booking_no.NEXTVAL,
 			6, '0') AS sr_id FROM dual
+
 		</selectKey>
 
 
@@ -184,6 +181,24 @@
   ]]>
 	</select>
 
+	<select id="selectReservationForCancel" resultType="com.hotel.domain.ReservationCancelCheckVO">
+		SELECT 
+			sr.sr_id AS srId,
+			sr.mi_id AS miId,
+			sr.sr_email AS srEmail,
+			sr.sr_checkin AS srCheckin,
+			sr.sr_status AS srStatus,
+			si.si_name AS siName
+		FROM t_stay_reservation sr
+		JOIN t_stay_info si ON sr.si_id = si.si_id
+		WHERE sr.sr_id = #{srId, jdbcType=VARCHAR}
+	</select>
+    
+    <update id="cancelReservation">
+        UPDATE t_stay_reservation 
+        SET sr_status = 'c', sr_cancledate = SYSDATE, sr_paymentstatus = 'c'  
+        WHERE sr_id = #{id}
+    </update>
 
 
 </mapper>

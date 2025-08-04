@@ -94,12 +94,12 @@ public class RoomController {
 	    
 		ReservationPriceResultDTO priceResult = reservationService.calculateRoomPrice(
 	            riId, siId, checkin, checkout, adult, child);
-		model.addAttribute("roomPrice", priceResult.getSrRoomPrice());
-		model.addAttribute("addpersonFee", priceResult.getSrAddpersonFee());
-		model.addAttribute("discount", priceResult.getSrtotalPrice() - priceResult.getSrRoomPrice() - priceResult.getSrAddpersonFee());
-		model.addAttribute("totalPrice", priceResult.getSrtotalPrice());
-		model.addAttribute("nights", priceResult.getNights());
-		model.addAttribute("discountRate", priceResult.getDiscountRate());
+		model.addAttribute("roomPrice", priceResult.getSrRoomPrice()); // 기본 가격
+		model.addAttribute("addpersonFee", priceResult.getSrAddpersonFee()); // 인원추가 가격
+		model.addAttribute("discount", priceResult.getSrtotalPrice() - priceResult.getSrRoomPrice() - priceResult.getSrAddpersonFee()); // 할인율
+		model.addAttribute("totalPrice", priceResult.getSrtotalPrice()); // 총 가격
+		model.addAttribute("nights", priceResult.getNights()); // 숙박 일 수
+		model.addAttribute("discountRate", priceResult.getDiscountRate()); // 할인율 *100
 	
 		StayVO stay = stayService.getStayInfo(siId);
 		StayDetailVO stayDetail = stayService.getStayDetail(siId);

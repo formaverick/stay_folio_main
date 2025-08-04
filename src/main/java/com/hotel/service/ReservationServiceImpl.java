@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import com.hotel.domain.ReservationCancelCheckVO;
 import com.hotel.domain.ReservationCreateDTO;
 import com.hotel.domain.ReservationDTO;
 import com.hotel.domain.ReservationDetail;
@@ -248,7 +249,22 @@ public class ReservationServiceImpl implements ReservationService {
 
 		throw new IllegalArgumentException("요금이 정의되지 않은 달입니다: " + month);
 	}
-	
+
+	// 예약 취소 정보
+	@Override
+	public ReservationCancelCheckVO getReservationById(String id) {
+		ReservationCancelCheckVO vo = mapper.selectReservationForCancel(id);
+		log.info(vo);
+		return vo;
+	}
+
+	// 예약 취소
+	@Override
+	public int cancelReservation(String id) {
+		int result = mapper.cancelReservation(id);
+		return result;
+	}
+
 }
 
 

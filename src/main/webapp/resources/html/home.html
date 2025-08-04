@@ -168,7 +168,11 @@
                 alt="서울 명동 비즈니스 호텔"
               />
               <div class="stay-promotion">프로모션</div>
-              <button class="stay-wishlist" data-wishlist="false">
+              <button
+                class="stay-wishlist"
+                data-wishlist="false"
+                onclick="openModal()"
+              >
                 <i class="ph ph-heart wishlist-empty"></i>
                 <i
                   class="ph ph-heart-fill wishlist-filled"
@@ -195,7 +199,11 @@
           <div class="stay-item" data-stay-id="2">
             <div class="stay-image">
               <img src="../../resources/img/card1.png" alt="강남 럭셔리 호텔" />
-              <button class="stay-wishlist" data-wishlist="false">
+              <button
+                class="stay-wishlist"
+                data-wishlist="false"
+                onclick="openModal()"
+              >
                 <i class="ph ph-heart"></i>
               </button>
             </div>
@@ -217,7 +225,11 @@
             <div class="stay-image">
               <img src="../../resources/img/card1.png" alt="홍대 부티크 호텔" />
               <div class="stay-promotion">프로모션</div>
-              <button class="stay-wishlist" data-wishlist="false">
+              <button
+                class="stay-wishlist"
+                data-wishlist="false"
+                onclick="openModal()"
+              >
                 <i class="ph ph-heart"></i>
               </button>
             </div>
@@ -247,7 +259,11 @@
                 alt="이태원 부티크 호텔"
               />
               <div class="stay-promotion">프로모션</div>
-              <button class="stay-wishlist" data-wishlist="false">
+              <button
+                class="stay-wishlist"
+                data-wishlist="false"
+                onclick="openModal()"
+              >
                 <i class="ph ph-heart"></i>
               </button>
             </div>
@@ -270,7 +286,11 @@
           <div class="stay-item" data-stay-id="5">
             <div class="stay-image">
               <img src="../../resources/img/card1.png" alt="잠실 패밀리 호텔" />
-              <button class="stay-wishlist" data-wishlist="false">
+              <button
+                class="stay-wishlist"
+                data-wishlist="false"
+                onclick="openModal()"
+              >
                 <i class="ph ph-heart"></i>
               </button>
             </div>
@@ -295,7 +315,11 @@
                 alt="여의도 비즈니스 호텔"
               />
               <div class="stay-promotion">프로모션</div>
-              <button class="stay-wishlist" data-wishlist="false">
+              <button
+                class="stay-wishlist"
+                data-wishlist="false"
+                onclick="openModal()"
+              >
                 <i class="ph ph-heart"></i>
               </button>
             </div>
@@ -322,7 +346,11 @@
             <div class="stay-image">
               <img src="../../resources/img/card1.png" alt="건대 유스 호스텔" />
               <div class="stay-promotion">프로모션</div>
-              <button class="stay-wishlist" data-wishlist="false">
+              <button
+                class="stay-wishlist"
+                data-wishlist="false"
+                onclick="openModal()"
+              >
                 <i class="ph ph-heart"></i>
               </button>
             </div>
@@ -348,7 +376,11 @@
                 src="../../resources/img/card1.png"
                 alt="신촌 게스트하우스"
               />
-              <button class="stay-wishlist" data-wishlist="false">
+              <button
+                class="stay-wishlist"
+                data-wishlist="false"
+                onclick="openModal()"
+              >
                 <i class="ph ph-heart"></i>
               </button>
             </div>
@@ -373,7 +405,11 @@
                 alt="성수동 부티크 호텔"
               />
               <div class="stay-promotion">프로모션</div>
-              <button class="stay-wishlist" data-wishlist="false">
+              <button
+                class="stay-wishlist"
+                data-wishlist="false"
+                onclick="openModal()"
+              >
                 <i class="ph ph-heart"></i>
               </button>
             </div>
@@ -401,7 +437,17 @@
   </div>
 </section>
 <!-- 숙소 카드 캐러셀 섹션 끝 -->
-
+<!-- 모달 시작 -->
+<div class="modal-overlay" id="commonModal">
+  <div class="modal-content">
+    <p class="modal-message">로그인 하시겠습니까?</p>
+    <div class="modal-buttons">
+      <button class="btn btn-cancel" onclick="closeModal()">취소</button>
+      <button class="btn btn-confirm">확인</button>
+    </div>
+  </div>
+</div>
+<!-- 모달 끝 -->
 <!-- 푸터 시작 -->
 <link rel="stylesheet" href="../../resources/css/common.css" />
 <link rel="stylesheet" href="../../resources/css/footer.css" />
@@ -456,3 +502,13 @@
   </div>
 </footer>
 <!-- 푸터 끝 -->
+
+<script>
+  function openModal() {
+    document.getElementById("commonModal").style.display = "flex";
+  }
+
+  function closeModal() {
+    document.getElementById("commonModal").style.display = "none";
+  }
+</script>

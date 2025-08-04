@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import com.hotel.domain.ReservationCancelCheckVO;
 import com.hotel.domain.ReservationCreateDTO;
 import com.hotel.domain.ReservationDetail;
 import com.hotel.domain.ReservationPageVO;
@@ -20,6 +21,9 @@ public interface ReservationMapper {
             @Param("checkout") Date checkout);
 	ReservationDetail selectReservationById(String srId);//예약 상세 조회
 	
+	// 예약 취소
+	ReservationCancelCheckVO selectReservationForCancel(String srId);
+	public int cancelReservation(String id);
 	
 
 }

@@ -3,12 +3,24 @@ package com.hotel.service;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import com.hotel.domain.ReservationCreateDTO;
 import com.hotel.domain.ReservationDTO;
@@ -32,6 +44,8 @@ public class ReservationServiceImpl implements ReservationService {
 
 	@Override
 	public ReservationPageVO getReservationPageInfo(int riId, int siId, String miId) {
+		log.info("getReservationPageInfo(기본) 호출됨");
+		log.info("riId: " + riId + ", siId: " + siId + ", miId: " + miId);
 		return mapper.getReservationPageInfo(riId, siId, miId);
 	}
 
@@ -64,6 +78,7 @@ public class ReservationServiceImpl implements ReservationService {
 	// 중복예약 방지
 	@Override
 	public boolean isDuplicateReservation(int siId, int riId, LocalDate checkin, LocalDate checkout) {
+		log.info("isDuplicateReservation 호출됨");
 		Date checkinDate = Date.valueOf(checkin);
 		Date checkoutDate = Date.valueOf(checkout);
 
@@ -81,6 +96,9 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public ReservationPageVO getReservationPageInfo(int riId, int siId, String miId, LocalDate checkin,
 			LocalDate checkout, int adult, int child) {
+		log.info("getReservationPageInfo(확장) 호출됨");
+		log.info("riId: " + riId + ", siId: " + siId + ", miId: " + miId);
+		log.info("checkin: " + checkin + ", checkout: " + checkout + ", adult: " + adult + ", child: " + child);
 		ReservationPageVO pageInfo = mapper.getReservationPageInfo(riId, siId, miId);
 		ReservationDTO priceInfo = priceMapper.getReservationPriceInfo(riId, siId);
 
@@ -113,6 +131,7 @@ public class ReservationServiceImpl implements ReservationService {
 			pageInfo.setSrAddpersonFee(dto.getSrAddpersonFee());
 			pageInfo.setSrDiscount(dto.getSrDiscount());
 			pageInfo.setSrtotalPrice(dto.getSrTotalprice());
+			log.info("예약 페이지 정보 설정 완료");
 		}
 
 		return pageInfo;
@@ -120,6 +139,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 	// 이메일처리
 	private void processEmail(ReservationCreateDTO dto) {
+		log.info("processEmail 호출됨");
 		if (dto.getMiId() != null && !dto.getMiId().isEmpty()) {
 			dto.setSrEmail(dto.getMiId());
 		} else {
@@ -127,27 +147,25 @@ public class ReservationServiceImpl implements ReservationService {
 				throw new IllegalArgumentException("비회원 예약 시 이메일은 필수입니다.");
 			}
 		}
+		log.info("이메일 처리 완료: " + dto.getSrEmail());
 	}
 
 	// 요금계산
 	private void calculateReservationPrice(ReservationCreateDTO dto, ReservationDTO priceInfo) {
 		ReservationPriceResultDTO result = calculatePrice(dto.getSrCheckin(), dto.getSrCheckout(), dto, priceInfo);
-
-		int totalBeforeDiscount = result.getSrtotalPrice() + result.getSrAddpersonFee();
-		int discount = calculateDiscount(totalBeforeDiscount, priceInfo.getSiDiscount());
-		int finalTotal = totalBeforeDiscount - discount;
-
-		dto.setSrRoomprice(result.getSrtotalPrice());
-		dto.setSrAddpersonFee(result.getSrAddpersonFee());
-		dto.setSrDiscount(discount);
-		dto.setSrTotalprice(finalTotal);
+		log.info("calculateReservationPrice(dto, priceInfo) 호출됨");
+		dto.setSrRoomprice(result.getSrRoomPrice());          // 할인 전 객실 총액
+		dto.setSrAddpersonFee(result.getSrAddpersonFee());    // 추가요금
+		dto.setSrDiscount(result.getSrRoomPrice() - result.getSrtotalPrice() + result.getSrAddpersonFee()); // 할인금액 계산 
+		dto.setSrTotalprice(result.getSrtotalPrice());        // 최종금액
 		dto.setNights(result.getNights());
+
 	}
 
-	// 요금계산 상세
+	// 요금계산 상세  DB 조회는 안 하고, 계산만 담당
 	private ReservationPriceResultDTO calculatePrice(LocalDate checkin, LocalDate checkout, ReservationCreateDTO dto,
 			ReservationDTO priceInfo) {
-
+		
 		Map<String, Integer> dailyPrices = new LinkedHashMap<>();
 		int roomPriceTotal = 0;
 		LocalDate current = checkin;
@@ -156,6 +174,7 @@ public class ReservationServiceImpl implements ReservationService {
 		int totalPerson = dto.getSrAdult() + dto.getSrChild();
 		int extraPerson = Math.max(0, totalPerson - basePerson);
 		int extraFee = extraPerson * priceInfo.getSiExtra();
+		log.warn("추가 인원 수: " + extraPerson + ", 인당 요금: " + priceInfo.getSiExtra() + ", 추가 요금: " + extraFee);
 
 		while (!current.isEqual(checkout)) {
 			double rate = getSeasonRate(current, priceInfo);
@@ -182,7 +201,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 		return result;
 	}
-
+	//room price
 	public ReservationPriceResultDTO calculateRoomPrice(int riId, int siId, LocalDate checkin, LocalDate checkout,
 			int adult, int child) {
 
@@ -199,11 +218,8 @@ public class ReservationServiceImpl implements ReservationService {
 		return calculatePrice(checkin, checkout, dto, priceInfo);
 	}
 
-	// 할인 금액 계산
-	private int calculateDiscount(int baseAmount, double discountRate) {
-		return (int) (baseAmount * discountRate);
-	}
-
+	
+	//dto만 있어도 호출 가능
 	private void calculateReservationPrice(ReservationCreateDTO dto) {
 		ReservationDTO priceInfo = priceMapper.getReservationPriceInfo(dto.getRiId(), dto.getSiId());
 		calculateReservationPrice(dto, priceInfo);
@@ -232,5 +248,7 @@ public class ReservationServiceImpl implements ReservationService {
 
 		throw new IllegalArgumentException("요금이 정의되지 않은 달입니다: " + month);
 	}
-
+	
 }
+
+

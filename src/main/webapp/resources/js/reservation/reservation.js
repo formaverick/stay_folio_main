@@ -1,45 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const paymentOptions = document.querySelectorAll(".payment-option");
-  const srPaymentInput = document.getElementById("srPayment"); // 결제 방법
-  const srStatusInput = document.getElementById("srStatus"); // 예약 상태
-  const srPaymentstatusInput = document.getElementById("srPaymentstatus"); // 결제 상태
-
-  
-  const activePayment = document.querySelector(".payment-option.active");
-  if (activePayment) {
-    const selectedPayment = activePayment.getAttribute("data-payment");
-    srPaymentInput.value = selectedPayment;
-
-    if (selectedPayment === "무통장입금") {				//무통입 사용안함
-      srStatusInput.value = "d";         // 입금대기
-      srPaymentstatusInput.value = "a";  // 결제대기
-    } else {
-      srStatusInput.value = "a";         // 예약완료
-      srPaymentstatusInput.value = "b";  // 결제완료
-    }
-  }
-
-  //결제 수단 클릭 시 변경 처리
-  paymentOptions.forEach((option) => {
-    option.addEventListener("click", function () {
-      paymentOptions.forEach((opt) => opt.classList.remove("active"));	// 무통입 사용안함
-      this.classList.add("active");
-
-      const selectedPayment = this.getAttribute("data-payment");
-      console.log("Selected payment method:", selectedPayment);
-
-      srPaymentInput.value = selectedPayment;
-      if (selectedPayment === "무통장입금") {
-        srStatusInput.value = "d";         // 입금대기
-        srPaymentstatusInput.value = "a";  // 결제대기
-      } else {
-        srStatusInput.value = "a";         // 예약완료
-        srPaymentstatusInput.value = "b";  // 결제완료
-      }
-    });
-  });
-
-  //약관 동의 전체 체크
+  //1. 약관 전체 동의 체크 처리
   const agreeAllCheckbox = document.getElementById("agree-all");
   const subCheckboxes = document.querySelectorAll(".sub-checkbox");
 
@@ -57,19 +17,67 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 
-  //필수 약관 체크 확인
+  //2. 결제 버튼 클릭 시 유효성 검사
   const paymentButton = document.querySelector(".payment-button");
-  paymentButton.addEventListener("click", function (event) {
-    const requiredCheckboxes = document.querySelectorAll(
-      ".sub-checkbox[data-required='true']"
-    );
-    const allRequiredAgreed = Array.from(requiredCheckboxes).every(
-      (cb) => cb.checked
-    );
 
-    if (!allRequiredAgreed) {
-      event.preventDefault();
-      alert("필수 약관에 모두 동의해야 결제를 진행할 수 있습니다.");
+  paymentButton.addEventListener("click", function () {
+    const isLogin = document.getElementById("isLogin")?.value === "true";
+
+    //(1) 이름 입력 확인
+    if (!isLogin) {
+      const nameInput = document.getElementById("srName");
+      if (!nameInput.value.trim()) {
+        alert("이름을 입력해주세요.");
+        nameInput.focus();
+        return;
+      }
+
+      //(2) 이메일 입력 및 형식 확인
+      const emailInput = document.getElementById("srEmail");
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailInput.value.trim()) {
+        alert("이메일을 입력해주세요.");
+        emailInput.focus();
+        return;
+      } else if (!emailRegex.test(emailInput.value)) {
+        alert("이메일 형식이 올바르지 않습니다.");
+        emailInput.focus();
+        return;
+      }
+
+      //(3) 전화번호 입력 및 형식 확인
+      const phoneInput = document.getElementById("srPhone");
+      const phoneRegex = /^010-\d{4}-\d{4}$/;
+      if (!phoneInput.value.trim()) {
+        alert("전화번호를 입력해주세요.");
+        phoneInput.focus();
+        return;
+      } else if (!phoneRegex.test(phoneInput.value)) {
+        alert("전화번호 형식이 올바르지 않습니다. 예: 010-1234-5678");
+        phoneInput.focus();
+        return;
+      }
     }
+
+    //(4) 필수 약관 동의 확인
+    const requiredCheckboxes = document.querySelectorAll(".sub-checkbox[data-required='true']");
+    const allRequiredAgreed = Array.from(requiredCheckboxes).every((cb) => cb.checked);
+    if (!allRequiredAgreed) {
+      alert("필수 약관에 모두 동의해야 결제를 진행할 수 있습니다.");
+      return; //약관 안 했으면 중단
+    }
+
+    //(5) 총 결제 금액이 유효한지 확인
+    const totalPriceInput = document.querySelector("input[name='srTotalprice']");
+    const price = parseInt(totalPriceInput?.value || "0");
+    if (isNaN(price) || price <= 0) {
+      alert("결제 금액이 유효하지 않습니다.");
+      return;
+    }
+    
+    
+
+    //결제 API 실행
+    requestPay();
   });
 });

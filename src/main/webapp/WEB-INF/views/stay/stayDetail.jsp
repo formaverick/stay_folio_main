@@ -352,13 +352,13 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 			<div class="room-detail-right">
 				<!-- 예약 카드 (필터+요약 통합) -->
 				<div class="booking-card">
-					<form id="searchForm" method="POST" action="/search/results">
+					<form id="searchForm" method="POST" action="/search/results onsubmit="return false;">
 						<!-- 숨겨진 입력 필드들 -->
 						<input type="hidden" name="checkin" id="checkinInput"
 							value="${checkin}" /> <input type="hidden" name="checkout"
 							id="checkoutInput" value="${checkout}" /> <input type="hidden"
-							name="adult" id="adultInput" value="${param.adult}" /> <input
-							type="hidden" name="child" id="childInput" value="${param.child}" />
+							name="adult" id="adultInput" value="${adult}" /> <input
+							type="hidden" name="child" id="childInput" value="${child}" />
 						<input type="hidden" id="maxPerson" value="${room.riMaxperson}" />
 
 						<div class="pill-filter">
@@ -422,7 +422,7 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 								</div>
 							</div>
 						</div>
-					</form>
+					
 
 					<div class="booking-price-info">
 						<c:if test="${discountRate > 0}">
@@ -451,9 +451,9 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 							<span>총액</span> <span>₩<fmt:formatNumber value="${totalPrice}" type="number"/></span>
 						</div>
 					</div>
-
-					<button 
-  class="booking-button"
+					</form>
+					<button type="button" 
+  class="booking-button" 
   data-si-id="${stay.siId}" 
   data-ri-id="${room.riId}">
   예약하기
@@ -468,25 +468,29 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 	<jsp:include page="../includes/footer.jsp" />
 	
 	<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const bookingBtn = document.querySelector(".booking-button");
-    if (!bookingBtn) return;
+	document.addEventListener("DOMContentLoaded", function () {
+		  const bookingBtn = document.querySelector(".booking-button");
+		  if (!bookingBtn) return;
 
-    // JSP에서만 작동하는 EL 표현식
-    const siId = "${stay.siId}";
-    const riId = "${room.riId}";
+		  const siId = bookingBtn.getAttribute("data-si-id");
+		  const riId = bookingBtn.getAttribute("data-ri-id");
 
-    bookingBtn.addEventListener("click", function () {
-      const checkin = document.getElementById("checkinInput").value;
-      const checkout = document.getElementById("checkoutInput").value;
-      const adult = document.getElementById("adultInput").value;
-      const child = document.getElementById("childInput").value;
+		  bookingBtn.addEventListener("click", function (e) {
+		    e.preventDefault(); 
+		    const checkin = document.getElementById("checkinInput")?.value || "";
+		    const checkout = document.getElementById("checkoutInput")?.value || "";
+		    const adult = document.getElementById("adultInput")?.value || "";
+		    const child = document.getElementById("childInput")?.value || "";
 
-      const query = `?checkin=${checkin}&checkout=${checkout}&adult=${adult}&child=${child}`;
-      window.location.href = `/reservation/${siId}/${riId}${query}`;
-    });
-  });
+		    const query = `?checkin=${checkin}&checkout=${checkout}&adult=${adult}&child=${child}`;
+		    const url = `/reservation/${siId}/${riId}`;
+		    console.log("최종 URL:", url + query);
+		    window.location.href = url+query;
+		  });
+		});
+
 </script>
+
 
 </body>
 </html>

@@ -369,7 +369,6 @@
     // 숙소 ID 값 세팅
     <c:if test="${not empty newSiId}">
       $("#image-siId").val("${newSiId}");
-      console.log("✅ loaded si_id : ${newSiId}");
       alert("숙소 정보가 등록되었습니다. 이미지를 추가해주세요.");
     </c:if>
 
@@ -390,7 +389,6 @@
       const siId = $("#image-siId").val();
       const riId = $("#image-riId").val();
       
-      console.log("siId 확인:", siId);
 
       if (!siId || siId.trim() === "") {
         alert("숙소 이미지 업로드는 숙소 정보 등록 이후 가능합니다");
@@ -409,12 +407,11 @@
           const file = input.files[0];
           const spIdx = input.dataset.spidx;
 
-          console.log(`📦 파일 선택됨: spIdx ${spIdx}, 파일명: ${file.name}`);
           formData.append("imageFiles", file);
           formData.append("spIdxes", spIdx);
           atLeastOneSelected = true;
         } else {
-          console.log(`⚠️ 파일 미선택: spIdx=${input.dataset.spidx}`);
+        	alert("⚠️ 파일 미선택");
         }
       });
 

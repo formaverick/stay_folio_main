@@ -31,13 +31,14 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequestMapping("/admin/rooms")
 @RequiredArgsConstructor
-public class roomUpdateController {
+public class RoomUpdateController {
 	private final StayService stayService;
 
 	private final RoomService roomService;
 
 	private final S3Uploader s3Uploader;
 
+	// 객실 수정 페이지
 	@GetMapping("/form")
 	public String showUpdateForm(@RequestParam("siId") int siId, @RequestParam("riId") int riId, Model model) {
 		RoomVO room = roomService.getRoomById(siId, riId);
@@ -46,6 +47,7 @@ public class roomUpdateController {
 		List<FacilityVO> roomFacilities = roomService.getFacilitiesByRoomId(siId, riId);
 		List<AmenityVO> roomAmenities = roomService.getAmenitiesByRoomId(siId, riId);
 		
+		// 사진 목록을 map으로 변환
 		Map<Integer, RoomPhotoVO> photoMap = roomService.getAllRoomPhotos(siId, riId).stream()
 				.collect(Collectors.toMap(RoomPhotoVO::getSpIdx, photo -> photo, (oldVal, newVal) -> oldVal));
 
@@ -66,6 +68,7 @@ public class roomUpdateController {
 		return "admin/room/roomUpdateForm";
 	}
 	
+	// 객실 수정
 	@PostMapping("/update")
 	public String updateStay(@ModelAttribute RoomVO room,
 			@RequestParam(value = "facilityIds", required = false) List<Integer> facilityIds,
@@ -93,6 +96,7 @@ public class roomUpdateController {
 			}
 		}
 
+		// 숙소, 객실 id 반환
 		rttr.addAttribute("siId", room.getSiId());
 		rttr.addAttribute("riId", room.getRiId());
 		

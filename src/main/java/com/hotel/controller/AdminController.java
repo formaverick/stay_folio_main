@@ -40,11 +40,14 @@ public class AdminController {
 	// 숙소 등록 페이지
 	@GetMapping("/stay/add")
 	public String StayForm(Model model) {
+		// 지역 선택 목록
 		model.addAttribute("locationList", stayService.getAllLocations());
+		// 편의 시설 선택 목록
 		model.addAttribute("facilityList", stayService.getAllFacilities());
 		return "admin/room/stayRegister";
 	}
 
+	// 숙소 등록
 	@PostMapping("/stay/add")
 	public String addStay(StayVO stay, StayDetailVO detail,
 			@RequestParam(value = "facilities", required = false) List<Integer> facilities, Model model) {
@@ -52,7 +55,7 @@ public class AdminController {
 		// 숙소 정보 insert
 		stayService.insertStayInfo(stay, detail, facilities);
 
-		// 최근 si_id
+		// 최근 si_id 가져오기
 		int siId = stayService.getLastInsertId();
 
 		if (facilities == null) {
@@ -61,11 +64,12 @@ public class AdminController {
 
 		List<FacilityVO> facilityList = stayService.getAllFacilities();
 
-		model.addAttribute("stay", stay);
-		model.addAttribute("detail", detail);
-		model.addAttribute("facilityList", facilityList);
-		model.addAttribute("selectedFacilityIds", facilities);
-		model.addAttribute("newSiId", siId);
+		
+		model.addAttribute("stay", stay); // 숙소 기본 정보
+		model.addAttribute("detail", detail);	// 숙소 상세 정보
+		model.addAttribute("facilityList", facilityList);	// 모든 편의 시설 목록
+		model.addAttribute("selectedFacilityIds", facilities);	// 선택된 편의 시설
+		model.addAttribute("newSiId", siId);	// insert 된 숙소 id
 
 		return "/admin/room/stayRegister"; // 같은 페이지로 돌아가서 이미지 등록 진행
 	}
@@ -86,9 +90,7 @@ public class AdminController {
 
 		int riId = roomService.insertRoom(vo, facilities, amenities);
 
-		System.out.println("==== success ====");
-
-		// 등록 된 객실 숙소 아이디, 마지막 id
+		// 등록 된 객실, 숙소 마지막 id
 		rttr.addAttribute("siId", vo.getSiId());
 		rttr.addAttribute("riId", riId);
 

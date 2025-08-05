@@ -55,6 +55,7 @@ public class RoomController {
 		Map<Integer, RoomPhotoVO> roomMainPhotos = roomService.getMainPhotoForRooms(siId);
 
 		double discount = stayInfo.getSiDiscount();
+		// 객실 최종 가격(할인율 포함)
 		for (RoomVO room : rooms) {
 			if (discount > 0) {
 				int discountedPrice = (int) Math.floor(room.getRiPrice() * (1 - discount / 100));
@@ -63,11 +64,6 @@ public class RoomController {
 				room.setDiscountedPrice(room.getRiPrice());
 			}
 		}
-
-		System.out.println("== stayPhotos ==");
-		stayPhotos.forEach((k, v) -> {
-			System.out.println(k + " => " + v.size() + "개");
-		});
 
 		model.addAttribute("stay", stayInfo);
 		model.addAttribute("detail", stayDetail);
@@ -78,6 +74,7 @@ public class RoomController {
 
 		return "stay/stay";
 	}
+	
 	@Autowired
 	private ReservationService reservationService;
 	
@@ -148,6 +145,7 @@ public class RoomController {
 	@GetMapping("/search")
 	public String searchPage(@RequestParam(name = "lcId", required = false, defaultValue = "0") int lcId, Model model, Principal principal) {
 
+		// 0 = 전국, 그 외 번호는 번호에 맞는 지역 검색
 		List<StayVO> stayList = (lcId == 0) ? stayService.getRandomStayList() : stayService.getStayListByLcId(lcId);
 		
 		if (principal != null) {

@@ -32,7 +32,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 @Controller
 @RequestMapping("/stay")
-@Log4j
+
 public class RoomController {
 
 	@Autowired

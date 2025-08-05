@@ -11,20 +11,9 @@
 
 	<bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
 
-	<security:http pattern="/admin/**" use-expressions="true">
-		<security:intercept-url pattern="/admin/login" access="permitAll" />
-		<security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
-
-		<security:form-login login-page="/admin/login" login-processing-url="/admin/login" default-target-url="/admin" username-parameter="admin-id" password-parameter="admin-password"/>
-
-		<security:logout logout-url="/admin/logout" logout-success-url="/admin/login" invalidate-session="true" />
-
-		<security:access-denied-handler ref="customAccessDenied" />
-		<security:csrf disabled="true" />
-	</security:http>
-
-	<security:http pattern="/**" use-expressions="true">
-
+	<security:http>
+		<!-- <security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" /> --> <!-- 권한 확인 시 주석 해제 -->
+		
 		<security:access-denied-handler ref="customAccessDenied" />
 
 		<security:form-login login-page="/login" authentication-success-handler-ref="customLoginSuccess" />

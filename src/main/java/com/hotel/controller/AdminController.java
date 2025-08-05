@@ -28,11 +28,6 @@ public class AdminController {
 	@Autowired
 	private RoomService roomService;
 	
-	@GetMapping("/login")
-	public String adminLoginPage() {
-		return "admin/adminLogin";
-	}
-	
 	@GetMapping("/stay/add")
 	public String StayForm(Model model) {
 		model.addAttribute("locationList", stayService.getAllLocations());

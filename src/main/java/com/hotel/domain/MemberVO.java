@@ -1,6 +1,7 @@
 package com.hotel.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 
@@ -15,4 +16,5 @@ public class MemberVO {
 	private boolean miIsad;	// 수정 필요
 	private Date miDate;
 	private boolean miEnabled;
+	private List<String> roles;
 }

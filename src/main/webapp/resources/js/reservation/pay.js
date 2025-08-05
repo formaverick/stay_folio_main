@@ -4,16 +4,19 @@ document.addEventListener("DOMContentLoaded", () => {
     IMP.init("imp50774123"); // 본인의 imp 키
 
     const amount = document.querySelector(".payment-price").dataset.amount;
-
+    const srName = document.querySelector("input[name='srName']")?.value || "비회원";
+    const srEmail = document.querySelector("input[name='srEmail']")?.value || "noemail@example.com";
+    const srPhone = document.querySelector("input[name='srPhone']")?.value || "000-0000-0000";
+    
     IMP.request_pay({
       pg: "html5_inicis.INIpayTest", // 테스트용 PG
       pay_method: "card",
       merchant_uid: "order_" + new Date().getTime(),
       name: "stayfolio 결제",
-      amount: 100,	//test로 100으로 넣고 사용	
-      buyer_email: "test@gmail.com",
-      buyer_name: "윤단비",
-      buyer_tel: "01012345678"
+      amount: 100,	//test로 100으로 넣고 사용 원래는 amount
+      buyer_email: srEmail,
+      buyer_name:  srName,
+      buyer_tel:   srPhone
       
     }, function (rsp) {
       if (rsp.success) {

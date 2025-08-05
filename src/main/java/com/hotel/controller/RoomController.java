@@ -2,7 +2,6 @@ package com.hotel.controller;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +32,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 @Controller
 @RequestMapping("/stay")
+@Log4j
 public class RoomController {
 
 	@Autowired
@@ -54,15 +54,16 @@ public class RoomController {
 		Map<String, List<PhotoVO>> stayPhotos = stayService.getStayPhotosByCategory(siId);
 		Map<Integer, RoomPhotoVO> roomMainPhotos = roomService.getMainPhotoForRooms(siId);
 
-		double discount = stayInfo.getSiDiscount();
-		// 객실 최종 가격(할인율 포함)
+		double discount = stayInfo.getSiDiscount(); // 예: 0.1 -> 10% 할인
+
 		for (RoomVO room : rooms) {
-			if (discount > 0) {
-				int discountedPrice = (int) Math.floor(room.getRiPrice() * (1 - discount / 100));
-				room.setDiscountedPrice(discountedPrice);
-			} else {
-				room.setDiscountedPrice(room.getRiPrice());
-			}
+		    log.info("discount 비율=" + discount);
+		    if (discount > 0) {
+		        int discountedPrice = (int) Math.floor(room.getRiPrice() * (1 - discount));
+		        room.setDiscountedPrice(discountedPrice);
+		    } else {
+		        room.setDiscountedPrice(room.getRiPrice());
+		    }
 		}
 
 		model.addAttribute("stay", stayInfo);
@@ -104,7 +105,7 @@ public class RoomController {
 		model.addAttribute("discount", priceResult.getSrtotalPrice() - priceResult.getSrRoomPrice() - priceResult.getSrAddpersonFee()); // 할인율
 		model.addAttribute("totalPrice", priceResult.getSrtotalPrice()); // 총 가격
 		model.addAttribute("nights", priceResult.getNights()); // 숙박 일 수
-		model.addAttribute("discountRate", priceResult.getDiscountRate()); // 할인율 *100
+		model.addAttribute("discountRate", priceResult.getDiscountRate()); // 할인율 * 100
 	
 		StayVO stay = stayService.getStayInfo(siId);
 		StayDetailVO stayDetail = stayService.getStayDetail(siId);

@@ -148,6 +148,7 @@ public class RoomController {
 		// 0 = 전국, 그 외 번호는 번호에 맞는 지역 검색
 		List<StayVO> stayList = (lcId == 0) ? stayService.getRandomStayList() : stayService.getStayListByLcId(lcId);
 		
+		// 로그인 시 북마크 정보 불러옴
 		if (principal != null) {
 			List<Long> bookmarkList = bookmarkService.getBookmarkList(principal.getName());
 			stayList.forEach(stay -> stay.setBookmarked(bookmarkList.contains(stay.getSiId())));

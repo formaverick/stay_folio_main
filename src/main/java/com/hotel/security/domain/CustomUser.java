@@ -16,7 +16,7 @@ import lombok.Getter;
 public class CustomUser extends User {
 
 	private static final long serialVersionUID = 1L;
-	private MemberVO member;
+	private MemberVO member;	// 회원 상세 정보
 	
 	public CustomUser() {
 	    super("anonymous", "anonymous", List.of(new SimpleGrantedAuthority("ROLE_ANONYMOUS")));

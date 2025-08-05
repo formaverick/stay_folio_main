@@ -153,9 +153,10 @@ pageEncoding="UTF-8"%>
     </section>
     <!-- 메인 캐러셀 끝 -->
 
-    <!-- 숙소 카드 캐러셀 섹션 -->
+    <!-- 숙소 카드 캐러셀 섹션 (recommendSection.js) -->
     <div id="recommend-container"></div>
     <!-- 숙소 카드 캐러셀 섹션 끝 -->
+    
     <!-- 모달 시작 -->
     <div class="modal-overlay" id="commonModal">
       <div class="modal-content">

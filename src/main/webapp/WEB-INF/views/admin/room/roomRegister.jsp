@@ -256,12 +256,10 @@
 
 				  if (siId) {
 					   $("#image-siId").val(siId);
-					   console.log("✅ loaded siId: " + siId);
 					   refreshRoomList(siId);
 				  }
 				  if (riId) {
 					   $("#image-riId").val(riId);
-					   console.log("✅ loaded riId: " + riId);
 					   alert("객실 정보가 등록되었습니다. 이미지를 추가해주세요.");
 				  }
 

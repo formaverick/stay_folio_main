@@ -47,6 +47,7 @@ public class RoomServiceImpl implements RoomService {
 		return roomMapper.getOtherRoomsByStayId(siId, riId);
 	}
 
+	// 객실 사진 번호 순서대로 가져오기
 	@Override
 	public Map<String, List<RoomPhotoVO>> getRoomPhotosByCategory(int siId, int riId) {
 		List<RoomPhotoVO> photos = roomMapper.getRoomPhotos(siId, riId);
@@ -82,7 +83,7 @@ public class RoomServiceImpl implements RoomService {
 		Map<Integer, RoomPhotoVO> map = new HashMap<>();
 
 		for (RoomPhotoVO photo : photos) {
-			map.put(photo.getRiId(), photo); // 각 객실 번호의 대표 이미지 1장만
+			map.put(photo.getRiId(), photo); // 각 객실 번호의 대표 이미지 1장만 숙소 상세페이지에서 출력
 		}
 
 		return map;
@@ -93,6 +94,7 @@ public class RoomServiceImpl implements RoomService {
 		return roomMapper.getRoomPhotos(siId, riId);
 	}
 	
+	// 어메니티 리스트
 	@Override
 	public List<AmenityVO> getAllAmenities() {
 		return roomMapper.getAllAmenities();
@@ -101,6 +103,7 @@ public class RoomServiceImpl implements RoomService {
 	// admin - 객실 등록
 	@Override
 	public int insertRoom(RoomVO vo, List<Integer> facilities, List<Integer> amenities) {
+		// 객실 기본 정보 등록
 		roomMapper.insertRoom(vo);
 
 		int riId = vo.getRiId();

@@ -45,6 +45,7 @@ public class CommonController {
 		return "home";
 	}
 	
+	// main 페이지 숙소 카드(recomendSection.js)
 	@GetMapping(value ="/recommend/{rc_id}", produces = "application/json; charset=UTF-8")
 	@ResponseBody
 	public Map<String, Object> getRecommendStays(@PathVariable("rc_id") int rc_id, Principal principal) {
@@ -55,9 +56,8 @@ public class CommonController {
 	    
 		Map<String, Object> map = commonService.getRecommend(rc_id, miId);
 		
-		log.info(map);
-		
 		map.put("success", true);
+		
 		return map;
 	}
 

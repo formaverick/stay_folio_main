@@ -27,12 +27,13 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequestMapping("/admin/stay")
 @RequiredArgsConstructor
-public class stayUpdateController {
+public class StayUpdateController {
 
 	private final StayService stayService;
 
 	private final S3Uploader s3Uploader;
 
+	// 숙소 수정 페이지
 	@GetMapping("/form")
 	public String showUpdateForm(@RequestParam("siId") int siId, Model model) {
 		StayVO stay = stayService.getStayInfo(siId);
@@ -56,6 +57,7 @@ public class stayUpdateController {
 		return "admin/room/stayUpdateForm";
 	}
 
+	// 숙소 수정
 	@PostMapping("/update")
 	public String updateStay(@ModelAttribute StayVO stay, @ModelAttribute StayDetailVO detail,
 			@RequestParam(value = "facilityIds", required = false) List<Integer> facilityIds,
@@ -82,8 +84,10 @@ public class stayUpdateController {
 				}
 			}
 		}
-
+		
+		// 숙소 id 반환
 		rttr.addAttribute("siId", stay.getSiId());
+		
 		return "redirect:/admin/stay/detail";
 	}
 

@@ -22,14 +22,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class S3Uploader {
 
-	private final AmazonS3 amazonS3;
+	private final AmazonS3 amazonS3; // S3 클라이언트
 
 	@Autowired
 	private StayMapper stayMapper;
 	private final RoomMapper roomMapper;
 
 	@Value("${cloud.aws.s3.bucket}")
-	private String bucket;
+	private String bucket; // 업로드 대상 S3 버킷
 
 	// 숙소 이미지 업로드
 	public void uploadStayPhoto(int siId, Integer riId, int spIdx, MultipartFile file) throws IOException {
@@ -40,7 +40,7 @@ public class S3Uploader {
 		metadata.setContentLength(file.getSize());
 
 		PutObjectRequest request = new PutObjectRequest(bucket, fileName, file.getInputStream(), metadata);
-		amazonS3.putObject(request);
+		amazonS3.putObject(request); // S3에 업로드
 
 		PhotoVO photo = new PhotoVO();
 		photo.setSiId(siId);
@@ -60,7 +60,7 @@ public class S3Uploader {
 		metadata.setContentLength(file.getSize());
 
 		PutObjectRequest request = new PutObjectRequest(bucket, fileName, file.getInputStream(), metadata);
-		amazonS3.putObject(request);
+		amazonS3.putObject(request); // S3에 업로드
 
 		RoomPhotoVO photo = new RoomPhotoVO();
 		photo.setSiId(siId);
@@ -80,7 +80,7 @@ public class S3Uploader {
 		metadata.setContentLength(file.getSize());
 
 		PutObjectRequest request = new PutObjectRequest(bucket, fileName, file.getInputStream(), metadata);
-		amazonS3.putObject(request);
+		amazonS3.putObject(request); // S3에 업로드
 
 		PhotoVO photo = new PhotoVO();
 		photo.setSiId(siId);
@@ -110,7 +110,7 @@ public class S3Uploader {
 		metadata.setContentLength(file.getSize());
 
 		PutObjectRequest request = new PutObjectRequest(bucket, fileName, file.getInputStream(), metadata);
-		amazonS3.putObject(request);
+		amazonS3.putObject(request); // S3에 업로드
 
 		RoomPhotoVO photo = new RoomPhotoVO();
 		photo.setSiId(siId);

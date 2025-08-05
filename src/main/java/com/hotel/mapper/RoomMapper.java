@@ -24,9 +24,9 @@ public interface RoomMapper {
 
 	// 객실 상세페이지 - 다른 객실
 	List<RoomVO> getOtherRoomsByStayId(@Param("siId") int siId, @Param("riId") int riId);
-	
+
 	List<RoomPhotoVO> getRoomPhotos(@Param("siId") int siId, @Param("riId") int riId);
-	
+
 	List<RoomPhotoVO> getMainPhotosForAllRooms(@Param("siId") int siId);
 
 	// admin - 객실 등록
@@ -39,4 +39,15 @@ public interface RoomMapper {
 	void insertRoomAmenity(@Param("siId") int siId, @Param("riId") int riId, @Param("aiIdx") Integer aiIdx);
 
 	void insertRoomPhoto(RoomPhotoVO photo);
+
+	// 객실 수정
+	void updateRoom(RoomVO room);
+
+	void deleteFacilitiesByRoomId(@Param("siId") int siId, @Param("riId") int riId);
+
+	void deleteAmenitiesByRoomId(@Param("siId") int siId, @Param("riId") int riId);
+
+	boolean existsRoomPhoto(RoomPhotoVO photo);
+
+	void updateRoomPhoto(RoomPhotoVO photo);
 }

@@ -21,9 +21,9 @@ import lombok.RequiredArgsConstructor;
 @Component
 @RequiredArgsConstructor
 public class S3Uploader {
-	
+
 	private final AmazonS3 amazonS3;
-	
+
 	@Autowired
 	private StayMapper stayMapper;
 	private final RoomMapper roomMapper;
@@ -40,7 +40,7 @@ public class S3Uploader {
 		metadata.setContentLength(file.getSize());
 
 		PutObjectRequest request = new PutObjectRequest(bucket, fileName, file.getInputStream(), metadata);
-        amazonS3.putObject(request);
+		amazonS3.putObject(request);
 
 		PhotoVO photo = new PhotoVO();
 		photo.setSiId(siId);
@@ -50,7 +50,7 @@ public class S3Uploader {
 
 		stayMapper.insertStayPhoto(photo);
 	}
-	
+
 	// 객실 이미지 업로드
 	public void uploadRoomPhoto(int siId, int riId, int spIdx, MultipartFile file) throws IOException {
 		String fileName = "stay/" + siId + "/" + riId + "/" + UUID.randomUUID();
@@ -70,9 +70,9 @@ public class S3Uploader {
 
 		roomMapper.insertRoomPhoto(photo);
 	}
-	
-	// update
-	public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile file) throws IOException{
+
+	// 숙소 이미지 수정
+	public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile file) throws IOException {
 		String fileName = "stay/" + siId + "/" + UUID.randomUUID();
 		ObjectMetadata metadata = new ObjectMetadata();
 		metadata.setContentType(file.getContentType());
@@ -87,18 +87,44 @@ public class S3Uploader {
 		photo.setRiId(riId);
 		photo.setSpIdx(spIdx);
 		photo.setSpUrl(fileName);
-		
+
 		System.out.println("PhotoVO riId: " + photo.getRiId());
-		
-		boolean exists = stayMapper.existsStayPhoto(photo);
-		
+
+		boolean exists = stayMapper.existsStayPhoto(photo); // 이미지 존재 여부 확인
+
 		System.out.println("이미지 존재 여부: " + stayMapper.existsStayPhoto(photo));
 
-	    if (exists) {
-	        stayMapper.updateStayPhoto(photo); // UPDATE 문 필요
-	    } else {
-	        stayMapper.insertStayPhoto(photo); // INSERT
-	    }
+		if (exists) {
+			stayMapper.updateStayPhoto(photo); // UPDATE
+		} else {
+			stayMapper.insertStayPhoto(photo); // 비어있을 경우 INSERT
+		}
+	}
+
+	// 객실 이미지 수정
+	public void updateRoomImage(int siId, int riId, int spIdx, MultipartFile file) throws IOException {
+		String fileName = "stay/" + siId + "/" + riId + "/" + UUID.randomUUID();
+		ObjectMetadata metadata = new ObjectMetadata();
+		metadata.setContentType(file.getContentType());
+		metadata.setContentDisposition("inline");
+		metadata.setContentLength(file.getSize());
+
+		PutObjectRequest request = new PutObjectRequest(bucket, fileName, file.getInputStream(), metadata);
+		amazonS3.putObject(request);
+
+		RoomPhotoVO photo = new RoomPhotoVO();
+		photo.setSiId(siId);
+		photo.setRiId(riId);
+		photo.setSpIdx(spIdx);
+		photo.setSpUrl(fileName);
+
+		boolean exists = roomMapper.existsRoomPhoto(photo); // 이미지 존재 여부 확인
+
+		if (exists) {
+			roomMapper.updateRoomPhoto(photo); // UPDATE
+		} else {
+			roomMapper.insertRoomPhoto(photo); // 비어있을 경우 INSERT
+		}
 	}
 
 }

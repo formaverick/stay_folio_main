@@ -46,7 +46,7 @@
 			<div class="mypage-main">
 				<div class="reserv-title">
 					<h2>
-						<a href="/mypage/reservations">예약 정보 ></a> ${reserv.siName}(#${reserv.srId })
+						<a href="/mypage/reservations">예약 정보 ></a> ${reserv.siName}(#${reserv.srId})
 					</h2>
 				</div>
 				<div class="reserv-box">
@@ -61,7 +61,7 @@
 						</div>
 					</div>
 					<div class="reserv-image">
-						<img src="${s3BaseUrl}${reserv.spUrl}" alt="${reserv.siName }" />
+						<img src="${s3BaseUrl}${reserv.spUrl}" alt="${reserv.siName}" />
 					</div>
 				</div>
 				<div class="reservation-status">

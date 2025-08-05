@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.hotel.mapper.ReservationMapper">
-
+	<!-- 예약 페이지 -->
 	<resultMap id="reservationPageMap"
 		type="com.hotel.domain.ReservationPageVO">
 		<result property="riId" column="ri_id" />
@@ -30,7 +30,8 @@
 		<result property="spUrl" column="sp_url" />
 	</resultMap>
 
-	<select id="getReservationPageInfo" resultMap="reservationPageMap">
+	<select id="getReservationPageInfo"
+		resultMap="reservationPageMap">
 		SELECT
 		r.ri_id,
 		r.ri_type,
@@ -55,29 +56,28 @@
 		m.mi_name,
 		m.mi_phone,
 
-		sp.sp_url
+		rp.sp_url
 
 		FROM t_room_info r
-		JOIN t_stay_info s ON
-		r.si_id = s.si_id
-		JOIN
-		t_stay_info_detail d ON s.si_id = d.si_id
-		JOIN
-		t_stay_photo sp ON s.si_id = sp.si_id and sp.sp_idx = 0
-		LEFT JOIN
-		t_member_info m
+		JOIN t_stay_info s ON r.si_id = s.si_id
+		JOIN t_stay_info_detail d ON s.si_id = d.si_id
+		JOIN t_room_photo rp ON r.si_id = rp.si_id AND r.ri_id = rp.ri_id AND
+		rp.sp_idx = 0
+
 		<choose>
 			<when test="miId != null">
-				ON m.mi_id = #{miId}
+				LEFT JOIN t_member_info m ON m.mi_id = #{miId}
 			</when>
 			<otherwise>
-				ON 1 = 0
+				LEFT JOIN t_member_info m ON 1 = 0
 			</otherwise>
 		</choose>
+
 		WHERE r.ri_id = #{riId}
 		AND s.si_id = #{siId}
 	</select>
 
+	<!-- 예약 db insert -->
 	<insert id="insertReservation"
 		parameterType="com.hotel.domain.ReservationCreateDTO">
 		<selectKey resultType="string" keyProperty="srId"
@@ -110,37 +110,59 @@
 		#{srPaymentstatus,jdbcType=VARCHAR}
 		)
 	</insert>
-
+	<!-- 예약 후 페이지 -->
 	<resultMap id="reservationDetailMap"
-		type="com.hotel.domain.ReservationDetail">
+		type="com.hotel.domain.ReservationDetailVO">
+		<result property="riId" column="ri_id" />
 		<result property="riName" column="ri_name" />
+		<result property="riType" column="ri_type" />
+		<result property="riPerson" column="ri_person" />
+		<result property="riMaxperson" column="ri_maxperson" />
+		<result property="riDesc" column="ri_desc" />
+
 		<result property="srId" column="sr_id" />
+		<result property="siId" column="si_id" />
+		<result property="miId" column="mi_id" />
 		<result property="siAddress" column="si_address" />
 		<result property="siPhone" column="si_phone" />
 		<result property="siEmail" column="si_email" />
+
 		<result property="spUrl" column="sp_url" />
+
 		<result property="srStatus" column="sr_status" />
 		<result property="srAdult" column="sr_adult" />
 		<result property="srChild" column="sr_child" />
-		<result property="srCheckin" column="sr_checkin" />
-		<result property="srCheckout" column="sr_checkout" />
+		<result column="sr_checkin" property="srCheckin" jdbcType="TIMESTAMP"/>
+		<result column="sr_checkout" property="srCheckout" jdbcType="TIMESTAMP"/>
 		<result property="srRequest" column="sr_request" />
-		<result property="srTotalPrice" column="sr_totalprice" />
+		<result property="srDate" column="sr_date" />
+		<result property="srTotalprice" column="sr_totalprice" />
 		<result property="srDiscount" column="sr_discount" />
 		<result property="srPayment" column="sr_payment" />
 		<result property="srPaydate" column="sr_paydate" />
 		<result property="srCancelDate" column="sr_cancledate" />
 	</resultMap>
 
+
 	<select id="selectReservationById"
 		resultMap="reservationDetailMap">
 		SELECT
 		r.ri_name,
+		r.ri_type,
+		r.ri_person,
+		r.ri_maxperson,
+		r.ri_desc,
+
 		sr.sr_id,
+		sr.ri_id,
+		sr.mi_id,
+		sid.si_id,
 		sid.si_address,
 		sid.si_phone,
 		sid.si_email,
-		sp.sp_url,
+
+		rp.sp_url,
+
 		sr.sr_status,
 		sr.sr_adult,
 		sr.sr_child,
@@ -150,23 +172,36 @@
 		sr.sr_totalprice,
 		sr.sr_discount,
 		sr.sr_payment,
-		TO_CHAR(sr.sr_paydate, 'YYYY-MM-DD') AS
-		sr_paydate,
-		TO_CHAR(sr.sr_cancledate, 'YYYY-MM-DD') AS sr_cancledate
-		FROM
-		t_stay_reservation sr
-		JOIN t_room_info r ON sr.ri_id = r.ri_id
-		JOIN
-		t_stay_info_detail sid ON sr.si_id = sid.si_id
-		LEFT JOIN t_stay_photo
-		sp ON sr.si_id = sp.si_id AND sp.sp_idx = 1
-		WHERE
-		sr.sr_id = #{srId}
-		AND
-		ROWNUM = 1
+
+		sr.sr_paydate,
+		sr.sr_date,
+		sr.sr_cancledate
+
+		FROM t_stay_reservation sr
+
+		JOIN t_room_info
+		r
+		ON sr.ri_id = r.ri_id
+		AND sr.si_id = r.si_id
+
+		JOIN t_stay_info_detail
+		sid
+		ON sr.si_id = sid.si_id
+
+		LEFT JOIN t_room_photo rp
+		ON sr.ri_id =
+		rp.ri_id
+		AND sr.si_id = rp.si_id
+		AND rp.sp_idx = 0
+
+		WHERE sr.sr_id =
+		#{srId}
+		AND ROWNUM = 1
 	</select>
 
 
+
+	<!-- 중복 예약 체크 -->
 	<select id="checkDuplicateReservation" resultType="int">
   <![CDATA[
     SELECT COUNT(*)
@@ -181,24 +216,29 @@
   ]]>
 	</select>
 
-	<select id="selectReservationForCancel" resultType="com.hotel.domain.ReservationCancelCheckVO">
-		SELECT 
-			sr.sr_id AS srId,
-			sr.mi_id AS miId,
-			sr.sr_email AS srEmail,
-			sr.sr_checkin AS srCheckin,
-			sr.sr_status AS srStatus,
-			si.si_name AS siName
+	<select id="selectReservationForCancel"
+		resultType="com.hotel.domain.ReservationCancelCheckVO">
+		SELECT
+		sr.sr_id AS srId,
+		sr.mi_id AS miId,
+		sr.sr_email AS
+		srEmail,
+		sr.sr_checkin AS srCheckin,
+		sr.sr_status AS srStatus,
+		si.si_name AS siName
 		FROM t_stay_reservation sr
-		JOIN t_stay_info si ON sr.si_id = si.si_id
+		JOIN t_stay_info si ON
+		sr.si_id =
+		si.si_id
 		WHERE sr.sr_id = #{srId, jdbcType=VARCHAR}
 	</select>
-    
-    <update id="cancelReservation">
-        UPDATE t_stay_reservation 
-        SET sr_status = 'c', sr_cancledate = SYSDATE, sr_paymentstatus = 'c'  
-        WHERE sr_id = #{id}
-    </update>
+
+	<update id="cancelReservation">
+		UPDATE t_stay_reservation
+		SET sr_status = 'c',
+		sr_cancledate = SYSDATE, sr_paymentstatus = 'c'
+		WHERE sr_id = #{id}
+	</update>
 
 
 </mapper>

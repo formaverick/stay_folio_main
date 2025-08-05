@@ -11,10 +11,10 @@ public class ReservationPriceResultDTO {
 		private int srtotalPrice;      // 최종 객실 요금
 
 		
-		private Map<String, Integer> dailyPrices;
+		private Map<String, Integer> dailyPrices; //1일당 숙박요금 계산
 		private int riPrice;           // 기본 1박 요금
 		private long nights;           // 숙박일 수
-		private double DiscountRate;
+		private double DiscountRate;	
 		
 		
 

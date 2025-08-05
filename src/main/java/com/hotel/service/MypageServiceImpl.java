@@ -28,6 +28,7 @@ public class MypageServiceImpl implements MypageService {
 	public List<ReservationListVO> getUpcomingReservationByMember(String id) {
 		List<ReservationListVO> upcomingList = mypageMapper.getUpcomingReservationByMember(id);
 		
+		// 체크인 - 체크아웃 날짜 계산
 		for (ReservationListVO reserv : upcomingList) {
 			LocalDate checkin = reserv.getSrCheckin().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		    LocalDate checkout = reserv.getSrCheckout().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -39,10 +40,12 @@ public class MypageServiceImpl implements MypageService {
 		return upcomingList;
 	}
 
+	
 	@Override
 	public List<ReservationListVO> getCompletedReservationsByMember(String id) {
 		List<ReservationListVO> completedList = mypageMapper.getCompletedReservationsByMember(id);
 		
+		// 체크인 - 체크아웃 날짜 계산
 		for (ReservationListVO reserv : completedList) {
 			LocalDate checkin = reserv.getSrCheckin().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		    LocalDate checkout = reserv.getSrCheckout().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

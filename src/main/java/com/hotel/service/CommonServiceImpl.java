@@ -34,6 +34,7 @@ public class CommonServiceImpl implements CommonService {
 		String title = recommendMapper.getRecommendTitle(rc_id);
 	    List<StayVO> stays = recommendMapper.getRecommend(rc_id);
 	    
+	    // 로그인 시 북마크 정보 불러옴
 	    if (miId != null) {
 	        List<Long> bookmarked = bookmarkService.getBookmarkList(miId); // 북마크된 숙소 ID 목록
 	        for (StayVO stay : stays) {
@@ -50,7 +51,7 @@ public class CommonServiceImpl implements CommonService {
 	@Override
 	public int handleRegister(MemberVO vo) {
 		String encodedPassword = passwordEncoder.encode(vo.getMiPw());
-		vo.setMiPw(encodedPassword);
+		vo.setMiPw(encodedPassword);	// 비밀번호 인코딩
 		int result = commonMapper.handleRegister(vo);
 		return result;
 	}

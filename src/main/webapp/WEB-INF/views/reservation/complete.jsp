@@ -163,21 +163,21 @@
 				<td class="reservation-info-content">
 					<p>
 						숙소 요금:
-						<fmt:formatNumber value="${info.srRoomPrice}" pattern="#,#00" />
+						₩<fmt:formatNumber value="${info.srRoomPrice}" pattern="#,#00" />
 					</p> <c:if test="${info.srAddpersonFee != 0}">
 						<p class="payment-add">
 							인원 추가:
-							<fmt:formatNumber value="${info.srAddpersonFee}" pattern="#,##0" />
+							₩<fmt:formatNumber value="${info.srAddpersonFee}" pattern="#,##0" />
 						</p>
 					</c:if> <c:if test="${info.srDiscount != 0}">
 						<p class="payment-add">
 							할인 금액:
-							<fmt:formatNumber value="${info.srDiscount}" pattern="#,##0" />
+							₩<fmt:formatNumber value="${info.srDiscount}" pattern="#,##0" />
 						</p>
 					</c:if>
 
 					<div class="payment-summary">
-						총 결제 금액 <span><fmt:formatNumber
+						총 결제 금액 <span>₩<fmt:formatNumber
 								value="${reservation.srTotalprice}" pattern="#,##0" /></span>
 					</div>
 				</td>
@@ -194,12 +194,8 @@
 
 	<div class="reservation-detail-section">
 		<div class="detail-bottom-buttons">
-			<form action="/mypage/reservation/cancel/${reservation.srId}"
-				method="get">
-				<button type="submit">예약 취소</button>
-			</form>
-			<button onclick="location.href='/policy/refund'">이용 안내 및 환불
-				규정</button>
+			
+			<button onclick="location.href='/mypage/reservations/${reservation.srId}'">예약 상세페이지</button>
 			<button onclick="location.href='/'">메인으로</button>
 		</div>
 	</div>

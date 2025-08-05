@@ -1,31 +1,9 @@
-/* 우측 영역 (30%) */
-.room-detail-right {
-  flex: 0 0 30%;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  position: sticky;
-  top: 84px;
-}
-
-.room-detail-right h3 {
-  font-size: 20px;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin-bottom: 16px;
-}
-
-.room-detail-right p {
-  font-size: 14px;
-  color: #666666;
-  line-height: 1.5;
-}
-
 /* 예약 카드 스타일 */
 .booking-card {
   display: flex;
   flex-direction: column;
-
+  position: sticky;
+  top: 84px;
   align-self: flex-start;
 }
 

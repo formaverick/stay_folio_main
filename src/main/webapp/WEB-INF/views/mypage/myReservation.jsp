@@ -42,7 +42,7 @@
 
 			<div class="mypage-main">
 				<c:if test="${empty upcomingList and empty completedList }">
-					<div class="no-reserv" style="display: none">
+					<div class="no-reserv">
 						<img src="${pageContext.request.contextPath}/resources/img/img-booking-waiting.png"> <br>
 						<p>아직 예약 정보가 없습니다. 새로운 스테이를 찾아 떠나보세요.</p>
 					</div>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotel.mapper.AdminMapper">
+
+	<select id="getAdminInfo" resultType="com.hotel.domain.AdminVO">
+		SELECT 
+			ai_idx AS aiIdx, 
+			ai_id AS aiId, 
+			ai_pw AS aiPw, 
+			ai_name AS aiName, 
+			ai_isuse AS aiIsuse, 
+			ai_date AS aiDate
+		FROM t_admin_info 
+		WHERE ai_id = #{aiId}
+	</select>
+	
+</mapper>

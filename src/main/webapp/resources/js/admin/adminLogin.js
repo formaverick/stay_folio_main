@@ -39,15 +39,10 @@ function validateField($field, value) {
   return isValid;
 }
 
-// 관리자 계정 정보 (임시)
-const ADMIN_CREDENTIALS = {
-  id: "admin",
-  password: "qwe123!@#"
-};
-
 // 폼 제출 핸들러
 function handleAdminSubmit(e) {
   e.preventDefault();
+  console.log("handleAdminSubmit");
 
   const adminId = $("#admin-id").val().trim();
   const adminPassword = $("#admin-password").val().trim();
@@ -55,19 +50,7 @@ function handleAdminSubmit(e) {
   const isPasswordValid = validateField($("#admin-password"), adminPassword);
 
   if (isIdValid && isPasswordValid) {
-    // 관리자 계정 확인
-    if (adminId === ADMIN_CREDENTIALS.id && adminPassword === ADMIN_CREDENTIALS.password) {
-      console.log("관리자 로그인 성공:", { adminId });
-      alert("관리자 로그인 성공!");
-      
-      // 관리자 대시보드로 리다이렉트 (임시로 메인 페이지)
-      // 실제 관리자 페이지가 있다면 해당 URL로 변경
-      window.location.href = "/admin/dashboard";
-      
-    } else {
-      // 로그인 실패
-      showLoginError("아이디 또는 비밀번호가 올바르지 않습니다.");
-    }
+    $(".admin-login-form")[0].submit();
   }
 }
 
@@ -143,27 +126,3 @@ $(document).ready(function () {
     }
   });
 });
-
-// 실제 서버 통신 함수 (추후 구현)
-async function submitAdminLogin(credentials) {
-  try {
-    const response = await fetch("/admin/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(credentials),
-    });
-
-    if (response.ok) {
-      const result = await response.json();
-      // 성공 시 관리자 대시보드로 리다이렉트
-      window.location.href = "/admin/dashboard";
-    } else {
-      throw new Error("로그인 실패");
-    }
-  } catch (error) {
-    console.error("관리자 로그인 오류:", error);
-    alert("로그인에 실패했습니다. 다시 시도해주세요.");
-  }
-}

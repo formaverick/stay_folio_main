@@ -14,29 +14,43 @@
 		<result column="mi_isad" property="miIsad" />
 		<result column="mi_date" property="miDate" />
 		<result column="mi_enabled" property="miEnabled" />
+		<collection property="roles" ofType="string">
+			<result column="mr_name" />
+		</collection>
 	</resultMap>
 
 	<select id="read" resultMap="memberMap">
-		select * 
-		from t_member_info 
-		where mi_id = #{miId}
+		SELECT 
+			mi.mi_id,
+			mi.mi_pw,
+			mi.mi_name,
+			mi.mi_gender,
+			mi.mi_birth,
+			mi.mi_phone, 
+			mi.mi_isad,
+			mi.mi_date,
+			mi.mi_enabled,
+			mr.mr_name 
+		FROM t_member_info mi 
+		LEFT JOIN t_member_role mr ON mi.mi_id = mr.mi_id 
+		WHERE mi.mi_id = #{miId}
 	</select>
 	
 	<select id="countByEmail" resultType="int">
-		select count(*) 
-		from t_member_info 
-		where mi_id = #{email}
+		SELECT count(*) 
+		FROM t_member_info 
+		WHERE mi_id = #{email}
 	</select>
 	
 	<select id="countByPhone" resultType="int">
-		select count(*) 
-		from t_member_info 
-		where mi_phone = #{phone}
+		SELECT count(*) 
+		FROM t_member_info 
+		WHERE mi_phone = #{phone}
 	</select>
 	
 	<insert id="handleRegister">
-		insert into t_member_info (mi_id, mi_pw, mi_name, mi_phone, mi_isad) 
-		values (#{miId}, #{miPw}, #{miName}, #{miPhone}, 
+		INSERT INTO t_member_info (mi_id, mi_pw, mi_name, mi_phone, mi_isad) 
+		VALUES (#{miId}, #{miPw}, #{miName}, #{miPhone}, 
 			<choose>
       			<when test="miIsad"> '1' </when>
       			<otherwise> '0' </otherwise>

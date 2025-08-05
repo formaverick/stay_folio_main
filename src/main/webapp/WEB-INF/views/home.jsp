@@ -39,6 +39,7 @@ pageEncoding="UTF-8"%>
     <!-- Stay Card Carousel JS -->
     <script src="${pageContext.request.contextPath}/resources/js/main/recommendSection.js"></script>
     <script src="${pageContext.request.contextPath}/resources/js/main/stayCardCarousel.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/bookmark/bookmark.js"></script>
   </head>
   <body>
     <!-- Header Include -->
@@ -152,16 +153,17 @@ pageEncoding="UTF-8"%>
     </section>
     <!-- 메인 캐러셀 끝 -->
 
-    <!-- 숙소 카드 캐러셀 섹션 -->
+    <!-- 숙소 카드 캐러셀 섹션 (recommendSection.js) -->
     <div id="recommend-container"></div>
     <!-- 숙소 카드 캐러셀 섹션 끝 -->
+    
     <!-- 모달 시작 -->
     <div class="modal-overlay" id="commonModal">
       <div class="modal-content">
-        <p class="modal-message">로그인 하시겠습니까?</p>
+        <p class="modal-message">로그인 후 사용 가능합니다.<br/>로그인 하시겠습니까?</p>
         <div class="modal-buttons">
           <button class="btn btn-cancel" onclick="closeModal()">취소</button>
-          <button class="btn btn-confirm">확인</button>
+          <button class="btn btn-confirm" onclick="location.href='${pageContext.request.contextPath}/login'">확인</button>
         </div>
       </div>
     </div>

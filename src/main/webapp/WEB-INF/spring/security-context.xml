@@ -8,23 +8,23 @@
 	<bean id="customAccessDenied" class="com.hotel.security.CustomAccessDeniedHandler"></bean>
 	<bean id="customLoginSuccess" class="com.hotel.security.CustomLoginSuccessHandler"></bean>
 	<bean id="customUserDetailsService" class="com.hotel.security.CustomUserDetailsService"></bean>
-	
+
 	<bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
-	
+
 	<security:http>
-		<security:intercept-url pattern="/admin" access="hasRole('ROLE_ADMIN')" />
+		<!-- <security:intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" /> --> <!-- 권한 확인 시 주석 해제 -->
 		
 		<security:access-denied-handler ref="customAccessDenied" />
-		
-		<security:form-login login-page="/login" authentication-success-handler-ref="customLoginSuccess"/>
-		<security:logout logout-url="/logout" logout-success-url="/" invalidate-session="true"/>
-		
-		<security:csrf disabled="true"/> <!-- 보안 비활성화 -->
+
+		<security:form-login login-page="/login" authentication-success-handler-ref="customLoginSuccess" />
+		<security:logout logout-url="/logout" logout-success-url="/" invalidate-session="true" />
+
+		<security:csrf disabled="true" /> <!-- 보안 비활성화 -->
 	</security:http>
-	
+
 	<security:authentication-manager>
 		<security:authentication-provider user-service-ref="customUserDetailsService">
-			<security:password-encoder ref="bcryptPasswordEncoder"/>
+			<security:password-encoder ref="bcryptPasswordEncoder" />
 		</security:authentication-provider>
 	</security:authentication-manager>
 </beans>

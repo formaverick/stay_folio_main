@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hotel.mapper.BookmarkMapper">
+
+	<insert id="addBookmark">
+		insert into t_stay_bookmarks (mi_id, si_id, sb_regdate) 
+		values (#{miId}, #{siId}, Sysdate) 
+	</insert>
+	
+	<delete id="deleteBookmark">
+		delete from t_stay_bookmarks 
+		where mi_id = #{miId} and si_id = #{siId} 
+	</delete>
+	
+	<select id="getBookmarkList">
+		select si_id from t_stay_bookmarks 
+		where mi_id = #{miId}
+	</select>
+
+</mapper>

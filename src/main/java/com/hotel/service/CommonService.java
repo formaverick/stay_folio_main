@@ -5,7 +5,7 @@ import com.hotel.domain.MemberVO;
 
 public interface CommonService {
   
-	Map<String, Object> getRecommend(int rc_id);
+	Map<String, Object> getRecommend(int rc_id, String miId);
 
 	int handleRegister(MemberVO vo);
 

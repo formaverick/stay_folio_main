@@ -27,19 +27,19 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequestMapping("/admin/stay")
 @RequiredArgsConstructor
-public class stayUpdateController {
+public class StayUpdateController {
 
 	private final StayService stayService;
 
 	private final S3Uploader s3Uploader;
 
+	// 숙소 수정 페이지
 	@GetMapping("/form")
 	public String showUpdateForm(@RequestParam("siId") int siId, Model model) {
 		StayVO stay = stayService.getStayInfo(siId);
 		StayDetailVO stayDetail = stayService.getStayDetail(siId);
 		List<FacilityVO> allFacilities = stayService.getAllFacilities();
 		List<FacilityVO> checkedFacilities = stayService.getFacilitiesByStayId(siId); // 선택된 것
-		Map<String, List<PhotoVO>> stayPhotos = stayService.getStayPhotosByCategory(siId);
 
 		Map<Integer, PhotoVO> photoMap = stayService.getAllStayPhotos(siId).stream()
 				.collect(Collectors.toMap(PhotoVO::getSpIdx, photo -> photo, (oldVal, newVal) -> oldVal));
@@ -50,13 +50,14 @@ public class stayUpdateController {
 
 		model.addAttribute("stay", stay);
 		model.addAttribute("detail", stayDetail);
+		model.addAttribute("locationList", stayService.getAllLocations());
 		model.addAttribute("allFacilities", allFacilities);
 		model.addAttribute("selectedFacilityIds", selectedFacilityIds);
-		model.addAttribute("stayPhotos", stayPhotos);
 		model.addAttribute("photoMap", photoMap);
 		return "admin/room/stayUpdateForm";
 	}
 
+	// 숙소 수정
 	@PostMapping("/update")
 	public String updateStay(@ModelAttribute StayVO stay, @ModelAttribute StayDetailVO detail,
 			@RequestParam(value = "facilityIds", required = false) List<Integer> facilityIds,
@@ -83,8 +84,10 @@ public class stayUpdateController {
 				}
 			}
 		}
-
+		
+		// 숙소 id 반환
 		rttr.addAttribute("siId", stay.getSiId());
+		
 		return "redirect:/admin/stay/detail";
 	}
 

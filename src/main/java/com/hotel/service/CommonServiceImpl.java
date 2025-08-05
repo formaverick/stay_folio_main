@@ -24,12 +24,22 @@ public class CommonServiceImpl implements CommonService {
 	private CommonMapper commonMapper;
 	
 	@Autowired
+	private BookmarkService bookmarkService;
+	
+	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
   
 	@Override
-	public Map<String, Object> getRecommend(int rc_id) {
+	public Map<String, Object> getRecommend(int rc_id, String miId) {
 		String title = recommendMapper.getRecommendTitle(rc_id);
 	    List<StayVO> stays = recommendMapper.getRecommend(rc_id);
+	    
+	    if (miId != null) {
+	        List<Long> bookmarked = bookmarkService.getBookmarkList(miId); // 북마크된 숙소 ID 목록
+	        for (StayVO stay : stays) {
+	            stay.setBookmarked(bookmarked.contains(stay.getSiId()));
+	        }
+	    }
 
 	    Map<String, Object> map = new HashMap<>();
 	    map.put("title", title);

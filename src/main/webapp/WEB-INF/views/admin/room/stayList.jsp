@@ -27,8 +27,7 @@
 		<aside class="admin-sidebar">
 			<div class="admin-logo">
 				<h1 class="logo-text">
-					STAY<br />FOLIO<br />
-					<span class="admin-text">ADMIN</span>
+					STAY<br />FOLIO<br /> <span class="admin-text">ADMIN</span>
 				</h1>
 			</div>
 			<nav class="admin-nav">
@@ -56,6 +55,22 @@
 							class="btn-icon">+</span> 숙소 등록
 						</a>
 					</div>
+				</div>
+			</div>
+
+			<!-- 검색 및 필터 영역 -->
+			<div class="search-filter-section">
+				<div class="search-container">
+					<input type="text" id="member-search" class="search-input"
+						placeholder="숙소 이름으로 검색..." />
+					<button class="search-btn" id="search-btn">검색</button>
+				</div>
+
+				<div class="filter-container">
+					<select id="region-filter" class="region-filter">
+						<!-- 지역 목록 추가 -->
+					</select>
+					<button class="reset-btn" id="reset-btn">초기화</button>
 				</div>
 			</div>
 

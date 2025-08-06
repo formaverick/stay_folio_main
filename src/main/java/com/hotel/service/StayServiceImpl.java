@@ -80,7 +80,7 @@ public class StayServiceImpl implements StayService {
 		int siId = stayMapper.getLastInsertId();
 
 		// 상세 정보 id에 등록된 숙소 id 설정
-		detail.setSiId((long) siId);
+		detail.setSiId(siId);
 		// 숙소 상세 정보 등록
 		stayMapper.insertStayDetail(detail);
 

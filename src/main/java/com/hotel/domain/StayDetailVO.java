@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class StayDetailVO {
 	// t_stay_info_detail
-	private Long siId;           // 숙소 ID
+	private int siId;           // 숙소 ID
 	private String siNotice; // 공지사항
 	private String siDesc1; // 이미지1 설명
 	private String siDesc2; // 이미지2 설명

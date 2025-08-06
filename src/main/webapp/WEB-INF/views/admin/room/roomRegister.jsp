@@ -36,7 +36,7 @@
 					<li><a href="/admin/dashboard" class="nav-item">대시보드</a></li>
 					<li><a href="/admin/reservation" class="nav-item">예약관리</a></li>
 					<li><a href="/admin/stay/staylist" class="nav-item active">숙소관리</a></li>
-					<li><a href="/admin/member" class="nav-item">회원관리</a></li>
+					<li><a href="/admin/member/list" class="nav-item">회원관리</a></li>
 					<li><a href="/admin/review" class="nav-item">리뷰관리</a></li>
 				</ul>
 			</nav>
@@ -256,11 +256,14 @@
 
 				  if (siId) {
 					   $("#image-siId").val(siId);
-					   refreshRoomList(siId);
 				  }
+				  
 				  if (riId) {
 					   $("#image-riId").val(riId);
 					   alert("객실 정보가 등록되었습니다. 이미지를 추가해주세요.");
+				  }else if(siId){
+					  // 객실 리스트에서 들어왔을 경우
+					  refreshRoomList(siId);
 				  }
 
 				  // 마지막 저장 후 상세페이지 이동 버튼
@@ -331,34 +334,13 @@
 				      contentType: false,
 				      success: function (res) {
 				        alert("✅ " + res);
-
-						refreshRoomList(siId); // 등록되어있는 객실 목록 출력
+				        
+				        refreshRoomList(siId);
 						
 				        $("#image-upload-form")[0].reset();
 				        $("#image-riId").val("");
 				        
-				        // 파일 선택 텍스트 복구
-				        $(".file-input").each(function () {
-				            const $label = $(this).siblings(".file-text");
-				            const spIdx = parseInt($(this).data("spidx"));
-
-				            let defaultText = "";
-				            if (spIdx === 0) {
-				              defaultText = "대표 이미지 선택";
-				            } else if (spIdx <= 2) {
-				              defaultText = `추가 이미지 ${spIdx}`;
-				            } else if (spIdx <= 5) {
-				              defaultText = `주요 특징 이미지 ${spIdx - 2}`;
-				            } else if (spIdx <= 8) {
-				              defaultText = `특징1 이미지 ${spIdx - 5}`;
-				            } else {
-				              defaultText = `특징2 이미지 ${spIdx - 8}`;
-				            }
-
-				            $label.text(defaultText);
-				          });
-				        
-				        $imgSubmitBtn.prop("disabled", false).text("이미지 업로드");
+				        location.href = `/admin/rooms?siId=${siId}`;
 				      },
 				      error: function (xhr) {
 				        alert("⚠️ " + xhr.responseText);

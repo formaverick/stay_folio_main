@@ -12,7 +12,7 @@ public class RoomVO {
     private String riDesc;         // 객실 설명
     private Integer riPerson;      // 기준 인원
     private Integer riMaxperson;   // 최대 인원
-    private Integer riArea;         // 면적
+    private Double riArea;         // 면적
     private String riBed;          // 침대 정보
     private Integer riBedcnt;      // 침대 개수
     private Integer riPrice;       // 기본 가격

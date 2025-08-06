@@ -71,7 +71,7 @@ public class StayUpdateController {
 		stayService.updateStayDetail(detail);
 
 		// 편의시설
-		stayService.updateStayFacilities(stay.getSiId().intValue(), facilityIds);
+		stayService.updateStayFacilities(stay.getSiId(), facilityIds);
 
 		// 이미지 파일 처리
 		for (Map.Entry<String, MultipartFile> entry : fileMap.entrySet()) {
@@ -80,7 +80,7 @@ public class StayUpdateController {
 				int spIdx = Integer.parseInt(key.replace("replaceImage_", ""));
 				MultipartFile file = entry.getValue();
 				if (!file.isEmpty()) {
-					s3Uploader.updateStayImage(stay.getSiId().intValue(), null, spIdx, file);
+					s3Uploader.updateStayImage(stay.getSiId(), null, spIdx, file);
 				}
 			}
 		}

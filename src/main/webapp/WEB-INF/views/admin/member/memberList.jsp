@@ -40,7 +40,7 @@
           <ul>
             <li><a href="/admin/dashboard" class="nav-item">대시보드</a></li>
             <li><a href="/admin/reservation" class="nav-item">예약관리</a></li>
-            <li><a href="/admin/room" class="nav-item">숙소관리</a></li>
+            <li><a href="/admin/stay/staylist" class="nav-item">숙소관리</a></li>
             <li><a href="/admin/member" class="nav-item active">회원관리</a></li>
             <li><a href="/admin/review" class="nav-item">리뷰관리</a></li>
           </ul>

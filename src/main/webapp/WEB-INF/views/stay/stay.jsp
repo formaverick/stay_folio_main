@@ -279,10 +279,25 @@
 											</c:otherwise>
 										</c:choose>
 									</div>
-									<c:set var="defaultAdult" value="${room.riPerson == 1 ? 1 : 2}" />
-									<button class="room-select-btn"
-										onclick="location.href='/stay/${stay.siId}/${room.riId}?checkin=${param.checkin}&checkout=${param.checkout}&adult=${param.adult}&child=${param.child}'">객실
-										선택</button>
+
+									<c:set var="adult"
+										value="${empty param.adult ? 2 : param.adult}" />
+									<c:set var="child"
+										value="${empty param.child ? 0 : param.child}" />
+									<c:set var="currentPerson" value="${adult + child}" />
+
+									<c:choose>
+										<c:when test="${currentPerson <= room.riMaxperson}">
+											<button class="room-select-btn"
+												onclick="location.href='/stay/${stay.siId}/${room.riId}?checkin=${param.checkin}&checkout=${param.checkout}&adult=${param.adult}&child=${param.child}'">
+												객실 선택</button>
+										</c:when>
+										<c:otherwise>
+											<button class="room-select-btn disabled" disabled
+												style="opacity: 0.5; cursor: not-allowed;">인원 초과</button>
+										</c:otherwise>
+									</c:choose>
+
 								</div>
 							</div>
 						</div>

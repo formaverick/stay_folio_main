@@ -164,8 +164,8 @@ public class RoomController {
 		param.put("rcId", rcId);
 		param.put("checkin", checkin);
 		param.put("checkout", checkout);
-		param.put("totalPerson", adult + child);stayList
-		List<StaySearchResultVO>  = stayService.getStayListFiltered(param);
+		param.put("totalPerson", adult + child);
+		List<StaySearchResultVO> stayList = stayService.getStayListFiltered(param);
 		// 북마크 정보 추가
 		if (principal != null) {
 			List<Long> bookmarkList = bookmarkService.getBookmarkList(principal.getName());

@@ -26,6 +26,7 @@
   border-radius: 50px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   padding: 16px 36px;
+  min-width: 700px;
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
@@ -190,6 +191,52 @@
   margin-bottom: 0;
   padding-bottom: 0;
   border-bottom: none;
+}
+
+.people-selector-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.people-selector-button {
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  outline: none;
+  position: relative;
+  overflow: hidden;
+  min-width: 80px;
+}
+
+.people-selector-cancel {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+.people-selector-cancel:hover {
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(100, 116, 139, 0.15);
+  color: #475569;
+}
+
+.people-selector-apply {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(30, 41, 59, 0.2);
+  border: 1px solid #334155;
+}
+
+.people-selector-apply:hover {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(30, 41, 59, 0.3);
 }
 
 .counter {
@@ -804,6 +851,7 @@
   .pill-filter {
     padding: 12px 24px;
     height: 72px;
+    min-width: 700px;
     min-height: 72px;
     flex-wrap: nowrap;
     overflow-x: auto;

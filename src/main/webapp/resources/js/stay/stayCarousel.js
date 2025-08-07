@@ -1,12 +1,10 @@
-// 캐러셀 네임스페이스로 중복 방지
+// Stay 캐러셀 네임스페이스로 중복 방지
 window.StayFolioStayCarousel = window.StayFolioStayCarousel || {};
 
 if (!window.StayFolioStayCarousel.initialized) {
   window.StayFolioStayCarousel.initialized = true;
 
   $(document).ready(function () {
-    // 북마크(하트) 기능 초기화
-    initBookmarkFeature();
     const $carousel = $(".carousel");
     const $track = $(".carousel-track");
     const $slides = $(".carousel-slide");
@@ -18,12 +16,14 @@ if (!window.StayFolioStayCarousel.initialized) {
     const totalSlides = $slides.length;
     let isTransitioning = false;
 
-    console.log("Stay Carousel initialized with", totalSlides, "slides");
+    // 슬라이드가 없으면 초기화하지 않음
+    if (totalSlides === 0) {
+      return;
+    }
 
     // 슬라이드 이동 함수
     function moveToSlide(slideIndex) {
       if (isTransitioning) {
-        console.log("Transition in progress, ignoring moveToSlide call");
         return;
       }
 
@@ -43,7 +43,6 @@ if (!window.StayFolioStayCarousel.initialized) {
 
       // 같은 슬라이드면 무시
       if (slideIndex === currentSlide) {
-        console.log("Same slide, ignoring");
         return;
       }
 
@@ -61,11 +60,10 @@ if (!window.StayFolioStayCarousel.initialized) {
       // 인디케이터 업데이트
       $indicators.removeClass("active");
       $indicators.eq(slideIndex).addClass("active");
-      
+
       // 트랜지션 완료 후 상태 초기화
-      setTimeout(function() {
+      setTimeout(function () {
         isTransitioning = false;
-        console.log("Transition completed, ready for next slide");
       }, 500); // CSS transition 시간과 동일하게 설정
     }
 
@@ -79,7 +77,7 @@ if (!window.StayFolioStayCarousel.initialized) {
       moveToSlide(currentSlide + 1);
     }
 
-    // 이벤트 리스너 - 간단하고 명확하게
+    // 이벤트 리스너
     $prevBtn.off("click.stayCarousel").on("click.stayCarousel", function (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -102,96 +100,12 @@ if (!window.StayFolioStayCarousel.initialized) {
         moveToSlide(slideIndex);
       });
 
-    // 키보드 네비게이션
-    $(document)
-      .off("keydown.stayCarousel")
-      .on("keydown.stayCarousel", function (e) {
-        if ($carousel.is(":visible")) {
-          switch (e.key) {
-            case "ArrowLeft":
-              e.preventDefault();
-              prevSlide();
-              break;
-            case "ArrowRight":
-              e.preventDefault();
-              nextSlide();
-              break;
-          }
-        }
-      });
-
-    // 터치/스와이프 지원
-    let startX = 0;
-    let endX = 0;
-    let isDragging = false;
-
-    $carousel.on("touchstart", function (e) {
-      startX = e.originalEvent.touches[0].clientX;
-      isDragging = true;
-    });
-
-    $carousel.on("touchmove", function (e) {
-      if (!isDragging) return;
-      endX = e.originalEvent.touches[0].clientX;
-    });
-
-    $carousel.on("touchend", function (e) {
-      if (!isDragging) return;
-      isDragging = false;
-
-      const diffX = startX - endX;
-      const threshold = 50;
-
-      if (Math.abs(diffX) > threshold) {
-        if (diffX > 0) {
-          nextSlide();
-        } else {
-          prevSlide();
-        }
-      }
-    });
-
     // 이미지 드래그 방지
     $carousel.find("img").on("dragstart", function (e) {
       e.preventDefault();
     });
+
+    // 초기 슬라이드 설정
+    moveToSlide(0);
   });
-
-  // 북마크(하트) 기능 구현
-  function initBookmarkFeature() {
-    const $heartBtn = $(".heart-btn");
-    console.log("북마크 기능 초기화");
-
-    // 초기 상태 설정
-    const $icon = $heartBtn.find("i");
-    const isBookmarked = $heartBtn.attr("data-bookmark") === "true";
-
-    if (isBookmarked) {
-      $icon.removeClass("ph-heart").addClass("ph-heart-fill");
-    } else {
-      $icon.removeClass("ph-heart-fill").addClass("ph-heart");
-    }
-
-    // 클릭 이벤트 설정
-    $heartBtn.off("click.bookmark").on("click.bookmark", function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      console.log("북마크 버튼 클릭됨");
-      const $icon = $(this).find("i");
-      const isBookmarked = $(this).attr("data-bookmark") === "true";
-
-      if (isBookmarked) {
-        // 북마크 해제
-        $icon.removeClass("ph-heart-fill").addClass("ph-heart");
-        $(this).attr("data-bookmark", "false");
-        console.log("북마크 해제 완료 - 빈 하트로 변경");
-      } else {
-        // 북마크 추가
-        $icon.removeClass("ph-heart").addClass("ph-heart-fill");
-        $(this).attr("data-bookmark", "true");
-        console.log("북마크 추가 완료 - 채워진 하트로 변경");
-      }
-    });
-  }
 }

@@ -1,5 +1,6 @@
 package com.hotel.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import com.hotel.domain.LocationCategoryVO;
 import com.hotel.domain.PhotoVO;
 import com.hotel.domain.RoomVO;
 import com.hotel.domain.StayDetailVO;
+import com.hotel.domain.StaySearchResultVO;
 import com.hotel.domain.StayVO;
 
 public interface StayService {
@@ -30,6 +32,10 @@ public interface StayService {
 
 	// 숙소 검색 - 기본(전국) 랜덤 리스트
 	List<StayVO> getRandomStayList();
+	
+	// 날짜, 인원, 추천 카테고리 포함 필터 검색
+	 List<StaySearchResultVO> getStayListFiltered(Map<String, Object> param);
+	
 
 	// admin - 숙소 등록 (지역 리스트)
 	List<LocationCategoryVO> getAllLocations(); 
@@ -66,4 +72,6 @@ public interface StayService {
 
 	// admin - 숙소 편의 시설 수정
 	void updateStayFacilities(int siId, List<Integer> facilityIds);
+
+
 }

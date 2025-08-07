@@ -281,7 +281,7 @@
 									</div>
 									<c:set var="defaultAdult" value="${room.riPerson == 1 ? 1 : 2}" />
 									<button class="room-select-btn"
-										onclick="location.href='/stay/${stay.siId}/${room.riId}?checkin=${checkin}&checkout=${checkout}&adult=${defaultAdult}&child=0'">객실
+										onclick="location.href='/stay/${stay.siId}/${room.riId}?checkin=${param.checkin}&checkout=${param.checkout}&adult=${param.adult}&child=${param.child}'">객실
 										선택</button>
 								</div>
 							</div>

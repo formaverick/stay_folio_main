@@ -60,7 +60,7 @@ $(document).ready(function () {
     $(".search-results-title").text(categoryNames[category] || "검색 결과");
 
     // 로딩 효과 (선택사항)
-    showLoadingEffect();
+    //showLoadingEffect();
 
     // 실제 구현에서는 여기서 API 호출하여 결과 업데이트
     setTimeout(() => {

@@ -1,5 +1,6 @@
 package com.hotel.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ import com.hotel.domain.LocationCategoryVO;
 import com.hotel.domain.PhotoVO;
 import com.hotel.domain.RoomVO;
 import com.hotel.domain.StayDetailVO;
+import com.hotel.domain.StaySearchResultVO;
 import com.hotel.domain.StayVO;
 import com.hotel.mapper.StayMapper;
 
@@ -63,6 +65,12 @@ public class StayServiceImpl implements StayService {
 	public List<LocationCategoryVO> getAllLocations() {
 		return stayMapper.getAllLocations();
 	}
+	// 검색 리스트(지역,카테고리,체크인,체크아웃,총 인원)
+	@Override
+    public List<StaySearchResultVO> getStayListFiltered(Map<String, Object> param) {
+        return stayMapper.selectStayListFiltered(param);
+    }
+
 
 	// 편의시설 리스트
 	@Override

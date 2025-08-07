@@ -74,8 +74,8 @@ public class AdminServiceImpl implements AdminService {
 
 	// categoryDetail
 	@Override
-	public RecommendCategoryVO getAllCategory(int rcId) {
-		return adminMapper.getAllCategory(rcId);
+	public RecommendCategoryVO getCategory(int rcId) {
+		return adminMapper.getCategory(rcId);
 	}
 
 	@Override
@@ -102,6 +102,23 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public void insertCategoryStay(int rcId, int siId) {
 		adminMapper.insertCategoryStay(rcId, siId);
+	}
+
+	@Override
+	public RecommendCategoryVO getKeyWord(int rcId) {
+		return adminMapper.getKeyWord(rcId);
+	}
+
+	// keywordDetail
+	@Override
+	public List<StayVO> getKeyWordStayList(int rcId) {
+		return adminMapper.getRecommendStayList(rcId);
+	}
+
+	@Override
+	public void updateKeyword(RecommendCategoryVO keyword) {
+		adminMapper.updateKeyword(keyword);
+		
 	}
 	
 }

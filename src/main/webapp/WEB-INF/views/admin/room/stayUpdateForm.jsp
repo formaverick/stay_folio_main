@@ -33,7 +33,7 @@
 					<li><a href="/admin/reservation" class="nav-item">예약관리</a></li>
 					<li><a href="/admin/stay/staylist" class="nav-item active">숙소관리</a></li>
 					<li><a href="/admin/member/list" class="nav-item">회원관리</a></li>
-					<li><a href="/admin/review" class="nav-item">리뷰관리</a></li>
+					<li><a href="/admin/dashboard#category-section" class="nav-item">페이지관리</a></li>
 				</ul>
 			</nav>
 		</aside>

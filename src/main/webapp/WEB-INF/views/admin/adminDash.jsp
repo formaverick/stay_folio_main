@@ -276,7 +276,7 @@
 			<section>
 				<div>
 					<div class="header-left">
-						<h1 class="page-title">키워드 리스트</h1>
+						<h1 class="page-title">검색 키워드 리스트</h1>
 					</div>
 				</div>
 
@@ -295,7 +295,9 @@
 									<tr>
 										<td>${keyword.rcName}</td>
 										<td>${keyword.siNum}</td>
-										<td><a href="#" class="btn-edit">상세보기</a></td>
+										<td><a
+											href="${pageContext.request.contextPath}/admin/keyword/detail?rcId=${keyword.rcId}"
+											class="btn-edit">상세보기</a></td>
 									</tr>
 								</c:forEach>
 							</tbody>

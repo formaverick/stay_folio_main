@@ -18,55 +18,57 @@ import com.hotel.service.AdminService;
 
 @Controller
 @RequestMapping("/admin")
-public class CategoryUpdateController {
+public class KeywordUpdateController {
+
 	@Autowired
 	private AdminService adminService;
 
-	@GetMapping("/category/detail")
+	@GetMapping("/keyword/detail")
 	public String categoryDetail(@RequestParam("rcId") int rcId, Model model) {
-		RecommendCategoryVO category = adminService.getCategory(rcId);
-		List<StayVO> stayList = adminService.getRecommendStayList(rcId);
+		RecommendCategoryVO keyword = adminService.getKeyWord(rcId);
+		List<StayVO> stayList = adminService.getKeyWordStayList(rcId);
 
-		model.addAttribute("category", category);
+		model.addAttribute("keyword", keyword);
 		model.addAttribute("stayList", stayList);
-		return "admin/category/categoryDetail";
+		return "admin/keyword/keywordDetail";
 	}
-
-	@GetMapping("/category/form")
-	public String categoryUpdateForm(@RequestParam("rcId") int rcId, Model model) {
-		RecommendCategoryVO category = adminService.getCategory(rcId);
+	
+	@GetMapping("/keyword/form")
+	public String keywordUpdateForm(@RequestParam("rcId") int rcId, Model model) {
+		RecommendCategoryVO keyword = adminService.getKeyWord(rcId);
 		List<StayVO> categoryStay = adminService.getRecommendStayList(rcId);
 		List<StayVO> stayList = adminService.getUnrecommendedStays(rcId);
 
-		model.addAttribute("category", category);
+		model.addAttribute("keyword", keyword);
 		model.addAttribute("categoryStay", categoryStay);
 		model.addAttribute("stayList", stayList);
-		return "admin/category/categoryUpdateForm";
+		return "admin/keyword/keywordUpdateForm";
 	}
+	
+	@PostMapping("/keyword/update")
+	public String updateKeyword(@ModelAttribute RecommendCategoryVO keyword, RedirectAttributes redirectAttributes) {
 
-	@PostMapping("/category/update")
-	public String updateCategory(@ModelAttribute RecommendCategoryVO category, RedirectAttributes redirectAttributes) {
+		adminService.updateKeyword(keyword);
 
-		adminService.updateCategory(category);
+		redirectAttributes.addFlashAttribute("message", "키워드 정보가 수정되었습니다.");
 
-		redirectAttributes.addFlashAttribute("message", "카테고리 정보가 수정되었습니다.");
-
-		return "redirect:/admin/category/form?rcId=" + category.getRcId();
+		return "redirect:/admin/keyword/form?rcId=" + keyword.getRcId();
 	}
-
-	@PostMapping("/category/delete")
+	
+	@PostMapping("/keyword/delete")
 	public String deleteCategoryStay(@RequestParam("rcId") int rcId, @RequestParam("siId") int siId,
 			RedirectAttributes rttr) {
 		adminService.deleteCategoryStay(rcId, siId);
 		rttr.addFlashAttribute("message", "숙소가 제거되었습니다.");
-		return "redirect:/admin/category/form?rcId=" + rcId;
+		return "redirect:/admin/keyword/form?rcId=" + rcId;
 	}
 	
-	@PostMapping("/category/insert")
+	@PostMapping("/keyword/insert")
 	public String insertCategoryStay(@RequestParam("rcId") int rcId, @RequestParam("siId") int siId,
 			RedirectAttributes rttr) {
 		adminService.insertCategoryStay(rcId, siId);
 		rttr.addFlashAttribute("message", "숙소가 추가되었습니다.");
-		return "redirect:/admin/category/form?rcId=" + rcId;
+		return "redirect:/admin/keyword/form?rcId=" + rcId;
 	}
+
 }

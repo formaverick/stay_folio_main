@@ -8,7 +8,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>CATEGORY - STAY FOLIO</title>
+<title>KEYWORD - STAY FOLIO</title>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 <link rel="stylesheet"
@@ -39,7 +39,8 @@
 					<li><a href="/admin/reservation" class="nav-item">예약관리</a></li>
 					<li><a href="/admin/stay/staylist" class="nav-item">숙소관리</a></li>
 					<li><a href="/admin/member/list" class="nav-item">회원관리</a></li>
-					<li><a href="/admin/dashboard#category-section" class="nav-item active">페이지관리</a></li>
+					<li><a href="/admin/dashboard#category-section"
+						class="nav-item active">페이지관리</a></li>
 				</ul>
 			</nav>
 		</aside>
@@ -48,12 +49,14 @@
 			<div class="admin-header">
 				<div class="header-content">
 					<div class="header-left">
-						<h1 class="page-title">카테고리 상세</h1>
-						<p class="page-subtitle">등록된 카테고리 정보를 확인하세요.</p>
+						<h1 class="page-title">검색 키워드 상세</h1>
+						<p class="page-subtitle">등록된 검색 키워드 정보를 확인하세요.</p>
 					</div>
 					<div class="header-right">
 						<div style="display: inline-block; margin-right: 1rem;">
-							<a href="${pageContext.request.contextPath}/admin/category/form?rcId=${category.rcId}" class="btn-save">수정하기</a>
+							<a
+								href="${pageContext.request.contextPath}/admin/keyword/form?rcId=${keyword.rcId}"
+								class="btn-save">수정하기</a>
 						</div>
 
 						<div style="display: inline-block;">
@@ -67,13 +70,8 @@
 				<div class="register-form">
 					<section class="form-section">
 						<div class="form-field-group">
-							<label class="form-label">제목</label>
-							<div class="form-text-readonly">${category.rcDetailTop}</div>
-						</div>
-
-						<div class="form-field-group">
-							<label class="form-label">부제목</label>
-							<div class="form-text-readonly">${category.rcDetailBottom}</div>
+							<label class="form-label">검색 키워드</label>
+							<div class="form-text-readonly">${keyword.rcName}</div>
 						</div>
 					</section>
 
@@ -87,7 +85,8 @@
 
 							<div class="recommend-grid">
 								<c:forEach var="stay" items="${stayList}">
-									<div class="recommend-item" data-stay-id="${stay.siId}" onclick="location.href='/admin/stay/detail?siId=${stay.siId}'">
+									<div class="recommend-item" data-stay-id="${stay.siId}"
+										onclick="location.href='/admin/stay/detail?siId=${stay.siId}'">
 										<div class="recommend-image">
 											<img src="${s3BaseUrl}${stay.spUrl}" alt="${stay.siName}" />
 										</div>

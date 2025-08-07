@@ -35,7 +35,7 @@
 	<!-- 대시보드 - home 카테고리 제목 -->
 	<select id="getAllCategoryTopDetails"
 		resultType="com.hotel.domain.RecommendCategoryVO">
-		SELECT rc_detail_top AS rcDetailTop
+		SELECT rc_id AS rcId, rc_detail_top AS rcDetailTop
 		FROM
 		t_recommend_category
 		WHERE rc_detail_top IS NOT NULL
@@ -75,10 +75,13 @@
 	<!-- 회원, 비회원 예약 비율 -->
 	<select id="getMemberVsGuestRatio" resultType="map">
 		SELECT
-		COUNT(CASE WHEN mi_id IS NOT NULL THEN 1 END) AS memberCount,
-		COUNT(CASE WHEN mi_id IS NULL THEN 1 END) AS guestCount
+		COUNT(CASE
+		WHEN mi_id IS NOT NULL THEN 1 END) AS memberCount,
+		COUNT(CASE WHEN
+		mi_id IS NULL THEN 1 END) AS guestCount
 		FROM t_stay_reservation
-		WHERE sr_status = 'a' -- 예약 완료된 건만
+		WHERE
+		sr_status = 'a' -- 예약 완료된 건만
 	</select>
 
 	<!-- 예약 취소 비율 -->
@@ -126,9 +129,11 @@
 		t_stay_reservation r ON s.si_id =
 		r.si_id
 		WHERE r.sr_status = 'a'
-		GROUP BY s.si_id, s.si_name, s.si_loca
+		GROUP
+		BY s.si_id, s.si_name, s.si_loca
 		ORDER BY reserveCount DESC
-		FETCH FIRST 5 ROWS ONLY
+		FETCH FIRST
+		5 ROWS ONLY
 	</select>
 
 	<!-- 북마크 top 5 -->
@@ -145,4 +150,78 @@
 		ROWS ONLY
 	</select>
 
+
+	<!-- home 카테고리 상세 -->
+	<select id="getAllCategory"
+		resultType="com.hotel.domain.RecommendCategoryVO">
+		SELECT rc_id AS rcId, rc_detail_top AS rcDetailTop,
+		rc_detail_bottom AS rcDetailBottom
+		FROM
+		t_recommend_category
+		WHERE
+		rc_detail_top IS NOT NULL AND rc_id=#{rcId}
+	</select>
+
+	<select id="getRecommendStayList"
+		resultType="com.hotel.domain.StayVO">
+		SELECT s.si_id AS siId,
+		s.si_name AS siName,
+		s.si_loca AS
+		siLoca,
+		s.si_minprice AS siMinprice,
+		s.si_discount AS siDiscount,
+		p.sp_url AS spUrl
+		FROM t_stay_recommend r
+		JOIN t_stay_info s ON r.si_id
+		= s.si_id
+		LEFT JOIN t_stay_photo p ON s.si_id = p.si_id AND p.sp_idx =
+		0
+		WHERE r.rc_id = #{rcId}
+		AND s.si_show = '1'
+		ORDER BY s.si_id
+	</select>
+
+	<!-- 카테고리 미포함 숙소리스트 -->
+	<select id="getUnrecommendedStays"
+		resultType="com.hotel.domain.StayVO">
+		SELECT s.si_id AS siId,
+		s.si_name AS siName,
+		s.si_loca AS
+		siLoca
+		FROM t_stay_info s
+		LEFT JOIN t_stay_photo p ON s.si_id = p.si_id
+		AND p.sp_idx = 0
+		WHERE s.si_show = '1'
+		AND s.si_id NOT IN (
+		SELECT
+		r.si_id
+		FROM t_stay_recommend r
+		WHERE r.rc_id = #{rcId}
+		)
+		ORDER BY s.si_id
+	</select>
+
+	<!-- 카테고리 제목 수정 -->
+	<update id="updateCategory">
+		UPDATE t_recommend_category
+		SET
+		rc_detail_top =
+		#{rcDetailTop},
+		rc_detail_bottom = #{rcDetailBottom}
+		WHERE rc_id =
+		#{rcId}
+	</update>
+
+	<!-- 카테고리 숙소 삭제 -->
+	<delete id="deleteCategoryStay">
+		DELETE FROM t_stay_recommend
+		WHERE rc_id = #{rcId}
+		AND si_id = #{siId}
+	</delete>
+
+	<!-- 카테고리 숙소 추가 -->
+	<insert id="insertCategoryStay">
+		INSERT INTO t_stay_recommend (rc_id, si_id)
+		VALUES (#{rcId}, #{siId})
+	</insert>
 </mapper>

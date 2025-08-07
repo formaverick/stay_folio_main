@@ -16,6 +16,7 @@ public interface AdminService {
 
     List<MemberVO> getMemberList(Criteria cri);
     
+    // DashBoard
     List<RecommendCategoryVO> getAllCategoryTopDetails();
     
     List<RecommendCategoryVO> getRecommendKeyword();
@@ -32,4 +33,16 @@ public interface AdminService {
     
     List<StayVO> getTopBookmarkedStays();
     
+    
+    // categoryDetail
+    RecommendCategoryVO getAllCategory(int rcId);
+    
+    List<StayVO> getRecommendStayList(int rcId);
+    
+    List<StayVO> getUnrecommendedStays(int rcId);
+    
+    // categoryUpdate
+    void updateCategory(RecommendCategoryVO category);
+    void deleteCategoryStay(int rcId, int siId);
+    void insertCategoryStay(int rcId, int siId);
 }

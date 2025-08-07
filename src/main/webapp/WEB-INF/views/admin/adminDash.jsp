@@ -20,6 +20,70 @@
 	href="${pageContext.request.contextPath}/resources/css/admin/dashboard/dashboard.css">
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+
+<script>
+  function scrollToCategory() {
+	event.preventDefault();
+    
+	const target = document.getElementById("category-section");
+    
+	if (target) {
+      // 스크롤 이동
+      target.scrollIntoView({ behavior: "smooth" });
+
+      // 기존 메뉴에서 active 제거
+      document.querySelectorAll('.admin-nav .nav-item.active').forEach(el => {
+        el.classList.remove('active');
+      });
+
+      // 페이지관리 메뉴에 active 추가
+      document.getElementById("menu-category").classList.add("active");
+    }
+  }
+  
+  function setActiveMenu(menuId) {
+	  document.querySelectorAll('.admin-nav .nav-item.active').forEach(el => {
+	    el.classList.remove('active');
+	  });
+	  const newActive = document.getElementById(menuId);
+	  if (newActive) newActive.classList.add("active");
+	}
+
+  document.addEventListener("DOMContentLoaded", function () {
+	  // 해시가 '#category-section'이면 자동 스크롤 실행
+	    if (window.location.hash === "#category-section") {
+	      const target = document.getElementById("category-section");
+	      if (target) {
+	        setTimeout(() => {
+	          target.scrollIntoView({ behavior: "smooth" });
+	          setActiveMenu("menu-category"); // 사이드바 메뉴 활성화
+	        }, 200); // 렌더링 대기용 약간의 지연
+	      }
+	    }
+	  
+	    const categorySection = document.getElementById("category-section");
+	    if (!categorySection) return;
+
+	    const observer = new IntersectionObserver((entries) => {
+	      entries.forEach(entry => {
+	        if (entry.isIntersecting) {
+	          // 카테고리 섹션이 화면에 보임
+	          setActiveMenu("menu-category");
+	        } else {
+	          // 화면에서 벗어남
+	          setActiveMenu("menu-dashboard");
+	        }
+	      });
+	    }, {
+	      root: null, // viewport
+	      threshold: 0, // 0%만 보여도 true
+	    });
+
+	    observer.observe(categorySection);
+	  });
+
+</script>
+
 </head>
 <body>
 	<div class="admin-container">
@@ -32,11 +96,13 @@
 			</div>
 			<nav class="admin-nav">
 				<ul>
-					<li><a href="/admin/dashboard" class="nav-item active">대시보드</a></li>
+					<li><a href="/admin/dashboard" class="nav-item active"
+						id="menu-dashboard">대시보드</a></li>
 					<li><a href="/admin/reservation" class="nav-item">예약관리</a></li>
 					<li><a href="/admin/stay/staylist" class="nav-item">숙소관리</a></li>
 					<li><a href="/admin/member/list" class="nav-item">회원관리</a></li>
-					<li><a href="/admin/review" class="nav-item">리뷰관리</a></li>
+					<li><a href="#" class="nav-item" id="menu-category"
+						onclick="scrollToCategory()">페이지관리</a></li>
 				</ul>
 			</nav>
 		</aside>
@@ -175,7 +241,7 @@
 			</section>
 
 			<!-- home 카테고리 리스트 -->
-			<section>
+			<section id="category-section">
 				<div>
 					<div class="header-left">
 						<h1 class="page-title">카테고리 리스트</h1>
@@ -195,7 +261,9 @@
 								<c:forEach var="category" items="${categoryList}">
 									<tr>
 										<td>${category.rcDetailTop}</td>
-										<td><a href="#" class="btn-edit">상세보기</a></td>
+										<td><a
+											href="${pageContext.request.contextPath}/admin/category/detail?rcId=${category.rcId}"
+											class="btn-edit">상세보기</a></td>
 									</tr>
 								</c:forEach>
 							</tbody>

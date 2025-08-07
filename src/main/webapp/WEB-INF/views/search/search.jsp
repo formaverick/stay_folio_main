@@ -8,32 +8,22 @@
 	value="https://stayfolio-upload-bucket.s3.us-east-1.amazonaws.com/" />
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>검색 결과 - STAY FOLIO</title>
-    <!-- CSS -->
-    <link
-      rel="stylesheet"
-      href="${pageContext.request.contextPath}/resources/css/common.css"
-    />
-    <link
-      rel="stylesheet"
-      href="${pageContext.request.contextPath}/resources/css/header.css"
-    />
-    <link
-      rel="stylesheet"
-      href="${pageContext.request.contextPath}/resources/css/search/searchFilter.css"
-    />
-    <link
-      rel="stylesheet"
-      href="${pageContext.request.contextPath}/resources/css/search/search.css"
-    />
-    <!-- 폰트 -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
-    />
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>검색 결과 - STAY FOLIO</title>
+<!-- CSS -->
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/common.css" />
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/header.css" />
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/search/searchFilter.css" />
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/search/search.css" />
+<!-- 폰트 -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
 
     <!-- 아이콘 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -249,10 +239,12 @@
 						</c:if>
 
 						<!-- 숙소 카드 -->
-						<div class="search-stay-item stay-item" data-stay-id="${stay.siId }">
+						<div class="search-stay-item stay-item"
+							data-stay-id="${stay.siId }">
 							<div class="search-stay-image">
 								<img src="${s3BaseUrl}${stay.spUrl}" alt="${stay.siName}" />
-								<button class="search-stay-wishlist stay-wishlist" data-wishlist="${stay.bookmarked }">
+								<button class="search-stay-wishlist stay-wishlist"
+									data-wishlist="${stay.bookmarked }">
 									<i class="ph ph-heart"></i>
 								</button>
 								<c:if test="${stay.siDiscount > 0}">
@@ -337,30 +329,37 @@
 
 	<!-- 검색 결과 섹션 끝 -->
 	<!-- 모달 시작 -->
-    <div class="modal-overlay" id="commonModal">
-      <div class="modal-content">
-        <p class="modal-message">로그인 후 사용 가능합니다.<br/>로그인 하시겠습니까?</p>
-        <div class="modal-buttons">
-          <button class="btn btn-cancel" onclick="closeModal()">취소</button>
-          <button class="btn btn-confirm" onclick="location.href='${pageContext.request.contextPath}/login'">확인</button>
-        </div>
-      </div>
-    </div>
-    <!-- 모달 끝 -->
-    <script>
-    	function openModal() {
-    		document.getElementById("commonModal").style.display = "flex";
-    	}
+	<div class="modal-overlay" id="commonModal">
+		<div class="modal-content">
+			<p class="modal-message">
+				로그인 후 사용 가능합니다.<br />로그인 하시겠습니까?
+			</p>
+			<div class="modal-buttons">
+				<button class="btn btn-cancel" onclick="closeModal()">취소</button>
+				<button class="btn btn-confirm"
+					onclick="location.href='${pageContext.request.contextPath}/login'">확인</button>
+			</div>
+		</div>
+	</div>
+	<!-- 모달 끝 -->
+	<script>
+		function openModal() {
+			document.getElementById("commonModal").style.display = "flex";
+		}
 
-    	function closeModal() {
-    		document.getElementById("commonModal").style.display = "none";
-    	}
-    </script>
+		function closeModal() {
+			document.getElementById("commonModal").style.display = "none";
+		}
+	</script>
 
-    <script src="${pageContext.request.contextPath}/resources/js/bookmark/bookmark.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/js/search/searchFilter.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/js/search/search.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/js/search/searchCategory.js"></script>
-    <%@ include file="../includes/footer.jsp" %>
-  </body>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/bookmark/bookmark.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/search/searchFilter.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/search/search.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/search/searchCategory.js"></script>
+	<%@ include file="../includes/footer.jsp"%>
+</body>
 </html>

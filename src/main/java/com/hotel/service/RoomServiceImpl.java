@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -167,5 +168,16 @@ public class RoomServiceImpl implements RoomService {
 		for (Integer aiIdx : amenityIds) {
 			roomMapper.insertRoomAmenity(siId, riId, aiIdx);
 		}
+	}
+	
+	@Override
+	public Map<String, List<Date>> getUnavailableDateMap(int siId, int riId) {
+	    List<Date> reservedDates = roomMapper.getReservedDates(siId, riId);
+	    List<Date> checkinDates = roomMapper.getCheckinDates(siId, riId);
+
+	    Map<String, List<Date>> result = new HashMap<>();
+	    result.put("unavailableCheckin", reservedDates);
+	    result.put("checkoutOnly", checkinDates);
+	    return result;
 	}
 }

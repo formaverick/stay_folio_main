@@ -20,7 +20,7 @@
 	href="${pageContext.request.contextPath}/resources/css/admin/dashboard/dashboard.css">
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
-
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
 <script>
   function scrollToCategory() {
 	event.preventDefault();
@@ -115,7 +115,7 @@
 						<p class="page-subtitle">예약 현황, 숙소 등록 상태, 통계 정보를 빠르게 확인하세요.</p>
 					</div>
 					<div class="header-right">
-						<button type="submit" class="btn-save">마이페이지</button>
+						<button class="btn-save" onclick="history.back()">MAIN PAGE</button>
 					</div>
 				</div>
 			</div>

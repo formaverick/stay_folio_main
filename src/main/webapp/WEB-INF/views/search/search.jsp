@@ -36,6 +36,7 @@
     />
 
     <!-- 아이콘 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -140,28 +141,29 @@
 										<span>아동</span>
 										<div class="counter">
 											<button type="button" class="counter-btn decrease"
-												data-type="child">-</button>
+												data-type="	child">-</button>
 											<span class="count" id="childCount">0</span>
 											<button type="button" class="counter-btn increase"
 												data-type="child">+</button>
+										</div>
+									</div>
+									<div class="people-selector-buttons">
+										<button type="button"
+											class="people-selector-button people-selector-cancel" id="peopleCancel">
+											취소</button>
+										<button type="button"
+											class="people-selector-button people-selector-apply" id="peopleApply">
+											적용</button>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-
-            <!-- 검색 버튼 -->
-            <div class="search-button-container">
-              <button type="submit" class="search-button" id="searchButton">
-                <i class="ph ph-magnifying-glass"></i>
-                <span>검색하기</span>
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </section>
+				</div>
+			</form>
+		</div>
+	</section>
     <!-- 검색 필터 끝 -->
     <!-- 카테고리 섹션 시작 -->
     <section class="category-section">
@@ -171,7 +173,7 @@
             <div class="category-icon">
               <i class="fas fa-home"></i>
             </div>
-            <span class="category-text">모두</span>
+            <span class="category-text">전체</span>
           </button>
           <button class="category-item" data-category="new">
             <div class="category-icon">

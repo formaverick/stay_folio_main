@@ -79,15 +79,15 @@ $(document).ready(function () {
     monthSelectorType: "static", // 월 선택 방식 개선
     enableTime: false,
     animate: true,
-    onDayCreate: function(dObj, dStr, fp, dayElem) {
+    onDayCreate: function (dObj, dStr, fp, dayElem) {
       // 첫 번째 날짜가 선택된 경우, 그 이전 날짜들을 비활성화
       if (fp.selectedDates.length === 1) {
         const firstSelectedDate = fp.selectedDates[0];
         const dayDate = dayElem.dateObj;
-        
+
         if (dayDate < firstSelectedDate) {
-          dayElem.classList.add('flatpickr-disabled');
-          dayElem.setAttribute('aria-disabled', 'true');
+          dayElem.classList.add("flatpickr-disabled");
+          dayElem.setAttribute("aria-disabled", "true");
         }
       }
     },
@@ -156,7 +156,7 @@ $(document).ready(function () {
         tempStartDate = selectedDates[0];
         $("#dateError").hide();
         $("#dateApply").prop("disabled", true).css("opacity", 0.5);
-        
+
         // 첫 번째 날짜 선택 후 달력 다시 렌더링하여 이전 날짜들 비활성화
         setTimeout(() => {
           this.redraw();
@@ -204,27 +204,28 @@ $(document).ready(function () {
     },
   });
 
-  // 드롭다운 토글 함수
-  function toggleDropdown(element) {
-    // 다른 모든 드롭다운 닫기
-    $(".filter-content").not(element).removeClass("active");
+  // 드롭다운 토글 함수 (개선)
+  function toggleFilterDropdown(targetElement) {
+    // 모든 드롭다운 컨텐츠 숨기기
     $(
       ".dropdown-container, .date-picker-container, .people-selector-container"
     ).hide();
+    // 모든 필터 버튼의 'active' 클래스 제거
+    $(".filter-content").removeClass("active");
 
-    // 현재 드롭다운 토글
-    $(element).toggleClass("active");
-    $(element)
-      .find(
-        ".dropdown-container, .date-picker-container, .people-selector-container"
-      )
-      .toggle();
+    // 클릭된 요소의 드롭다운 컨텐츠를 찾고 토글
+    const content = $(targetElement).find(
+      ".dropdown-container, .date-picker-container, .people-selector-container"
+    );
+    content.toggle();
+    // 클릭된 요소에 'active' 클래스 토글
+    $(targetElement).toggleClass("active");
   }
 
   // 날짜 선택 클릭 이벤트
   $("#dateSelect").on("click", function (e) {
     e.stopPropagation();
-    toggleDropdown(this);
+    toggleFilterDropdown(this);
 
     // 플랫피커 날짜 초기화 (현재 선택된 날짜로)
     datePicker.setDate([startDate, endDate]);
@@ -286,31 +287,13 @@ $(document).ready(function () {
   // 지역 선택 드롭다운 토글
   $("#regionSelect").on("click", function (e) {
     e.stopPropagation();
-    const dropdown = $(this).find(".dropdown-container");
-
-    // 다른 드롭다운 닫기
-    $(".dropdown-container, .date-picker-container, .people-selector-container")
-      .not(dropdown)
-      .hide();
-    $(".filter-content").not($(this)).removeClass("active");
-
-    dropdown.toggle();
-    $(this).toggleClass("active");
+    toggleFilterDropdown(this);
   });
 
   // 인원 선택 드롭다운 토글
   $("#peopleSelect").on("click", function (e) {
     e.stopPropagation();
-    const peopleSelector = $(this).find(".people-selector-container");
-
-    // 다른 드롭다운 닫기
-    $(".dropdown-container, .date-picker-container, .people-selector-container")
-      .not(peopleSelector)
-      .hide();
-    $(".filter-content").not($(this)).removeClass("active");
-
-    peopleSelector.toggle();
-    $(this).toggleClass("active");
+    toggleFilterDropdown(this);
   });
 
   // 지역 옵션 선택 이벤트
@@ -322,30 +305,13 @@ $(document).ready(function () {
     $("#regionSelect .selected-option span").text(text);
     $(".dropdown-options .option").removeClass("selected");
     $(this).addClass("selected");
-    
-    // 선택된 숙소 불러오기
-    const lcId = $(this).data("lc-id") || 0;
-    
-    $.ajax({
-    	url: `/stay/search?lcId=${lcId}`,
-    	method: "GET",
-    	success: function (data) {
-      		// 전체 HTML에서 검색 결과 부분만 추출
-      		const newSection = $(data).find("#searchResultsSection").html();
-      		$("#searchResultsSection").html(newSection);
-    	},
-    	error: function () {
-      		alert("숙소 목록을 불러오지 못했습니다.");
-    	},
-  	});
-  	
-  	// 드롭다운 닫기
+
+    // 드롭다운 닫기
     setTimeout(() => {
-  		$("#regionSelect").removeClass("active");
-  		$(".dropdown-container").hide();
-	}, 10);
+      $("#regionSelect").removeClass("active");
+      $(".dropdown-container").hide();
+    }, 10);
   });
-  
 
   // 인원 증감 버튼 이벤트
   $(".counter-btn").on("click", function (e) {
@@ -411,26 +377,26 @@ $(document).ready(function () {
   // 초기 인원 표시 업데이트
   updatePeopleDisplay();
 
-  // 검색 버튼 클릭 시만 폼 제출 처리
-  $("#searchButton").on("click", function (e) {
-    e.preventDefault();
+  // 인원 취소 버튼 클릭 이벤트
+  $("#peopleCancel").on("click", function (e) {
+    e.stopPropagation();
+    $("#peopleSelect").removeClass("active");
+    $(".people-selector-container").hide();
+  });
 
-    // 현재 필터 값들을 숨겨진 입력 필드에 설정 (서버용 포맷)
-    $("#regionInput").val(selectedRegion);
-    $("#startDateInput").val(formatDateForServer(startDate));
-    $("#endDateInput").val(formatDateForServer(endDate));
+  // 인원 적용 버튼 클릭 이벤트
+  $("#peopleApply").on("click", function (e) {
+    e.stopPropagation();
     $("#adultsInput").val(adultCount);
     $("#childrenInput").val(childCount);
 
-    console.log("검색 버튼 클릭 - 폼 제출:", {
-      region: selectedRegion,
-      startDate: formatDateForServer(startDate),
-      endDate: formatDateForServer(endDate),
-      adults: adultCount,
-      children: childCount,
-    });
+    $("#peopleSelect").removeClass("active");
+    $(".people-selector-container").hide();
+  });
 
-    // 폼 제출
+  // 검색 버튼 클릭 시만 폼 제출 처리 (기존 로직을 performSearch 호출로 변경)
+  $("#searchButton").on("click", function (e) {
+    e.preventDefault(); // 기본 폼 제출 방지
     $("#searchForm").submit();
   });
 

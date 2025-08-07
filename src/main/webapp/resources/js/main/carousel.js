@@ -1,10 +1,13 @@
 // 캐러셀 네임스페이스로 중복 방지
 window.StayFolioCarousel = window.StayFolioCarousel || {};
 
+// 캐러셀이 초기화되지 않았다면 초기화 진행
 if (!window.StayFolioCarousel.initialized) {
   window.StayFolioCarousel.initialized = true;
 
+  // 문서 준비 완료 시 실행
   $(document).ready(function () {
+    // DOM 요소 선택
     const $carousel = $(".carousel");
     const $track = $(".carousel-track");
     const $slides = $(".carousel-slide");
@@ -12,14 +15,19 @@ if (!window.StayFolioCarousel.initialized) {
     const $prevBtn = $(".carousel-btn-prev");
     const $nextBtn = $(".carousel-btn-next");
 
+    // 상태 변수 초기화
     let currentSlide = 0;
     const totalSlides = $slides.length;
     let isTransitioning = false;
 
     console.log("Carousel initialized with", totalSlides, "slides");
 
-    // 슬라이드 이동 함수
+    /**
+     * description 특정 슬라이드로 이동시키는 함수
+     * param {number} slideIndex - 이동할 슬라이드의 인덱스
+     */
     function moveToSlide(slideIndex) {
+      // 전환 중이면 함수 실행 중단
       if (isTransitioning) {
         return;
       }
@@ -31,7 +39,7 @@ if (!window.StayFolioCarousel.initialized) {
         currentSlide
       );
 
-      // 인덱스 범위 체크
+      // 인덱스 범위 체크 및 순환
       if (slideIndex < 0) {
         slideIndex = totalSlides - 1;
       } else if (slideIndex >= totalSlides) {
@@ -44,6 +52,7 @@ if (!window.StayFolioCarousel.initialized) {
         return;
       }
 
+      // 전환 시작 플래그 설정
       isTransitioning = true;
       currentSlide = slideIndex;
 
@@ -70,23 +79,27 @@ if (!window.StayFolioCarousel.initialized) {
       }, 300);
     }
 
-    // 이전 슬라이드
     function prevSlide() {
       moveToSlide(currentSlide - 1);
     }
 
-    // 다음 슬라이드
+    /**
+     * function nextSlide
+     * description 다음 슬라이드로 이동시키는 함수
+     */
     function nextSlide() {
       moveToSlide(currentSlide + 1);
     }
 
-    // 이벤트 리스너 - 간단하고 명확하게
+    // 이벤트 리스너 설정
+    // 이전 버튼 이벤트
     $prevBtn.off("click.carousel").on("click.carousel", function (e) {
       e.preventDefault();
       e.stopPropagation();
       prevSlide();
     });
 
+    // 다음 버튼 이벤트
     $nextBtn.off("click.carousel").on("click.carousel", function (e) {
       e.preventDefault();
       e.stopPropagation();
@@ -99,55 +112,6 @@ if (!window.StayFolioCarousel.initialized) {
       e.stopPropagation();
       const slideIndex = parseInt($(this).data("slide"));
       moveToSlide(slideIndex);
-    });
-
-    // 키보드 네비게이션
-    $(document)
-      .off("keydown.carousel")
-      .on("keydown.carousel", function (e) {
-        if ($carousel.is(":visible")) {
-          switch (e.key) {
-            case "ArrowLeft":
-              e.preventDefault();
-              prevSlide();
-              break;
-            case "ArrowRight":
-              e.preventDefault();
-              nextSlide();
-              break;
-          }
-        }
-      });
-
-    // 터치/스와이프 지원
-    let startX = 0;
-    let endX = 0;
-    let isDragging = false;
-
-    $carousel.on("touchstart", function (e) {
-      startX = e.originalEvent.touches[0].clientX;
-      isDragging = true;
-    });
-
-    $carousel.on("touchmove", function (e) {
-      if (!isDragging) return;
-      endX = e.originalEvent.touches[0].clientX;
-    });
-
-    $carousel.on("touchend", function (e) {
-      if (!isDragging) return;
-      isDragging = false;
-
-      const diffX = startX - endX;
-      const threshold = 50;
-
-      if (Math.abs(diffX) > threshold) {
-        if (diffX > 0) {
-          nextSlide();
-        } else {
-          prevSlide();
-        }
-      }
     });
 
     // 이미지 드래그 방지

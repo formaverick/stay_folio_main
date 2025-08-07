@@ -39,7 +39,6 @@
   <body>
     <%@ include file="../includes/header.jsp" %>
     <!-- 헤더 끝 -->
-
 	<!-- 검색 필터 시작 -->
 	<section class="search-filter-container">
 		<div class="search-filter-inner">
@@ -48,7 +47,7 @@
 				<input type="hidden" id="regionInput" name="region" value="all" />
 				<input type="hidden" id="startDateInput" name="startDate" value="" />
 				<input type="hidden" id="endDateInput" name="endDate" value="" /> <input
-					type="hidden" id="adultsInput" name="adults" value="2" /> <input
+					type="hidden" id="adultsInput" name="adult" value="2" /> <input
 					type="hidden" id="childrenInput" name="children" value="0" />
 
 				<div class="pill-filter">
@@ -154,79 +153,104 @@
 			</form>
 		</div>
 	</section>
-    <!-- 검색 필터 끝 -->
-    <!-- 카테고리 섹션 시작 -->
-    <section class="category-section">
-      <div class="category-container">
-        <div class="category-list">
-          <button class="category-item active" data-category="all">
-            <div class="category-icon">
-              <i class="fas fa-home"></i>
-            </div>
-            <span class="category-text">전체</span>
-          </button>
-          <button class="category-item" data-category="new">
-            <div class="category-icon">
-              <i class="fas fa-star"></i>
-            </div>
-            <span class="category-text">신규오픈</span>
-          </button>
-          <button class="category-item" data-category="exclusive">
-            <div class="category-icon">
-              <i class="fas fa-crown"></i>
-            </div>
-            <span class="category-text">단독소개</span>
-          </button>
-          <button class="category-item" data-category="best">
-            <div class="category-icon">
-              <i class="fas fa-trophy"></i>
-            </div>
-            <span class="category-text">베스트 스테이</span>
-          </button>
-          <button class="category-item" data-category="steady">
-            <div class="category-icon">
-              <i class="fas fa-fire"></i>
-            </div>
-            <span class="category-text">스테디셀러</span>
-          </button>
-          <button class="category-item" data-category="emotional">
-            <div class="category-icon">
-              <i class="fas fa-heart"></i>
-            </div>
-            <span class="category-text">감성 숙소</span>
-          </button>
-          <button class="category-item" data-category="nature">
-            <div class="category-icon">
-              <i class="fas fa-tree"></i>
-            </div>
-            <span class="category-text">자연속에서</span>
-          </button>
-          <button class="category-item" data-category="ocean">
-            <div class="category-icon">
-              <i class="fas fa-water"></i>
-            </div>
-            <span class="category-text">바다와 함께</span>
-          </button>
-          <button class="category-item" data-category="couple">
-            <div class="category-icon">
-              <i class="fas fa-kiss-wink-heart"></i>
-            </div>
-            <span class="category-text">연인과 함께</span>
-          </button>
-        </div>
-      </div>
-    </section>
-    <!-- 카테고리 섹션 끝 -->
-    <!-- 검색 결과 섹션 시작 -->
-    <section class="search-results-section">
-      <div class="search-results-container">
-        <!-- 검색 결과 헤더 -->
-        <div class="search-results-header">
-          <h2 class="search-results-title">검색 결과</h2>
-          <p class="search-results-count">
-            총 <span id="resultsCount">27</span>개의 숙소
-          </p>
-        </div>
+	<!-- 검색 필터 끝 -->
+	<!-- 카테고리 섹션 시작 -->
+	<section class="category-section">
+		<div class="category-container">
+			<div class="category-list">
+				<button class="category-item active" data-category="all"
+					data-rc-id="0">
+					<div class="category-icon">
+						<i class="fas fa-home"></i>
+					</div>
+					<span class="category-text">모두</span>
+				</button>
+				<button class="category-item" data-category="new" data-rc-id="6">
+					<div class="category-icon">
+						<i class="fas fa-star"></i>
+					</div>
+					<span class="category-text">신규오픈</span>
+				</button>
+				<button class="category-item" data-category="exclusive"
+					data-rc-id="7">
+					<div class="category-icon">
+						<i class="fas fa-crown"></i>
+					</div>
+					<span class="category-text">단독소개</span>
+				</button>
+				<button class="category-item" data-category="best" data-rc-id="8">
+					<div class="category-icon">
+						<i class="fas fa-trophy"></i>
+					</div>
+					<span class="category-text">베스트 스테이</span>
+				</button>
+				<button class="category-item" data-category="steady" data-rc-id="9">
+					<div class="category-icon">
+						<i class="fas fa-fire"></i>
+					</div>
+					<span class="category-text">스테디셀러</span>
+				</button>
+				<button class="category-item" data-category="emotional"
+					data-rc-id="10">
+					<div class="category-icon">
+						<i class="fas fa-heart"></i>
+					</div>
+					<span class="category-text">감성 숙소</span>
+				</button>
+				<button class="category-item" data-category="nature" data-rc-id="11">
+					<div class="category-icon">
+						<i class="fas fa-tree"></i>
+					</div>
+					<span class="category-text">자연속에서</span>
+				</button>
+				<button class="category-item" data-category="ocean" data-rc-id="12">
+					<div class="category-icon">
+						<i class="fas fa-water"></i>
+					</div>
+					<span class="category-text">바다와 함께</span>
+				</button>
+				<button class="category-item" data-category="couple" data-rc-id="13">
+					<div class="category-icon">
+						<i class="fas fa-kiss-wink-heart"></i>
+					</div>
+					<span class="category-text">연인과 함께</span>
+				</button>
+			</div>
+		</div>
+		<form id="filterForm" action="/stay/search" method="get">
+			<input type="hidden" id="lcId" name="lcId" value="${lcId}" /> <input
+				type="hidden" name="rcId" id="rcId" value="${param.rcId}" /> <input
+				type="hidden" name="checkin" value="${param.checkin}" /> <input
+				type="hidden" name="checkout" value="${param.checkout}" /> <input
+				type="hidden" name="totalPerson" value="${param.totalPerson}" />
+		</form>
+	</section>
+	<!-- 카테고리 섹션 끝 -->
+	<!-- 검색 결과 섹션 시작 -->
+	<section class="search-results-section">
+		<div class="search-results-container" id="searchResultsSection">
+			<!-- 검색 결과 헤더 -->
+			<div class="search-results-header">
+				<!-- 숙소 카테고리 필터 -->
+				<h2 class="search-results-title" id="searchTitle">
+					<c:choose>
+						<c:when test="${rcId == 0}">전체 숙소</c:when>
+						<c:when test="${rcId == 6}">신규오픈 숙소</c:when>
+						<c:when test="${rcId == 7}">단독소개 숙소</c:when>
+						<c:when test="${rcId == 8}">베스트 스테이</c:when>
+						<c:when test="${rcId == 9}">스테디셀러</c:when>
+						<c:when test="${rcId == 10}">감성 숙소</c:when>
+						<c:when test="${rcId == 11}">자연속 숙소</c:when>
+						<c:when test="${rcId == 12}">바다뷰 숙소</c:when>
+						<c:when test="${rcId == 13}">커플 추천 숙소</c:when>
+						<c:otherwise>검색 결과</c:otherwise>
+					</c:choose>
+				</h2>
+
+				<p class="search-results-count">
+					총 <span id="resultsCount">${fn:length(stayList)}</span>개의 숙소
+				</p>
+			</div>
 
 			<div class="search-results-grid" id="searchResultsGrid">
 				<c:if test="${not empty stayList}">
@@ -237,56 +261,56 @@
 						<c:if test="${loop.index % 9 == 0}">
 							<div class="results-group">
 						</c:if>
-
 						<!-- 숙소 카드 -->
-						<div class="search-stay-item stay-item"
-							data-stay-id="${stay.siId }">
-							<div class="search-stay-image">
-								<img src="${s3BaseUrl}${stay.spUrl}" alt="${stay.siName}" />
-								<button class="search-stay-wishlist stay-wishlist"
-									data-wishlist="${stay.bookmarked }">
-									<i class="ph ph-heart"></i>
-								</button>
-								<c:if test="${stay.siDiscount > 0}">
-									<div class="search-stay-promotion">프로모션</div>
-								</c:if>
-							</div>
-							<div class="search-stay-content">
-								<h3 class="search-stay-name">${stay.siName}</h3>
-								<div class="search-stay-location">
-									<i class="ph ph-map-pin"></i> ${stay.siLoca}
+							<a href="/stay/${stay.siId}?checkin=${checkin}&checkout=${checkout}&adult=${adult}&child=${child}">
+							<div class="search-stay-item stay-item"
+								data-stay-id="${stay.siId }">
+								<div class="search-stay-image">
+									<img src="${s3BaseUrl}${stay.spUrl}" alt="${stay.siName}" />
+									<button class="search-stay-wishlist stay-wishlist"
+										data-wishlist="${stay.bookmarked }">
+										<i class="ph ph-heart"></i>
+									</button>
+									<c:if test="${stay.siDiscount > 0}">
+										<div class="search-stay-promotion">프로모션</div>
+									</c:if>
 								</div>
-								<div class="search-stay-price">
-									<c:choose>
-										<c:when test="${stay.siDiscount > 0}">
-											<span class="search-stay-price-original"> ₩<fmt:formatNumber
-													value="${stay.siMinprice}" type="number"
-													groupingUsed="true" />
-											</span>
-											<div class="search-stay-price-main">
-												<span class="search-stay-price-discount">
-													${stay.siDiscount * 100}% </span> <span
-													class="search-stay-price-current"> ₩<fmt:formatNumber
-														value="${stay.siMinprice * (1 - stay.siDiscount)}"
-														type="number" groupingUsed="true" />~
-												</span>
-											</div>
-										</c:when>
-										<c:otherwise>
-											<div class="search-stay-price-main">
-												<span class="search-stay-price-current"> ₩<fmt:formatNumber
+								<div class="search-stay-content">
+									<h3 class="search-stay-name">${stay.siName}</h3>
+									<div class="search-stay-location">
+										<i class="ph ph-map-pin"></i> ${stay.siLoca}
+									</div>
+									<div class="search-stay-price">
+										<c:choose>
+											<c:when test="${stay.siDiscount > 0}">
+												<span class="search-stay-price-original"> ₩<fmt:formatNumber
 														value="${stay.siMinprice}" type="number"
-														groupingUsed="true" />~
+														groupingUsed="true" />
 												</span>
-											</div>
-										</c:otherwise>
-									</c:choose>
+												<div class="search-stay-price-main">
+													<span class="search-stay-price-discount"> <fmt:formatNumber
+															value="${stay.siDiscount * 100}" maxFractionDigits="0" />%
+													</span> <span class="search-stay-price-current"> ₩<fmt:formatNumber
+															value="${stay.siMinprice * (1 - stay.siDiscount)}"
+															type="number" groupingUsed="true" />~
+													</span>
+													
+												</div>
+												
+											</c:when>
+											<c:otherwise>
+												<div class="search-stay-price-main">
+													<span class="search-stay-price-current"> ₩<fmt:formatNumber
+															value="${stay.siMinprice}" type="number"
+															groupingUsed="true" />~
+													</span>
+												</div>
+											</c:otherwise>
+										</c:choose>
+									</div>
 								</div>
-							</div>
-						</div>
-
-						<%-- 9개마다 그룹 끝 --%>
-						<c:if test="${(loop.index + 1) % 9 == 0 or loop.last}">
+							</div></a> <%-- 9개마다 그룹 끝 --%> <c:if
+								test="${(loop.index + 1) % 9 == 0 or loop.last}">
 			</div>
 			<%-- .results-group 끝 --%>
 
@@ -341,6 +365,23 @@
 			</div>
 		</div>
 	</div>
+
+	<form id="searchForm" action="/stay/search" method="get">
+		<!-- 체크인 날짜 -->
+		<input type="hidden" name="checkin" id="checkin" value="">
+
+		<!-- 체크아웃 날짜 -->
+		<input type="hidden" name="checkout" id="checkout" value="">
+
+		<!-- 성인 수 -->
+		<input type="hidden" name="adult" id="adult" value="2">
+
+		<!-- 아동 수 -->
+		<input type="hidden" name="child" id="child" value="0">
+
+		<button type="submit">검색</button>
+	</form>
+
 	<!-- 모달 끝 -->
 	<script>
 		function openModal() {
@@ -361,5 +402,17 @@
 	<script
 		src="${pageContext.request.contextPath}/resources/js/search/searchCategory.js"></script>
 	<%@ include file="../includes/footer.jsp"%>
+</body>
+
+<script>
+  // 예: 추천 카테고리 버튼 클릭 시
+  document.querySelectorAll(".rc-button").forEach(btn => {
+    btn.addEventListener("click", function () {
+      document.getElementById("rcId").value = this.dataset.rcid;
+      document.getElementById("filterForm").submit();
+    });
+  });
+</script>
+
 </body>
 </html>

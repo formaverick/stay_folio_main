@@ -134,6 +134,104 @@
 
 
 
+	<!-- 숙소 필터 검색 쿼리 -->
+	<!-- 숙소 필터 검색 쿼리 -->
+	<select id="selectStayListFiltered"
+		resultType="com.hotel.domain.StaySearchResultVO">
+  <![CDATA[
+    SELECT
+      s.si_id AS siId,
+      s.si_name AS siName,
+      s.si_loca AS siLoca,
+      s.si_minprice AS siMinprice,
+      s.si_discount AS siDiscount,
+      s.si_date AS siDate,
+      MIN(p.sp_url) AS spUrl
+    FROM t_stay_info s
+    LEFT JOIN t_stay_photo p ON s.si_id = p.si_id AND p.sp_idx = 0
+  ]]>
+
+		<if test="rcId != null and rcId != 0">
+    <![CDATA[
+      JOIN t_stay_recommend r ON s.si_id = r.si_id
+    ]]>
+		</if>
+
+  <![CDATA[
+    WHERE s.si_show = '1'
+  ]]>
+
+		<if test="rcId != null and rcId != 0">
+    <![CDATA[
+      AND r.rc_id = #{rcId}
+    ]]>
+		</if>
+
+		<if test="lcId != null and lcId != 0">
+    <![CDATA[
+      AND s.lc_id = #{lcId}
+    ]]>
+		</if>
+
+  <![CDATA[
+    AND EXISTS (
+      SELECT 1
+      FROM t_room_info ri
+      WHERE ri.si_id = s.si_id
+        AND ri.ri_maxperson >= #{totalPerson}
+        AND ri.ri_show = 1
+        AND NOT EXISTS (
+          SELECT 1
+          FROM t_stay_reservation res
+          WHERE res.ri_id = ri.ri_id
+            AND res.sr_status IN ('A', 'D')
+            AND (
+              res.sr_checkin < #{checkout, jdbcType=DATE}
+              AND res.sr_checkout > #{checkin, jdbcType=DATE}
+            )
+        )
+    )
+    GROUP BY
+      s.si_id, s.si_name, s.si_loca, s.si_minprice, s.si_discount, s.si_date
+    ORDER BY s.si_date DESC
+  ]]>
+	</select>
+
+
+
+
+	<!-- lcId랑 카테고리 -->
+	<select id="selectRecommendStayListByLcId"
+		resultType="com.hotel.domain.StaySearchResultVO">
+  <![CDATA[
+    SELECT
+      s.si_id AS siId,
+      s.si_name AS siName,
+      s.si_loca AS siLoca,
+      s.si_minprice AS siMinprice,
+      s.si_discount AS siDiscount,
+      s.si_date AS siDate,
+      MIN(p.sp_url) AS spUrl
+    FROM t_stay_info s
+    JOIN t_stay_recommend r ON s.si_id = r.si_id
+    LEFT JOIN t_stay_photo p ON s.si_id = p.si_id AND p.sp_idx = 0
+    WHERE s.si_show = '1'
+      AND r.rc_id = #{rcId}
+  ]]>
+		<if test="lcId != 0">
+  <![CDATA[
+      AND s.lc_id = #{lcId}
+  ]]>
+		</if>
+  <![CDATA[
+    GROUP BY
+      s.si_id, s.si_name, s.si_loca, s.si_minprice, s.si_discount, s.si_date
+    ORDER BY s.si_date DESC
+  ]]>
+	</select>
+
+
+
 	<!-- 전체 랜덤 숙소 조회 -->
 	<select id="selectRandomStayList"
 		resultType="com.hotel.domain.StayVO">
@@ -159,10 +257,6 @@
 		ORDER BY
 		DBMS_RANDOM.VALUE
 	</select>
-
-
-
-
 
 	<!-- admin insert 시작 -->
 	<!-- 지역 목록 조회 -->

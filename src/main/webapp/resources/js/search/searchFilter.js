@@ -1,5 +1,11 @@
 $(document).ready(function () {
   // 초기값 설정
+  const currentLcId = $("#lcId").val();
+  if (currentLcId) {
+    $(`.dropdown-options .option[data-lc-id="${currentLcId}"]`).addClass(
+      "selected"
+    );
+  }
   let selectedRegion = "all";
   let adultCount = 2;
   let childCount = 0;
@@ -37,6 +43,59 @@ $(document).ready(function () {
   function updateDateDisplay() {
     $("#startDate").text(formatDate(startDate));
     $("#endDate").text(formatDate(endDate));
+    $("input[name='checkin']").val(formatDateForServer(startDate));
+    $("input[name='checkout']").val(formatDateForServer(endDate));
+  }
+
+  function triggerSearch() {
+    const lcId = $("#lcId").val() || 0;
+    const rcId = $("#rcId").val() || 0;
+
+    // ✅ 체크인/체크아웃 값이 비어 있으면 기본값 설정
+    let checkin = $("input[name='checkin']").val();
+    let checkout = $("input[name='checkout']").val();
+
+    if (!checkin || !checkout) {
+      const today = new Date();
+      const tomorrow = new Date();
+      tomorrow.setDate(today.getDate() + 1);
+
+      checkin = formatDateForServer(today);
+      checkout = formatDateForServer(tomorrow);
+
+      $("input[name='checkin']").val(checkin);
+      $("input[name='checkout']").val(checkout);
+    }
+
+    const adult = $("input[name='adult']").val() || 2;
+    const child = $("input[name='child']").val() || 0;
+
+    $.ajax({
+      url: `/stay/search`,
+      method: "GET",
+      data: {
+        lcId,
+        rcId,
+        checkin,
+        checkout,
+        adult,
+        child,
+      },
+      success: function (data) {
+        const $section = $(data).find("#searchResultsSection");
+
+        if ($section.length === 0 || !$section.html().trim()) {
+          $("#searchResultsSection").html("");
+          alert("검색 결과가 없습니다.");
+          return;
+        }
+
+        $("#searchResultsSection").html($section.html());
+      },
+      error: function () {
+        alert("숙소 목록을 불러오지 못했습니다.");
+      },
+    });
   }
 
   // 날짜 유효성 검사 함수
@@ -150,6 +209,10 @@ $(document).ready(function () {
         } else {
           $("#dateError").hide();
           $("#dateApply").prop("disabled", false).css("opacity", 1);
+          startDate = tempStartDate;
+          endDate = tempEndDate;
+          updateDateDisplay();
+          triggerSearch();
         }
       } else if (selectedDates.length === 1) {
         // 시작일만 선택된 경우
@@ -298,13 +361,44 @@ $(document).ready(function () {
 
   // 지역 옵션 선택 이벤트
   $(".dropdown-options .option").on("click", function () {
-    const value = $(this).data("value");
-    const text = $(this).text();
-    selectedRegion = value;
+    const selectedLcId = $(this).data("lc-id") || 0;
+    const currentLcId = $("#lcId").val();
 
-    $("#regionSelect .selected-option span").text(text);
+    // 이미 선택된 지역이면 무시 (중복 실행 방지)
+    if (String(currentLcId) === String(selectedLcId)) return;
+
+    $("#lcId").val(selectedLcId);
+
     $(".dropdown-options .option").removeClass("selected");
     $(this).addClass("selected");
+
+    const text = $(this).text();
+    $("#regionSelect .selected-option span").text(text);
+
+    // 날짜/인원/카테고리 값 수집
+    const checkin = $("input[name='checkin']").val();
+    const checkout = $("input[name='checkout']").val();
+    const rcId = $("#rcId").val() || 0;
+
+    $.ajax({
+      url: `/stay/search`,
+      method: "GET",
+      data: {
+        lcId: selectedLcId,
+        rcId: rcId,
+        checkin: checkin,
+        checkout: checkout,
+        adult: adultCount,
+        child: childCount,
+      },
+      success: function (data) {
+        const newSection = $(data).find("#searchResultsSection").html();
+        $("#searchResultsSection").html(newSection);
+      },
+      error: function () {
+        alert("숙소 목록을 불러오지 못했습니다.");
+      },
+    });
 
     // 드롭다운 닫기
     setTimeout(() => {
@@ -347,6 +441,11 @@ $(document).ready(function () {
       displayText += `, 아동 ${childCount}명`;
     }
     $("#peopleDisplay").text(displayText);
+    //인원 수 받아오기
+    $("input[name='adult']").val(adultCount);
+    $("input[name='child']").val(childCount);
+
+    triggerSearch();
 
     // 버튼 비활성화 처리
     if (adultCount <= 1) {
@@ -408,5 +507,58 @@ $(document).ready(function () {
         ".dropdown-container, .date-picker-container, .people-selector-container"
       ).hide();
     }
+  });
+  // 카테고리 클릭 시
+  $(document).on("click", ".category-item", function () {
+    const selectedRcId = $(this).data("rc-id") || 0;
+    const currentRcId = $("#rcId").val();
+
+    if (String(selectedRcId) === String(currentRcId)) return;
+
+    $(".category-item").removeClass("active");
+    $(this).addClass("active");
+
+    $("#rcId").val(selectedRcId); // ✅ 선택한 카테고리 저장
+
+    triggerSearch(); // ✅ 중복 방지, 이 한 줄로 끝냄!
+  });
+
+  $(document).on("click", ".category-item", function () {
+    const selectedRcId = $(this).data("rc-id") || 0;
+    const currentRcId = $("#rcId").val();
+
+    // ✅ 이미 선택된 카테고리면 무시 → 무한루프 방지 핵심!
+    if (String(selectedRcId) === String(currentRcId)) return;
+
+    console.log("카테고리 클릭:", selectedRcId);
+    $(".category-item").removeClass("active");
+    $(this).addClass("active");
+
+    const lcId = $("#lcId").val() || 0;
+    const checkin = $("input[name='checkin']").val();
+    const checkout = $("input[name='checkout']").val();
+
+    $.ajax({
+      url: `/stay/search`,
+      method: "GET",
+      data: {
+        lcId: lcId,
+        rcId: selectedRcId,
+        checkin: checkin,
+        checkout: checkout,
+        adult: adultCount,
+        child: childCount,
+      },
+      success: function (data) {
+        const newSection = $(data).find("#searchResultsSection").html();
+        $("#searchResultsSection").html(newSection);
+
+        // 선택한 카테고리 저장 (중복 방지를 위함)
+        $("#rcId").val(selectedRcId);
+      },
+      error: function () {
+        alert("추천 숙소 목록을 불러오지 못했습니다.");
+      },
+    });
   });
 });

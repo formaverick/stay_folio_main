@@ -1,6 +1,8 @@
 package com.hotel.mapper;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -11,6 +13,7 @@ import com.hotel.domain.LocationCategoryVO;
 import com.hotel.domain.PhotoVO;
 import com.hotel.domain.RoomVO;
 import com.hotel.domain.StayDetailVO;
+import com.hotel.domain.StaySearchResultVO;
 import com.hotel.domain.StayVO;
 
 @Mapper
@@ -35,6 +38,11 @@ public interface StayMapper {
 
 	// 지역 목록 조회
 	List<LocationCategoryVO> getAllLocations();
+
+	// Mapper 인터페이스
+	List<StaySearchResultVO> selectStayListFiltered(Map<String, Object> param);
+
+	List<StayVO> selectRecommendStayListByLcId(@Param("rcId") int rcId, @Param("lcId") int lcId);
 
 	// 편의시설 목록 조회
 	List<FacilityVO> getAllFacilities();

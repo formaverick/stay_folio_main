@@ -348,7 +348,8 @@
 		si_id AS siId,
 		si_name
 		AS siName,
-		si_loca AS siLoca
+		si_loca AS siLoca,
+		si_date AS siDate
 		FROM
 		t_stay_info
 		ORDER BY

@@ -1,0 +1,111 @@
+.recommend-results-section {
+	padding: 40px 20px;
+	background-color: #fff;
+	font-family: 'Pretendard', sans-serif;
+}
+
+.recommend-results-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 24px;
+}
+
+.recommend-results-title {
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.recommend-results-count {
+	font-size: 16px;
+	color: #666;
+}
+
+.recommend-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 24px;
+}
+
+.recommend-item {
+	border: 1px solid #ddd;
+	border-radius: 12px;
+	overflow: hidden;
+	background-color: #fafafa;
+	transition: box-shadow 0.2s ease;
+}
+
+.recommend-item:hover {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.recommend-image {
+	position: relative;
+	width: 100%;
+	height: 200px;
+	overflow: hidden;
+}
+
+.recommend-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.recommend-promotion {
+	position: absolute;
+	top: 12px;
+	left: 12px;
+	background-color: #f44336;
+	color: white;
+	font-size: 12px;
+	padding: 4px 8px;
+	border-radius: 4px;
+}
+
+.recommend-content {
+	padding: 16px;
+}
+
+.recommend-name {
+	font-size: 18px;
+	font-weight: 600;
+	margin-bottom: 8px;
+}
+
+.recommend-location {
+	font-size: 14px;
+	color: #666;
+	margin-bottom: 12px;
+}
+
+.recommend-location i {
+	margin-right: 4px;
+}
+
+.recommend-price {
+	display: flex;
+	flex-direction: column;
+	font-size: 14px;
+}
+
+.recommend-price-original {
+	text-decoration: line-through;
+	color: #999;
+	margin-bottom: 4px;
+}
+
+.recommend-price-discount {
+	color: #007aff;
+	font-weight: bold;
+	margin-bottom: 4px;
+}
+
+.recommend-price-current {
+	font-size: 16px;
+	font-weight: bold;
+	display: flex;
+	align-items: baseline;
+	gap: 6px;
+}

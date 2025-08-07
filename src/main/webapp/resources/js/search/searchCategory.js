@@ -1,49 +1,13 @@
-// 검색 카테고리 기능
 $(document).ready(function () {
-  // 카테고리 버튼 클릭 이벤트
   $(".category-item").on("click", function () {
     const $this = $(this);
     const category = $this.data("category");
-
-    // 모든 카테고리에서 active 클래스 제거
     $(".category-item").removeClass("active");
-
-    // 클릭된 카테고리에 active 클래스 추가
     $this.addClass("active");
-
-    // 카테고리별 필터링 로직
-    filterByCategory(category);
-
-    // 검색 결과 업데이트
     updateSearchResults(category);
   });
 
-  // 카테고리별 필터링 함수
-  function filterByCategory(category) {
-    console.log("카테고리 필터링:", category);
-
-    // 여기에 실제 필터링 로직 구현
-    // 예: API 호출, 결과 필터링 등
-
-    // 임시로 콘솔에 로그 출력
-    const categoryNames = {
-      all: "모두",
-      new: "신규오픈",
-      exclusive: "단독소개",
-      best: "베스트 스테이",
-      steady: "스테디셀러",
-      emotional: "감성 숙소",
-      nature: "자연속에서",
-      ocean: "바다와 함께",
-      couple: "연인과 함께",
-    };
-
-    console.log(`${categoryNames[category]} 카테고리가 선택되었습니다.`);
-  }
-
-  // 검색 결과 업데이트 함수
   function updateSearchResults(category) {
-    // 검색 결과 제목 업데이트
     const categoryNames = {
       all: "전체 숙소",
       new: "신규오픈 숙소",
@@ -56,7 +20,6 @@ $(document).ready(function () {
       couple: "커플 추천 숙소",
     };
 
-    // 검색 결과 제목 변경
     $(".search-results-title").text(categoryNames[category] || "검색 결과");
 
     // 로딩 효과 (선택사항)
@@ -110,7 +73,4 @@ $(document).ready(function () {
       });
     }
   }
-
-  // 초기화
-  initCategoryScroll();
 });

@@ -78,7 +78,7 @@
             LEFT JOIN t_stay_info si ON sr.si_id = si.si_id 
             LEFT JOIN t_room_info ri ON sr.si_id = ri.si_id AND sr.ri_id = ri.ri_id 
             LEFT JOIN t_room_photo sp ON sr.si_id = sp.si_id AND sr.ri_id = sp.ri_id AND sp.sp_idx = 0 
-            WHERE mi_id = #{id} AND sr_status = 'b' OR sr_status = 'c' OR sr_checkout < SYSDATE 
+            WHERE mi_id = #{id} AND (sr_status = 'b' OR sr_status = 'c' OR sr_checkout < SYSDATE) 
             ORDER BY sr_date desc
         ]]>
     </select>

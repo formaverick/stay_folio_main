@@ -30,6 +30,7 @@ public class AdminServiceImpl implements AdminService {
 		return adminMapper.selectMembersWithPaging(cri);
 	}
 
+	// DashBoard
 	@Override
 	public List<RecommendCategoryVO> getAllCategoryTopDetails() {
 		return adminMapper.getAllCategoryTopDetails();
@@ -69,6 +70,38 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<StayVO> getTopBookmarkedStays() {
 		return adminMapper.getTopBookmarkedStays();
+	}
+
+	// categoryDetail
+	@Override
+	public RecommendCategoryVO getAllCategory(int rcId) {
+		return adminMapper.getAllCategory(rcId);
+	}
+
+	@Override
+	public List<StayVO> getRecommendStayList(int rcId) {
+		return adminMapper.getRecommendStayList(rcId);
+	}
+
+	@Override
+	public List<StayVO> getUnrecommendedStays(int rcId) {
+		return adminMapper.getUnrecommendedStays(rcId);
+	}
+
+	// categoryUpdate
+	@Override
+	public void updateCategory(RecommendCategoryVO category) {
+		adminMapper.updateCategory(category);
+	}
+
+	@Override
+	public void deleteCategoryStay(int rcId, int siId) {
+		adminMapper.deleteCategoryStay(rcId, siId);
+	}
+
+	@Override
+	public void insertCategoryStay(int rcId, int siId) {
+		adminMapper.insertCategoryStay(rcId, siId);
 	}
 	
 }

@@ -51,10 +51,9 @@
 						<p class="page-subtitle">숙소 등록 정보를 확인하세요</p>
 					</div>
 					<div class="header-right">
-						<form action="/admin/stay/staylist" method="get"
-							style="display: inline-block; margin-right: 1rem;">
-							<button type="submit" class="btn-save">숙소 목록</button>
-						</form>
+						<div style="display: inline-block; margin-right: 1rem;">
+							<button class="btn-save" onclick="history.back()">뒤로가기</button>
+						</div>
 
 						<form action="/admin/stay/form" method="get"
 							style="display: inline-block; margin-right: 1rem;">
@@ -75,76 +74,74 @@
 				<div class="register-form">
 
 					<!-- 기본 정보 -->
-					<div class="register-form">
-						<section class="form-section">
-							<h2 class="section-title">기본 정보</h2>
-							<div class="form-grid">
+					<section class="form-section">
+						<h2 class="section-title">기본 정보</h2>
+						<div class="form-grid">
 
-								<div class="form-group">
-									<label class="form-label">숙소명</label>
-									<div class="form-text-readonly">${stay.siName}</div>
-								</div>
-
-								<div class="form-group">
-									<label class="form-label">짧은 설명</label>
-									<div class="form-text-readonly">${stay.siDesc}</div>
-								</div>
-
-								<div class="form-group">
-									<label class="form-label">지역 상세</label>
-									<div class="form-text-readonly">${stay.siLoca}</div>
-								</div>
-
-								<c:forEach var="loc" items="${locationList}">
-									<c:if test="${loc.lcId eq stay.lcId}">
-										<c:set var="lcName" value="${loc.lcName}" />
-									</c:if>
-								</c:forEach>
-
-								<div class="form-group">
-									<label class="form-label">지역 선택</label>
-									<div class="form-text-readonly">${lcName}</div>
-								</div>
-
-
-								<div class="form-group">
-									<label class="form-label">최소 인원</label>
-									<div class="form-text-readonly">${stay.siMinperson}</div>
-								</div>
-
-								<div class="form-group">
-									<label class="form-label">최대 인원</label>
-									<div class="form-text-readonly">${stay.siMaxperson}</div>
-								</div>
-
-								<div class="form-group">
-									<label class="form-label">기본 요금</label>
-									<div class="form-text-readonly">${stay.siMinprice}</div>
-								</div>
-
-								<div class="form-group">
-									<label class="form-label">추가 인원 요금</label>
-									<div class="form-text-readonly">${stay.siExtra}</div>
-								</div>
-
-								<div class="form-group">
-									<label class="form-label">성수기 요율</label>
-									<div class="form-text-readonly">${stay.siPeak}</div>
-								</div>
-
-								<div class="form-group">
-									<label class="form-label">비성수기 요율</label>
-									<div class="form-text-readonly">${stay.siOff}</div>
-								</div>
-
-								<div class="form-group">
-									<label class="form-label">할인율 (%)</label>
-									<div class="form-text-readonly">${stay.siDiscount}</div>
-								</div>
-
+							<div class="form-group">
+								<label class="form-label">숙소명</label>
+								<div class="form-text-readonly">${stay.siName}</div>
 							</div>
-						</section>
-					</div>
+
+							<div class="form-group">
+								<label class="form-label">짧은 설명</label>
+								<div class="form-text-readonly">${stay.siDesc}</div>
+							</div>
+
+							<div class="form-group">
+								<label class="form-label">지역 상세</label>
+								<div class="form-text-readonly">${stay.siLoca}</div>
+							</div>
+
+							<c:forEach var="loc" items="${locationList}">
+								<c:if test="${loc.lcId eq stay.lcId}">
+									<c:set var="lcName" value="${loc.lcName}" />
+								</c:if>
+							</c:forEach>
+
+							<div class="form-group">
+								<label class="form-label">지역 선택</label>
+								<div class="form-text-readonly">${lcName}</div>
+							</div>
+
+
+							<div class="form-group">
+								<label class="form-label">최소 인원</label>
+								<div class="form-text-readonly">${stay.siMinperson}</div>
+							</div>
+
+							<div class="form-group">
+								<label class="form-label">최대 인원</label>
+								<div class="form-text-readonly">${stay.siMaxperson}</div>
+							</div>
+
+							<div class="form-group">
+								<label class="form-label">기본 요금</label>
+								<div class="form-text-readonly">${stay.siMinprice}</div>
+							</div>
+
+							<div class="form-group">
+								<label class="form-label">추가 인원 요금</label>
+								<div class="form-text-readonly">${stay.siExtra}</div>
+							</div>
+
+							<div class="form-group">
+								<label class="form-label">성수기 요율</label>
+								<div class="form-text-readonly">${stay.siPeak}</div>
+							</div>
+
+							<div class="form-group">
+								<label class="form-label">비성수기 요율</label>
+								<div class="form-text-readonly">${stay.siOff}</div>
+							</div>
+
+							<div class="form-group">
+								<label class="form-label">할인율 (%)</label>
+								<div class="form-text-readonly">${stay.siDiscount}</div>
+							</div>
+
+						</div>
+					</section>
 
 					<!-- 상세 설명 -->
 					<div class="form-section">

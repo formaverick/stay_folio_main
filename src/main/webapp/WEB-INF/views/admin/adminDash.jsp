@@ -20,7 +20,7 @@
 	href="${pageContext.request.contextPath}/resources/css/admin/dashboard/dashboard.css">
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
-
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
 <script>
   function scrollToCategory() {
 	event.preventDefault();
@@ -115,7 +115,7 @@
 						<p class="page-subtitle">예약 현황, 숙소 등록 상태, 통계 정보를 빠르게 확인하세요.</p>
 					</div>
 					<div class="header-right">
-						<button type="submit" class="btn-save">마이페이지</button>
+						<a href="${pageContext.request.contextPath}/" class="btn-save">MAIN PAGE</a>
 					</div>
 				</div>
 			</div>
@@ -276,7 +276,7 @@
 			<section>
 				<div>
 					<div class="header-left">
-						<h1 class="page-title">키워드 리스트</h1>
+						<h1 class="page-title">검색 키워드 리스트</h1>
 					</div>
 				</div>
 
@@ -295,7 +295,9 @@
 									<tr>
 										<td>${keyword.rcName}</td>
 										<td>${keyword.siNum}</td>
-										<td><a href="#" class="btn-edit">상세보기</a></td>
+										<td><a
+											href="${pageContext.request.contextPath}/admin/keyword/detail?rcId=${keyword.rcId}"
+											class="btn-edit">상세보기</a></td>
 									</tr>
 								</c:forEach>
 							</tbody>

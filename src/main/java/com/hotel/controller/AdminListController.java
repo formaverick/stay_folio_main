@@ -15,6 +15,7 @@ import com.hotel.domain.Criteria;
 import com.hotel.domain.FacilityVO;
 import com.hotel.domain.PageDTO;
 import com.hotel.domain.PhotoVO;
+import com.hotel.domain.RecommendCategoryVO;
 import com.hotel.domain.RoomPhotoVO;
 import com.hotel.domain.RoomVO;
 import com.hotel.domain.StayDetailVO;
@@ -54,6 +55,7 @@ public class AdminListController {
 		StayVO stayInfo = stayService.getStayInfo(siId);
 		StayDetailVO stayDetail = stayService.getStayDetail(siId);
 		List<FacilityVO> stayFacilities = stayService.getFacilitiesByStayId(siId);
+		List<RecommendCategoryVO> stayKeywords = stayService.getKeywordByStayId(siId);
 		Map<String, List<PhotoVO>> stayPhotos = stayService.getStayPhotosByCategory(siId);
 
 		System.out.println("stayFacilities : " + stayFacilities);
@@ -62,6 +64,7 @@ public class AdminListController {
 		model.addAttribute("detail", stayDetail);
 		model.addAttribute("locationList", stayService.getAllLocations());
 		model.addAttribute("stayFacilities", stayFacilities);
+		model.addAttribute("stayKeywords", stayKeywords);
 		model.addAttribute("stayPhotos", stayPhotos);
 
 		return "admin/room/stayDetail";

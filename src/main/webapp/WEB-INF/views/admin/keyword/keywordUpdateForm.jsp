@@ -32,7 +32,8 @@
 					<li><a href="/admin/reservation" class="nav-item">예약관리</a></li>
 					<li><a href="/admin/stay/staylist" class="nav-item">숙소관리</a></li>
 					<li><a href="/admin/member/list" class="nav-item">회원관리</a></li>
-					<li><a href="/admin/dashboard#category-section" class="nav-item active">페이지관리</a></li>
+					<li><a href="/admin/dashboard#category-section"
+						class="nav-item active">페이지관리</a></li>
 				</ul>
 			</nav>
 		</aside>
@@ -46,7 +47,9 @@
 					</div>
 					<div class="header-right">
 						<div style="display: inline-block;">
-							<a href="${pageContext.request.contextPath}/admin/category/detail?rcId=${category.rcId}" class="btn-save">뒤로가기</a>
+							<a
+								href="${pageContext.request.contextPath}/admin/keyword/detail?rcId=${keyword.rcId}"
+								class="btn-save">저장하기</a>
 						</div>
 					</div>
 				</div>
@@ -60,21 +63,15 @@
 								alert("${message}");
 							</script>
 						</c:if>
-						<form action="/admin/category/update" method="post"
+						<form action="/admin/keyword/update" method="post"
 							enctype="multipart/form-data">
 							<div class="form-field-group">
-								<label class="form-label">제목</label> <input type="text"
-									name="rcDetailTop" value="${category.rcDetailTop}"
-									id="rcDetailTop" required class="form-input" />
+								<label class="form-label">검색 키워드</label> <input type="text"
+									name="rcName" value="${keyword.rcName}"
+									id="rcName" required class="form-input" />
 							</div>
 
-							<div class="form-field-group">
-								<label class="form-label">부제목</label> <input type="text"
-									name="rcDetailBottom" value="${category.rcDetailBottom}"
-									id="rcDetailBottom" class="form-input" />
-							</div>
-
-							<input type="hidden" name="rcId" value="${category.rcId}" />
+							<input type="hidden" name="rcId" value="${keyword.rcId}" />
 
 							<div class="form-actions" style="margin-top: 20px;">
 								<button type="submit" id="stay-submit-btn" class="btn-save">수정하기</button>
@@ -99,9 +96,9 @@
 											<td>${stay.siId}</td>
 											<td>${stay.siName}</td>
 											<td>${stay.siLoca}</td>
-											<td><form action="/admin/category/delete" method="post"
+											<td><form action="/admin/keyword/delete" method="post"
 													style="display: inline-block; margin-right: 1rem;">
-													<input type="hidden" name="rcId" value="${category.rcId}" />
+													<input type="hidden" name="rcId" value="${keyword.rcId}" />
 													<input type="hidden" name="siId" value="${stay.siId}" />
 													<button type="submit" class="btn-edit">삭제</button>
 												</form></td>
@@ -129,9 +126,9 @@
 											<td>${stay.siId}</td>
 											<td>${stay.siName}</td>
 											<td>${stay.siLoca}</td>
-											<td><form action="/admin/category/insert" method="post"
+											<td><form action="/admin/keyword/insert" method="post"
 													style="display: inline-block; margin-right: 1rem;">
-													<input type="hidden" name="rcId" value="${category.rcId}" />
+													<input type="hidden" name="rcId" value="${keyword.rcId}" />
 													<input type="hidden" name="siId" value="${stay.siId}" />
 													<button type="submit" class="btn-edit">+ 추가</button>
 												</form></td>

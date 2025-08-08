@@ -35,14 +35,21 @@ public interface AdminService {
     
     
     // categoryDetail
-    RecommendCategoryVO getAllCategory(int rcId);
-    
+    RecommendCategoryVO getCategory(int rcId);
     List<StayVO> getRecommendStayList(int rcId);
     
-    List<StayVO> getUnrecommendedStays(int rcId);
-    
     // categoryUpdate
+    List<StayVO> getUnrecommendedStays(int rcId);
     void updateCategory(RecommendCategoryVO category);
+    
+    // category/keyword stay Update
     void deleteCategoryStay(int rcId, int siId);
     void insertCategoryStay(int rcId, int siId);
+    
+	// keywordDetail
+    RecommendCategoryVO getKeyWord(int rcId);
+    List<StayVO> getKeyWordStayList(int rcId);
+    
+    // keywordUpdate
+    void updateKeyword(RecommendCategoryVO keyword);
 }

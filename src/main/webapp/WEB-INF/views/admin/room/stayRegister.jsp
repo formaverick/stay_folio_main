@@ -34,7 +34,8 @@
 					<li><a href="/admin/reservation" class="nav-item">예약관리</a></li>
 					<li><a href="/admin/stay/staylist" class="nav-item active">숙소관리</a></li>
 					<li><a href="/admin/member/list" class="nav-item">회원관리</a></li>
-					<li><a href="/admin/review" class="nav-item">리뷰관리</a></li>
+					<li><a href="/admin/dashboard#category-section"
+						class="nav-item">페이지관리</a></li>
 				</ul>
 			</nav>
 		</aside>
@@ -124,7 +125,7 @@
 						</section>
 					</div>
 
-					<!-- 상세 정보 폼 -->
+					<!-- 상세 정보 시작 -->
 					<div class="register-form">
 						<section class="form-section">
 							<h2 class="section-title">상세 정보</h2>
@@ -209,40 +210,45 @@
 								</div>
 								<div class="form-group">
 									<label class="form-label">체크인</label><input name="siCheckin"
-										value="${detail.siCheckin}" class="form-input" placeholder="15:00" />
+										value="${detail.siCheckin}" class="form-input"
+										placeholder="15:00" />
 								</div>
 								<div class="form-group">
 									<label class="form-label">체크아웃</label><input name="siCheckout"
-										value="${detail.siCheckout}" class="form-input" placeholder="11:00" />
+										value="${detail.siCheckout}" class="form-input"
+										placeholder="11:00" />
 								</div>
 							</div>
 
 							<div class="form-group full-width">
-								<label class="form-label">부가 서비스</label>
-								<div class="amenities-grid">
-									<div class="form-row">
-										<label class="amenity-item">반려동물 동반</label> <label><input
-											type="checkbox" name="siPet" value="1"
+								<h2 class="section-title">부가 서비스</h2>
+								<div class="amenities-grid form-radio-grid">
+
+									<div class="form-row form-radio">
+										<label class="amenity-item radio-label">반려동물 동반</label> <label><input
+											type="radio" name="siPet" value="1"
 											<c:if test="${detail.siPet == 1}">checked</c:if>> <span
 											class="amenity-text">가능</span></label> <label><input
-											type="checkbox" name="siPet" value="0"
+											type="radio" name="siPet" value="0"
 											<c:if test="${detail.siPet == 0}">checked</c:if>> <span
 											class="amenity-text">불가능</span></label>
 									</div>
-									<div class="form-row">
-										<label class="amenity-item">주차</label> <label><input
-											type="checkbox" name="siParking" value="1"
+
+									<div class="form-row form-radio">
+										<label class="amenity-item radio-label">주차</label> <label><input
+											type="radio" name="siParking" value="1"
 											<c:if test="${detail.siParking == 1}">checked</c:if>>
-											가능</label> <label><input type="checkbox" name="siParking"
+											가능</label> <label><input type="radio" name="siParking"
 											value="0"
 											<c:if test="${detail.siParking == 0}">checked</c:if>>
 											불가능</label>
 									</div>
-									<div class="form-row">
-										<label class="amenity-item">취식</label> <label><input
-											type="checkbox" name="siFood" value="1"
+
+									<div class="form-row form-radio">
+										<label class="amenity-item radio-label">취식</label> <label><input
+											type="radio" name="siFood" value="1"
 											<c:if test="${detail.siFood == 1}">checked</c:if>> 가능</label>
-										<label><input type="checkbox" name="siFood" value="0"
+										<label><input type="radio" name="siFood" value="0"
 											<c:if test="${detail.siFood == 0}">checked</c:if>>
 											불가능</label>
 									</div>
@@ -251,7 +257,7 @@
 
 
 							<div class="form-group full-width">
-								<label class="form-label">편의시설 선택</label>
+								<h2 class="section-title">편의시설 선택</h2>
 								<div class="amenities-grid">
 									<c:if test="${not empty facilityList}">
 										<c:forEach var="fac" items="${facilityList}">
@@ -274,6 +280,31 @@
 								</div>
 							</div>
 
+							<div class="form-group full-width">
+								<h2 class="section-title">키워드 선택</h2>
+								<div class="amenities-grid">
+									<c:if test="${not empty keywordList}">
+										<c:forEach var="key" items="${keywordList}">
+											<c:set var="checked" value="false" />
+
+											<c:if test="${not empty selectedKeywordIds}">
+												<c:forEach var="selId" items="${selectedKeywordIds}">
+													<c:if test="${selId eq key.rcId}">
+														<c:set var="checked" value="true" />
+													</c:if>
+												</c:forEach>
+											</c:if>
+
+											<label class="amenity-item"> <input type="checkbox"
+												name="keyword" value="${key.rcId}"
+												<c:if test="${checked}">checked</c:if> /> ${key.rcName}
+											</label>
+										</c:forEach>
+									</c:if>
+								</div>
+							</div>
+
+
 							<br>
 
 							<!-- 고정값 hidden -->
@@ -293,56 +324,59 @@
 			</div>
 
 
-			<!-- 이미지 업로드 -->
-			<form class="register-form" id="image-upload-form" method="post"
-				enctype="multipart/form-data">
-				<input type="hidden" name="siId" id="image-siId" /> <input
-					type="hidden" name="riId" id="image-riId" />
+			<div class="register-form-container">
+				<!-- 이미지 업로드 -->
+				<form class="register-form" id="image-upload-form" method="post"
+					enctype="multipart/form-data">
+					<input type="hidden" name="siId" id="image-siId" /> <input
+						type="hidden" name="riId" id="image-riId" />
 
-				<section class="form-section">
-					<h2 class="section-title">이미지 업로드</h2>
-					<div class="form-group full-width">
-						<label class="form-label">대표 이미지</label>
-						<div class="simple-upload-container">
-							<div class="file-upload-wrapper main-image-wrapper">
-								<label for="image-0" class="file-upload-label"> <span
-									class="file-icon"><i class="ph ph-folder"></i></span> <span
-									class="file-text">대표 이미지 선택</span>
-								</label> <input type="file" class="file-input" id="image-0"
-									name="imageFiles[]" data-spidx="0" accept="image/*" />
+					<section class="form-section">
+						<h2 class="section-title">이미지 업로드</h2>
+						<div class="form-group full-width">
+							<label class="form-label">대표 이미지</label>
+							<div class="simple-upload-container">
+								<div class="file-upload-wrapper main-image-wrapper">
+									<label for="image-0" class="file-upload-label"> <span
+										class="file-icon"><i class="ph ph-folder"></i></span> <span
+										class="file-text">대표 이미지 선택</span>
+									</label> <input type="file" class="file-input" id="image-0"
+										name="imageFiles[]" data-spidx="0" accept="image/*" />
+								</div>
 							</div>
 						</div>
-					</div>
 
-					<div class="form-group full-width">
-						<label class="form-label">추가 이미지 (최대 10개)</label>
-						<div class="simple-upload-container">
-							<div class="additional-images-grid">
-								<c:forEach var="i" begin="1" end="11">
-									<div class="file-upload-wrapper">
-										<label for="image-${i}" class="file-upload-label"> <span
-											class="file-icon"><i class="ph ph-folder"></i></span> <span
-											class="file-text"> <c:choose>
-													<c:when test="${i le 2}">추가 이미지 ${i}</c:when>
-													<c:when test="${i le 5}">주요 특징 이미지 ${i-2}</c:when>
-													<c:when test="${i le 8}">특징1 이미지 ${i-5}</c:when>
-													<c:otherwise>특징2 이미지 ${i-8}</c:otherwise>
-												</c:choose>
-										</span>
-										</label> <input type="file" class="file-input" id="image-${i}"
-											name="imageFiles[]" data-spidx="${i}" accept="image/*" />
-									</div>
-								</c:forEach>
+						<div class="form-group full-width">
+							<label class="form-label">추가 이미지 (최대 10개)</label>
+							<div class="simple-upload-container">
+								<div class="additional-images-grid">
+									<c:forEach var="i" begin="1" end="11">
+										<div class="file-upload-wrapper">
+											<label for="image-${i}" class="file-upload-label"> <span
+												class="file-icon"><i class="ph ph-folder"></i></span> <span
+												class="file-text"> <c:choose>
+														<c:when test="${i le 2}">추가 이미지 ${i}</c:when>
+														<c:when test="${i le 5}">주요 특징 이미지 ${i-2}</c:when>
+														<c:when test="${i le 8}">특징1 이미지 ${i-5}</c:when>
+														<c:otherwise>특징2 이미지 ${i-8}</c:otherwise>
+													</c:choose>
+											</span>
+											</label> <input type="file" class="file-input" id="image-${i}"
+												name="imageFiles[]" data-spidx="${i}" accept="image/*" />
+										</div>
+									</c:forEach>
+								</div>
 							</div>
 						</div>
-					</div>
 
-					<div class="form-actions">
-						<button type="submit" class="btn-save">이미지 업로드</button>
-					</div>
+						<div class="form-actions">
+							<button type="submit" class="btn-save">이미지 업로드</button>
+						</div>
 
-				</section>
-			</form>
+					</section>
+				</form>
+			</div>
+
 
 			<!-- 객실 등록 버튼 -->
 			<div style="text-align: right; margin-top: 2rem;">
@@ -360,8 +394,8 @@
 					</c:otherwise>
 				</c:choose>
 			</div>
-	</div>
-	</main>
+			<!-- 객실 등록 버튼 끝-->
+		</main>
 	</div>
 
 	<script>

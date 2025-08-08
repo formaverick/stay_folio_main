@@ -10,6 +10,7 @@ import com.hotel.domain.Criteria;
 import com.hotel.domain.FacilityVO;
 import com.hotel.domain.LocationCategoryVO;
 import com.hotel.domain.PhotoVO;
+import com.hotel.domain.RecommendCategoryVO;
 import com.hotel.domain.RoomVO;
 import com.hotel.domain.StayDetailVO;
 import com.hotel.domain.StaySearchResultVO;
@@ -33,22 +34,22 @@ public interface StayService {
 
 	// 숙소 검색 - 기본(전국) 랜덤 리스트
 	List<StayVO> getRandomStayList();
-	
+
 	// 날짜, 인원, 추천 카테고리 포함 필터 검색
 	 List<StaySearchResultVO> getStayListFiltered(Map<String, Object> param);
 	
 	 List<StayVO> getListWithPaging(Criteria cri);
 	 
 	 int getTotalCount(Criteria cri);
-	 
+
 	// admin - 숙소 등록 (지역 리스트)
-	List<LocationCategoryVO> getAllLocations(); 
+	List<LocationCategoryVO> getAllLocations();
 
 	// admin - 숙소 등록 (편의시설 리스트)
 	List<FacilityVO> getAllFacilities();
 
 	// admin - 숙소 기본 정보 등록
-	void insertStayInfo(StayVO stay, StayDetailVO detail, List<Integer> facilityIds);
+	void insertStayInfo(StayVO stay, StayDetailVO detail, List<Integer> facilityIds, List<Integer> keyword);
 
 	// admin - 숙소 마지막 id 가져오기
 	int getLastInsertId();
@@ -77,5 +78,12 @@ public interface StayService {
 	// admin - 숙소 편의 시설 수정
 	void updateStayFacilities(int siId, List<Integer> facilityIds);
 
+	// admin 숙소 상세페이지 - 키워드
+	List<RecommendCategoryVO> getKeywordByStayId(int siId);
+	
+	// admin - 숙소 id로 키워드 추가, 삭제
+	List<RecommendCategoryVO> getAllKeywords();
+	List<Integer> getKeywordIdsByStayId(int siId);
+	void updateStayKeywords(int siId, List<Integer> keywordIds);
 
 }

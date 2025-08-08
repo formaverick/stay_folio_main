@@ -70,6 +70,7 @@
 	<select id="getRecommendKeyword"
 		resultType="com.hotel.domain.RecommendCategoryVO">
 		SELECT
+		rc.rc_id AS rcId,
 		rc.rc_name AS rcName,
 		COUNT(sr.si_id) AS siNum
 		FROM
@@ -80,7 +81,7 @@
 		WHERE
 		rc.rc_name IS NOT NULL
 		GROUP BY
-		rc.rc_name
+		rc.rc_id, rc.rc_name
 	</select>
 
 	<!-- 예약 현황 그래프 -->
@@ -177,7 +178,7 @@
 
 
 	<!-- home 카테고리 상세 -->
-	<select id="getAllCategory"
+	<select id="getCategory"
 		resultType="com.hotel.domain.RecommendCategoryVO">
 		SELECT rc_id AS rcId, rc_detail_top AS rcDetailTop,
 		rc_detail_bottom AS rcDetailBottom
@@ -187,6 +188,7 @@
 		rc_detail_top IS NOT NULL AND rc_id=#{rcId}
 	</select>
 
+	<!-- 카테고리/검색 키워드 포함 숙소 리스트 -->
 	<select id="getRecommendStayList"
 		resultType="com.hotel.domain.StayVO">
 		SELECT s.si_id AS siId,
@@ -206,7 +208,7 @@
 		ORDER BY s.si_id
 	</select>
 
-	<!-- 카테고리 미포함 숙소리스트 -->
+	<!-- 카테고리/검색 키워드 미포함 숙소리스트 -->
 	<select id="getUnrecommendedStays"
 		resultType="com.hotel.domain.StayVO">
 		SELECT s.si_id AS siId,
@@ -237,7 +239,7 @@
 		#{rcId}
 	</update>
 
-	<!-- 카테고리 숙소 삭제 -->
+	<!-- 카테고리/검색 키워드 숙소 삭제 -->
 	<delete id="deleteCategoryStay">
 		DELETE FROM t_stay_recommend
 		WHERE rc_id = #{rcId}
@@ -245,10 +247,30 @@
 		si_id = #{siId}
 	</delete>
 
-	<!-- 카테고리 숙소 추가 -->
+	<!-- 카테고리/검색 키워드 숙소 추가 -->
 	<insert id="insertCategoryStay">
 		INSERT INTO t_stay_recommend (rc_id, si_id)
 		VALUES
 		(#{rcId}, #{siId})
 	</insert>
+	
+	
+	<!-- 검색 키워드 상세 -->
+	<select id="getKeyWord"
+		resultType="com.hotel.domain.RecommendCategoryVO">
+		SELECT rc_id AS rcId, rc_name AS rcName
+		FROM
+		t_recommend_category
+		WHERE
+		rc_name IS NOT NULL AND rc_id=#{rcId}
+	</select>
+	
+	<!-- 검색 키워드 수정 -->
+	<update id="updateKeyword">
+		UPDATE t_recommend_category
+		SET
+		rc_name = #{rcName}
+		WHERE rc_id =
+		#{rcId}
+	</update>
 </mapper>

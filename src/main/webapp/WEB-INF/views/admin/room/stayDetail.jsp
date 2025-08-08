@@ -37,7 +37,8 @@
 					<li><a href="/admin/reservation" class="nav-item">예약관리</a></li>
 					<li><a href="/admin/stay/staylist" class="nav-item active">숙소관리</a></li>
 					<li><a href="/admin/member/list" class="nav-item">회원관리</a></li>
-					<li><a href="/admin/review" class="nav-item">리뷰관리</a></li>
+					<li><a href="/admin/dashboard#category-section"
+						class="nav-item">페이지관리</a></li>
 				</ul>
 			</nav>
 		</aside>
@@ -263,6 +264,18 @@
 							<c:forEach var="fac" items="${stayFacilities}">
 								<div class="facility-item">
 									<i class="ph ${fac.fiIcon}"></i> <span>${fac.fiName}</span>
+								</div>
+							</c:forEach>
+						</div>
+					</div>
+
+					<!-- 키워드 -->
+					<div class="form-section">
+						<h2 class="section-title">키워드</h2>
+						<div class="facility-list">
+							<c:forEach var="key" items="${stayKeywords}">
+								<div class="facility-item">
+									<span>${key.rcName}</span>
 								</div>
 							</c:forEach>
 						</div>

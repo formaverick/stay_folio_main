@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class StayVO {
 	// t_stay_info
-	private Long siId;           // 숙소 ID
+	private int siId;           // 숙소 ID
     private String siName;         // 숙소 이름
     private String siDesc;         // 짧은 설명
     private String siLoca;         // 지역 텍스트
@@ -29,4 +29,6 @@ public class StayVO {
     private String spUrl;			 // 숙소 card 용 1장 가져오기
     
     private boolean bookmarked;	// 북마크 정보
+    
+    private int reserveCount; 	// 예약 건 수
 }

@@ -32,8 +32,9 @@
 					<li><a href="/admin/dashboard" class="nav-item">대시보드</a></li>
 					<li><a href="/admin/reservation" class="nav-item">예약관리</a></li>
 					<li><a href="/admin/stay/staylist" class="nav-item active">숙소관리</a></li>
-					<li><a href="/admin/member" class="nav-item">회원관리</a></li>
-					<li><a href="/admin/review" class="nav-item">리뷰관리</a></li>
+					<li><a href="/admin/member/list" class="nav-item">회원관리</a></li>
+					<li><a href="/admin/dashboard#category-section"
+						class="nav-item">페이지관리</a></li>
 				</ul>
 			</nav>
 		</aside>
@@ -222,22 +223,19 @@
 
 							<div class="form-group full-width">
 								<label class="form-label">부가 서비스</label>
-								<div class="amenities-grid"
-									style="display: flex; flex-direction: column; gap: 12px;">
+								<div class="amenities-grid form-radio-grid">
 
-									<div class="form-row"
-										style="display: flex; align-items: center; gap: 20px;">
-										<span class="amenity-item" style="min-width: 100px;">반려동물
-											동반</span> <label><input type="radio" name="siPet" value="1"
+									<div class="form-row form-radio">
+										<span class="amenity-item radio-label">반려동물 동반</span> <label><input
+											type="radio" name="siPet" value="1"
 											<c:if test="${detail.siPet == 1}">checked</c:if>> 가능</label>
 										<label><input type="radio" name="siPet" value="0"
 											<c:if test="${detail.siPet == 0}">checked</c:if>> 불가능</label>
 									</div>
 
-									<div class="form-row"
-										style="display: flex; align-items: center; gap: 20px;">
-										<span class="amenity-item" style="min-width: 100px;">주차</span>
-										<label><input type="radio" name="siParking" value="1"
+									<div class="form-row form-radio">
+										<span class="amenity-item radio-label">주차</span> <label><input
+											type="radio" name="siParking" value="1"
 											<c:if test="${detail.siParking == 1}">checked</c:if>>
 											가능</label> <label><input type="radio" name="siParking"
 											value="0"
@@ -245,10 +243,9 @@
 											불가능</label>
 									</div>
 
-									<div class="form-row"
-										style="display: flex; align-items: center; gap: 20px;">
-										<span class="amenity-item" style="min-width: 100px;">취식</span>
-										<label><input type="radio" name="siFood" value="1"
+									<div class="form-row form-radio">
+										<span class="amenity-item radio-label">취식</span> <label><input
+											type="radio" name="siFood" value="1"
 											<c:if test="${detail.siFood == 1}">checked</c:if>> 가능</label>
 										<label><input type="radio" name="siFood" value="0"
 											<c:if test="${detail.siFood == 0}">checked</c:if>>
@@ -265,9 +262,8 @@
 								<div class="amenities-grid"
 									style="display: flex; flex-wrap: wrap; gap: 12px;">
 									<c:forEach var="fac" items="${allFacilities}">
-										<label class="amenity-item"
-											style="display: flex; align-items: center; gap: 6px;">
-											<input type="checkbox" name="facilityIds" value="${fac.fiId}"
+										<label class="amenity-item radio-item"> <input
+											type="checkbox" name="facilityIds" value="${fac.fiId}"
 											<c:forEach var="id" items="${selectedFacilityIds}">
 												<c:if test="${id == fac.fiId}">checked</c:if>
 											</c:forEach> />
@@ -276,6 +272,23 @@
 									</c:forEach>
 								</div>
 							</div>
+
+							<div class="form-group full-width">
+								<label class="form-label">키워드 선택</label>
+								<div class="amenities-grid"
+									style="display: flex; flex-wrap: wrap; gap: 12px;">
+									<c:forEach var="key" items="${allKeyword}">
+										<label class="amenity-item radio-item"> <input
+											type="checkbox" name="keywordIds" value="${key.rcId}"
+											<c:forEach var="id" items="${selectedKeywordIds}">
+												<c:if test="${id == key.rcId}">checked</c:if>
+											</c:forEach> />
+											${key.rcName}
+										</label>
+									</c:forEach>
+								</div>
+							</div>
+
 
 							<br>
 

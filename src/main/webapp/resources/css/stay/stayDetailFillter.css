@@ -1010,6 +1010,7 @@
 }
 
 .stay-price-main {
+  padding-left: 4px;
   display: flex;
   align-items: baseline;
   gap: 4px;

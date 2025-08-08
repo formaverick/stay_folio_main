@@ -49,6 +49,10 @@ body {
   color: #333;
 }
 
+.stay-wishlist[data-wishlist="true"] i {
+  color: #ff3b30;
+}
+
 .feature-title {
   font-size: 22px;
   font-weight: 600;

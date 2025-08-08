@@ -42,18 +42,23 @@ public class AdminController {
 	public String StayForm(Model model) {
 		// 지역 선택 목록
 		model.addAttribute("locationList", stayService.getAllLocations());
+		
 		// 편의 시설 선택 목록
 		model.addAttribute("facilityList", stayService.getAllFacilities());
+
+		// 검색 키워드 선택 목록
+		model.addAttribute("keywordList", adminService.getRecommendKeyword());
+
 		return "admin/room/stayRegister";
 	}
 
 	// 숙소 등록
 	@PostMapping("/stay/add")
 	public String addStay(StayVO stay, StayDetailVO detail,
-			@RequestParam(value = "facilities", required = false) List<Integer> facilities, Model model) {
+			@RequestParam(value = "facilities", required = false) List<Integer> facilities, @RequestParam(value = "keyword", required = false) List<Integer> keyword, Model model) {
 
 		// 숙소 정보 insert
-		stayService.insertStayInfo(stay, detail, facilities);
+		stayService.insertStayInfo(stay, detail, facilities, keyword);
 
 		// 최근 si_id 가져오기
 		int siId = stayService.getLastInsertId();
@@ -64,15 +69,15 @@ public class AdminController {
 
 		List<FacilityVO> facilityList = stayService.getAllFacilities();
 
-		
 		model.addAttribute("stay", stay); // 숙소 기본 정보
-		model.addAttribute("detail", detail);	// 숙소 상세 정보
-		model.addAttribute("facilityList", facilityList);	// 모든 편의 시설 목록
-		model.addAttribute("selectedFacilityIds", facilities);	// 선택된 편의 시설
-		model.addAttribute("newSiId", siId);	// insert 된 숙소 id
+		model.addAttribute("detail", detail); // 숙소 상세 정보
+		model.addAttribute("facilityList", facilityList); // 모든 편의 시설 목록
+		model.addAttribute("selectedFacilityIds", facilities); // 선택된 편의 시설
+		model.addAttribute("newSiId", siId); // insert 된 숙소 id
 
 		return "/admin/room/stayRegister"; // 같은 페이지로 돌아가서 이미지 등록 진행
 	}
+	
 
 	@GetMapping("/rooms") // 숙소 등록에서 객실 등록 페이지 이동
 	public String showRoomRegister(@RequestParam("siId") int siId,
@@ -103,9 +108,13 @@ public class AdminController {
 	public List<RoomVO> getRoomList(@RequestParam("siId") int siId) {
 		return stayService.getRoomsByStayId(siId);
 	}
-
+	//회원 리스트
 	@GetMapping("/member/list")
 	public String memberList(Criteria cri, Model model) {
+		System.out.println("enabled: " + cri.getEnabled());
+		if (cri.getEnabled() == null) {
+		    // 전체 회원 조회로 간주
+		}
 		List<MemberVO> memberList = adminService.getMemberList(cri);
 		int total = adminService.getTotalMemberCount(cri); // 총 회원 수
 

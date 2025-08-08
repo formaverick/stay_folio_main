@@ -165,8 +165,8 @@
 
 				<!-- 6. 객실 선택 -->
 				<section id="room-select" class="stay-section">
-					<div class="amenity-title1">이 스테이의 다른 객실</div>
 					<c:if test="${not empty otherRooms}">
+						<div class="amenity-title1">이 스테이의 다른 객실</div>
 						<div class="room-list">
 							<c:forEach var="room" items="${otherRooms}">
 								<div class="room-card">

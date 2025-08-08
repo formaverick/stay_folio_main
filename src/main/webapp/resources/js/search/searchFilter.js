@@ -1,5 +1,11 @@
 $(document).ready(function () {
   // 초기값 설정
+  const currentLcId = $("#lcId").val();
+  if (currentLcId) {
+    $(`.dropdown-options .option[data-lc-id="${currentLcId}"]`).addClass(
+      "selected"
+    );
+  }
   let selectedRegion = "all";
   let adultCount = 2;
   let childCount = 0;
@@ -37,6 +43,59 @@ $(document).ready(function () {
   function updateDateDisplay() {
     $("#startDate").text(formatDate(startDate));
     $("#endDate").text(formatDate(endDate));
+    $("input[name='checkin']").val(formatDateForServer(startDate));
+    $("input[name='checkout']").val(formatDateForServer(endDate));
+  }
+
+  function triggerSearch() {
+    const lcId = $("#lcId").val() || 0;
+    const rcId = $("#rcId").val() || 0;
+
+    // ✅ 체크인/체크아웃 값이 비어 있으면 기본값 설정
+    let checkin = $("input[name='checkin']").val();
+    let checkout = $("input[name='checkout']").val();
+
+    if (!checkin || !checkout) {
+      const today = new Date();
+      const tomorrow = new Date();
+      tomorrow.setDate(today.getDate() + 1);
+
+      checkin = formatDateForServer(today);
+      checkout = formatDateForServer(tomorrow);
+
+      $("input[name='checkin']").val(checkin);
+      $("input[name='checkout']").val(checkout);
+    }
+
+    const adult = $("input[name='adult']").val() || 2;
+    const child = $("input[name='child']").val() || 0;
+
+    $.ajax({
+      url: `/stay/search`,
+      method: "GET",
+      data: {
+        lcId,
+        rcId,
+        checkin,
+        checkout,
+        adult,
+        child,
+      },
+      success: function (data) {
+        const $section = $(data).find("#searchResultsSection");
+
+        if ($section.length === 0 || !$section.html().trim()) {
+          $("#searchResultsSection").html("");
+          alert("검색 결과가 없습니다.");
+          return;
+        }
+
+        $("#searchResultsSection").html($section.html());
+      },
+      error: function () {
+        alert("숙소 목록을 불러오지 못했습니다.");
+      },
+    });
   }
 
   // 날짜 유효성 검사 함수
@@ -79,15 +138,15 @@ $(document).ready(function () {
     monthSelectorType: "static", // 월 선택 방식 개선
     enableTime: false,
     animate: true,
-    onDayCreate: function(dObj, dStr, fp, dayElem) {
+    onDayCreate: function (dObj, dStr, fp, dayElem) {
       // 첫 번째 날짜가 선택된 경우, 그 이전 날짜들을 비활성화
       if (fp.selectedDates.length === 1) {
         const firstSelectedDate = fp.selectedDates[0];
         const dayDate = dayElem.dateObj;
-        
+
         if (dayDate < firstSelectedDate) {
-          dayElem.classList.add('flatpickr-disabled');
-          dayElem.setAttribute('aria-disabled', 'true');
+          dayElem.classList.add("flatpickr-disabled");
+          dayElem.setAttribute("aria-disabled", "true");
         }
       }
     },
@@ -150,13 +209,17 @@ $(document).ready(function () {
         } else {
           $("#dateError").hide();
           $("#dateApply").prop("disabled", false).css("opacity", 1);
+          startDate = tempStartDate;
+          endDate = tempEndDate;
+          updateDateDisplay();
+          triggerSearch();
         }
       } else if (selectedDates.length === 1) {
         // 시작일만 선택된 경우
         tempStartDate = selectedDates[0];
         $("#dateError").hide();
         $("#dateApply").prop("disabled", true).css("opacity", 0.5);
-        
+
         // 첫 번째 날짜 선택 후 달력 다시 렌더링하여 이전 날짜들 비활성화
         setTimeout(() => {
           this.redraw();
@@ -204,27 +267,28 @@ $(document).ready(function () {
     },
   });
 
-  // 드롭다운 토글 함수
-  function toggleDropdown(element) {
-    // 다른 모든 드롭다운 닫기
-    $(".filter-content").not(element).removeClass("active");
+  // 드롭다운 토글 함수 (개선)
+  function toggleFilterDropdown(targetElement) {
+    // 모든 드롭다운 컨텐츠 숨기기
     $(
       ".dropdown-container, .date-picker-container, .people-selector-container"
     ).hide();
+    // 모든 필터 버튼의 'active' 클래스 제거
+    $(".filter-content").removeClass("active");
 
-    // 현재 드롭다운 토글
-    $(element).toggleClass("active");
-    $(element)
-      .find(
-        ".dropdown-container, .date-picker-container, .people-selector-container"
-      )
-      .toggle();
+    // 클릭된 요소의 드롭다운 컨텐츠를 찾고 토글
+    const content = $(targetElement).find(
+      ".dropdown-container, .date-picker-container, .people-selector-container"
+    );
+    content.toggle();
+    // 클릭된 요소에 'active' 클래스 토글
+    $(targetElement).toggleClass("active");
   }
 
   // 날짜 선택 클릭 이벤트
   $("#dateSelect").on("click", function (e) {
     e.stopPropagation();
-    toggleDropdown(this);
+    toggleFilterDropdown(this);
 
     // 플랫피커 날짜 초기화 (현재 선택된 날짜로)
     datePicker.setDate([startDate, endDate]);
@@ -286,66 +350,62 @@ $(document).ready(function () {
   // 지역 선택 드롭다운 토글
   $("#regionSelect").on("click", function (e) {
     e.stopPropagation();
-    const dropdown = $(this).find(".dropdown-container");
-
-    // 다른 드롭다운 닫기
-    $(".dropdown-container, .date-picker-container, .people-selector-container")
-      .not(dropdown)
-      .hide();
-    $(".filter-content").not($(this)).removeClass("active");
-
-    dropdown.toggle();
-    $(this).toggleClass("active");
+    toggleFilterDropdown(this);
   });
 
   // 인원 선택 드롭다운 토글
   $("#peopleSelect").on("click", function (e) {
     e.stopPropagation();
-    const peopleSelector = $(this).find(".people-selector-container");
-
-    // 다른 드롭다운 닫기
-    $(".dropdown-container, .date-picker-container, .people-selector-container")
-      .not(peopleSelector)
-      .hide();
-    $(".filter-content").not($(this)).removeClass("active");
-
-    peopleSelector.toggle();
-    $(this).toggleClass("active");
+    toggleFilterDropdown(this);
   });
 
   // 지역 옵션 선택 이벤트
   $(".dropdown-options .option").on("click", function () {
-    const value = $(this).data("value");
-    const text = $(this).text();
-    selectedRegion = value;
+    const selectedLcId = $(this).data("lc-id") || 0;
+    const currentLcId = $("#lcId").val();
 
-    $("#regionSelect .selected-option span").text(text);
+    // 이미 선택된 지역이면 무시 (중복 실행 방지)
+    if (String(currentLcId) === String(selectedLcId)) return;
+
+    $("#lcId").val(selectedLcId);
+
     $(".dropdown-options .option").removeClass("selected");
     $(this).addClass("selected");
-    
-    // 선택된 숙소 불러오기
-    const lcId = $(this).data("lc-id") || 0;
-    
+
+    const text = $(this).text();
+    $("#regionSelect .selected-option span").text(text);
+
+    // 날짜/인원/카테고리 값 수집
+    const checkin = $("input[name='checkin']").val();
+    const checkout = $("input[name='checkout']").val();
+    const rcId = $("#rcId").val() || 0;
+
     $.ajax({
-    	url: `/stay/search?lcId=${lcId}`,
-    	method: "GET",
-    	success: function (data) {
-      		// 전체 HTML에서 검색 결과 부분만 추출
-      		const newSection = $(data).find("#searchResultsSection").html();
-      		$("#searchResultsSection").html(newSection);
-    	},
-    	error: function () {
-      		alert("숙소 목록을 불러오지 못했습니다.");
-    	},
-  	});
-  	
-  	// 드롭다운 닫기
+      url: `/stay/search`,
+      method: "GET",
+      data: {
+        lcId: selectedLcId,
+        rcId: rcId,
+        checkin: checkin,
+        checkout: checkout,
+        adult: adultCount,
+        child: childCount,
+      },
+      success: function (data) {
+        const newSection = $(data).find("#searchResultsSection").html();
+        $("#searchResultsSection").html(newSection);
+      },
+      error: function () {
+        alert("숙소 목록을 불러오지 못했습니다.");
+      },
+    });
+
+    // 드롭다운 닫기
     setTimeout(() => {
-  		$("#regionSelect").removeClass("active");
-  		$(".dropdown-container").hide();
-	}, 10);
+      $("#regionSelect").removeClass("active");
+      $(".dropdown-container").hide();
+    }, 10);
   });
-  
 
   // 인원 증감 버튼 이벤트
   $(".counter-btn").on("click", function (e) {
@@ -381,6 +441,11 @@ $(document).ready(function () {
       displayText += `, 아동 ${childCount}명`;
     }
     $("#peopleDisplay").text(displayText);
+    //인원 수 받아오기
+    $("input[name='adult']").val(adultCount);
+    $("input[name='child']").val(childCount);
+
+    triggerSearch();
 
     // 버튼 비활성화 처리
     if (adultCount <= 1) {
@@ -411,26 +476,26 @@ $(document).ready(function () {
   // 초기 인원 표시 업데이트
   updatePeopleDisplay();
 
-  // 검색 버튼 클릭 시만 폼 제출 처리
-  $("#searchButton").on("click", function (e) {
-    e.preventDefault();
+  // 인원 취소 버튼 클릭 이벤트
+  $("#peopleCancel").on("click", function (e) {
+    e.stopPropagation();
+    $("#peopleSelect").removeClass("active");
+    $(".people-selector-container").hide();
+  });
 
-    // 현재 필터 값들을 숨겨진 입력 필드에 설정 (서버용 포맷)
-    $("#regionInput").val(selectedRegion);
-    $("#startDateInput").val(formatDateForServer(startDate));
-    $("#endDateInput").val(formatDateForServer(endDate));
+  // 인원 적용 버튼 클릭 이벤트
+  $("#peopleApply").on("click", function (e) {
+    e.stopPropagation();
     $("#adultsInput").val(adultCount);
     $("#childrenInput").val(childCount);
 
-    console.log("검색 버튼 클릭 - 폼 제출:", {
-      region: selectedRegion,
-      startDate: formatDateForServer(startDate),
-      endDate: formatDateForServer(endDate),
-      adults: adultCount,
-      children: childCount,
-    });
+    $("#peopleSelect").removeClass("active");
+    $(".people-selector-container").hide();
+  });
 
-    // 폼 제출
+  // 검색 버튼 클릭 시만 폼 제출 처리 (기존 로직을 performSearch 호출로 변경)
+  $("#searchButton").on("click", function (e) {
+    e.preventDefault(); // 기본 폼 제출 방지
     $("#searchForm").submit();
   });
 
@@ -442,5 +507,58 @@ $(document).ready(function () {
         ".dropdown-container, .date-picker-container, .people-selector-container"
       ).hide();
     }
+  });
+  // 카테고리 클릭 시
+  $(document).on("click", ".category-item", function () {
+    const selectedRcId = $(this).data("rc-id") || 0;
+    const currentRcId = $("#rcId").val();
+
+    if (String(selectedRcId) === String(currentRcId)) return;
+
+    $(".category-item").removeClass("active");
+    $(this).addClass("active");
+
+    $("#rcId").val(selectedRcId); // ✅ 선택한 카테고리 저장
+
+    triggerSearch(); // ✅ 중복 방지, 이 한 줄로 끝냄!
+  });
+
+  $(document).on("click", ".category-item", function () {
+    const selectedRcId = $(this).data("rc-id") || 0;
+    const currentRcId = $("#rcId").val();
+
+    // ✅ 이미 선택된 카테고리면 무시 → 무한루프 방지 핵심!
+    if (String(selectedRcId) === String(currentRcId)) return;
+
+    console.log("카테고리 클릭:", selectedRcId);
+    $(".category-item").removeClass("active");
+    $(this).addClass("active");
+
+    const lcId = $("#lcId").val() || 0;
+    const checkin = $("input[name='checkin']").val();
+    const checkout = $("input[name='checkout']").val();
+
+    $.ajax({
+      url: `/stay/search`,
+      method: "GET",
+      data: {
+        lcId: lcId,
+        rcId: selectedRcId,
+        checkin: checkin,
+        checkout: checkout,
+        adult: adultCount,
+        child: childCount,
+      },
+      success: function (data) {
+        const newSection = $(data).find("#searchResultsSection").html();
+        $("#searchResultsSection").html(newSection);
+
+        // 선택한 카테고리 저장 (중복 방지를 위함)
+        $("#rcId").val(selectedRcId);
+      },
+      error: function () {
+        alert("추천 숙소 목록을 불러오지 못했습니다.");
+      },
+    });
   });
 });

@@ -7,12 +7,12 @@ function loadRecommendations(rc_id) {
       const subtitle = document.getElementById(`subtitle-${rc_id}`);
       const track = document.getElementById(`track-${rc_id}`);
 
-	  // 제목과 부제목 분리
+      // 제목과 부제목 분리
       const titleSplit = json.title.split(" - ");
       if (title) title.textContent = titleSplit[0] || "";
       if (subtitle) subtitle.textContent = titleSplit[1] || "";
 
-	  // 기존 캐러셀 내용 초기화
+      // 기존 캐러셀 내용 초기화
       track.innerHTML = "";
 
       const stays = json.stays;
@@ -20,14 +20,14 @@ function loadRecommendations(rc_id) {
       for (let i = 0; i < stays.length; i += 3) {
         const grid = document.createElement("div");
         grid.className = "stay-grid";
-		
-		// 3개씩 끊어서 렌더링
+
+        // 3개씩 끊어서 렌더링
         stays.slice(i, i + 3).forEach((stay) => {
           const item = document.createElement("div");
           item.className = "stay-item";
           item.dataset.stayId = stay.siId;
-		
-		  // 할인 정보 구성
+
+          // 할인 정보 구성
           const discountSection =
             stay.discount > 0
               ? `
@@ -47,12 +47,12 @@ function loadRecommendations(rc_id) {
               ? `<div class="stay-promotion">프로모션</div>`
               : "";
 
-		  // 이미지 URL (없으면 기본 이미지)
+          // 이미지 URL (없으면 기본 이미지)
           const imageUrl = stay.spUrl
             ? `https://stayfolio-upload-bucket.s3.us-east-1.amazonaws.com/${stay.spUrl}`
             : "/resources/img/card1.png";
 
-  		  // 각 숙소 카드 HTML 구성
+          // 각 숙소 카드 HTML 구성
           item.innerHTML = `
             <div class="stay-image">
               <img src="${imageUrl}" alt="${stay.siName}" />
@@ -72,15 +72,15 @@ function loadRecommendations(rc_id) {
             </div>
           `;
 
-		  // 현재 grid에 카드 추가
+          // 현재 grid에 카드 추가
           grid.appendChild(item);
         });
 
-		// 전체 캐러셀 트랙에 grid 추가
+        // 전체 캐러셀 트랙에 grid 추가
         track.appendChild(grid);
       }
 
-	  // 캐러셀 기능, 찜 기능 활성화
+      // 캐러셀 기능, 찜 기능 활성화
       initStayCarouselEvents(rc_id);
       wishEvent();
     });
@@ -94,10 +94,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById("recommend-container");
 
   rcIdList.forEach((rc_id) => {
-  	// 각 추천 ID별 섹션 생성
+    // 각 추천 ID별 섹션 생성
     const section = document.createElement("section");
     section.className = "stay-section";
-    
+
     // 섹션 내부 구조 (제목 + 캐러셀 영역)
     section.innerHTML = `
       <div class="stay-container">
@@ -121,9 +121,9 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
 
-	// 추천 섹션을 DOM에 추가
+    // 추천 섹션을 DOM에 추가
     container.appendChild(section);
-    
+
     // 해당 추천 ID에 맞는 숙소 리스트 로드
     loadRecommendations(rc_id);
   });

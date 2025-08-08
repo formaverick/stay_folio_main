@@ -250,7 +250,7 @@
 					<img src="${s3BaseUrl}${info.spUrl}" alt="객실 사진" class="room-image" />
 					<div class="room-details">
 						<p class="room-name">${info.riName}</p>
-						<button class="view-room-button">객실 보기</button>
+						<button class="view-room-button" onclick="location.href='/stay/${siId}/${riId}?checkin=${checkin}&checkout=${checkout}&adult=${adult}&child=${child}'">객실 보기</button>
 					</div>
 					<div class="room-info">
 						<p>${info.riType}/기준${info.riPerson}명(최대${info.riMaxperson}명)</p>

@@ -1,16 +1,20 @@
 package com.hotel.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.hotel.domain.AmenityVO;
+import com.hotel.domain.Criteria;
 import com.hotel.domain.FacilityVO;
 import com.hotel.domain.LocationCategoryVO;
 import com.hotel.domain.PhotoVO;
+import com.hotel.domain.RecommendCategoryVO;
 import com.hotel.domain.RoomVO;
 import com.hotel.domain.StayDetailVO;
+import com.hotel.domain.StaySearchResultVO;
 import com.hotel.domain.StayVO;
 
 @Mapper
@@ -36,6 +40,11 @@ public interface StayMapper {
 	// 지역 목록 조회
 	List<LocationCategoryVO> getAllLocations();
 
+	// Mapper 인터페이스
+	List<StaySearchResultVO> selectStayListFiltered(Map<String, Object> param);
+
+	List<StayVO> selectRecommendStayListByLcId(@Param("rcId") int rcId, @Param("lcId") int lcId);
+
 	// 편의시설 목록 조회
 	List<FacilityVO> getAllFacilities();
 
@@ -53,6 +62,12 @@ public interface StayMapper {
 
 	// 모든 숙소 불러오기
 	List<StayVO> getAllStays();
+	
+	// 페이징된 숙소 리스트 가져오기
+	List<StayVO> getListWithPaging(Criteria cri);
+
+	// 전체 숙소 수 (페이징용)
+	int getTotalCount(Criteria cri);
 
 	// 숙소 이미지 불러오기
 	List<PhotoVO> getStayPhotos(int siId);
@@ -74,5 +89,16 @@ public interface StayMapper {
 
 	// admin - 숙소 사진 수정
 	void updateStayPhoto(PhotoVO photo);
+
+	// admin 숙소 상세페이지 - 키워드
+	List<RecommendCategoryVO> getKeywordByStayId(int siId);
+	
+	List<RecommendCategoryVO> getAllKeywords();
+	
+	List<Integer> getKeywordIdsByStayId(int siId);
+	
+	void deleteKeywordsByStayId(int siId);
+	
+	void insertKeywordForStay(@Param("rcId") int rcId, @Param("siId") int siId);
 
 }

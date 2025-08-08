@@ -7,13 +7,18 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.hotel.domain.Criteria;
 import com.hotel.domain.FacilityVO;
 import com.hotel.domain.LocationCategoryVO;
 import com.hotel.domain.PhotoVO;
+import com.hotel.domain.RecommendCategoryVO;
 import com.hotel.domain.RoomVO;
 import com.hotel.domain.StayDetailVO;
+import com.hotel.domain.StaySearchResultVO;
 import com.hotel.domain.StayVO;
+import com.hotel.mapper.AdminMapper;
 import com.hotel.mapper.StayMapper;
 
 @Service
@@ -21,6 +26,9 @@ public class StayServiceImpl implements StayService {
 
 	@Autowired
 	private StayMapper stayMapper;
+
+	@Autowired
+	private AdminMapper adminMapper;
 
 //	숙소 card
 	@Override
@@ -64,6 +72,12 @@ public class StayServiceImpl implements StayService {
 		return stayMapper.getAllLocations();
 	}
 
+	// 검색 리스트(지역,카테고리,체크인,체크아웃,총 인원)
+	@Override
+	public List<StaySearchResultVO> getStayListFiltered(Map<String, Object> param) {
+		return stayMapper.selectStayListFiltered(param);
+	}
+
 	// 편의시설 리스트
 	@Override
 	public List<FacilityVO> getAllFacilities() {
@@ -72,15 +86,15 @@ public class StayServiceImpl implements StayService {
 
 	// admin - 숙소 등록
 	@Override
-	public void insertStayInfo(StayVO stay, StayDetailVO detail, List<Integer> facilityIds) {
+	public void insertStayInfo(StayVO stay, StayDetailVO detail, List<Integer> facilityIds, List<Integer> keyword) {
 		// 숙소 기본 정보
 		stayMapper.insertStayInfo(stay);
-		
+
 		// 등록된 숙소 id
 		int siId = stayMapper.getLastInsertId();
 
 		// 상세 정보 id에 등록된 숙소 id 설정
-		detail.setSiId((long) siId);
+		detail.setSiId(siId);
 		// 숙소 상세 정보 등록
 		stayMapper.insertStayDetail(detail);
 
@@ -88,6 +102,13 @@ public class StayServiceImpl implements StayService {
 		if (facilityIds != null) {
 			for (Integer fiId : facilityIds) {
 				stayMapper.insertFacilityRel(siId, fiId);
+			}
+		}
+
+		// 선택된 키워드 등록
+		if (keyword != null) {
+			for (Integer rcId : keyword) {
+				adminMapper.insertCategoryStay(rcId, siId);
 			}
 		}
 	}
@@ -110,8 +131,18 @@ public class StayServiceImpl implements StayService {
 
 	// admin - 숙소 전체
 	@Override
+	public List<StayVO> getListWithPaging(Criteria cri) {
+		return stayMapper.getListWithPaging(cri);
+	}
+
+	@Override
 	public List<StayVO> getAllStays() {
-		return stayMapper.getAllStays();
+		return stayMapper.getAllStays(); // ← 이렇게 반드시 구현해야 에러가 사라짐
+	}
+
+	@Override
+	public int getTotalCount(Criteria cri) {
+		return stayMapper.getTotalCount(cri);
 	}
 
 	// admin - 숙소 사진 map
@@ -177,6 +208,37 @@ public class StayServiceImpl implements StayService {
 		// 다시 insert
 		for (Integer fiId : facilityIds) {
 			stayMapper.insertFacilityRel(siId, fiId);
+		}
+	}
+
+	// admin 숙소 상세페이지 - 키워드
+	@Override
+	public List<RecommendCategoryVO> getKeywordByStayId(int siId) {
+		return stayMapper.getKeywordByStayId(siId);
+	}
+
+	// admin - 숙소 id로 키워드 추가, 삭제
+	@Override
+	public List<RecommendCategoryVO> getAllKeywords() {
+		return stayMapper.getAllKeywords();
+	}
+
+	@Override
+	public List<Integer> getKeywordIdsByStayId(int siId) {
+		return stayMapper.getKeywordIdsByStayId(siId);
+	}
+
+	@Override
+	@Transactional
+	public void updateStayKeywords(int siId, List<Integer> keywordIds) {
+		// 아무것도 체크 안 한 경우: 전부 해제
+		if (keywordIds == null || keywordIds.isEmpty()) {
+			stayMapper.deleteKeywordsByStayId(siId);
+			return;
+		}
+		stayMapper.deleteKeywordsByStayId(siId);
+		for (Integer rcId : keywordIds) {
+			stayMapper.insertKeywordForStay(rcId, siId);
 		}
 	}
 

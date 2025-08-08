@@ -193,8 +193,8 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 				<!-- 6. 객실 선택 -->
 				<section id="room-select" class="stay-section">
-					<div class="amenity-title1">이 스테이의 다른 객실</div>
 					<c:if test="${not empty otherRooms}">
+						<div class="amenity-title1">이 스테이의 다른 객실</div>
 						<div class="room-list">
 							<c:forEach var="room" items="${otherRooms}">
 								<div class="room-card">
@@ -352,14 +352,15 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 			<div class="room-detail-right">
 				<!-- 예약 카드 (필터+요약 통합) -->
 				<div class="booking-card">
-					<form id="searchForm" method="POST" action="/search/results onsubmit="return false;">
+					<form id="searchForm" method="POST"
+						action="/search/results onsubmit=" returnfalse;">
 						<!-- 숨겨진 입력 필드들 -->
 						<input type="hidden" name="checkin" id="checkinInput"
 							value="${checkin}" /> <input type="hidden" name="checkout"
 							id="checkoutInput" value="${checkout}" /> <input type="hidden"
 							name="adult" id="adultInput" value="${adult}" /> <input
-							type="hidden" name="child" id="childInput" value="${child}" />
-						<input type="hidden" id="maxPerson" value="${room.riMaxperson}" />
+							type="hidden" name="child" id="childInput" value="${child}" /> <input
+							type="hidden" id="maxPerson" value="${room.riMaxperson}" />
 
 						<div class="pill-filter">
 							<!-- 일정 선택 -->
@@ -422,42 +423,45 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 								</div>
 							</div>
 						</div>
-					
 
-					<div class="booking-price-info">
-						<c:if test="${discountRate > 0}">
-							<div class="stay-price-original">₩<fmt:formatNumber value="${roomPrice}" type="number"/></div>
-						</c:if>
-						<div class="stay-price-main">
+
+						<div class="booking-price-info">
 							<c:if test="${discountRate > 0}">
-								<span class="stay-price-discount"> <fmt:formatNumber
-										value="${discountRate * 100}" type="number"
-										maxFractionDigits="0" />%
-								</span>
+								<div class="stay-price-original">
+									₩
+									<fmt:formatNumber value="${roomPrice}" type="number" />
+								</div>
 							</c:if>
+							<div class="stay-price-main">
+								<c:if test="${discountRate > 0}">
+									<span class="stay-price-discount"> <fmt:formatNumber
+											value="${discountRate * 100}" type="number"
+											maxFractionDigits="0" />%
+									</span>
+								</c:if>
 
-							<span class="stay-price-current"><fmt:formatNumber value="${totalPrice}" type="number"/></span> <span
-								class="per-night">/ 박</span>
+								<span class="stay-price-current"><fmt:formatNumber
+										value="${totalPrice}" type="number" /></span> <span class="per-night">/
+									박</span>
+							</div>
 						</div>
-					</div>
 
-					<div class="booking-price-details">
-						<div class="price-detail-row">
-							<c:set var="perNightPrice" value="${totalPrice / nights}" />
-							<span>₩<fmt:formatNumber value="${perNightPrice}"
-									type="number" /> * ${nights}</span>
+						<div class="booking-price-details">
+							<div class="price-detail-row">
+								<c:set var="perNightPrice" value="${totalPrice / nights}" />
+								<span>₩<fmt:formatNumber value="${perNightPrice}"
+										type="number" /> * ${nights}
+								</span>
+							</div>
+							<div class="price-detail-row">
+								<span>총액</span> <span>₩<fmt:formatNumber
+										value="${totalPrice}" type="number" /></span>
+							</div>
 						</div>
-						<div class="price-detail-row">
-							<span>총액</span> <span>₩<fmt:formatNumber value="${totalPrice}" type="number"/></span>
-						</div>
-					</div>
 					</form>
-					<button type="button" 
-  class="booking-button" 
-  data-si-id="${stay.siId}" 
-  data-ri-id="${room.riId}">
-  예약하기
-</button>
+					<button type="button" class="booking-button"
+						data-si-id="${stay.siId}" data-ri-id="${room.riId}">예약하기
+					</button>
 				</div>
 			</div>
 		</div>
@@ -466,7 +470,7 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 	<!-- 푸터 인클루드 -->
 	<jsp:include page="../includes/footer.jsp" />
-	
+
 	<script>
 	document.addEventListener("DOMContentLoaded", function () {
 		  const bookingBtn = document.querySelector(".booking-button");

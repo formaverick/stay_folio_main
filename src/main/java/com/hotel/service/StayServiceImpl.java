@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.hotel.domain.Criteria;
 import com.hotel.domain.FacilityVO;
 import com.hotel.domain.LocationCategoryVO;
 import com.hotel.domain.PhotoVO;
@@ -130,8 +131,18 @@ public class StayServiceImpl implements StayService {
 
 	// admin - 숙소 전체
 	@Override
+	public List<StayVO> getListWithPaging(Criteria cri) {
+		return stayMapper.getListWithPaging(cri);
+	}
+
+	@Override
 	public List<StayVO> getAllStays() {
-		return stayMapper.getAllStays();
+		return stayMapper.getAllStays(); // ← 이렇게 반드시 구현해야 에러가 사라짐
+	}
+
+	@Override
+	public int getTotalCount(Criteria cri) {
+		return stayMapper.getTotalCount(cri);
 	}
 
 	// admin - 숙소 사진 map

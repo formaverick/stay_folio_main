@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.hotel.domain.Criteria;
 import com.hotel.domain.FacilityVO;
 import com.hotel.domain.LocationCategoryVO;
 import com.hotel.domain.PhotoVO;
@@ -35,7 +36,11 @@ public interface StayService {
 	List<StayVO> getRandomStayList();
 
 	// 날짜, 인원, 추천 카테고리 포함 필터 검색
-	List<StaySearchResultVO> getStayListFiltered(Map<String, Object> param);
+	 List<StaySearchResultVO> getStayListFiltered(Map<String, Object> param);
+	
+	 List<StayVO> getListWithPaging(Criteria cri);
+	 
+	 int getTotalCount(Criteria cri);
 
 	// admin - 숙소 등록 (지역 리스트)
 	List<LocationCategoryVO> getAllLocations();

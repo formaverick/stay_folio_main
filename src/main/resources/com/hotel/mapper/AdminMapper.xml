@@ -19,17 +19,42 @@
 
 	<!-- 회원 목록 페이징 조회 -->
 	<select id="selectMembersWithPaging" resultMap="memberMap">
-		SELECT * FROM
-		t_member_info
+		SELECT *
+		FROM t_member_info
+		<where>
+			<if test="keyword != null and keyword != ''">
+				(mi_id LIKE '%' || #{keyword} || '%' OR mi_name LIKE '%'
+				|| #{keyword} ||
+				'%')
+			</if>
+			<if test="enabled != null">
+				<if test="keyword != null and keyword != ''">
+					AND
+				</if>
+				mi_enabled = #{enabled}
+			</if>
+		</where>
 		ORDER BY mi_date DESC
-		OFFSET #{pageStart} ROWS FETCH NEXT
-		#{perPageNum} ROWS ONLY
+		OFFSET #{pageStart} ROWS FETCH NEXT #{perPageNum}
+		ROWS ONLY
 	</select>
 
 	<!-- 전체 회원 수 -->
 	<select id="getTotalMemberCount" resultType="int">
-		SELECT COUNT(*) FROM
-		t_member_info
+		SELECT COUNT(*)
+		FROM t_member_info
+		<where>
+			<if test="keyword != null and keyword != ''">
+				(mi_id LIKE '%' || #{keyword} || '%' OR mi_name LIKE '%' || #{keyword} ||
+				'%')
+			</if>
+			<if test="enabled != null">
+				<if test="keyword != null and keyword != ''">
+					AND
+				</if>
+				mi_enabled = #{enabled}
+			</if>
+		</where>
 	</select>
 
 	<!-- 대시보드 - home 카테고리 제목 -->
@@ -218,13 +243,15 @@
 	<delete id="deleteCategoryStay">
 		DELETE FROM t_stay_recommend
 		WHERE rc_id = #{rcId}
-		AND si_id = #{siId}
+		AND
+		si_id = #{siId}
 	</delete>
 
 	<!-- 카테고리/검색 키워드 숙소 추가 -->
 	<insert id="insertCategoryStay">
 		INSERT INTO t_stay_recommend (rc_id, si_id)
-		VALUES (#{rcId}, #{siId})
+		VALUES
+		(#{rcId}, #{siId})
 	</insert>
 	
 	

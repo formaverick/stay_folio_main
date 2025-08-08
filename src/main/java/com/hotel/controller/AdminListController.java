@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.hotel.domain.AmenityVO;
+import com.hotel.domain.Criteria;
 import com.hotel.domain.FacilityVO;
+import com.hotel.domain.PageDTO;
 import com.hotel.domain.PhotoVO;
 import com.hotel.domain.RecommendCategoryVO;
 import com.hotel.domain.RoomPhotoVO;
@@ -33,9 +35,16 @@ public class AdminListController {
 
 	// 숙소 리스트
 	@GetMapping("/stay/staylist")
-	public String stayList(Model model) {
-		List<StayVO> stayList = stayService.getAllStays();
+	public String stayList(Criteria cri,Model model) {
+		List<StayVO> stayList = stayService.getListWithPaging(cri);
+		if (cri.getLcId() != null && cri.getLcId() == 0) {
+	        cri.setLcId(null);
+	    }
+		System.out.println("lcId: " + cri.getLcId());	
+		int total = stayService.getTotalCount(cri); // 조건에 맞는 전체 숙소 수
 		model.addAttribute("stayList", stayList);
+		model.addAttribute("pageMaker", new PageDTO(cri, total));
+		model.addAttribute("cri", cri);
 		System.out.println("stayList size: " + stayList.size());
 		return "admin/room/stayList";
 	}

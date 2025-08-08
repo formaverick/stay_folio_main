@@ -134,7 +134,7 @@
 
 
 
-	<!-- 숙소 필터 검색 쿼리 -->
+
 	<!-- 숙소 필터 검색 쿼리 -->
 	<select id="selectStayListFiltered"
 		resultType="com.hotel.domain.StaySearchResultVO">
@@ -146,9 +146,13 @@
       s.si_minprice AS siMinprice,
       s.si_discount AS siDiscount,
       s.si_date AS siDate,
-      MIN(p.sp_url) AS spUrl
+      (
+        SELECT p.sp_url
+        FROM t_stay_photo p
+        WHERE p.si_id = s.si_id AND p.sp_idx = 0
+        FETCH FIRST 1 ROWS ONLY
+      ) AS spUrl
     FROM t_stay_info s
-    LEFT JOIN t_stay_photo p ON s.si_id = p.si_id AND p.sp_idx = 0
   ]]>
 
 		<if test="rcId != null and rcId != 0">
@@ -191,13 +195,9 @@
             )
         )
     )
-    GROUP BY
-      s.si_id, s.si_name, s.si_loca, s.si_minprice, s.si_discount, s.si_date
     ORDER BY s.si_date DESC
   ]]>
 	</select>
-
-
 
 
 	<!-- lcId랑 카테고리 -->
@@ -229,8 +229,6 @@
     ORDER BY s.si_date DESC
   ]]>
 	</select>
-
-
 
 	<!-- 전체 랜덤 숙소 조회 -->
 	<select id="selectRandomStayList"
@@ -355,6 +353,48 @@
 		ORDER BY
 		si_id DESC
 	</select>
+
+	<select id="getListWithPaging"
+		resultType="com.hotel.domain.StayVO">
+		SELECT * FROM (
+		SELECT ROWNUM rn, A.* FROM (
+		SELECT
+		si_id AS siId,
+		si_name AS siName,
+		si_loca AS siLoca,
+		si_date AS siDate
+		FROM t_stay_info
+		<where>
+			<if test="keyword != null and keyword != ''">
+				si_name LIKE '%' || #{keyword} || '%'
+			</if>
+			<if test="lcId != null">
+				AND lc_id = #{lcId}
+			</if>
+		</where>
+		ORDER BY si_id DESC
+		) A
+		WHERE ROWNUM &lt;= #{pageStart} + #{perPageNum}
+		)
+		WHERE rn &gt; #{pageStart}
+	</select>
+
+
+
+	<select id="getTotalCount" resultType="int">
+		SELECT COUNT(*)
+		FROM t_stay_info
+		<where>
+			<if test="keyword != null and keyword != ''">
+				si_name LIKE '%' || #{keyword} || '%'
+			</if>
+			<if test="lcId != null">
+				AND lc_id = #{lcId}
+			</if>
+		</where>
+	</select>
+
+
 
 	<select id="getStayPhotos" resultType="com.hotel.domain.PhotoVO">
 		SELECT sp_idx AS spIdx,

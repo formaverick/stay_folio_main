@@ -47,12 +47,18 @@ public class StayUpdateController {
 		// 선택된 시설들의 fiId만 추출
 		List<Integer> selectedFacilityIds = checkedFacilities.stream().map(FacilityVO::getFiId)
 				.collect(Collectors.toList());
+		
+		// 키워드
+		var allKeyword = stayService.getAllKeywords();
+	    var selectedKeywordIds = stayService.getKeywordIdsByStayId(siId);
 
 		model.addAttribute("stay", stay);
 		model.addAttribute("detail", stayDetail);
 		model.addAttribute("locationList", stayService.getAllLocations());
 		model.addAttribute("allFacilities", allFacilities);
 		model.addAttribute("selectedFacilityIds", selectedFacilityIds);
+		model.addAttribute("allKeyword", allKeyword);
+	    model.addAttribute("selectedKeywordIds", selectedKeywordIds);
 		model.addAttribute("photoMap", photoMap);
 		return "admin/room/stayUpdateForm";
 	}
@@ -61,6 +67,7 @@ public class StayUpdateController {
 	@PostMapping("/update")
 	public String updateStay(@ModelAttribute StayVO stay, @ModelAttribute StayDetailVO detail,
 			@RequestParam(value = "facilityIds", required = false) List<Integer> facilityIds,
+			@RequestParam(value = "keywordIds", required = false) List<Integer> keywordIds,
 			@RequestParam Map<String, MultipartFile> fileMap, RedirectAttributes rttr) throws IOException {
 
 		// 기본 숙소 정보
@@ -72,6 +79,9 @@ public class StayUpdateController {
 
 		// 편의시설
 		stayService.updateStayFacilities(stay.getSiId(), facilityIds);
+		
+		// 키워드
+	    stayService.updateStayKeywords(stay.getSiId(), keywordIds);
 
 		// 이미지 파일 처리
 		for (Map.Entry<String, MultipartFile> entry : fileMap.entrySet()) {

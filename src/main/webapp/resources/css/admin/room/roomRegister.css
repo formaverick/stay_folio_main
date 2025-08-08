@@ -264,6 +264,28 @@ body {
   resize: vertical;
 }
 
+.form-radio-grid {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.form-radio {
+	display: flex; 
+	align-items: center; 
+	gap: 20px;
+}
+
+.radio-label{
+	min-width: 100px;
+}
+
+.radio-item{
+	display: flex;
+	align-items: center; 
+	gap: 6px;
+}
+
 /* 이미지 업로드 스타일 - 간소화된 디자인 */
 .simple-upload-container {
   width: 100%;

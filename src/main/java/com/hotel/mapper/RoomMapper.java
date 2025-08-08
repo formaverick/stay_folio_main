@@ -1,5 +1,6 @@
 package com.hotel.mapper;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -60,4 +61,9 @@ public interface RoomMapper {
 
 	// 객실 사진 수정
 	void updateRoomPhoto(RoomPhotoVO photo);
+	
+	// 객실 예약 불가 날짜 리스트
+	List<Date> getReservedDates(@Param("siId") int siId, @Param("riId") int riId);
+	// 객실 체크아웃만 가능한 날짜 리스트
+	List<Date> getCheckinDates(@Param("siId") int siId, @Param("riId") int riId);
 }

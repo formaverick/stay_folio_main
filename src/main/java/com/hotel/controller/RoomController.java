@@ -1,10 +1,13 @@
 package com.hotel.controller;
 
 import java.security.Principal;
+import java.sql.Date;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hotel.domain.AmenityVO;
 import com.hotel.domain.FacilityVO;
@@ -188,6 +192,24 @@ public class RoomController {
 		model.addAttribute("child", child);
 
 		return "search/search";
+	}
+	
+	@GetMapping(value = "/room/unavailable-dates/{siId}/{riId}", produces = "application/json")
+	@ResponseBody
+	public Map<String, List<String>> getUnavailableDates(@PathVariable int siId, @PathVariable int riId) {
+		Map<String, List<Date>> rawMap = roomService.getUnavailableDateMap(siId, riId);
+
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	    Map<String, List<String>> result = new HashMap<>();
+
+	    for (Map.Entry<String, List<Date>> entry : rawMap.entrySet()) {
+	        List<String> converted = entry.getValue().stream()
+	                .map(date -> date.toLocalDate().format(formatter))
+	                .collect(Collectors.toList());
+	        result.put(entry.getKey(), converted);
+	    }
+
+	    return result;
 	}
 
 }

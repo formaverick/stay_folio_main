@@ -1,11 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
-<%@
-taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<c:set var="s3BaseUrl"
-	value="https://stayfolio-upload-bucket.s3.us-east-1.amazonaws.com/" />
+<c:set var="s3BaseUrl" value="https://stayfolio-upload-bucket.s3.us-east-1.amazonaws.com/" />
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -13,35 +11,23 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>숙소 상세 - STAY FOLIO</title>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/common.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/header.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/stay/stayCarousel.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/stay/stayDetail.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/stay/stayDetailFillter.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/stay/stayCarousel.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/stay/stayDetail.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/stay/stayDetailFillter.css" />
 
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
 <!-- Carousel JS -->
-<script
-	src="${pageContext.request.contextPath}/resources/js/stay/stayCarousel.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/stay/stayNavigation.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/stay/stay.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/stay/stayDetailBooking.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/stay/stayDetail.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/stay/stayCarousel.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/stay/stayNavigation.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/stay/stay.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/stay/stayDetailBooking.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/stay/stayDetail.js"></script>
 </head>
 <body>
 	<!-- 헤더 인클루드 -->
@@ -51,8 +37,8 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 	<!-- 숙소 캐러셀 시작 -->
 	<section class="carousel-container">
 		<!-- 뒤로가기 버튼 -->
-		<a href="javascript:history.back()" class="back-button"> <i
-			class="ph ph-arrow-left"></i>
+		<a href="javascript:history.back()" class="back-button">
+			<i class="ph ph-arrow-left"></i>
 		</a>
 		<div class="carousel">
 			<div class="carousel-track">
@@ -68,20 +54,17 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 				</c:forEach>
 				<c:forEach var="photo" items="${roomPhotos.feature}">
 					<div class="carousel-slide">
-						<img class="preview" src="${s3BaseUrl}${photo.spUrl}"
-							alt="주요 특징 이미지" />
+						<img class="preview" src="${s3BaseUrl}${photo.spUrl}" alt="주요 특징 이미지" />
 					</div>
 				</c:forEach>
 				<c:forEach var="photo" items="${roomPhotos.feat1}">
 					<div class="carousel-slide">
-						<img class="preview" src="${s3BaseUrl}${photo.spUrl}"
-							alt="특징1 이미지" />
+						<img class="preview" src="${s3BaseUrl}${photo.spUrl}" alt="특징1 이미지" />
 					</div>
 				</c:forEach>
 				<c:forEach var="photo" items="${roomPhotos.feat2}">
 					<div class="carousel-slide">
-						<img class="preview" src="${s3BaseUrl}${photo.spUrl}"
-							alt="특징2 이미지" />
+						<img class="preview" src="${s3BaseUrl}${photo.spUrl}" alt="특징2 이미지" />
 					</div>
 				</c:forEach>
 			</div>
@@ -97,28 +80,19 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 			<!-- 인디케이터 -->
 			<div class="carousel-indicators">
 				<c:forEach var="photo" items="${roomPhotos.main}" varStatus="status">
-					<button class="indicator ${status.first ? 'active' : ''}"
-						data-slide="${status.index}"></button>
+					<button class="indicator ${status.first ? 'active' : ''}" data-slide="${status.index}"></button>
 				</c:forEach>
-				<c:forEach var="photo" items="${roomPhotos.additional}"
-					varStatus="status">
-					<button class="indicator"
-						data-slide="${status.index + roomPhotos.main.size()}"></button>
+				<c:forEach var="photo" items="${roomPhotos.additional}" varStatus="status">
+					<button class="indicator" data-slide="${status.index + roomPhotos.main.size()}"></button>
 				</c:forEach>
-				<c:forEach var="photo" items="${roomPhotos.feature}"
-					varStatus="status">
-					<button class="indicator"
-						data-slide="${status.index + roomPhotos.main.size() + roomPhotos.additional.size()}"></button>
+				<c:forEach var="photo" items="${roomPhotos.feature}" varStatus="status">
+					<button class="indicator" data-slide="${status.index + roomPhotos.main.size() + roomPhotos.additional.size()}"></button>
 				</c:forEach>
-				<c:forEach var="photo" items="${roomPhotos.feat1}"
-					varStatus="status">
-					<button class="indicator"
-						data-slide="${status.index + roomPhotos.main.size() + roomPhotos.additional.size() + roomPhotos.feature.size()}"></button>
+				<c:forEach var="photo" items="${roomPhotos.feat1}" varStatus="status">
+					<button class="indicator" data-slide="${status.index + roomPhotos.main.size() + roomPhotos.additional.size() + roomPhotos.feature.size()}"></button>
 				</c:forEach>
-				<c:forEach var="photo" items="${roomPhotos.feat2}"
-					varStatus="status">
-					<button class="indicator"
-						data-slide="${status.index + roomPhotos.main.size() + roomPhotos.additional.size() + roomPhotos.feature.size() + roomPhotos.feat1.size()}"></button>
+				<c:forEach var="photo" items="${roomPhotos.feat2}" varStatus="status">
+					<button class="indicator" data-slide="${status.index + roomPhotos.main.size() + roomPhotos.additional.size() + roomPhotos.feature.size() + roomPhotos.feat1.size()}"></button>
 				</c:forEach>
 			</div>
 
@@ -142,12 +116,10 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 					<div class="amenity-title">객실 규정</div>
 					<div class="rules-list">
 						<div class="rule-item">
-							<span class="rule-text">• 체크인 ${detail.siCheckin} / 체크아웃
-								${detail.siCheckout}</span>
+							<span class="rule-text">• 체크인 ${detail.siCheckin} / 체크아웃 ${detail.siCheckout}</span>
 						</div>
 						<div class="rule-item">
-							<span class="rule-text">• 기준 ${room.riPerson} 명 (최대
-								${room.riMaxperson} 명)</span>
+							<span class="rule-text">• 기준 ${room.riPerson} 명 (최대 ${room.riMaxperson} 명)</span>
 						</div>
 					</div>
 				</section>
@@ -199,8 +171,7 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 							<c:forEach var="room" items="${otherRooms}">
 								<div class="room-card">
 									<div class="room-image">
-										<img src="${s3BaseUrl}${roomMainPhotos[room.riId].spUrl}"
-											alt="${room.riName}" />
+										<img src="${s3BaseUrl}${roomMainPhotos[room.riId].spUrl}" alt="${room.riName}" />
 									</div>
 									<div class="room-info">
 										<h3>${room.riName}</h3>
@@ -216,37 +187,34 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 											</c:choose>
 											/ 기준 ${room.riPerson} (최대 ${room.riMaxperson}명)
 										</p>
-										<p class="room-amenity">침실 ${room.riBedroom} | 침대
-											${room.riBedcnt} | 욕실 ${room.riBathroom}</p>
+										<p class="room-amenity">침실 ${room.riBedroom} | 침대 ${room.riBedcnt} | 욕실 ${room.riBathroom}</p>
 										<p>
 										<div class="room-price-container">
 											<div class="price-info">
 												<c:choose>
 													<c:when test="${stay.siDiscount > 0}">
 														<div class="original-price">
-															₩
-															<fmt:formatNumber value="${room.riPrice}" type="number" />
+															₩<fmt:formatNumber value="${room.riPrice}" type="number" />
 														</div>
 														<div class="discount-price">
-															<span class="discount-rate"> <fmt:formatNumber
-																	value="${discountPercent}" type="number" />%
-															</span> <span class="final-price"> ₩<fmt:formatNumber
-																	value="${room.discountedPrice}" type="number" /> ~
-															</span> <span class="per-night">/ 박</span>
+															<span class="discount-rate">
+																<fmt:formatNumber value="${discountPercent}" type="number" />%
+															</span>
+															<span class="final-price">
+																₩<fmt:formatNumber value="${room.discountedPrice}" type="number" /> ~
+															</span>
+															<span class="per-night">/ 박</span>
 														</div>
 													</c:when>
 													<c:otherwise>
 														<div class="discount-price">
-															<span class="final-price"> ₩<fmt:formatNumber
-																	value="${room.riPrice}" type="number" /> ~
-															</span> <span class="per-night">/ 박</span>
+															<span class="final-price"> ₩<fmt:formatNumber value="${room.riPrice}" type="number" /> ~ </span>
+															<span class="per-night">/ 박</span>
 														</div>
 													</c:otherwise>
 												</c:choose>
 											</div>
-											<button class="room-select-btn"
-												onclick="location.href='/stay/${stay.siId}/${room.riId}'">객실
-												선택</button>
+											<button class="room-select-btn" onclick="location.href='/stay/${stay.siId}/${room.riId}'">객실 선택</button>
 										</div>
 									</div>
 								</div>
@@ -315,30 +283,30 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 							</div>
 							<div class="accordion-content">
 								<ul>
-									<p>
+									<li>
 										<strong>상호</strong>
-									<p>${detail.siBizname}</p>
-									<p>
+										<p>${detail.siBizname}</p>
+									</li>
+									<li>
 										<strong>대표자명</strong>
-									<p>${detail.siCeo}</p>
-
-									</p>
-									<p>
+										<p>${detail.siCeo}</p>
+									</li>
+									<li>
 										<strong>주소</strong>
-									<p>${detail.siAddress}</p>
-									</p>
-									<p>
+										<p>${detail.siAddress}</p>
+									</li>
+									<li>
 										<strong>전화번호</strong>
-									<p>${detail.siPhone}</p>
-									</p>
-									<p>
+										<p>${detail.siPhone}</p>
+									</li>
+									<li>
 										<strong>이메일주소</strong>
-									<p>${detail.siEmail}</p>
-									</p>
-									<p>
+										<p>${detail.siEmail}</p>
+									</li>
+									<li>
 										<strong>사업자번호</strong>
-									<p>${detail.siBiznum}</p>
-									</p>
+										<p>${detail.siBiznum}</p>
+									</li>
 								</ul>
 							</div>
 						</div>
@@ -352,8 +320,7 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 			<div class="room-detail-right">
 				<!-- 예약 카드 (필터+요약 통합) -->
 				<div class="booking-card">
-					<form id="searchForm" method="POST"
-						action="/search/results onsubmit=" returnfalse;">
+					<form id="searchForm" method="POST" action="/search/results" onsubmit="return false;">
 						<!-- 숨겨진 입력 필드들 -->
 						<input type="hidden" name="checkin" id="checkinInput"
 							value="${checkin}" /> <input type="hidden" name="checkout"
@@ -377,6 +344,9 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 										<div class="date-picker-error" id="dateError"></div>
 										<div class="date-picker-footer">
 											<div class="date-picker-buttons">
+												<button type="button"
+													class="date-picker-button date-picker-reset"
+													id="dateReset">초기화</button>
 												<button type="button"
 													class="date-picker-button date-picker-cancel"
 													id="dateCancel">취소</button>
@@ -441,8 +411,8 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 								</c:if>
 
 								<span class="stay-price-current"><fmt:formatNumber
-										value="${totalPrice}" type="number" /></span> <span class="per-night">/
-									박</span>
+										value="${totalPrice}" type="number" /></span> <span
+									class="per-night">/ 박</span>
 							</div>
 						</div>
 
@@ -465,7 +435,6 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 
 	<!-- 푸터 인클루드 -->

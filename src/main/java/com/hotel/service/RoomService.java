@@ -5,6 +5,7 @@ import com.hotel.domain.FacilityVO;
 import com.hotel.domain.RoomPhotoVO;
 import com.hotel.domain.RoomVO;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -43,4 +44,6 @@ public interface RoomService {
 	void updateRoomFacilities(int siId, int riId, List<Integer> facilityIds);
 
 	void updateRoomAmenities(int siId, int riId, List<Integer> amenityIds);
+	
+	Map<String, List<Date>> getUnavailableDateMap(int siId, int riId);
 }

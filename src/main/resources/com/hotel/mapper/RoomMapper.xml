@@ -222,4 +222,38 @@
 		AND sp_idx = #{spIdx}
 		AND ri_id = #{riId}
 	</update>
+	
+	<select id="getReservedDates" resultType="java.sql.Date">
+		<![CDATA[
+			WITH reserved_dates AS (
+				SELECT 
+					sr_checkin + LEVEL - 1 AS reserved_date 
+				FROM t_stay_reservation
+				WHERE si_id = #{siId} AND ri_id = #{riId} AND sr_status = 'a' 
+					CONNECT BY LEVEL <= sr_checkout - sr_checkin 
+					AND PRIOR sr_id = sr_id 
+					AND PRIOR DBMS_RANDOM.VALUE IS NOT NULL
+			)
+			SELECT reserved_date
+			FROM reserved_dates
+			WHERE reserved_date > TRUNC(SYSDATE)
+			ORDER BY reserved_date
+		]]>
+	</select>
+	
+	<select id="getCheckinDates" resultType="java.sql.Date">
+		<![CDATA[
+			SELECT DISTINCT sr_checkin AS checkout_only_date
+			FROM t_stay_reservation
+			WHERE si_id = #{siId} AND ri_id = #{riId} AND sr_status = 'a'
+			  AND sr_checkin NOT IN (
+			    SELECT sr_checkout
+			    FROM t_stay_reservation
+			    WHERE si_id = #{siId} AND ri_id = #{riId} AND sr_status = 'a'
+			  )
+			  AND sr_checkin > TRUNC(SYSDATE)
+			ORDER BY checkout_only_date
+		]]>
+	</select>
+	
 </mapper>

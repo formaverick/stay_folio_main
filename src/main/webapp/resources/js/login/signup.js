@@ -154,6 +154,15 @@ $(document).ready(function () {
   const debouncedValidate = debounce(function ($field) {
     validateField($field, $field.val());
   }, 500);
+  
+  /* 모달 창 열고 닫기 */
+  function openModal() {
+    document.getElementById("commonModal").style.display = "flex";
+  }
+
+  function closeModal() {
+    document.getElementById("commonModal").style.display = "none";
+  }
 
   /**
    * 이메일 및 전화번호 중복 검사 함수
@@ -163,9 +172,8 @@ $(document).ready(function () {
       const response = await fetch(`/api/check/${type}?${type}=${value}`);
       const result = await response.text();
       if (result === "true") {
-        alert(
-          `이미 사용중인 ${type === "email" ? "이메일" : "전화번호"}입니다.`
-        );
+      	$(".modal-message").text(`이미 사용중인 ${type === "email" ? "이메일" : "전화번호"}입니다.`);
+        openModal();
         return true; // 중복됨
       }
       return false; // 중복 아님
@@ -297,4 +305,7 @@ $(document).ready(function () {
   $(".btn-login").on("click", function () {
     window.location.href = "login.html"; // 로그인 페이지로 이동
   });
+  
+  // 모달 닫기
+  $("#commonModal .btn-cancel").on("click", closeModal);
 });

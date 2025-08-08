@@ -48,7 +48,7 @@ public class RoomController {
 
 	// 숙소 상세페이지
 	@GetMapping("/{siId}")
-	public String StayDetail(@PathVariable("siId") Integer siId, Model model) {
+	public String StayDetail(@PathVariable("siId") Integer siId, Model model, Principal principal) {
 		StayVO stayInfo = stayService.getStayInfo(siId);
 		StayDetailVO stayDetail = stayService.getStayDetail(siId);
 		List<RoomVO> rooms = stayService.getRoomsByStayId(siId);
@@ -66,6 +66,12 @@ public class RoomController {
 			} else {
 				room.setDiscountedPrice(room.getRiPrice());
 			}
+		}
+
+		// 북마크 정보 추가
+		if (principal != null) {
+			List<Long> bookmarkList = bookmarkService.getBookmarkList(principal.getName());
+			stayInfo.setBookmarked(bookmarkList.contains(stayInfo.getSiId()));
 		}
 
 		model.addAttribute("stay", stayInfo);

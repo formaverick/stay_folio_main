@@ -35,6 +35,8 @@
 	src="${pageContext.request.contextPath}/resources/js/stay/stayNavigation.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/stay/stay.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/bookmark/bookmark.js"></script>
 </head>
 
 <body>
@@ -103,7 +105,7 @@
 			<div class="stay-header">
 				<div class="title-row">
 					<h1>${stay.siName}</h1>
-					<button class="heart-btn">
+					<button class="heart-btn stay-wishlist" data-wishlist="${stay.bookmarked }">
 						<i class="ph ph-heart"></i>
 					</button>
 				</div>
@@ -121,6 +123,15 @@
 							<i class="ph ${fac.fiIcon}"></i> <span>${fac.fiName}</span>
 						</div>
 					</c:forEach>
+				</div>
+			</c:if>
+
+			<c:if test="${not empty detail.siNotice}">
+				<div class="amenity-title">공지사항</div>
+				<div class="stay-amenities">
+					<div class="amenity">
+						<span>${detail.siNotice}</span>
+					</div>
 				</div>
 			</c:if>
 

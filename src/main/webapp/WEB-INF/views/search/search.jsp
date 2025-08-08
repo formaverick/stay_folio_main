@@ -369,17 +369,12 @@
 	<form id="searchForm" action="/stay/search" method="get">
 		<!-- 체크인 날짜 -->
 		<input type="hidden" name="checkin" id="checkin" value="">
-
 		<!-- 체크아웃 날짜 -->
 		<input type="hidden" name="checkout" id="checkout" value="">
-
 		<!-- 성인 수 -->
 		<input type="hidden" name="adult" id="adult" value="2">
-
 		<!-- 아동 수 -->
 		<input type="hidden" name="child" id="child" value="0">
-
-		<button type="submit">검색</button>
 	</form>
 
 	<!-- 모달 끝 -->

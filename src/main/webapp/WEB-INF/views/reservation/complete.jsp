@@ -163,7 +163,7 @@
 				<td class="reservation-info-content">
 					<p>
 						숙소 요금:
-						₩<fmt:formatNumber value="${info.srRoomPrice}" pattern="#,#00" />
+						₩<fmt:formatNumber value="${info.srRoomprice}" pattern="#,#00" />
 					</p> <c:if test="${info.srAddpersonFee != 0}">
 						<p class="payment-add">
 							인원 추가:

@@ -2,6 +2,7 @@ package com.hotel.domain;
 
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Date;
 
 import lombok.Data;
@@ -38,10 +39,29 @@ public class ReservationDetailVO {
 	private Date srCancledate; //취소 날짜
 	private String srStatus; //예약 상태
 	private String srPaymentstatus; //결제 상태
-	private int nights; //박 수
 	private String miId; //회원 아이디
 	private String riType; //형태
 	private int riPerson; //기준 인원
 	private String riDesc; //룸설명
 	private int riMaxperson; //최대 인원
+	
+	private int riPrice;
+	private long nights;
+	
+	private String miName;
+	private String miPhone;
+
+	private String riBed;
+	private int riBedcnt;
+	private int riBedroom;
+	private int riBathroom;
+
+	private double siPeak;     // 성수기 계수
+	private double siOff;      // 비성수기 계수
+	private double siDiscount; // 할인율
+	
+	private String siCheckin;
+	private String siCheckout;
+	private int siExtra;
+	private double seasonRate;
 }

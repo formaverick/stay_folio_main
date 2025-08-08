@@ -6,7 +6,7 @@
 <mapper namespace="com.hotel.mapper.ReservationMapper">
 	<!-- 예약 페이지 -->
 	<resultMap id="reservationPageMap"
-		type="com.hotel.domain.ReservationPageVO">
+		type="com.hotel.domain.ReservationDetailVO">
 		<result property="riId" column="ri_id" />
 		<result property="riName" column="ri_name" />
 		<result property="riType" column="ri_type" />
@@ -26,7 +26,6 @@
 		<result property="miPhone" column="mi_phone" />
 		<result property="siCheckin" column="si_checkin" />
 		<result property="siCheckout" column="si_checkout" />
-		<result property="siName" column="si_name" />
 		<result property="spUrl" column="sp_url" />
 	</resultMap>
 
@@ -79,7 +78,7 @@
 
 	<!-- 예약 db insert -->
 	<insert id="insertReservation"
-		parameterType="com.hotel.domain.ReservationCreateDTO">
+		parameterType="com.hotel.domain.ReservationDetailVO">
 		<selectKey resultType="string" keyProperty="srId"
 			order="BEFORE">
 			SELECT TO_CHAR(SYSDATE, 'YYYYMMDD') || '-' ||

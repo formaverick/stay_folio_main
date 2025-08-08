@@ -50,6 +50,17 @@
 			</form>
 		</div>
 		<!-- 로그인 끝 -->
+		
+		<!-- 모달 시작 -->
+	    <div class="modal-overlay" id="commonModal" style="display:${empty error ? 'none' : 'flex'};">
+	      <div class="modal-content">
+	        <p class="modal-message">${error }</p>
+	        <div class="modal-buttons">
+	          <a href="${pageContext.request.contextPath}/login" class="btn btn-cancel">확인</a>
+	        </div>
+	      </div>
+	    </div>
+	    <!-- 모달 끝 -->
 	</main>
 </body>
 </html>

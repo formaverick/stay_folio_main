@@ -114,9 +114,4 @@ $(document).ready(function () {
   // $(".btn-kakao").on("click", function () {
   //   // 카카오 로그인 추가 시 구현
   // });
-
-  // 회원가입 버튼 클릭 이벤트 리스너 등록
- // $(".btn-join").on("click", function () {
-  //  window.location.href = "signup.html"; // 회원가입 페이지로 이동
- // });
 });

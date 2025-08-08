@@ -77,6 +77,14 @@
 								</div>
 							</div>
 						</div>
+						<c:set var="srCheckinTimestamp"
+							value="${checkin} ${info.siCheckin}:00" />
+						<c:set var="srCheckoutTimestamp"
+							value="${checkout} ${info.siCheckout}:00" />
+
+						<input type="hidden" name="srCheckin"
+							value="${srCheckinTimestamp}" /> <input type="hidden"
+							name="srCheckout" value="${srCheckoutTimestamp}" />
 
 
 						<div class="reservation-box">
@@ -137,11 +145,12 @@
 								객실 요금
 								<div>
 									₩
-									<fmt:formatNumber value="${info.srRoomPrice}" pattern="#,###" />
+									<fmt:formatNumber value="${info.srRoomprice}" pattern="#,###" />
 								</div>
 							</div>
 							<c:if test="${not empty priceResult.dailyPrices}">
-								<div style="margin-top: 10px; font-size: 14px; color:gray; margin-bottom:10px;">
+								<div
+									style="margin-top: 10px; font-size: 14px; color: gray; margin-bottom: 10px;">
 									<c:forEach var="entry" items="${priceResult.dailyPrices}">
 										<div
 											style="display: flex; justify-content: space-between; padding: 2px 0;">
@@ -175,7 +184,7 @@
 								총 결제 금액
 								<div>
 									₩
-									<fmt:formatNumber value="${info.srtotalPrice}" pattern="#,###" />
+									<fmt:formatNumber value="${info.srTotalprice}" pattern="#,###" />
 								</div>
 							</div>
 						</div>
@@ -228,14 +237,14 @@
 							type="hidden" name="riId" value="${riId}" /> <input
 							type="hidden" name="miId" value="${miId}" /> <input
 							type="hidden" name="srAdult" value="${srAdult}" /> <input
-							type="hidden" name="srChild" value="${srChild}" /> <input
-							type="hidden" name="srCheckin" value="${checkin}" /> <input
-							type="hidden" name="srCheckout" value="${checkout}" /> <input
-							type="hidden" name="srRoomPrice" value="${info.srRoomPrice}" />
+							type="hidden" name="srChild" value="${srChild}" />
+							
+							  <input
+							type="hidden" name="srRoomPrice" value="${info.srRoomprice}" />
 						<input type="hidden" name="srDiscount" value="${info.srDiscount}" />
 						<input type="hidden" name="srAddpersonFee"
 							value="${info.srAddpersonFee}" /> <input type="hidden"
-							name="srTotalprice" value="${info.srtotalPrice}" /> <input
+							name="srTotalprice" value="${info.srTotalprice}" /> <input
 							type="hidden" id="srStatus" name="srStatus" value="" /> <input
 							type="hidden" id="srPaymentstatus" name="srPaymentstatus"
 							value="" /> <input type="hidden" id="srPayment" name="srPayment"
@@ -253,14 +262,24 @@
 						<button class="view-room-button" onclick="location.href='/stay/${siId}/${riId}?checkin=${checkin}&checkout=${checkout}&adult=${adult}&child=${child}'">객실 보기</button>
 					</div>
 					<div class="room-info">
-						<p>${info.riType}/기준${info.riPerson}명(최대${info.riMaxperson}명)</p>
+						<p>
+							<c:choose>
+								<c:when test="${info.riType == 'a'}">기본형</c:when>
+								<c:when test="${info.riType == 'b'}">독채형</c:when>
+								<c:when test="${info.riType == 'c'}">원룸형</c:when>
+								<c:when test="${info.riType == 'd'}">도미토리</c:when>
+								<c:when test="${info.riType == 'e'}">복층형</c:when>
+								<c:otherwise>기타</c:otherwise>
+							</c:choose>
+							/기준${info.riPerson}명(최대${info.riMaxperson}명)
+						</p>
 						<p>침대${info.riBedcnt} | 침구${info.riBedroom} |
 							욕실${info.riBathroom}</p>
 					</div>
 					<button type="button" class="payment-button">
 						<p>
-							<span class="payment-price" data-amount="${info.srtotalPrice}">
-								₩<fmt:formatNumber value="${info.srtotalPrice}" pattern="#,###" />
+							<span class="payment-price" data-amount="${info.srTotalprice}">
+								₩<fmt:formatNumber value="${info.srTotalprice}" pattern="#,###" />
 							</span> 결제하기
 						</p>
 					</button>

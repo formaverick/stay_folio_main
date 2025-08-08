@@ -1,6 +1,7 @@
 package com.hotel.service;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneId;
@@ -12,10 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.hotel.domain.ReservationCancelCheckVO;
-import com.hotel.domain.ReservationCreateDTO;
 import com.hotel.domain.ReservationDTO;
 import com.hotel.domain.ReservationDetailVO;
-import com.hotel.domain.ReservationPageVO;
 import com.hotel.domain.ReservationPriceResultDTO;
 import com.hotel.mapper.ReservationMapper;
 import com.hotel.mapper.ReservationPriceMapper;
@@ -34,12 +33,12 @@ public class ReservationServiceImpl implements ReservationService {
 
 	// 예약등록 처리
 	@Override
-	public int reserve(ReservationCreateDTO dto) {
+	public int reserve(ReservationDetailVO dto) {
 		dto.setSrId(null); // 예약번호 새로 부여받도록 null 처리
 		if (isDuplicateReservation(dto.getSiId(), dto.getRiId(), dto.getSrCheckin(), dto.getSrCheckout())) {
 			return -1; // 중복 예약 발생 시
 		}
-		calculateReservationPrice(dto); // 요금 계산
+
 		processEmail(dto); // 이메일 처리
 
 		if (dto.getSrRequest() == null) { // 빈문자열로 request 넣기
@@ -51,9 +50,9 @@ public class ReservationServiceImpl implements ReservationService {
 
 	// 중복예약 방지 (sr status가 a or d만)
 	@Override
-	public boolean isDuplicateReservation(int siId, int riId, LocalDate checkin, LocalDate checkout) {
-		Date checkinDate = Date.valueOf(checkin);
-		Date checkoutDate = Date.valueOf(checkout);
+	public boolean isDuplicateReservation(int siId, int riId, Timestamp checkin, Timestamp checkout) {
+		Date checkinDate = Date.valueOf(checkin.toLocalDateTime().toLocalDate());
+		Date checkoutDate = Date.valueOf(checkout.toLocalDateTime().toLocalDate());
 
 		int count = mapper.checkDuplicateReservation(siId, riId, checkinDate, checkoutDate);
 		return count > 0;
@@ -61,35 +60,34 @@ public class ReservationServiceImpl implements ReservationService {
 
 	// 예약 완료 페이지 (info 몇개 가져옴)
 	@Override
-	public ReservationPageVO getReservationPageInfo(int riId, int siId, String miId) {
+	public ReservationDetailVO getReservationPageInfo(int riId, int siId, String miId) {
 		return mapper.getReservationPageInfo(riId, siId, miId);
 	}
 
 	// 예약 완료 페이지
 	@Override
 	public ReservationDetailVO getReservation(String reservationId) {
-	    ReservationDetailVO reservation = mapper.selectReservationById(reservationId);
+		ReservationDetailVO reservation = mapper.selectReservationById(reservationId);
 
-	    if (reservation.getSrCheckin() != null && reservation.getSrCheckout() != null) {	
-	       
-	        LocalDate checkinDate = reservation.getSrCheckin().toInstant()	//LocalDate로 변환
-	                .atZone(ZoneId.systemDefault()).toLocalDate();
-	        LocalDate checkoutDate = reservation.getSrCheckout().toInstant()
-	                .atZone(ZoneId.systemDefault()).toLocalDate();
+		if (reservation.getSrCheckin() != null && reservation.getSrCheckout() != null) {
 
-	        int nights = (int) ChronoUnit.DAYS.between(checkinDate, checkoutDate);	//박 수체크
-	        reservation.setNights(nights);
-	    }
+			LocalDate checkinDate = reservation.getSrCheckin().toInstant() // LocalDate로 변환
+					.atZone(ZoneId.systemDefault()).toLocalDate();
+			LocalDate checkoutDate = reservation.getSrCheckout().toInstant().atZone(ZoneId.systemDefault())
+					.toLocalDate();
 
-	    return reservation;
+			int nights = (int) ChronoUnit.DAYS.between(checkinDate, checkoutDate); // 박 수체크
+			reservation.setNights(nights);
+		}
+
+		return reservation;
 	}
-
 
 	// 예약 페이지 설정
 	@Override
-	public ReservationPageVO getReservationPageInfo(int riId, int siId, String miId, LocalDate checkin,
+	public ReservationDetailVO getReservationPageInfo(int riId, int siId, String miId, LocalDate checkin,
 			LocalDate checkout, int adult, int child) {
-		ReservationPageVO pageInfo = mapper.getReservationPageInfo(riId, siId, miId);
+		ReservationDetailVO pageInfo = mapper.getReservationPageInfo(riId, siId, miId);
 		ReservationDTO priceInfo = priceMapper.getReservationPriceInfo(riId, siId);
 
 		int totalPerson = adult + child;
@@ -99,29 +97,37 @@ public class ReservationServiceImpl implements ReservationService {
 			throw new IllegalStateException("redirect:/?error=인원초과");
 		}
 
-		ReservationCreateDTO dto = new ReservationCreateDTO();
+		ReservationDetailVO dto = new ReservationDetailVO();
 		dto.setRiId(riId);
 		dto.setSiId(siId);
-		dto.setSrCheckin(checkin);
-		dto.setSrCheckout(checkout);
+		dto.setSrCheckin(Timestamp.valueOf(checkin.atStartOfDay()));
+		dto.setSrCheckout(Timestamp.valueOf(checkout.atStartOfDay()));
 		dto.setSrAdult(adult);
 		dto.setSrChild(child);
 
-		calculateReservationPrice(dto, priceInfo);
+		ReservationPriceResultDTO result = calculatePrice(checkin, checkout, dto, priceInfo);
+		
+		dto.setSrRoomprice(result.getSrRoomPrice());
+		dto.setSrAddpersonFee(result.getSrAddpersonFee());
+		dto.setSrDiscount((int) (result.getSrRoomPrice() * result.getDiscountRate()));
+		dto.setSrTotalprice(result.getSrtotalPrice());
 
+		dto.setNights((int) result.getNights());
+		
 		if (pageInfo != null) {
 			pageInfo.setRiPrice(priceInfo.getRiPrice());
 			pageInfo.setNights(dto.getNights());
-			pageInfo.setSrRoomPrice(dto.getSrRoomprice());
+			pageInfo.setSrRoomprice(dto.getSrRoomprice());
 			pageInfo.setSrAddpersonFee(dto.getSrAddpersonFee());
 			pageInfo.setSrDiscount(dto.getSrDiscount());
-			pageInfo.setSrtotalPrice(dto.getSrTotalprice());
+			pageInfo.setSrTotalprice(dto.getSrTotalprice());
 		}
+
 		return pageInfo;
 	}
 
 	// 이메일처리
-	private void processEmail(ReservationCreateDTO dto) {
+	private void processEmail(ReservationDetailVO dto) {
 		if (dto.getMiId() != null && !dto.getMiId().isEmpty()) {
 			dto.setSrEmail(dto.getMiId());
 		} else {
@@ -131,19 +137,8 @@ public class ReservationServiceImpl implements ReservationService {
 		}
 	}
 
-	// 요금계산
-	private void calculateReservationPrice(ReservationCreateDTO dto, ReservationDTO priceInfo) {
-		ReservationPriceResultDTO result = calculatePrice(dto.getSrCheckin(), dto.getSrCheckout(), dto, priceInfo);
-		dto.setSrRoomprice(result.getSrRoomPrice()); // 할인 전 객실 총액
-		dto.setSrAddpersonFee(result.getSrAddpersonFee()); // 추가요금
-		dto.setSrDiscount(result.getSrRoomPrice() - result.getSrtotalPrice() + result.getSrAddpersonFee()); // 할인금액 계산
-		dto.setSrTotalprice(result.getSrtotalPrice()); // 최종금액
-		dto.setNights(result.getNights());
-
-	}
-
 	// 요금계산 상세 DB 조회는 안 하고, 계산만 담당
-	private ReservationPriceResultDTO calculatePrice(LocalDate checkin, LocalDate checkout, ReservationCreateDTO dto,
+	private ReservationPriceResultDTO calculatePrice(LocalDate checkin, LocalDate checkout, ReservationDetailVO dto,
 			ReservationDTO priceInfo) {
 
 		Map<String, Integer> dailyPrices = new LinkedHashMap<>();
@@ -176,6 +171,7 @@ public class ReservationServiceImpl implements ReservationService {
 		result.setNights(ChronoUnit.DAYS.between(checkin, checkout));
 		result.setRiPrice(priceInfo.getRiPrice()); // 1박 기본 요금
 		result.setDiscountRate(discountRate); // 할인율
+
 		return result;
 	}
 
@@ -185,20 +181,15 @@ public class ReservationServiceImpl implements ReservationService {
 
 		ReservationDTO priceInfo = priceMapper.getReservationPriceInfo(riId, siId);
 
-		ReservationCreateDTO dto = new ReservationCreateDTO();
+		ReservationDetailVO dto = new ReservationDetailVO();
 		dto.setRiId(riId);
 		dto.setSiId(siId);
-		dto.setSrCheckin(checkin);
-		dto.setSrCheckout(checkout);
+		dto.setSrCheckin(Timestamp.valueOf(checkin.atStartOfDay()));
+		dto.setSrCheckout(Timestamp.valueOf(checkout.atStartOfDay()));
 		dto.setSrAdult(adult);
 		dto.setSrChild(child);
-		return calculatePrice(checkin, checkout, dto, priceInfo);
-	}
 
-	// dto만 있어도 호출 가능
-	private void calculateReservationPrice(ReservationCreateDTO dto) {
-		ReservationDTO priceInfo = priceMapper.getReservationPriceInfo(dto.getRiId(), dto.getSiId());
-		calculateReservationPrice(dto, priceInfo);
+		return calculatePrice(checkin, checkout, dto, priceInfo);
 	}
 
 	// 월별 성수기 비성수기 로직 하드코딩 해놓음

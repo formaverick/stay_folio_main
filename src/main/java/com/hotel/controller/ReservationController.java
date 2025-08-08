@@ -2,6 +2,7 @@ package com.hotel.controller;
 
 
 import java.security.Principal;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
@@ -17,9 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.hotel.domain.ReservationCreateDTO;
+import com.hotel.domain.ReservationDTO;
 import com.hotel.domain.ReservationDetailVO;
-import com.hotel.domain.ReservationPageVO;
 import com.hotel.domain.ReservationPriceResultDTO;
 import com.hotel.service.ReservationService;
 
@@ -51,10 +51,20 @@ public class ReservationController {
 
 		String miId = (principal != null) ? principal.getName() : null; //로그인이 되어있으면 이름 가져오기 아니면 null처리
 		try {
-			ReservationPageVO pageInfo = reservationService.getReservationPageInfo(riId, siId, miId, //페이지 정보 넣어주기
-					LocalDate.parse(checkin), LocalDate.parse(checkout), adult, child);
+			ReservationDetailVO pageInfo = reservationService.getReservationPageInfo(riId, siId, miId,
+				    LocalDate.parse(checkin), LocalDate.parse(checkout), adult, child);
+
 			ReservationPriceResultDTO priceResult = reservationService.calculateRoomPrice(riId, siId, checkinDate, //계산 가져옴
 					checkoutDate, adult, child);
+			
+	        String checkinDateTime = checkin + " " + pageInfo.getSiCheckin() + ":00";
+	        String checkoutDateTime = checkout + " " + pageInfo.getSiCheckout() + ":00";
+
+	        Timestamp srCheckinTimestamp = Timestamp.valueOf(checkinDateTime);
+	        Timestamp srCheckoutTimestamp = Timestamp.valueOf(checkoutDateTime);
+
+	        model.addAttribute("srCheckinTimestamp", srCheckinTimestamp);
+	        model.addAttribute("srCheckoutTimestamp", srCheckoutTimestamp);
 
 			model.addAttribute("info", pageInfo);
 			model.addAttribute("priceResult", priceResult);
@@ -79,11 +89,12 @@ public class ReservationController {
 			String referer = request.getHeader("Referer");
 			return "redirect:" + (referer != null ? referer : "/");
 		}
+		
 	}
 
 	// 예약 처리
 	@PostMapping("/submit")
-	public String submitReservation(ReservationCreateDTO dto, RedirectAttributes rttr) {
+	public String submitReservation(ReservationDetailVO dto, RedirectAttributes rttr) {
 		log.info("submit 호출됨");
 		dto.setSrId(null);
 
@@ -108,14 +119,14 @@ public class ReservationController {
 	@GetMapping("/complete/{sr_id}")
 	public String reservationComplete(@PathVariable("sr_id") String reservationId, Model model) {
 		
-	    ReservationDetailVO reservation = reservationService.getReservation(reservationId); //해당 예약 ID의 상세 정보
+		ReservationDetailVO reservation = reservationService.getReservation(reservationId); //해당 예약 ID의 상세 정보
 	    model.addAttribute("reservation", reservation);
 	    LocalDate checkin = reservation.getSrCheckin().toInstant()	//날짜 정보 사용 (박 수체크)
 	            .atZone(ZoneId.systemDefault()).toLocalDate();
 	    LocalDate checkout = reservation.getSrCheckout().toInstant()
 	            .atZone(ZoneId.systemDefault()).toLocalDate();
 
-	    ReservationPageVO pageInfo = reservationService.getReservationPageInfo(	//가격 계산을 위한 예약 페이지 정보 가져오기
+	    ReservationDetailVO pageInfo = reservationService.getReservationPageInfo(	//가격 계산을 위한 예약 페이지 정보 가져오기
 	            reservation.getRiId(),
 	            reservation.getSiId(),
 	            reservation.getMiId(),

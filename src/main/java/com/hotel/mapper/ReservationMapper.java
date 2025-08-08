@@ -1,20 +1,20 @@
 package com.hotel.mapper;
 
 
+
+
 import java.util.Date;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.hotel.domain.ReservationCancelCheckVO;
-import com.hotel.domain.ReservationCreateDTO;
 import com.hotel.domain.ReservationDetailVO;
-import com.hotel.domain.ReservationPageVO;
 
 @Mapper
 public interface ReservationMapper {
-	ReservationPageVO getReservationPageInfo(@Param("riId") int riId, @Param("siId") int siId, @Param("miId") String miId); //예약페이지 
-	int insertReservation(ReservationCreateDTO dto);	//예약 등록
+	ReservationDetailVO getReservationPageInfo(@Param("riId") int riId, @Param("siId") int siId, @Param("miId") String miId); //예약페이지 
+	int insertReservation(ReservationDetailVO dto);	//예약 등록
 	int checkDuplicateReservation(@Param("siId") int siId,	//중복예약 
             @Param("riId") int riId,
             @Param("checkin") Date checkin,

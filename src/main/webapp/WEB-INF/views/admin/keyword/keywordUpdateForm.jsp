@@ -49,7 +49,7 @@
 						<div style="display: inline-block;">
 							<a
 								href="${pageContext.request.contextPath}/admin/keyword/detail?rcId=${keyword.rcId}"
-								class="btn-save">뒤로가기</a>
+								class="btn-save">저장하기</a>
 						</div>
 					</div>
 				</div>

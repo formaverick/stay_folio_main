@@ -115,7 +115,7 @@
 						<p class="page-subtitle">예약 현황, 숙소 등록 상태, 통계 정보를 빠르게 확인하세요.</p>
 					</div>
 					<div class="header-right">
-						<button class="btn-save" onclick="history.back()">MAIN PAGE</button>
+						<a href="${pageContext.request.contextPath}/" class="btn-save">MAIN PAGE</a>
 					</div>
 				</div>
 			</div>

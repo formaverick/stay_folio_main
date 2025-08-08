@@ -1,16 +1,15 @@
 package com.hotel.mapper;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.hotel.domain.AmenityVO;
 import com.hotel.domain.FacilityVO;
 import com.hotel.domain.LocationCategoryVO;
 import com.hotel.domain.PhotoVO;
+import com.hotel.domain.RecommendCategoryVO;
 import com.hotel.domain.RoomVO;
 import com.hotel.domain.StayDetailVO;
 import com.hotel.domain.StaySearchResultVO;
@@ -82,5 +81,16 @@ public interface StayMapper {
 
 	// admin - 숙소 사진 수정
 	void updateStayPhoto(PhotoVO photo);
+
+	// admin 숙소 상세페이지 - 키워드
+	List<RecommendCategoryVO> getKeywordByStayId(int siId);
+	
+	List<RecommendCategoryVO> getAllKeywords();
+	
+	List<Integer> getKeywordIdsByStayId(int siId);
+	
+	void deleteKeywordsByStayId(int siId);
+	
+	void insertKeywordForStay(@Param("rcId") int rcId, @Param("siId") int siId);
 
 }

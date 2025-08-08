@@ -464,4 +464,45 @@
 	</update>
 
 
+	<!-- 숙소 키워드 목록 조회 -->
+	<select id="getKeywordByStayId"
+		resultType="com.hotel.domain.RecommendCategoryVO">
+		SELECT re.rc_id AS rcId, re.rc_name AS rcName
+		FROM
+		t_recommend_category re
+		JOIN
+		t_stay_recommend sre ON re.rc_id =
+		sre.rc_id
+		WHERE sre.si_id = #{siId} AND re.rc_name IS NOT NULL
+	</select>
+
+	<!-- 전체 키워드(추천 카테고리) -->
+	<select id="getAllKeywords"
+		resultType="com.hotel.domain.RecommendCategoryVO">
+		SELECT rc_id AS rcId, rc_name AS rcName
+		FROM t_recommend_category
+		WHERE rc_name IS NOT NULL
+		ORDER BY rc_name
+	</select>
+
+	<!-- 숙소에 이미 선택된 키워드 ID들 -->
+	<select id="getKeywordIdsByStayId" parameterType="int"
+		resultType="int">
+		SELECT rc_id
+		FROM t_stay_recommend
+		WHERE si_id = #{siId}
+	</select>
+
+	<!-- 숙소의 기존 키워드 관계 삭제 -->
+	<delete id="deleteKeywordsByStayId" parameterType="int">
+		DELETE FROM t_stay_recommend
+		WHERE si_id = #{siId}
+	</delete>
+
+	<!-- 키워드 추가 (단건) -->
+	<insert id="insertKeywordForStay">
+		INSERT INTO t_stay_recommend (rc_id, si_id)
+		VALUES (#{rcId}, #{siId})
+	</insert>
+
 </mapper>

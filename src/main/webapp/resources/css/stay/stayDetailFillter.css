@@ -305,6 +305,7 @@
   padding-bottom: 8px !important;
   margin-bottom: 8px !important;
   border-bottom: 1px solid #f0f0f0 !important;
+  z-index: 100;
 }
 
 .flatpickr-weekday {
@@ -317,6 +318,7 @@
 .flatpickr-days {
   padding: 0 !important;
   width: 100% !important;
+  overflow: visible !important;
 }
 
 /* 두 개 달 레이아웃을 위한 기본 설정 */
@@ -395,11 +397,66 @@
 
 .flatpickr-day.flatpickr-disabled,
 .flatpickr-day.flatpickr-disabled:hover {
-  color: #ddd !important;
+  color: #ccc !important;
   background: transparent !important;
   cursor: not-allowed !important;
   transform: none !important;
+  text-decoration: line-through;
 }
+
+.flatpickr-day.flatpickr-disabled.checkout-only,
+.flatpickr-day.flatpickr-disabled.checkout-only:hover {
+  text-decoration: none !important;
+  color: #949494 !important;
+}
+
+/* 체크아웃으로 선택된 disable */
+.flatpickr-day.flatpickr-disabled.selected,
+.flatpickr-day.flatpickr-disabled.startRange,
+.flatpickr-day.flatpickr-disabled.endRange,
+.flatpickr-day.flatpickr-disabled.selected.inRange,
+.flatpickr-day.flatpickr-disabled.endRange.inRange,
+.flatpickr-day.flatpickr-disabled.selected:hover,
+.flatpickr-day.flatpickr-disabled.startRange:hover,
+.flatpickr-day.flatpickr-disabled.endRange:hover,
+.flatpickr-day.flatpickr-disabled.selected.inRange:hover,
+.flatpickr-day.flatpickr-disabled.endRange.inRange:hover {
+  background: #333 !important;
+  border-color: #333 !important;
+  color: #fff !important;
+  text-decoration: none !important;
+  cursor: default !important;
+}
+
+/* 말풍선 스타일 */
+.checkout-only {
+  position: relative;
+}
+
+.checkout-only::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%; /* 위쪽에 표시 */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  color: #595959;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  padding: 6px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 9999;
+  box-shadow: 0 0 20px rgba(0, 0, 0, .15);
+}
+
+.checkout-only:hover::after {
+  opacity: 1;
+}
+
 
 .flatpickr-prev-month,
 .flatpickr-next-month {

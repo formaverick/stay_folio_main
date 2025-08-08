@@ -2,7 +2,7 @@ $(document).ready(function () {
 	function getQueryParam(name) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(name);
-  	}
+  }
 
   // 초기값 설정
   let selectedRegion = "all";
@@ -17,12 +17,26 @@ $(document).ready(function () {
   $("#adultCount").text(adultCount);
   $("#childCount").text(childCount);
   updatePeopleDisplay();
+
+  const bookingBtn = document.querySelector(".booking-button");
+  const siId = bookingBtn.getAttribute("data-si-id");
+	const riId = bookingBtn.getAttribute("data-ri-id");
+  console.log("siId : " + siId);
+  console.log("riId : " + riId);
+
+  // 체크인 체크아웃 불가날짜 선언
+  let unavailableCheckin = [];
+  let checkoutOnly = [];
   
+  // 기본 범위: 오늘 ~ 1년 후
+  const today = new Date();
+  const oneYearLater = new Date();
+  oneYearLater.setFullYear(today.getFullYear() + 1);
+
   // 날짜 관련 변수
-  let startDate = queryCheckin ? new Date(queryCheckin) : new Date();
+  let startDate = queryCheckin ? new Date(queryCheckin) : today;
   let endDate = queryCheckout ? new Date(queryCheckout) : new Date(new Date().setDate(new Date().getDate() + 1));
-
-
+  
   // 임시 날짜 변수 (적용 버튼 누르기 전까지 실제로 적용되지 않음)
   let tempStartDate = new Date(startDate);
   let tempEndDate = new Date(endDate);
@@ -77,6 +91,12 @@ $(document).ready(function () {
     return null; // 유효성 검사 통과
   }
 
+  // 선택한 체크아웃 날짜 unavailableCheckin에서 제외
+  function getUnavailableWithoutEndDate(unavailableCheckin) {
+    const endDateStr = formatDateForServer(tempEndDate); // "YYYY-MM-DD" 형식
+    return unavailableCheckin.filter(date => date !== endDateStr);
+  }
+
   // 초기 날짜 표시
   updateDateDisplay();
 
@@ -107,11 +127,13 @@ $(document).ready(function () {
 
   // 플랫피커 초기화
   const datePicker = flatpickr("#datePicker", {
+    inline: true,
     mode: "range",
     dateFormat: "Y-m-d",
     defaultDate: [startDate, endDate],
     minDate: "today",
     maxDate: new Date().fp_incr(365), // 1년 후까지만 선택 가능
+    disable: unavailableCheckin,
     inline: true,
     showMonths: 2,
     monthSelectorType: "static", // 월 선택 방식 개선
@@ -175,7 +197,7 @@ $(document).ready(function () {
       },
     },
     onChange: function (selectedDates) {
-      if (selectedDates.length === 2) {
+      if (selectedDates.length === 2) { // 체크인 체크아웃 둘 다 선택
         tempStartDate = selectedDates[0];
         tempEndDate = selectedDates[1];
 
@@ -188,10 +210,38 @@ $(document).ready(function () {
         } else {
           $("#dateError").hide();
           $("#dateApply").prop("disabled", false).css("opacity", 1);
+
+          datePicker.set("minDate", "today");
+          datePicker.set("maxDate", oneYearLater);
+          datePicker.set("disable", getUnavailableWithoutEndDate(unavailableCheckin));
+
+          // 달력 다시 렌더링
+          setTimeout(() => {
+            this.redraw();
+          }, 10);
         }
-      } else if (selectedDates.length === 1) {
-        // 시작일만 선택된 경우
+      } else if (selectedDates.length === 1) { // 체크인만 선택된 경우
         tempStartDate = selectedDates[0];
+        tempEndDate = null;
+        const checkinStr = formatDateForServer(tempStartDate);
+
+        // 체크아웃 가능한 가장 가까운 checkoutOnly 날짜 찾기
+        const cutoffStr = checkoutOnly.find(date => date > checkinStr);
+        console.log("cutoffStr : " + cutoffStr);
+
+        if (cutoffStr) {
+          const cutoff = new Date(cutoffStr);
+          cutoff.setHours(0, 0, 0, 0); // 시간 초기화
+          console.log("cutoff : " + cutoff);
+          
+          // 선택 가능 날짜 초기화
+          datePicker.set("minDate", checkinStr);
+          datePicker.set("maxDate", cutoff);
+          datePicker.set("disable", []);
+        } else {
+          datePicker.set("maxDate", new Date(tempStartDate.getTime() + 1000 * 60 * 60 * 24 * 30));
+        }
+
         $("#dateError").hide();
         $("#dateApply").prop("disabled", true).css("opacity", 0.5);
 
@@ -240,6 +290,17 @@ $(document).ready(function () {
         }
       }, 100);
     },
+    onDayCreate: function(dObj, dStr, fp, dayElem) {
+      const dateStr = formatDateForServer(dayElem.dateObj);
+
+      if (checkoutOnly.includes(dateStr)) {
+        dayElem.classList.add("checkout-only");
+        dayElem.setAttribute("data-tooltip", "체크아웃만 가능");
+      }
+      if (tempEndDate && dateStr === formatDateForServer(tempEndDate)) {
+        dayElem.classList.add("flatpickr-disabled");
+      }
+    }
   });
 
   // 드롭다운 토글 함수
@@ -293,6 +354,32 @@ $(document).ready(function () {
     }, 200);
   });
 
+  // 초기화 버튼 클릭 시
+  $("#dateReset").on("click", function (e) {
+    e.preventDefault();
+
+    // 초기 상태로 재설정
+    datePicker.setDate([today, new Date(today.getTime() + 86400000)]); // 오늘 ~ 내일
+    datePicker.set("minDate", "today");
+    datePicker.set("maxDate", oneYearLater);
+    datePicker.set("disable", getUnavailableWithoutEndDate(unavailableCheckin)); // 초기 disable 복원
+
+    // 날짜 텍스트도 다시 표시
+    startDate = today;
+    endDate = new Date(today.getTime() + 86400000);
+    updateDateDisplay();
+
+    // 버튼 상태도 초기화
+    $("#dateApply").prop("disabled", false).css("opacity", 1);
+    $("#dateError").hide();
+
+    // 드롭다운은 닫지 않고 유지
+    setTimeout(() => {
+      datePicker.redraw();
+    }, 10);
+  });
+
+
   // 날짜 취소 버튼 클릭 이벤트
   $("#dateCancel").on("click", function (e) {
     e.stopPropagation();
@@ -318,8 +405,8 @@ $(document).ready(function () {
     
     //날짜 적용 버튼클릭시 url 쿼리
     const path = window.location.pathname;
-  	const query = `?checkin=${formatDateForServer(startDate)}&checkout=${formatDateForServer(endDate)}&adult=${adultCount}&child=${childCount}`;
-  	window.location.href = path + query;
+    const query = `?checkin=${formatDateForServer(startDate)}&checkout=${formatDateForServer(endDate)}&adult=${adultCount}&child=${childCount}`;
+    window.location.href = path + query;
 
     // 드롭다운 닫기
     $("#dateSelect").removeClass("active");
@@ -347,48 +434,48 @@ $(document).ready(function () {
 	
     const type = $(this).data("type");
     const isIncrease = $(this).hasClass("increase");
-	const maxPerson = parseInt($("#maxPerson").val()); //최대인원
+	  const maxPerson = parseInt($("#maxPerson").val()); //최대인원
 	
-	let newAdult = adultCount;
-  	let newChild = childCount;
+    let newAdult = adultCount;
+    let newChild = childCount;
 	
-     // 먼저 미리 계산
-  if (type === "adult") {
-    if (isIncrease) {
-      newAdult++;
-    } else {
-      newAdult = Math.max(1, newAdult - 1); // 성인은 최소 1명
+    // 먼저 미리 계산
+    if (type === "adult") {
+      if (isIncrease) {
+        newAdult++;
+      } else {
+        newAdult = Math.max(1, newAdult - 1); // 성인은 최소 1명
+      }
+    } else if (type === "child") {
+      if (isIncrease) {
+        newChild++;
+      } else {
+        newChild = Math.max(0, newChild - 1); // 아동은 최소 0명
+      }
     }
-  } else if (type === "child") {
-    if (isIncrease) {
-      newChild++;
-    } else {
-      newChild = Math.max(0, newChild - 1); // 아동은 최소 0명
+
+    const newTotal = newAdult + newChild;
+
+    // 최대 인원 초과 체크
+    if (newTotal > maxPerson) {
+      alert(`최대 인원은 ${maxPerson}명까지 가능합니다.`);
+      return; // 버튼 눌러도 아무 일 없음
     }
-  }
 
-  const newTotal = newAdult + newChild;
+    // 인원 업데이트 반영
+    adultCount = newAdult;
+    childCount = newChild;
+    $("#adultCount").text(adultCount);
+    $("#childCount").text(childCount);
 
-  // 최대 인원 초과 체크
-  if (newTotal > maxPerson) {
-    alert(`최대 인원은 ${maxPerson}명까지 가능합니다.`);
-    return; // 버튼 눌러도 아무 일 없음
-  }
+    // 인원 정보 업데이트
+    updatePeopleDisplay();
 
-  // 인원 업데이트 반영
-  adultCount = newAdult;
-  childCount = newChild;
-  $("#adultCount").text(adultCount);
-  $("#childCount").text(childCount);
-
-  // 인원 정보 업데이트
-  updatePeopleDisplay();
-
-  // 쿼리 업데이트
-  const path = window.location.pathname;
-  const query = `?checkin=${formatDateForServer(startDate)}&checkout=${formatDateForServer(endDate)}&adult=${adultCount}&child=${childCount}`;
-  window.location.href = path + query;
-});
+    // 쿼리 업데이트
+    const path = window.location.pathname;
+    const query = `?checkin=${formatDateForServer(startDate)}&checkout=${formatDateForServer(endDate)}&adult=${adultCount}&child=${childCount}`;
+    window.location.href = path + query;
+  });
 
   // 인원 표시 업데이트
   function updatePeopleDisplay() {
@@ -472,4 +559,18 @@ $(document).ready(function () {
       ).hide();
     }
   });
+
+  // 체크인, 체크아웃 불가 날짜 불러오기
+  fetch(`/stay/room/unavailable-dates/${siId}/${riId}`)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("실제 응답:", data);
+      unavailableCheckin = data.unavailableCheckin || [];
+      checkoutOnly = data.checkoutOnly || [];
+
+      // 달력에 비활성 날짜 설정
+      datePicker.set("disable", getUnavailableWithoutEndDate(unavailableCheckin));
+      datePicker.redraw();
+    })
+    .catch((err) => console.error("예약 불가 날짜 불러오기 실패:", err));
 });

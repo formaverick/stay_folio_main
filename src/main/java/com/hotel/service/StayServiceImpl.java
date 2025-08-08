@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.hotel.domain.Criteria;
 import com.hotel.domain.FacilityVO;
 import com.hotel.domain.LocationCategoryVO;
 import com.hotel.domain.PhotoVO;
@@ -65,12 +66,12 @@ public class StayServiceImpl implements StayService {
 	public List<LocationCategoryVO> getAllLocations() {
 		return stayMapper.getAllLocations();
 	}
+
 	// 검색 리스트(지역,카테고리,체크인,체크아웃,총 인원)
 	@Override
-    public List<StaySearchResultVO> getStayListFiltered(Map<String, Object> param) {
-        return stayMapper.selectStayListFiltered(param);
-    }
-
+	public List<StaySearchResultVO> getStayListFiltered(Map<String, Object> param) {
+		return stayMapper.selectStayListFiltered(param);
+	}
 
 	// 편의시설 리스트
 	@Override
@@ -83,7 +84,7 @@ public class StayServiceImpl implements StayService {
 	public void insertStayInfo(StayVO stay, StayDetailVO detail, List<Integer> facilityIds) {
 		// 숙소 기본 정보
 		stayMapper.insertStayInfo(stay);
-		
+
 		// 등록된 숙소 id
 		int siId = stayMapper.getLastInsertId();
 
@@ -118,8 +119,18 @@ public class StayServiceImpl implements StayService {
 
 	// admin - 숙소 전체
 	@Override
+	public List<StayVO> getListWithPaging(Criteria cri) {
+		return stayMapper.getListWithPaging(cri);
+	}
+
+	@Override
 	public List<StayVO> getAllStays() {
-		return stayMapper.getAllStays();
+		return stayMapper.getAllStays(); // ← 이렇게 반드시 구현해야 에러가 사라짐
+	}
+
+	@Override
+	public int getTotalCount(Criteria cri) {
+		return stayMapper.getTotalCount(cri);
 	}
 
 	// admin - 숙소 사진 map

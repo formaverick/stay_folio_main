@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.hotel.domain.AmenityVO;
+import com.hotel.domain.Criteria;
 import com.hotel.domain.FacilityVO;
 import com.hotel.domain.LocationCategoryVO;
 import com.hotel.domain.PhotoVO;
@@ -61,6 +62,12 @@ public interface StayMapper {
 
 	// 모든 숙소 불러오기
 	List<StayVO> getAllStays();
+	
+	// 페이징된 숙소 리스트 가져오기
+	List<StayVO> getListWithPaging(Criteria cri);
+
+	// 전체 숙소 수 (페이징용)
+	int getTotalCount(Criteria cri);
 
 	// 숙소 이미지 불러오기
 	List<PhotoVO> getStayPhotos(int siId);

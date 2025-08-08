@@ -11,7 +11,7 @@ public class StaySearchResultVO {
 	private int rcId;	//추천 번호
 	private String siLoca;
 	private int siMinprice;
-	private int siDiscount;
+	private Double siDiscount;
 	private String spUrl;
 	private Date siDate; // 등록일자 - 날짜 정렬용
 	private String siDesc; // 짧은 설명

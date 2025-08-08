@@ -103,9 +103,13 @@ public class AdminController {
 	public List<RoomVO> getRoomList(@RequestParam("siId") int siId) {
 		return stayService.getRoomsByStayId(siId);
 	}
-
+	//회원 리스트
 	@GetMapping("/member/list")
 	public String memberList(Criteria cri, Model model) {
+		System.out.println("enabled: " + cri.getEnabled());
+		if (cri.getEnabled() == null) {
+		    // 전체 회원 조회로 간주
+		}
 		List<MemberVO> memberList = adminService.getMemberList(cri);
 		int total = adminService.getTotalMemberCount(cri); // 총 회원 수
 

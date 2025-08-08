@@ -91,12 +91,6 @@ $(document).ready(function () {
     return null; // 유효성 검사 통과
   }
 
-  // 선택한 체크아웃 날짜 unavailableCheckin에서 제외
-  function getUnavailableWithoutEndDate(unavailableCheckin) {
-    const endDateStr = formatDateForServer(tempEndDate); // "YYYY-MM-DD" 형식
-    return unavailableCheckin.filter(date => date !== endDateStr);
-  }
-
   // 초기 날짜 표시
   updateDateDisplay();
 
@@ -139,18 +133,6 @@ $(document).ready(function () {
     monthSelectorType: "static", // 월 선택 방식 개선
     enableTime: false,
     animate: true,
-    onDayCreate: function (dObj, dStr, fp, dayElem) {
-      // 첫 번째 날짜가 선택된 경우, 그 이전 날짜들을 비활성화
-      if (fp.selectedDates.length === 1) {
-        const firstSelectedDate = fp.selectedDates[0];
-        const dayDate = dayElem.dateObj;
-
-        if (dayDate < firstSelectedDate) {
-          dayElem.classList.add("flatpickr-disabled");
-          dayElem.setAttribute("aria-disabled", "true");
-        }
-      }
-    },
     locale: {
       firstDayOfWeek: 1, // 월요일부터 시작
       weekdays: {
@@ -196,59 +178,88 @@ $(document).ready(function () {
         ],
       },
     },
-    onChange: function (selectedDates) {
-      if (selectedDates.length === 2) { // 체크인 체크아웃 둘 다 선택
-        tempStartDate = selectedDates[0];
-        tempEndDate = selectedDates[1];
+    onChange: function (selectedDates, dateStr, instance) {
+      // 매번 초기화
+      instance.calendarContainer.classList.remove("picking-end");
+      instance.calendarContainer.querySelectorAll(".can-end").forEach(el => el.classList.remove("can-end"));
 
-        // 유효성 검사
+      if (selectedDates.length === 2) {
+        // ✅ 체크인+체크아웃 선택 완료 분기 (기존 로직 유지 + 마지막에 locked-end만 붙이면 됨)
+        tempStartDate = selectedDates[0];
+        tempEndDate   = selectedDates[1];
+
         const errorMsg = validateDateSelection(tempStartDate, tempEndDate);
         if (errorMsg) {
           $("#dateError").text(errorMsg).show().addClass("shake");
           $("#dateApply").prop("disabled", true).css("opacity", 0.5);
           setTimeout(() => $("#dateError").removeClass("shake"), 500);
-        } else {
-          $("#dateError").hide();
-          $("#dateApply").prop("disabled", false).css("opacity", 1);
-
-          datePicker.set("minDate", "today");
-          datePicker.set("maxDate", oneYearLater);
-          datePicker.set("disable", getUnavailableWithoutEndDate(unavailableCheckin));
-
-          // 달력 다시 렌더링
-          setTimeout(() => {
-            this.redraw();
-          }, 10);
+          return;
         }
-      } else if (selectedDates.length === 1) { // 체크인만 선택된 경우
+
+        $("#dateError").hide();
+        $("#dateApply").prop("disabled", false).css("opacity", 1);
+
+        // 기본 범위+disable(체크인 불가만)
+        instance.set("minDate", "today");
+        instance.set("maxDate", oneYearLater);
+        instance.set("disable", unavailableCheckin);
+
+        // redraw 후 최종 체크아웃 셀 표시 고정
+        setTimeout(() => {
+          instance.redraw();
+          setTimeout(() => {
+            const endLabel = instance.formatDate(tempEndDate, "F j, Y");
+            const endEl = instance.calendarContainer.querySelector(`.flatpickr-day[aria-label="${endLabel}"]`);
+            if (endEl) {
+              endEl.classList.add("selected", "endRange", "locked-end");
+              endEl.setAttribute("aria-disabled", "true");
+              endEl.setAttribute("tabindex", "-1");
+            }
+          }, 0);
+        }, 0);
+
+        return;
+      }
+
+      if (selectedDates.length === 1) { // ✅ 체크인만 선택
         tempStartDate = selectedDates[0];
-        tempEndDate = null;
+        tempEndDate   = null;
+
         const checkinStr = formatDateForServer(tempStartDate);
 
-        // 체크아웃 가능한 가장 가까운 checkoutOnly 날짜 찾기
-        const cutoffStr = checkoutOnly.find(date => date > checkinStr);
-        console.log("cutoffStr : " + cutoffStr);
-
+        // 가장 가까운 checkout-only 날짜 찾기
+        const cutoffStr = checkoutOnly.find(d => d > checkinStr);
         if (cutoffStr) {
           const cutoff = new Date(cutoffStr);
-          cutoff.setHours(0, 0, 0, 0); // 시간 초기화
-          console.log("cutoff : " + cutoff);
-          
-          // 선택 가능 날짜 초기화
-          datePicker.set("minDate", checkinStr);
-          datePicker.set("maxDate", cutoff);
-          datePicker.set("disable", []);
+          cutoff.setHours(0,0,0,0);
+          instance.set("minDate", checkinStr);
+          instance.set("maxDate", cutoff);
+          instance.set("disable", []); // ← checkoutOnly는 disable에 절대 넣지 않음
         } else {
-          datePicker.set("maxDate", new Date(tempStartDate.getTime() + 1000 * 60 * 60 * 24 * 30));
+          instance.set("maxDate", new Date(tempStartDate.getTime() + 1000*60*60*24*30));
         }
 
         $("#dateError").hide();
         $("#dateApply").prop("disabled", true).css("opacity", 0.5);
 
-        // 첫 번째 날짜 선택 후 달력 다시 렌더링하여 이전 날짜들 비활성화
+        // ✅ 순서: redraw 먼저 → picking-end on → .can-end 부여
         setTimeout(() => {
-          this.redraw();
-        }, 10);
+          instance.redraw();
+          setTimeout(() => {
+            instance.calendarContainer.classList.add("picking-end");
+
+            const startStr = checkinStr;
+            const cells = instance.calendarContainer.querySelectorAll(".flatpickr-day.checkout-only");
+            let added = 0;
+            cells.forEach(el => {
+              const ymd = el.getAttribute("data-ymd"); // onDayCreate에서 심어둠
+              const ok  = ymd && ymd >= startStr;      // YYYY-MM-DD 문자열 비교 = 시간 비교
+              el.classList.toggle("can-end", !!ok);
+              if (ok) added++;
+            });
+            console.debug("[can-end] start=", startStr, "candidates=", cells.length, "added=", added);
+          }, 0);
+        }, 0);
       }
     },
     onReady: function (selectedDates, dateStr, instance) {
@@ -289,16 +300,53 @@ $(document).ready(function () {
           });
         }
       }, 100);
+
+      // checkoutOnly 클릭 설정
+      const guard = (e) => {
+        const cell = e.target.closest('.flatpickr-day');
+        if (!cell) return;
+
+        const isCheckoutOnly = cell.classList.contains('checkout-only');
+        const pickingEnd = instance.calendarContainer.classList.contains('picking-end');
+        const canEnd = cell.classList.contains('can-end');
+        const isLockedEnd = cell.classList.contains('endRange') && cell.classList.contains('locked-end');
+
+        // 1) 기본: checkout-only 는 막음
+        // 2) 단, 체크아웃 선택 단계에서 can-end 인 경우만 통과
+        // 3) 최종 체크아웃(locked-end)은 항상 막음
+        if ((isCheckoutOnly && !(pickingEnd && canEnd)) || isLockedEnd) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+        }
+      };
+
+      // 캡쳐 단계에서 가로채기 (mousedown/click/keydown)
+      ['mousedown','click','touchstart'].forEach(evt => {
+        instance.calendarContainer.addEventListener(evt, guard, true);
+      });
+      instance.calendarContainer.addEventListener('keydown', (e) => {
+        if (!['Enter',' '].includes(e.key)) return;
+        guard(e);
+      }, true);
     },
     onDayCreate: function(dObj, dStr, fp, dayElem) {
-      const dateStr = formatDateForServer(dayElem.dateObj);
+       // 모든 날짜 셀에 YYYY-MM-DD 저장 (로케일/파싱 이슈 제거)
+      const ymd = formatDateForServer(dayElem.dateObj);
+      dayElem.setAttribute('data-ymd', ymd);
 
-      if (checkoutOnly.includes(dateStr)) {
-        dayElem.classList.add("checkout-only");
-        dayElem.setAttribute("data-tooltip", "체크아웃만 가능");
+      // checkoutOnly 마킹
+      if (checkoutOnly.includes(ymd)) {
+        dayElem.classList.add('checkout-only');
+        dayElem.setAttribute('data-tooltip', '체크아웃만 가능');
       }
-      if (tempEndDate && dateStr === formatDateForServer(tempEndDate)) {
-        dayElem.classList.add("flatpickr-disabled");
+
+      // 체크인만 선택된 경우, 그 이전 날짜 비활성화
+      if (fp.selectedDates.length === 1) {
+        const first = fp.selectedDates[0];
+        if (dayElem.dateObj < first) {
+          dayElem.classList.add('flatpickr-disabled');
+          dayElem.setAttribute('aria-disabled', 'true');
+        }
       }
     }
   });
@@ -318,6 +366,12 @@ $(document).ready(function () {
         ".dropdown-container, .date-picker-container, .people-selector-container"
       )
       .toggle();
+  }
+
+  // 체크아웃용 class 삭제
+  function clearPickingState(instance) {
+    instance.calendarContainer.classList.remove("picking-end");
+    instance.calendarContainer.querySelectorAll(".can-end").forEach(el => el.classList.remove("can-end"));
   }
 
   // 날짜 선택 클릭 이벤트
@@ -362,12 +416,13 @@ $(document).ready(function () {
     datePicker.setDate([today, new Date(today.getTime() + 86400000)]); // 오늘 ~ 내일
     datePicker.set("minDate", "today");
     datePicker.set("maxDate", oneYearLater);
-    datePicker.set("disable", getUnavailableWithoutEndDate(unavailableCheckin)); // 초기 disable 복원
+    datePicker.set("disable", unavailableCheckin); // 초기 disable 복원
 
     // 날짜 텍스트도 다시 표시
     startDate = today;
     endDate = new Date(today.getTime() + 86400000);
     updateDateDisplay();
+    clearPickingState(datePicker);
 
     // 버튼 상태도 초기화
     $("#dateApply").prop("disabled", false).css("opacity", 1);
@@ -385,6 +440,7 @@ $(document).ready(function () {
     e.stopPropagation();
     $("#dateSelect").removeClass("active");
     $(".date-picker-container").hide();
+    clearPickingState(datePicker);
   });
 
   // 날짜 적용 버튼 클릭 이벤트
@@ -564,12 +620,14 @@ $(document).ready(function () {
   fetch(`/stay/room/unavailable-dates/${siId}/${riId}`)
     .then((res) => res.json())
     .then((data) => {
-      console.log("실제 응답:", data);
-      unavailableCheckin = data.unavailableCheckin || [];
+      const rawUnavailable = data.unavailableCheckin || [];
       checkoutOnly = data.checkoutOnly || [];
+       // disable에는 '체크인 불가'만 넣는다 (checkoutOnly는 제외)
+      unavailableCheckin = rawUnavailable.filter(d => !checkoutOnly.includes(d));
+      console.log(unavailableCheckin);
 
       // 달력에 비활성 날짜 설정
-      datePicker.set("disable", getUnavailableWithoutEndDate(unavailableCheckin));
+      datePicker.set("disable", unavailableCheckin);
       datePicker.redraw();
     })
     .catch((err) => console.error("예약 불가 날짜 불러오기 실패:", err));

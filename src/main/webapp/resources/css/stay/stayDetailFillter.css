@@ -404,29 +404,41 @@
   text-decoration: line-through;
 }
 
-.flatpickr-day.flatpickr-disabled.checkout-only,
-.flatpickr-day.flatpickr-disabled.checkout-only:hover {
-  text-decoration: none !important;
+/* 기본: 체크아웃 전용은 클릭 불가 */
+.flatpickr-day.checkout-only {
+  cursor: not-allowed !important;
   color: #949494 !important;
 }
 
-/* 체크아웃으로 선택된 disable */
-.flatpickr-day.flatpickr-disabled.selected,
-.flatpickr-day.flatpickr-disabled.startRange,
-.flatpickr-day.flatpickr-disabled.endRange,
-.flatpickr-day.flatpickr-disabled.selected.inRange,
-.flatpickr-day.flatpickr-disabled.endRange.inRange,
-.flatpickr-day.flatpickr-disabled.selected:hover,
-.flatpickr-day.flatpickr-disabled.startRange:hover,
-.flatpickr-day.flatpickr-disabled.endRange:hover,
-.flatpickr-day.flatpickr-disabled.selected.inRange:hover,
-.flatpickr-day.flatpickr-disabled.endRange.inRange:hover {
+/* 체크아웃 선택 후 .checkout-only */
+.flatpickr-calendar.picking-end .flatpickr-day.checkout-only.can-end {
+  cursor: pointer !important;
+}
+.flatpickr-calendar.picking-end .flatpickr-day.checkout-only.can-end:not(.endRange) {
+  color: #333 !important;
+}
+.flatpickr-calendar.picking-end .flatpickr-day.checkout-only.can-end.flatpickr-disabled {
+  color: #ccc !important;
+}
+
+/* endRange일 땐 흰색으로 */
+.flatpickr-day.checkout-only.can-end.endRange {
+  color: #fff !important;
+}
+
+.flatpickr-day.checkout-only.can-end.endRange {
+	color: #fff !important;
+}
+
+/* 최종 선택된 체크아웃은 선택 스타일 유지 */
+.flatpickr-day.checkout-only.endRange {
   background: #333 !important;
   border-color: #333 !important;
   color: #fff !important;
   text-decoration: none !important;
-  cursor: default !important;
+  cursor: not-allowed !important;
 }
+
 
 /* 말풍선 스타일 */
 .checkout-only {

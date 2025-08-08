@@ -71,12 +71,6 @@ public class CommonController {
 		return "login/login";
 	}
 	
-	// 로그아웃 페이지
-	@GetMapping("/logout")
-	public void logout() {
-		// 로그아웃 페이지로 이동 또는 페이지 없이 할건가?
-	}
-	
 	// 회원가입 페이지
 	@GetMapping("/register")
 	public String registerPage() {

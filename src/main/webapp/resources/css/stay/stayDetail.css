@@ -12,14 +12,11 @@
   max-width: 1280px;
   margin: 0 auto;
   display: flex;
-  align-items: flex-start;
 }
-d
 
 /* 좌측 영역 (70%) */
 .room-detail-left {
   flex: 0 0 70%;
-  background-color: #ffffff;
   padding: 24px;
 }
 
@@ -34,6 +31,26 @@ d
   font-size: 1.2rem;
   color: #666666;
   line-height: 1.6;
+}
+/* 우측 영역 (30%) */
+.room-detail-right {
+  flex: 0 0 30%;
+
+  position: sticky;
+  top: 84px;
+}
+
+.room-detail-right h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+}
+
+.room-detail-right p {
+  font-size: 14px;
+  color: #666666;
+  line-height: 1.5;
 }
 
 .room-header-section {
@@ -282,7 +299,6 @@ d
   }
 }
 
-/* Styles moved from stay.css */
 body {
   font-family: "Pretendard", sans-serif;
   color: #222;

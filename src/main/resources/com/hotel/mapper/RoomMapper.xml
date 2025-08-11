@@ -22,7 +22,8 @@
 		riPrice,
 		ri_bedroom AS riBedroom,
 		ri_bathroom AS
-		riBathroom
+		riBathroom,
+		ri_show AS riShow
 		FROM t_room_info
 		WHERE si_id = #{siId} AND
 		ri_id = #{riId}
@@ -107,7 +108,8 @@
 		SELECT sp_idx AS spIdx,
 		sp_url AS spUrl,
 		si_id AS siId,
-		ri_id AS riId
+		ri_id
+		AS riId
 		FROM t_room_photo
 		WHERE si_id = #{siId}
 		AND sp_idx = 0
@@ -166,4 +168,92 @@
 		VALUES (#{siId}, #{riId}, #{spIdx}, #{spUrl})
 	</insert>
 
+	<update id="updateRoom">
+		UPDATE t_room_info
+		SET
+		ri_type = #{riType},
+		ri_name =
+		#{riName},
+		ri_desc = #{riDesc},
+		ri_person = #{riPerson},
+		ri_maxperson =
+		#{riMaxperson},
+		ri_area = #{riArea},
+		ri_bed = #{riBed},
+		ri_bedcnt =
+		#{riBedcnt},
+		ri_price = #{riPrice},
+		ri_show = #{riShow},
+		ri_bedroom =
+		#{riBedroom},
+		ri_bathroom = #{riBathroom}
+		WHERE si_id = #{siId}
+		AND ri_id
+		= #{riId}
+	</update>
+
+	<delete id="deleteFacilitiesByRoomId">
+		DELETE FROM t_room_facility_rel WHERE si_id = #{siId}
+		AND ri_id = #{riId}
+	</delete>
+
+	<delete id="deleteAmenitiesByRoomId">
+		DELETE FROM t_room_amenities WHERE si_id = #{siId}
+		AND ri_id = #{riId}
+	</delete>
+
+	<select id="existsRoomPhoto" resultType="boolean"
+		parameterType="com.hotel.domain.RoomPhotoVO">
+		SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+		FROM
+		t_room_photo
+		WHERE
+		si_id = #{siId}
+		AND sp_idx = #{spIdx}
+		AND ri_id = #{riId}
+	</select>
+
+	<update id="updateRoomPhoto"
+		parameterType="com.hotel.domain.RoomPhotoVO">
+		UPDATE t_room_photo
+		SET sp_url = #{spUrl}
+		WHERE si_id =
+		#{siId}
+		AND sp_idx = #{spIdx}
+		AND ri_id = #{riId}
+	</update>
+	
+	<select id="getReservedDates" resultType="java.sql.Date">
+		<![CDATA[
+			WITH reserved_dates AS (
+				SELECT 
+					sr_checkin + LEVEL - 1 AS reserved_date 
+				FROM t_stay_reservation
+				WHERE si_id = #{siId} AND ri_id = #{riId} AND sr_status = 'a' 
+					CONNECT BY LEVEL <= sr_checkout - sr_checkin 
+					AND PRIOR sr_id = sr_id 
+					AND PRIOR DBMS_RANDOM.VALUE IS NOT NULL
+			)
+			SELECT reserved_date
+			FROM reserved_dates
+			WHERE reserved_date > TRUNC(SYSDATE)
+			ORDER BY reserved_date
+		]]>
+	</select>
+	
+	<select id="getCheckinDates" resultType="java.sql.Date">
+		<![CDATA[
+			SELECT DISTINCT sr_checkin AS checkout_only_date
+			FROM t_stay_reservation
+			WHERE si_id = #{siId} AND ri_id = #{riId} AND sr_status = 'a'
+			  AND sr_checkin NOT IN (
+			    SELECT sr_checkout
+			    FROM t_stay_reservation
+			    WHERE si_id = #{siId} AND ri_id = #{riId} AND sr_status = 'a'
+			  )
+			  AND sr_checkin > TRUNC(SYSDATE)
+			ORDER BY checkout_only_date
+		]]>
+	</select>
+	
 </mapper>

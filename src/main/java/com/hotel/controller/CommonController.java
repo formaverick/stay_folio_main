@@ -3,12 +3,10 @@ package com.hotel.controller;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hotel.domain.MemberVO;
-import com.hotel.service.BookmarkService;
 import com.hotel.service.CommonService;
 
 import lombok.extern.log4j.Log4j;
@@ -45,6 +42,7 @@ public class CommonController {
 		return "home";
 	}
 	
+	// main 페이지 숙소 카드(recomendSection.js)
 	@GetMapping(value ="/recommend/{rc_id}", produces = "application/json; charset=UTF-8")
 	@ResponseBody
 	public Map<String, Object> getRecommendStays(@PathVariable("rc_id") int rc_id, Principal principal) {
@@ -55,9 +53,8 @@ public class CommonController {
 	    
 		Map<String, Object> map = commonService.getRecommend(rc_id, miId);
 		
-		log.info(map);
-		
 		map.put("success", true);
+		
 		return map;
 	}
 
@@ -68,12 +65,6 @@ public class CommonController {
 			model.addAttribute("error", "아이디 혹은 비밀번호가 잘못되었습니다.");
 		}
 		return "login/login";
-	}
-	
-	// 로그아웃 페이지
-	@GetMapping("/logout")
-	public void logout() {
-		// 로그아웃 페이지로 이동 또는 페이지 없이 할건가?
 	}
 	
 	// 회원가입 페이지

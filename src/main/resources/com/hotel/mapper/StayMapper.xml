@@ -134,6 +134,102 @@
 
 
 
+
+	<!-- 숙소 필터 검색 쿼리 -->
+	<select id="selectStayListFiltered"
+		resultType="com.hotel.domain.StaySearchResultVO">
+  <![CDATA[
+    SELECT
+      s.si_id AS siId,
+      s.si_name AS siName,
+      s.si_loca AS siLoca,
+      s.si_minprice AS siMinprice,
+      s.si_discount AS siDiscount,
+      s.si_date AS siDate,
+      (
+        SELECT p.sp_url
+        FROM t_stay_photo p
+        WHERE p.si_id = s.si_id AND p.sp_idx = 0
+        FETCH FIRST 1 ROWS ONLY
+      ) AS spUrl
+    FROM t_stay_info s
+  ]]>
+
+		<if test="rcId != null and rcId != 0">
+    <![CDATA[
+      JOIN t_stay_recommend r ON s.si_id = r.si_id
+    ]]>
+		</if>
+
+  <![CDATA[
+    WHERE s.si_show = '1'
+  ]]>
+
+		<if test="rcId != null and rcId != 0">
+    <![CDATA[
+      AND r.rc_id = #{rcId}
+    ]]>
+		</if>
+
+		<if test="lcId != null and lcId != 0">
+    <![CDATA[
+      AND s.lc_id = #{lcId}
+    ]]>
+		</if>
+
+  <![CDATA[
+    AND EXISTS (
+      SELECT 1
+      FROM t_room_info ri
+      WHERE ri.si_id = s.si_id
+        AND ri.ri_maxperson >= #{totalPerson}
+        AND ri.ri_show = 1
+        AND NOT EXISTS (
+          SELECT 1
+          FROM t_stay_reservation res
+          WHERE res.ri_id = ri.ri_id
+            AND res.sr_status IN ('A', 'D')
+            AND (
+              res.sr_checkin < #{checkout, jdbcType=DATE}
+              AND res.sr_checkout > #{checkin, jdbcType=DATE}
+            )
+        )
+    )
+    ORDER BY s.si_date DESC
+  ]]>
+	</select>
+
+
+	<!-- lcId랑 카테고리 -->
+	<select id="selectRecommendStayListByLcId"
+		resultType="com.hotel.domain.StaySearchResultVO">
+  <![CDATA[
+    SELECT
+      s.si_id AS siId,
+      s.si_name AS siName,
+      s.si_loca AS siLoca,
+      s.si_minprice AS siMinprice,
+      s.si_discount AS siDiscount,
+      s.si_date AS siDate,
+      MIN(p.sp_url) AS spUrl
+    FROM t_stay_info s
+    JOIN t_stay_recommend r ON s.si_id = r.si_id
+    LEFT JOIN t_stay_photo p ON s.si_id = p.si_id AND p.sp_idx = 0
+    WHERE s.si_show = '1'
+      AND r.rc_id = #{rcId}
+  ]]>
+		<if test="lcId != 0">
+  <![CDATA[
+      AND s.lc_id = #{lcId}
+  ]]>
+		</if>
+  <![CDATA[
+    GROUP BY
+      s.si_id, s.si_name, s.si_loca, s.si_minprice, s.si_discount, s.si_date
+    ORDER BY s.si_date DESC
+  ]]>
+	</select>
+
 	<!-- 전체 랜덤 숙소 조회 -->
 	<select id="selectRandomStayList"
 		resultType="com.hotel.domain.StayVO">
@@ -159,10 +255,6 @@
 		ORDER BY
 		DBMS_RANDOM.VALUE
 	</select>
-
-
-
-
 
 	<!-- admin insert 시작 -->
 	<!-- 지역 목록 조회 -->
@@ -254,12 +346,55 @@
 		si_id AS siId,
 		si_name
 		AS siName,
-		si_loca AS siLoca
+		si_loca AS siLoca,
+		si_date AS siDate
 		FROM
 		t_stay_info
 		ORDER BY
 		si_id DESC
 	</select>
+
+	<select id="getListWithPaging"
+		resultType="com.hotel.domain.StayVO">
+		SELECT * FROM (
+		SELECT ROWNUM rn, A.* FROM (
+		SELECT
+		si_id AS siId,
+		si_name AS siName,
+		si_loca AS siLoca,
+		si_date AS siDate
+		FROM t_stay_info
+		<where>
+			<if test="keyword != null and keyword != ''">
+				si_name LIKE '%' || #{keyword} || '%'
+			</if>
+			<if test="lcId != null">
+				AND lc_id = #{lcId}
+			</if>
+		</where>
+		ORDER BY si_id DESC
+		) A
+		WHERE ROWNUM &lt;= #{pageStart} + #{perPageNum}
+		)
+		WHERE rn &gt; #{pageStart}
+	</select>
+
+
+
+	<select id="getTotalCount" resultType="int">
+		SELECT COUNT(*)
+		FROM t_stay_info
+		<where>
+			<if test="keyword != null and keyword != ''">
+				si_name LIKE '%' || #{keyword} || '%'
+			</if>
+			<if test="lcId != null">
+				AND lc_id = #{lcId}
+			</if>
+		</where>
+	</select>
+
+
 
 	<select id="getStayPhotos" resultType="com.hotel.domain.PhotoVO">
 		SELECT sp_idx AS spIdx,
@@ -368,5 +503,46 @@
 		</choose>
 	</update>
 
+
+	<!-- 숙소 키워드 목록 조회 -->
+	<select id="getKeywordByStayId"
+		resultType="com.hotel.domain.RecommendCategoryVO">
+		SELECT re.rc_id AS rcId, re.rc_name AS rcName
+		FROM
+		t_recommend_category re
+		JOIN
+		t_stay_recommend sre ON re.rc_id =
+		sre.rc_id
+		WHERE sre.si_id = #{siId} AND re.rc_name IS NOT NULL
+	</select>
+
+	<!-- 전체 키워드(추천 카테고리) -->
+	<select id="getAllKeywords"
+		resultType="com.hotel.domain.RecommendCategoryVO">
+		SELECT rc_id AS rcId, rc_name AS rcName
+		FROM t_recommend_category
+		WHERE rc_name IS NOT NULL
+		ORDER BY rc_name
+	</select>
+
+	<!-- 숙소에 이미 선택된 키워드 ID들 -->
+	<select id="getKeywordIdsByStayId" parameterType="int"
+		resultType="int">
+		SELECT rc_id
+		FROM t_stay_recommend
+		WHERE si_id = #{siId}
+	</select>
+
+	<!-- 숙소의 기존 키워드 관계 삭제 -->
+	<delete id="deleteKeywordsByStayId" parameterType="int">
+		DELETE FROM t_stay_recommend
+		WHERE si_id = #{siId}
+	</delete>
+
+	<!-- 키워드 추가 (단건) -->
+	<insert id="insertKeywordForStay">
+		INSERT INTO t_stay_recommend (rc_id, si_id)
+		VALUES (#{rcId}, #{siId})
+	</insert>
 
 </mapper>

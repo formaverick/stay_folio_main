@@ -33,7 +33,7 @@
 		
 		<!-- 파일 업로드 설정 -->
 		<multipart-config>
-			<location>/resources/upload</location> <!-- 파일 임시 저장 경로 -->
+			<location>C:/upload</location> <!-- 파일 임시 저장 경로 -->
 			<max-file-size>20971520</max-file-size> <!-- 개별 파일 최대 20MB -->
 			<max-request-size>41943040</max-request-size> <!-- 전체 요청 최대 40MB -->
 			<file-size-threshold>20971520</file-size-threshold> <!-- 이 크기 넘으면 디스크에 저장 -->

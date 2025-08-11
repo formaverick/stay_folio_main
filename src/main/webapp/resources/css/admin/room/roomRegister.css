@@ -13,13 +13,13 @@ body {
   line-height: 1.6;
 }
 
-/* 관리자 컨테이너 */
+/* 관리자 컨테이너
 .admin-container {
   display: flex;
   min-height: 100vh;
 }
 
-/* 좌측 사이드바 */
+좌측 사이드바
 .admin-sidebar {
   width: 250px;
   background-color: #fff;
@@ -83,15 +83,15 @@ body {
   font-weight: 600;
 }
 
-/* 메인 컨텐츠 */
+메인 컨텐츠
 .admin-main {
   flex: 1;
   margin-left: 250px;
-  padding: 0;
-  background-color: #f8f9fa;
+  padding: 2rem;
+  background-color: #fff;
 }
 
-/* 헤더 */
+헤더
 .admin-header {
   background-color: #fff;
   border-bottom: 1px solid #e9ecef;
@@ -131,7 +131,7 @@ body {
   color: #666;
   margin: 0;
   line-height: 1.4;
-}
+}*/
 
 /* 버튼 스타일 */
 .btn-cancel,
@@ -167,6 +167,16 @@ body {
   background-color: #333;
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-save:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  box-shadow: none;
+  border: none;
+  opacity: 0.7;
+  transition: none;
 }
 
 /* 폼 컨테이너 */
@@ -252,6 +262,28 @@ body {
 .form-textarea {
   min-height: 100px;
   resize: vertical;
+}
+
+.form-radio-grid {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.form-radio {
+	display: flex; 
+	align-items: center; 
+	gap: 20px;
+}
+
+.radio-label{
+	min-width: 100px;
+}
+
+.radio-item{
+	display: flex;
+	align-items: center; 
+	gap: 6px;
 }
 
 /* 이미지 업로드 스타일 - 간소화된 디자인 */

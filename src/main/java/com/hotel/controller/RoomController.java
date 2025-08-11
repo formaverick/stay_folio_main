@@ -1,10 +1,13 @@
 package com.hotel.controller;
 
 import java.security.Principal;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hotel.domain.AmenityVO;
 import com.hotel.domain.FacilityVO;
@@ -22,6 +26,7 @@ import com.hotel.domain.ReservationPriceResultDTO;
 import com.hotel.domain.RoomPhotoVO;
 import com.hotel.domain.RoomVO;
 import com.hotel.domain.StayDetailVO;
+import com.hotel.domain.StaySearchResultVO;
 import com.hotel.domain.StayVO;
 import com.hotel.service.BookmarkService;
 import com.hotel.service.ReservationService;
@@ -33,6 +38,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 @Controller
 @RequestMapping("/stay")
+
 public class RoomController {
 
 	@Autowired
@@ -40,13 +46,13 @@ public class RoomController {
 
 	@Autowired
 	private RoomService roomService;
-	
+
 	@Autowired
 	private BookmarkService bookmarkService;
 
 	// 숙소 상세페이지
 	@GetMapping("/{siId}")
-	public String StayDetail(@PathVariable("siId") Integer siId, Model model) {
+	public String StayDetail(@PathVariable("siId") Integer siId, Model model, Principal principal) {
 		StayVO stayInfo = stayService.getStayInfo(siId);
 		StayDetailVO stayDetail = stayService.getStayDetail(siId);
 		List<RoomVO> rooms = stayService.getRoomsByStayId(siId);
@@ -54,20 +60,23 @@ public class RoomController {
 		Map<String, List<PhotoVO>> stayPhotos = stayService.getStayPhotosByCategory(siId);
 		Map<Integer, RoomPhotoVO> roomMainPhotos = roomService.getMainPhotoForRooms(siId);
 
-		double discount = stayInfo.getSiDiscount();
+		double discount = stayInfo.getSiDiscount(); // 예: 0.1 -> 10% 할인
+
 		for (RoomVO room : rooms) {
+			log.info("discount 비율=" + discount);
 			if (discount > 0) {
-				int discountedPrice = (int) Math.floor(room.getRiPrice() * (1 - discount / 100));
+				int discountedPrice = (int) Math.floor(room.getRiPrice() * (1 - discount));
 				room.setDiscountedPrice(discountedPrice);
 			} else {
 				room.setDiscountedPrice(room.getRiPrice());
 			}
 		}
 
-		System.out.println("== stayPhotos ==");
-		stayPhotos.forEach((k, v) -> {
-			System.out.println(k + " => " + v.size() + "개");
-		});
+		// 북마크 정보 추가
+		if (principal != null) {
+			List<Long> bookmarkList = bookmarkService.getBookmarkList(principal.getName());
+			stayInfo.setBookmarked(bookmarkList.contains(stayInfo.getSiId()));
+		}
 
 		model.addAttribute("stay", stayInfo);
 		model.addAttribute("detail", stayDetail);
@@ -78,37 +87,40 @@ public class RoomController {
 
 		return "stay/stay";
 	}
+
 	@Autowired
 	private ReservationService reservationService;
-	
+
 	// 객실 상세페이지
 	@GetMapping("/{siId}/{riId}")
-	public String getRoomDetail(@PathVariable("siId") int siId, @PathVariable("riId") int riId, @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate checkin,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate checkout,
-            @RequestParam(required = false) Integer adult,
-            @RequestParam(required = false) Integer child, Model model) {
-		
-		
-		if (checkin == null || checkout == null) {
-	        checkin = LocalDate.now();
-	        checkout = checkin.plusDays(1);
-	    }
-		
-		RoomVO roomperson = roomService.getRoomById(siId, riId);
-	    int basePerson = roomperson.getRiPerson();  // 기준 인원 (예: 1 또는 2)
+	public String getRoomDetail(@PathVariable("siId") int siId, @PathVariable("riId") int riId,
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate checkin,
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate checkout,
+			@RequestParam(required = false) Integer adult, @RequestParam(required = false) Integer child, Model model) {
 
-	    if (adult == null) adult = basePerson < 2 ? 1 : 2;
-	    if (child == null) child = 0;
-	    
-		ReservationPriceResultDTO priceResult = reservationService.calculateRoomPrice(
-	            riId, siId, checkin, checkout, adult, child);
-		model.addAttribute("roomPrice", priceResult.getSrRoomPrice());
-		model.addAttribute("addpersonFee", priceResult.getSrAddpersonFee());
-		model.addAttribute("discount", priceResult.getSrtotalPrice() - priceResult.getSrRoomPrice() - priceResult.getSrAddpersonFee());
-		model.addAttribute("totalPrice", priceResult.getSrtotalPrice());
-		model.addAttribute("nights", priceResult.getNights());
-		model.addAttribute("discountRate", priceResult.getDiscountRate());
-	
+		if (checkin == null || checkout == null) {
+			checkin = LocalDate.now();
+			checkout = checkin.plusDays(1);
+		}
+
+		RoomVO roomperson = roomService.getRoomById(siId, riId);
+		int basePerson = roomperson.getRiPerson(); // 기준 인원 (예: 1 또는 2)
+
+		if (adult == null)
+			adult = basePerson < 2 ? 1 : 2;
+		if (child == null)
+			child = 0;
+
+		ReservationPriceResultDTO priceResult = reservationService.calculateRoomPrice(riId, siId, checkin, checkout,
+				adult, child);
+		model.addAttribute("roomPrice", priceResult.getSrRoomPrice()); // 기본 가격
+		model.addAttribute("addpersonFee", priceResult.getSrAddpersonFee()); // 인원추가 가격
+		model.addAttribute("discount",
+				priceResult.getSrtotalPrice() - priceResult.getSrRoomPrice() - priceResult.getSrAddpersonFee()); // 할인율
+		model.addAttribute("totalPrice", priceResult.getSrtotalPrice()); // 총 가격
+		model.addAttribute("nights", priceResult.getNights()); // 숙박 일 수
+		model.addAttribute("discountRate", priceResult.getDiscountRate()); // 할인율 * 100
+
 		StayVO stay = stayService.getStayInfo(siId);
 		StayDetailVO stayDetail = stayService.getStayDetail(siId);
 		RoomVO room = roomService.getRoomById(siId, riId);
@@ -127,7 +139,7 @@ public class RoomController {
 				rooms.setDiscountedPrice(rooms.getRiPrice());
 			}
 		}
-		
+
 		model.addAttribute("stay", stay);
 		model.addAttribute("detail", stayDetail);
 		model.addAttribute("room", room);
@@ -138,27 +150,66 @@ public class RoomController {
 		model.addAttribute("roomMainPhotos", roomMainPhotos);
 		model.addAttribute("checkin", checkin);
 		model.addAttribute("checkout", checkout);
-
+		model.addAttribute("adult", adult);
+		model.addAttribute("child", child);
 
 		return "stay/stayDetail";
 	}
 
 	// 숙소 검색 - 지역별
 	@GetMapping("/search")
-	public String searchPage(@RequestParam(name = "lcId", required = false, defaultValue = "0") int lcId, Model model, Principal principal) {
+	public String searchPage(@RequestParam(name = "lcId", required = false, defaultValue = "0") int lcId,
+			@RequestParam(name = "rcId", required = false, defaultValue = "0") int rcId,
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate checkin,
+			@RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate checkout,
+			@RequestParam(required = false, defaultValue = "2") int adult,
+			@RequestParam(required = false, defaultValue = "0") int child, Model model, Principal principal) {
+		if (checkin == null)
+			checkin = LocalDate.now();
+		if (checkout == null)
+			checkout = LocalDate.now().plusDays(1);
 
-		List<StayVO> stayList = (lcId == 0) ? stayService.getRandomStayList() : stayService.getStayListByLcId(lcId);
+		Map<String, Object> param = new HashMap<>();
+		param.put("lcId", lcId);
+		param.put("rcId", rcId);
+		param.put("checkin", checkin);
+		param.put("checkout", checkout);
+		param.put("totalPerson", adult + child);
+		List<StaySearchResultVO> stayList = stayService.getStayListFiltered(param);
 		
+		// 북마크 정보 추가
 		if (principal != null) {
 			List<Long> bookmarkList = bookmarkService.getBookmarkList(principal.getName());
 			stayList.forEach(stay -> stay.setBookmarked(bookmarkList.contains(stay.getSiId())));
 		}
 
-		log.info(stayList);
-		
 		model.addAttribute("stayList", stayList);
+		model.addAttribute("rcId", rcId);
+		model.addAttribute("lcId", lcId);
+		model.addAttribute("checkin", checkin);
+		model.addAttribute("checkout", checkout);
+		model.addAttribute("adult", adult);
+		model.addAttribute("child", child);
 
 		return "search/search";
+	}
+	
+	@GetMapping(value = "/room/unavailable-dates/{siId}/{riId}", produces = "application/json")
+	@ResponseBody
+	public Map<String, List<String>> getUnavailableDates(@PathVariable int siId, @PathVariable int riId) {
+		Map<String, List<Date>> rawMap = roomService.getUnavailableDateMap(siId, riId);
+
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	    Map<String, List<String>> result = new HashMap<>();
+
+	    for (Map.Entry<String, List<Date>> entry : rawMap.entrySet()) {
+	        List<String> converted = entry.getValue().stream()
+	                .map(date -> date.toLocalDate().format(formatter))
+	                .collect(Collectors.toList());
+	        result.put(entry.getKey(), converted);
+	    }
+
+	    return result;
 	}
 
 }

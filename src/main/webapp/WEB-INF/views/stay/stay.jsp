@@ -35,6 +35,8 @@
 	src="${pageContext.request.contextPath}/resources/js/stay/stayNavigation.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/js/stay/stay.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/bookmark/bookmark.js"></script>
 </head>
 
 <body>
@@ -103,7 +105,7 @@
 			<div class="stay-header">
 				<div class="title-row">
 					<h1>${stay.siName}</h1>
-					<button class="heart-btn">
+					<button class="heart-btn stay-wishlist" data-wishlist="${stay.bookmarked }">
 						<i class="ph ph-heart"></i>
 					</button>
 				</div>
@@ -121,6 +123,15 @@
 							<i class="ph ${fac.fiIcon}"></i> <span>${fac.fiName}</span>
 						</div>
 					</c:forEach>
+				</div>
+			</c:if>
+
+			<c:if test="${not empty detail.siNotice}">
+				<div class="amenity-title">공지사항</div>
+				<div class="stay-amenities">
+					<div class="amenity">
+						<span>${detail.siNotice}</span>
+					</div>
 				</div>
 			</c:if>
 
@@ -279,9 +290,25 @@
 											</c:otherwise>
 										</c:choose>
 									</div>
-									<button class="room-select-btn"
-										onclick="location.href='/stay/${stay.siId}/${room.riId}?checkin=${checkin}&checkout=${checkout}&adult=1&child=0'">객실
-										선택</button>
+
+									<c:set var="adult"
+										value="${empty param.adult ? 2 : param.adult}" />
+									<c:set var="child"
+										value="${empty param.child ? 0 : param.child}" />
+									<c:set var="currentPerson" value="${adult + child}" />
+
+									<c:choose>
+										<c:when test="${currentPerson <= room.riMaxperson}">
+											<button class="room-select-btn"
+												onclick="location.href='/stay/${stay.siId}/${room.riId}?checkin=${param.checkin}&checkout=${param.checkout}&adult=${param.adult}&child=${param.child}'">
+												객실 선택</button>
+										</c:when>
+										<c:otherwise>
+											<button class="room-select-btn disabled" disabled
+												style="opacity: 0.5; cursor: not-allowed;">인원 초과</button>
+										</c:otherwise>
+									</c:choose>
+
 								</div>
 							</div>
 						</div>

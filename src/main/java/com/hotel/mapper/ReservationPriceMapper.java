@@ -7,5 +7,4 @@ import com.hotel.domain.ReservationDTO;
 
 public interface ReservationPriceMapper {
 	ReservationDTO getReservationPriceInfo(@Param("riId") int riId, @Param("siId") int siId);
-
 }

@@ -1,7 +1,3 @@
-/**
- * 스테이 페이지 미니 네비게이션 스크립트
- * 스크롤 위치에 따라 네비게이션 활성화 상태를 변경하고 고정합니다.
- */
 document.addEventListener("DOMContentLoaded", function () {
   // 네비게이션 요소와 섹션 요소들을 가져옵니다
   const navLinks = document.querySelectorAll(".stay-nav a");
@@ -101,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /**
    * 네비게이션 활성화 상태를 업데이트합니다.
-   * @param {HTMLElement} activeLink - 활성화할 네비게이션 링크
+   * param {HTMLElement} activeLink - 활성화할 네비게이션 링크
    */
   function updateActiveNav(activeLink) {
     // 모든 네비게이션 아이템에서 active 클래스 제거
@@ -113,9 +109,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   /**
    * 디바운스 함수 - 연속적인 이벤트 호출을 제한합니다.
-   * @param {Function} func - 실행할 함수
-   * @param {number} wait - 대기 시간(ms)
-   * @returns {Function} 디바운스된 함수
+   * param {Function} func - 실행할 함수
+   * param {number} wait - 대기 시간(ms)
+   * returns {Function} 디바운스된 함수
    */
   function debounce(func, wait) {
     let timeout;

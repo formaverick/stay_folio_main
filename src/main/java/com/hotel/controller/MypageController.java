@@ -37,6 +37,7 @@ public class MypageController {
     @Autowired
     private ReservationService reservationService;
 
+    // 회원별 예약 리스트
     @GetMapping("/reservations")
     public String getMyReservations(Principal principal, Model model) {
         String miId = principal.getName();
@@ -51,6 +52,7 @@ public class MypageController {
         return "mypage/myReservation";
     }
     
+    // 예약 상세
     @GetMapping("/reservations/{id}")
     public String getReservationDetail(@PathVariable String id, Principal principal, Model model) {
         String miId = principal.getName();
@@ -63,6 +65,7 @@ public class MypageController {
         return "mypage/reservationDetail";
     }
     
+    // 예약 취소
     @GetMapping("/reservations/{id}/cancel")
     public String reservationCancelPage(@PathVariable String id, Principal principal, HttpSession session, Model model, RedirectAttributes rttr) {
     	// 예약 조회

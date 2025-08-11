@@ -1,31 +1,9 @@
-/* 우측 영역 (30%) */
-.room-detail-right {
-  flex: 0 0 30%;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  position: sticky;
-  top: 84px;
-}
-
-.room-detail-right h3 {
-  font-size: 20px;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin-bottom: 16px;
-}
-
-.room-detail-right p {
-  font-size: 14px;
-  color: #666666;
-  line-height: 1.5;
-}
-
 /* 예약 카드 스타일 */
 .booking-card {
   display: flex;
   flex-direction: column;
-
+  position: sticky;
+  top: 84px;
   align-self: flex-start;
 }
 
@@ -327,6 +305,7 @@
   padding-bottom: 8px !important;
   margin-bottom: 8px !important;
   border-bottom: 1px solid #f0f0f0 !important;
+  z-index: 100;
 }
 
 .flatpickr-weekday {
@@ -339,6 +318,7 @@
 .flatpickr-days {
   padding: 0 !important;
   width: 100% !important;
+  overflow: visible !important;
 }
 
 /* 두 개 달 레이아웃을 위한 기본 설정 */
@@ -417,11 +397,78 @@
 
 .flatpickr-day.flatpickr-disabled,
 .flatpickr-day.flatpickr-disabled:hover {
-  color: #ddd !important;
+  color: #ccc !important;
   background: transparent !important;
   cursor: not-allowed !important;
   transform: none !important;
+  text-decoration: line-through;
 }
+
+/* 기본: 체크아웃 전용은 클릭 불가 */
+.flatpickr-day.checkout-only {
+  cursor: not-allowed !important;
+  color: #949494 !important;
+}
+
+/* 체크아웃 선택 후 .checkout-only */
+.flatpickr-calendar.picking-end .flatpickr-day.checkout-only.can-end {
+  cursor: pointer !important;
+}
+.flatpickr-calendar.picking-end .flatpickr-day.checkout-only.can-end:not(.endRange) {
+  color: #333 !important;
+}
+.flatpickr-calendar.picking-end .flatpickr-day.checkout-only.can-end.flatpickr-disabled {
+  color: #ccc !important;
+}
+
+/* endRange일 땐 흰색으로 */
+.flatpickr-day.checkout-only.can-end.endRange {
+  color: #fff !important;
+}
+
+.flatpickr-day.checkout-only.can-end.endRange {
+	color: #fff !important;
+}
+
+/* 최종 선택된 체크아웃은 선택 스타일 유지 */
+.flatpickr-day.checkout-only.endRange {
+  background: #333 !important;
+  border-color: #333 !important;
+  color: #fff !important;
+  text-decoration: none !important;
+  cursor: not-allowed !important;
+}
+
+
+/* 말풍선 스타일 */
+.checkout-only {
+  position: relative;
+}
+
+.checkout-only::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%; /* 위쪽에 표시 */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  color: #595959;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  padding: 6px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 9999;
+  box-shadow: 0 0 20px rgba(0, 0, 0, .15);
+}
+
+.checkout-only:hover::after {
+  opacity: 1;
+}
+
 
 .flatpickr-prev-month,
 .flatpickr-next-month {
@@ -963,6 +1010,7 @@
 }
 
 .stay-price-main {
+  padding-left: 4px;
   display: flex;
   align-items: baseline;
   gap: 4px;

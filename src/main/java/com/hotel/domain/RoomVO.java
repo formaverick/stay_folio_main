@@ -6,13 +6,13 @@ import lombok.Data;
 public class RoomVO {
 	// t_room_info
     private Integer riId;          // 객실 번호
-    private String siId;           // 숙소 번호 (FK)
+    private Integer siId;           // 숙소 번호 (FK)
     private String riType;         // 객실 형태
     private String riName;         // 객실 이름
     private String riDesc;         // 객실 설명
     private Integer riPerson;      // 기준 인원
     private Integer riMaxperson;   // 최대 인원
-    private Integer riArea;         // 면적
+    private Double riArea;         // 면적
     private String riBed;          // 침대 정보
     private Integer riBedcnt;      // 침대 개수
     private Integer riPrice;       // 기본 가격

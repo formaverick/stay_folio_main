@@ -2,6 +2,7 @@ package com.hotel.security.domain;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,8 +16,7 @@ import lombok.Getter;
 public class CustomUser extends User {
 
 	private static final long serialVersionUID = 1L;
-	private MemberVO member;
-	//private AdminVO admin;
+	private MemberVO member;	// 회원 상세 정보
 	
 	public CustomUser() {
 	    super("anonymous", "anonymous", List.of(new SimpleGrantedAuthority("ROLE_ANONYMOUS")));
@@ -27,13 +27,8 @@ public class CustomUser extends User {
 	}
 	
 	public CustomUser(MemberVO vo) {
-		super(vo.getMiId(), vo.getMiPw(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
+		super(vo.getMiId(), vo.getMiPw(), vo.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
 		this.member = vo;
 	}
-	
-//	public CustomUser(AdminVO vo) {
-//		super(vo.getAi_id(), vo.getAi_pw(), List.of(new SimpleGrantedAuthority("ROLE_ADMIN")));
-//		this.admin = vo;
-//	}
 
 }

@@ -27,19 +27,19 @@ import lombok.RequiredArgsConstructor;
 @Controller
 @RequestMapping("/admin/stay")
 @RequiredArgsConstructor
-public class stayUpdateController {
+public class StayUpdateController {
 
 	private final StayService stayService;
 
 	private final S3Uploader s3Uploader;
 
+	// 숙소 수정 페이지
 	@GetMapping("/form")
 	public String showUpdateForm(@RequestParam("siId") int siId, Model model) {
 		StayVO stay = stayService.getStayInfo(siId);
 		StayDetailVO stayDetail = stayService.getStayDetail(siId);
 		List<FacilityVO> allFacilities = stayService.getAllFacilities();
 		List<FacilityVO> checkedFacilities = stayService.getFacilitiesByStayId(siId); // 선택된 것
-		Map<String, List<PhotoVO>> stayPhotos = stayService.getStayPhotosByCategory(siId);
 
 		Map<Integer, PhotoVO> photoMap = stayService.getAllStayPhotos(siId).stream()
 				.collect(Collectors.toMap(PhotoVO::getSpIdx, photo -> photo, (oldVal, newVal) -> oldVal));
@@ -47,19 +47,27 @@ public class stayUpdateController {
 		// 선택된 시설들의 fiId만 추출
 		List<Integer> selectedFacilityIds = checkedFacilities.stream().map(FacilityVO::getFiId)
 				.collect(Collectors.toList());
+		
+		// 키워드
+		var allKeyword = stayService.getAllKeywords();
+	    var selectedKeywordIds = stayService.getKeywordIdsByStayId(siId);
 
 		model.addAttribute("stay", stay);
 		model.addAttribute("detail", stayDetail);
+		model.addAttribute("locationList", stayService.getAllLocations());
 		model.addAttribute("allFacilities", allFacilities);
 		model.addAttribute("selectedFacilityIds", selectedFacilityIds);
-		model.addAttribute("stayPhotos", stayPhotos);
+		model.addAttribute("allKeyword", allKeyword);
+	    model.addAttribute("selectedKeywordIds", selectedKeywordIds);
 		model.addAttribute("photoMap", photoMap);
 		return "admin/room/stayUpdateForm";
 	}
 
+	// 숙소 수정
 	@PostMapping("/update")
 	public String updateStay(@ModelAttribute StayVO stay, @ModelAttribute StayDetailVO detail,
 			@RequestParam(value = "facilityIds", required = false) List<Integer> facilityIds,
+			@RequestParam(value = "keywordIds", required = false) List<Integer> keywordIds,
 			@RequestParam Map<String, MultipartFile> fileMap, RedirectAttributes rttr) throws IOException {
 
 		// 기본 숙소 정보
@@ -70,7 +78,10 @@ public class stayUpdateController {
 		stayService.updateStayDetail(detail);
 
 		// 편의시설
-		stayService.updateStayFacilities(stay.getSiId().intValue(), facilityIds);
+		stayService.updateStayFacilities(stay.getSiId(), facilityIds);
+		
+		// 키워드
+	    stayService.updateStayKeywords(stay.getSiId(), keywordIds);
 
 		// 이미지 파일 처리
 		for (Map.Entry<String, MultipartFile> entry : fileMap.entrySet()) {
@@ -79,12 +90,14 @@ public class stayUpdateController {
 				int spIdx = Integer.parseInt(key.replace("replaceImage_", ""));
 				MultipartFile file = entry.getValue();
 				if (!file.isEmpty()) {
-					s3Uploader.updateStayImage(stay.getSiId().intValue(), null, spIdx, file);
+					s3Uploader.updateStayImage(stay.getSiId(), null, spIdx, file);
 				}
 			}
 		}
-
+		
+		// 숙소 id 반환
 		rttr.addAttribute("siId", stay.getSiId());
+		
 		return "redirect:/admin/stay/detail";
 	}
 

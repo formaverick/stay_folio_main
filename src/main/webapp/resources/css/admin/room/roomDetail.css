@@ -1,0 +1,145 @@
+/* 본문 컨테이너 */
+.register-form-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.register-form {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* 섹션 */
+.form-section {
+  padding: 1.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 1.2rem 0;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+/* 폼 출력용 group */
+.form-field-group {
+  margin-bottom: 1.5rem;
+}
+
+/* 텍스트 출력 */
+.form-text-readonly {
+  font-size: 0.95rem;
+  color: #222;
+  padding: 0.75rem 1rem;
+  background-color: #fdfdfd;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  white-space: pre-wrap;
+  line-height: 1.6;
+}
+
+/* 편의시설 표시용 아이콘 목록 */
+.facility-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem 2rem;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fdfdfd;
+}
+
+/* 개별 아이템 */
+.facility-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #333;
+  min-width: 120px;
+}
+
+.facility-item i {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+
+/* 이미지 스타일 */
+img.preview {
+  width: 120px;
+  height: auto;
+  margin: 10px 10px 10px 0;
+  display: inline-block;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+/* 버튼 */
+.btn-save,
+.btn-edit {
+  padding: 0.6rem 1.2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.btn-save {
+  background-color: #000;
+  color: #fff;
+  border: none;
+}
+
+.btn-save:hover {
+  background-color: #333;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-edit {
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.btn-edit:hover {
+  background-color: #f8f9fa;
+  color: #000;
+  border-color: #999;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .admin-sidebar {
+    width: 200px;
+  }
+
+  .admin-main {
+    margin-left: 200px;
+  }
+
+  .register-form-container {
+    padding: 1rem;
+  }
+
+  .form-section {
+    padding: 1rem;
+  }
+
+  img.preview {
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 1rem;
+  }
+}

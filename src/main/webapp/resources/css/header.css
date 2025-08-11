@@ -60,7 +60,7 @@ body {
   background-color: transparent;
 }
 
-.gnb ul {
+.gnb > ul {
   display: flex;
   align-items: center;
   gap: 1.5rem;
@@ -69,7 +69,7 @@ body {
   padding: 0;
 }
 
-.gnb li a {
+.gnb > ul > li > a {
   text-decoration: none;
   color: #000;
   font-weight: 600;
@@ -83,7 +83,7 @@ body {
   padding-bottom: 4px;
 }
 
-.gnb li:not(.login) a::after {
+.gnb > ul > li:not(.login) > a::after {
   content: "";
   position: absolute;
   width: 0;
@@ -94,11 +94,11 @@ body {
   transition: width 0.3s ease;
 }
 
-.gnb li:not(.login) a:hover::after {
+.gnb > ul > li:not(.login) > a:hover::after {
   width: 100%;
 }
 
-.gnb li a:hover {
+.gnb > ul > li > a:hover {
   color: #000;
 }
 
@@ -144,12 +144,12 @@ body {
 }
 
 /* 로그인 상태 */
-.gnb li.logged-in a {
+.gnb > ul > li.logged-in > a {
   color: #000;
   font-weight: 600;
 }
 
-.gnb li.logged-in a:hover {
+.gnb > ul > li.logged-in > a:hover {
   color: #000;
 }
 
@@ -157,4 +157,84 @@ body {
 .gnb li.logged-in .ph-user {
   font-size: 1.2rem;
   color: #767676;
+}
+
+/* 로그인 드롭다운 */
+.gnb li.logged-in {
+  position: relative;
+}
+
+/* 호버 브리지: 트리거와 드롭다운 사이 미세한 간격이 있어도 호버가 끊기지 않도록 */
+.gnb li.logged-in::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 16px; /* 브리지 높이 확장 */
+  pointer-events: none; /* 클릭 방해 방지 */
+}
+
+.gnb .login-dropdown {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  min-width: 140px;
+  padding: 8px 0;
+  margin: 0; /* 기본 UL margin 제거 */
+  list-style: none; /* 점 표시 제거 */
+  z-index: 1200;
+  transform: translateX(-50%);
+}
+
+.gnb .login-dropdown li {
+  list-style: none;
+}
+
+.gnb .login-dropdown a,
+.gnb .login-dropdown .logout-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 10px 14px;
+  color: #333;
+  font-weight: 400;
+  font-size: 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.gnb .login-dropdown a:hover,
+.gnb .login-dropdown .logout-btn:hover {
+  background: #f6f6f6;
+}
+
+.gnb li.logged-in:hover .login-dropdown {
+  display: block;
+}
+
+/* 키보드 포커스 접근성 */
+.gnb li.logged-in:focus-within .login-dropdown {
+  display: block;
+}
+
+/* 드롭다운 자체에 호버가 있을 때도 유지 */
+.gnb .login-dropdown:hover {
+  display: block;
+}
+
+/* JS로 토글되는 open 상태 지원 */
+.gnb li.logged-in.open .login-dropdown {
+  display: block;
+}
+
+.gnb .login-dropdown form {
+  margin: 0;
 }

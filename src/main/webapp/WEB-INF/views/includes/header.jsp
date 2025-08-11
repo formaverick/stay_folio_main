@@ -11,7 +11,7 @@ uri="http://www.springframework.org/security/tags" prefix="sec"%>
     </h1>
 
     <!-- 검색창 -->
-    <a href="stay/search?lcId=0" class="search-box">
+    <a href="${pageContext.request.contextPath}/stay/search?lcId=0" class="search-box">
       <span class="search-icon"><i class="ph ph-magnifying-glass"></i></span>
       <span class="search-placeholder">어디로 떠날까요?</span>
     </a>

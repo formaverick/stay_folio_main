@@ -237,9 +237,7 @@
 							type="hidden" name="riId" value="${riId}" /> <input
 							type="hidden" name="miId" value="${miId}" /> <input
 							type="hidden" name="srAdult" value="${srAdult}" /> <input
-							type="hidden" name="srChild" value="${srChild}" />
-							
-							  <input
+							type="hidden" name="srChild" value="${srChild}" /> <input
 							type="hidden" name="srRoomPrice" value="${info.srRoomprice}" />
 						<input type="hidden" name="srDiscount" value="${info.srDiscount}" />
 						<input type="hidden" name="srAddpersonFee"
@@ -259,7 +257,9 @@
 					<img src="${s3BaseUrl}${info.spUrl}" alt="객실 사진" class="room-image" />
 					<div class="room-details">
 						<p class="room-name">${info.riName}</p>
-						<button class="view-room-button" onclick="location.href='/stay/${siId}/${riId}?checkin=${checkin}&checkout=${checkout}&adult=${adult}&child=${child}'">객실 보기</button>
+						<a class="view-room-button"
+							href="/stay/${siId}/${riId}?checkin=${checkin}&checkout=${checkout}&adult=${adult}&child=${child}">
+							객실 보기 </a>
 					</div>
 					<div class="room-info">
 						<p>

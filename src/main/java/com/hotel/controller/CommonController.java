@@ -64,7 +64,6 @@ public class CommonController {
 	// 로그인 페이지
 	@GetMapping("/login")
 	public String loginPage(String error, Model model) {
-		log.info("CommonController - loginPage");
 		if (error != null) {
 			model.addAttribute("error", "아이디 혹은 비밀번호가 잘못되었습니다.");
 		}
@@ -86,15 +85,11 @@ public class CommonController {
 	// 회원가입 처리
 	@PostMapping("/register")
 	public String handleRegister(MemberVO vo) {
-		log.info("CommonController - handleRegister");
-		System.out.println("vo : " + vo);
 		int result = commonService.handleRegister(vo);
 		
 		if (result == 1) {
-			log.info("sign up ok");
 			return "login/signupSuccess";
 		}
-		log.info("sign up fail");
 		return "/";
 	}
 	

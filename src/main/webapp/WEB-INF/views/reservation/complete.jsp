@@ -96,15 +96,15 @@
 		<table class="reservation-info-table">
 			<tr>
 				<td class="reservation-info-title">01. 예약 번호</td>
-				<td class="reservation-info-content">${reservation.srId} (예약일자:
-					<c:if test="${not empty reservation.srDate}">
+				<td class="reservation-info-content">#${reservation.srId}
+					(예약일자: <c:if test="${not empty reservation.srDate}">
     			${reservation.srDate}
 					</c:if>)
 				</td>
 			</tr>
 			<tr>
 				<td class="reservation-info-title">02. 스테이 및 객실</td>
-				<td class="reservation-info-content">${info.siName} /
+				<td class="reservation-info-content">${info.siName}/
 					${reservation.riName}</td>
 			</tr>
 			<tr>
@@ -114,15 +114,15 @@
 			</tr>
 			<tr>
 				<td class="reservation-info-title">04. 체크인</td>
-				<td class="reservation-info-content"><fmt:formatDate value="${reservation.srCheckin}" pattern="yyyy.MM.dd" /> ${info.siCheckin}
-</td>
+				<td class="reservation-info-content"><fmt:formatDate
+						value="${reservation.srCheckin}" pattern="yyyy.MM.dd" />
+					${info.siCheckin}</td>
 			</tr>
 			<tr>
 				<td class="reservation-info-title">05. 체크아웃</td>
-				<td class="reservation-info-content"><fmt:formatDate value="${reservation.srCheckout}" pattern="yyyy.MM.dd" /> ${info.siCheckout}
-
-
-				</td>
+				<td class="reservation-info-content"><fmt:formatDate
+						value="${reservation.srCheckout}" pattern="yyyy.MM.dd" />
+					${info.siCheckout}</td>
 			</tr>
 			<tr>
 				<td class="reservation-info-title">06. 룸설명</td>
@@ -162,17 +162,17 @@
 				<td class="reservation-info-title">01. 결제 금액</td>
 				<td class="reservation-info-content">
 					<p>
-						숙소 요금:
-						₩<fmt:formatNumber value="${info.srRoomprice}" pattern="#,#00" />
+						숙소 요금: ₩
+						<fmt:formatNumber value="${info.srRoomprice}" pattern="#,#00" />
 					</p> <c:if test="${info.srAddpersonFee != 0}">
 						<p class="payment-add">
-							인원 추가:
-							₩<fmt:formatNumber value="${info.srAddpersonFee}" pattern="#,##0" />
+							인원 추가: ₩
+							<fmt:formatNumber value="${info.srAddpersonFee}" pattern="#,##0" />
 						</p>
 					</c:if> <c:if test="${info.srDiscount != 0}">
 						<p class="payment-add">
-							할인 금액:
-							₩<fmt:formatNumber value="${info.srDiscount}" pattern="#,##0" />
+							할인 금액: ₩
+							<fmt:formatNumber value="${info.srDiscount}" pattern="#,##0" />
 						</p>
 					</c:if>
 
@@ -194,8 +194,13 @@
 
 	<div class="reservation-detail-section">
 		<div class="detail-bottom-buttons">
-			
-			<button onclick="location.href='/mypage/reservations/${reservation.srId}'">예약 상세페이지</button>
+
+			<c:if test="${isLogin}">
+				<button
+					onclick="location.href='/mypage/reservations/${reservation.srId}'">예약
+					상세페이지</button>
+			</c:if>
+
 			<button onclick="location.href='/'">메인으로</button>
 		</div>
 	</div>

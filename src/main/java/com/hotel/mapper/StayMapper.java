@@ -100,5 +100,8 @@ public interface StayMapper {
 	void deleteKeywordsByStayId(int siId);
 	
 	void insertKeywordForStay(@Param("rcId") int rcId, @Param("siId") int siId);
-
+	
+	// 북마크 수 수정
+	int incBookmarkCount(@Param("siId") int siId); // +1
+	int decBookmarkCount(@Param("siId") int siId); // -1 (최소 0)
 }

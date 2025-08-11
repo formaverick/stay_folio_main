@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.hotel.domain.AdminReservationCriteria;
+import com.hotel.domain.AdminReservationListDTO;
 import com.hotel.domain.AmenityVO;
 import com.hotel.domain.Criteria;
 import com.hotel.domain.FacilityVO;
@@ -20,6 +22,7 @@ import com.hotel.domain.RoomPhotoVO;
 import com.hotel.domain.RoomVO;
 import com.hotel.domain.StayDetailVO;
 import com.hotel.domain.StayVO;
+import com.hotel.service.AdminService;
 import com.hotel.service.RoomService;
 import com.hotel.service.StayService;
 
@@ -32,6 +35,9 @@ public class AdminListController {
 
 	@Autowired
 	private RoomService roomService;
+
+	@Autowired
+	private AdminService adminService;
 
 	// 숙소 리스트
 	@GetMapping("/stay/staylist")
@@ -97,6 +103,17 @@ public class AdminListController {
 		model.addAttribute("roomPhotos", roomPhotos);
 
 		return "admin/room/roomDetail";
+	}
+
+	// 예약 리스트
+	@GetMapping("/reservation/list")
+	public String reservationList(AdminReservationCriteria cri, Model model) {
+		List<AdminReservationListDTO> list = adminService.getReservationList(cri);
+		int total = adminService.getReservationListCount(cri);
+		model.addAttribute("reservationList", list);
+		model.addAttribute("pageMaker", new PageDTO(cri, total));
+		model.addAttribute("cri", cri);
+		return "admin/reservation/reservationList";
 	}
 
 }

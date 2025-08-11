@@ -273,4 +273,96 @@
 		WHERE rc_id =
 		#{rcId}
 	</update>
+
+	<!-- 관리자 예약 리스트 조회 -->
+	<select id="selectReservationList" resultType="com.hotel.domain.AdminReservationListDTO">
+		SELECT
+			sr.sr_id   AS srId,
+			si.si_name AS siName,
+			sr.sr_name AS srName,
+			sr.sr_phone AS srPhone,
+			sr.sr_checkin AS srCheckin,
+			sr.sr_checkout AS srCheckout,
+			sr.sr_status AS srStatus
+		FROM t_stay_reservation sr
+		JOIN t_stay_info si ON sr.si_id = si.si_id
+		LEFT JOIN t_member_info m ON sr.mi_id = m.mi_id
+		<where>
+			<!-- 예약 상태 조회 쿼리 -->
+			<if test="status != null and status != ''">
+				AND sr.sr_status = #{status}
+			</if>
+			<!-- 검색어 조회 쿼리 -->
+			<if test="keyword != null and keyword != ''"> 
+				AND (
+					si.si_name LIKE '%' || #{keyword} || '%'
+					OR m.mi_name LIKE '%' || #{keyword} || '%'
+					OR sr.sr_name LIKE '%' || #{keyword} || '%'
+					OR sr.sr_phone LIKE '%' || #{keyword} || '%'
+					OR m.mi_phone LIKE '%' || #{keyword} || '%'
+				)
+			</if>
+			<!-- 숙소 이름 조회 쿼리 -->
+			<if test="siName != null and siName != ''">
+				AND si.si_name LIKE '%' || #{siName} || '%'
+			</if>
+			<!-- 회원 이름 조회 쿼리 -->
+			<if test="miName != null and miName != ''">
+				AND (
+					m.mi_name LIKE '%' || #{miName} || '%'
+					OR sr.sr_name LIKE '%' || #{miName} || '%'
+				)
+			</if>
+			<!-- 전화번호 조회 쿼리 -->
+			<if test="phone != null and phone != ''">
+				AND (
+					sr.sr_phone LIKE '%' || #{phone} || '%'
+					OR m.mi_phone LIKE '%' || #{phone} || '%'
+				)
+			</if>
+		</where>
+		ORDER BY sr.sr_date DESC
+		OFFSET #{pageStart} ROWS FETCH NEXT #{perPageNum} ROWS ONLY
+	</select>
+
+	<select id="countReservationList" resultType="int">
+		SELECT COUNT(*)
+		FROM t_stay_reservation sr
+		JOIN t_stay_info si ON sr.si_id = si.si_id
+		LEFT JOIN t_member_info m ON sr.mi_id = m.mi_id
+		<where>
+			<!-- 예약 상태 조회 쿼리 -->
+			<if test="status != null and status != ''">
+				AND sr.sr_status = #{status}
+			</if>
+			<!-- 검색어 조회 쿼리 -->
+			<if test="keyword != null and keyword != ''">
+				AND (
+					si.si_name LIKE '%' || #{keyword} || '%'
+					OR m.mi_name LIKE '%' || #{keyword} || '%'
+					OR sr.sr_name LIKE '%' || #{keyword} || '%'
+					OR sr.sr_phone LIKE '%' || #{keyword} || '%'
+					OR m.mi_phone LIKE '%' || #{keyword} || '%'
+				)
+			</if>
+			<!-- 숙소 이름 조회 쿼리 -->
+			<if test="siName != null and siName != ''">
+				AND si.si_name LIKE '%' || #{siName} || '%'
+			</if>
+			<!-- 회원 이름 조회 쿼리 -->
+			<if test="miName != null and miName != ''">
+				AND (
+					m.mi_name LIKE '%' || #{miName} || '%'
+					OR sr.sr_name LIKE '%' || #{miName} || '%'
+				)
+			</if>
+			<!-- 전화번호 조회 쿼리 -->
+			<if test="phone != null and phone != ''">
+				AND (
+					sr.sr_phone LIKE '%' || #{phone} || '%'
+					OR m.mi_phone LIKE '%' || #{phone} || '%'
+				)
+			</if>
+		</where>
+	</select>
 </mapper>

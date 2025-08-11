@@ -12,6 +12,8 @@ import com.hotel.domain.MemberVO;
 import com.hotel.domain.RecommendCategoryVO;
 import com.hotel.domain.ReservationStatsDTO;
 import com.hotel.domain.StayVO;
+import com.hotel.domain.AdminReservationCriteria;
+import com.hotel.domain.AdminReservationListDTO;
 import com.hotel.mapper.AdminMapper;
 
 @Service
@@ -20,17 +22,19 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private AdminMapper adminMapper;
 
-	@Override
-	public int getTotalMemberCount(Criteria cri) {
-		return adminMapper.getTotalMemberCount(cri);
-	}
-
+	// 회원 리스트
 	@Override
 	public List<MemberVO> getMemberList(Criteria cri) {
 		return adminMapper.selectMembersWithPaging(cri);
 	}
+	
+	// 총 회원 리스트
+	@Override
+	public int getTotalMemberCount(Criteria cri) {
+		return adminMapper.getTotalMemberCount(cri);
+	}	
 
-	// DashBoard
+	// dashBoard
 	@Override
 	public List<RecommendCategoryVO> getAllCategoryTopDetails() {
 		return adminMapper.getAllCategoryTopDetails();
@@ -119,6 +123,18 @@ public class AdminServiceImpl implements AdminService {
 	public void updateKeyword(RecommendCategoryVO keyword) {
 		adminMapper.updateKeyword(keyword);
 		
+	}
+
+	// 예약 리스트
+	@Override
+	public List<AdminReservationListDTO> getReservationList(AdminReservationCriteria cri) {
+		return adminMapper.selectReservationList(cri);
+	}
+
+	// 총 예약 리스트
+	@Override
+	public int getReservationListCount(AdminReservationCriteria cri) {
+		return adminMapper.countReservationList(cri);
 	}
 	
 }

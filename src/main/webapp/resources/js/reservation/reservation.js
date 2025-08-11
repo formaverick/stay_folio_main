@@ -60,24 +60,51 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     //(4) 필수 약관 동의 확인
-    const requiredCheckboxes = document.querySelectorAll(".sub-checkbox[data-required='true']");
-    const allRequiredAgreed = Array.from(requiredCheckboxes).every((cb) => cb.checked);
+    const requiredCheckboxes = document.querySelectorAll(
+      ".sub-checkbox[data-required='true']"
+    );
+    const allRequiredAgreed = Array.from(requiredCheckboxes).every(
+      (cb) => cb.checked
+    );
     if (!allRequiredAgreed) {
       alert("필수 약관에 모두 동의해야 결제를 진행할 수 있습니다.");
       return; //약관 안 했으면 중단
     }
 
     //(5) 총 결제 금액이 유효한지 확인
-    const totalPriceInput = document.querySelector("input[name='srTotalprice']");
+    const totalPriceInput = document.querySelector(
+      "input[name='srTotalprice']"
+    );
     const price = parseInt(totalPriceInput?.value || "0");
     if (isNaN(price) || price <= 0) {
       alert("결제 금액이 유효하지 않습니다.");
       return;
     }
-    
-    
+    //(6) 예약 날짜 겹침 체크 (DB 조회)
+    const siId = document.querySelector("input[name='siId']").value;
+    const riId = document.querySelector("input[name='riId']").value;
+    const checkin = document
+      .querySelector("input[name='srCheckin']")
+      .value.slice(0, 10);
+    const checkout = document
+      .querySelector("input[name='srCheckout']")
+      .value.slice(0, 10);
 
-    //결제 API 실행
-    requestPay();
+    fetch(
+      `/reservation/check-available?siId=${siId}&riId=${riId}&checkin=${checkin}&checkout=${checkout}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.available) {
+          alert("이미 예약된 날짜입니다. 다른 날짜를 선택해주세요.");
+          return;
+        }
+        // 가능하면 결제 진행
+        requestPay();
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("예약 가능 여부 확인 중 오류가 발생했습니다.");
+      });
   });
 });

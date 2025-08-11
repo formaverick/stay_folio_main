@@ -64,4 +64,8 @@ public class ReservationDetailVO {
 	private String siCheckout;
 	private int siExtra;
 	private double seasonRate;
+	
+	private String status;   // "success" / "failed"
+	private String message;  // 실패 사유
+	
 }

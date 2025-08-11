@@ -74,7 +74,7 @@ public class RoomController {
 
 		// 북마크 정보 추가
 		if (principal != null) {
-			List<Long> bookmarkList = bookmarkService.getBookmarkList(principal.getName());
+			List<Integer> bookmarkList = bookmarkService.getBookmarkList(principal.getName());
 			stayInfo.setBookmarked(bookmarkList.contains(stayInfo.getSiId()));
 		}
 
@@ -179,7 +179,7 @@ public class RoomController {
 		
 		// 북마크 정보 추가
 		if (principal != null) {
-			List<Long> bookmarkList = bookmarkService.getBookmarkList(principal.getName());
+			List<Integer> bookmarkList = bookmarkService.getBookmarkList(principal.getName());
 			stayList.forEach(stay -> stay.setBookmarked(bookmarkList.contains(stay.getSiId())));
 		}
 

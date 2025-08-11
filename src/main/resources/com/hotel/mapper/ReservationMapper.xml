@@ -58,9 +58,14 @@
 		rp.sp_url
 
 		FROM t_room_info r
-		JOIN t_stay_info s ON r.si_id = s.si_id
+		JOIN t_stay_info s ON
+		r.si_id = s.si_id
 		JOIN t_stay_info_detail d ON s.si_id = d.si_id
-		JOIN t_room_photo rp ON r.si_id = rp.si_id AND r.ri_id = rp.ri_id AND
+		LEFT
+		JOIN t_room_photo rp
+		ON r.si_id = rp.si_id
+		AND r.ri_id = rp.ri_id
+		AND
 		rp.sp_idx = 0
 
 		<choose>
@@ -131,8 +136,10 @@
 		<result property="srStatus" column="sr_status" />
 		<result property="srAdult" column="sr_adult" />
 		<result property="srChild" column="sr_child" />
-		<result column="sr_checkin" property="srCheckin" jdbcType="TIMESTAMP"/>
-		<result column="sr_checkout" property="srCheckout" jdbcType="TIMESTAMP"/>
+		<result column="sr_checkin" property="srCheckin"
+			jdbcType="TIMESTAMP" />
+		<result column="sr_checkout" property="srCheckout"
+			jdbcType="TIMESTAMP" />
 		<result property="srRequest" column="sr_request" />
 		<result property="srDate" column="sr_date" />
 		<result property="srTotalprice" column="sr_totalprice" />
@@ -207,13 +214,14 @@
     FROM t_stay_reservation
     WHERE si_id = #{siId}
       AND ri_id = #{riId}
-      AND sr_status IN ('a', 'd')
-      AND (
-        sr_checkin < #{checkout}
-        AND sr_checkout > #{checkin}
+      AND sr_status IN ('a','d')
+      AND NOT (
+        TRUNC(sr_checkout) <= #{checkin}
+        OR TRUNC(sr_checkin) >= #{checkout}
       )
   ]]>
 	</select>
+
 
 	<select id="selectReservationForCancel"
 		resultType="com.hotel.domain.ReservationCancelCheckVO">

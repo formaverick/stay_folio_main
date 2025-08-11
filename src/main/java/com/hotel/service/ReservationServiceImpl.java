@@ -40,12 +40,17 @@ public class ReservationServiceImpl implements ReservationService {
 		}
 
 		processEmail(dto); // 이메일 처리
-
-		if (dto.getSrRequest() == null) { // 빈문자열로 request 넣기
+		if (dto.getSrRequest() == null)
 			dto.setSrRequest("");
+
+		try {
+		    return mapper.insertReservation(dto);
+		} catch (org.springframework.dao.DataAccessException e) { 
+		    dto.setStatus("failed");
+		    dto.setMessage("결제에 실패했습니다. 다시 시도해주세요.");
+		    return -2;
 		}
-		int result = mapper.insertReservation(dto); // reservation 테이블에 넣기
-		return result;
+
 	}
 
 	// 중복예약 방지 (sr status가 a or d만)
@@ -89,12 +94,13 @@ public class ReservationServiceImpl implements ReservationService {
 			LocalDate checkout, int adult, int child) {
 		ReservationDetailVO pageInfo = mapper.getReservationPageInfo(riId, siId, miId);
 		ReservationDTO priceInfo = priceMapper.getReservationPriceInfo(riId, siId);
-
+		if (priceInfo == null || pageInfo == null) return null;
+		
 		int totalPerson = adult + child;
 
 		Integer riMaxperson = priceInfo.getRiMaxperson();
 		if (totalPerson > riMaxperson) {
-			throw new IllegalStateException("redirect:/?error=인원초과");
+			throw new IllegalArgumentException("최대 인원을 초과했습니다.");
 		}
 
 		ReservationDetailVO dto = new ReservationDetailVO();
@@ -106,14 +112,14 @@ public class ReservationServiceImpl implements ReservationService {
 		dto.setSrChild(child);
 
 		ReservationPriceResultDTO result = calculatePrice(checkin, checkout, dto, priceInfo);
-		
+
 		dto.setSrRoomprice(result.getSrRoomPrice());
 		dto.setSrAddpersonFee(result.getSrAddpersonFee());
 		dto.setSrDiscount((int) (result.getSrRoomPrice() * result.getDiscountRate()));
 		dto.setSrTotalprice(result.getSrtotalPrice());
 
 		dto.setNights((int) result.getNights());
-		
+
 		if (pageInfo != null) {
 			pageInfo.setRiPrice(priceInfo.getRiPrice());
 			pageInfo.setNights(dto.getNights());

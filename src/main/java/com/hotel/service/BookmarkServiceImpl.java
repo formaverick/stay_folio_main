@@ -24,7 +24,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 	}
 
 	@Override
-	public List<Long> getBookmarkList(String miId) {
+	public List<Integer> getBookmarkList(String miId) {
 		return bookmarkMapper.getBookmarkList(miId);
 	}
 

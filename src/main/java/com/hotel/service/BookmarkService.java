@@ -7,5 +7,5 @@ public interface BookmarkService {
 	
 	int deleteBookmark(String miId, int siId);
 	
-	List<Long> getBookmarkList(String miId);
+	List<Integer> getBookmarkList(String miId);
 }

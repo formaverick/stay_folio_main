@@ -49,10 +49,8 @@
           <div class="filter-container" style="gap:8px;display:flex;flex-wrap:wrap;align-items:center;">
             <select name="status" class="member-filter">
               <option value="" ${empty cri.status ? 'selected' : ''}>전체</option>
-              <option value="a" ${cri.status == 'a' ? 'selected' : ''}>예약확정</option>
-              <option value="b" ${cri .status == 'b' ? 'selected' : ''}>체크인</option>
-              <option value="c" ${cri.status == 'c' ? 'selected' : ''}>체크아웃</option>
-              <option value="d" ${cri.status == 'd' ? 'selected' : ''}>예약취소</option>
+              <option value="a" ${cri.status == 'a' ? 'selected' : ''}>예약완료</option>
+              <option value="c" ${cri.status == 'c' ? 'selected' : ''}>취소완료</option>
             </select>
             <input type="text" name="keyword" value="${cri.keyword}" placeholder="숙소명/회원명/전화번호" class="search-input" />
             <button class="search-btn" id="search-btn">검색</button>
@@ -74,6 +72,7 @@
                 <th>체크인</th>
                 <th>체크아웃</th>
                 <th>상태</th>
+		 	    <th>에약날짜</th> 
                 <th>상세</th>
               </tr>
             </thead>
@@ -89,16 +88,14 @@
                   <td><fmt:formatDate value="${r.srCheckout}" pattern="yyyy-MM-dd"/></td>
                   <td>
                     <c:choose>
-                      <c:when test="${r.srStatus == 'a'}">예약확정</c:when>
-                      <c:when test="${r.srStatus == 'b'}">체크인</c:when>
-                      <c:when test="${r.srStatus == 'c'}">체크아웃</c:when>
-                      <c:when test="${r.srStatus == 'd'}">예약취소</c:when>
+                      <c:when test="${r.srStatus == 'a'}">예약완료</c:when>                      
+                      <c:when test="${r.srStatus == 'c'}">취소완료</c:when>
                       <c:otherwise>${r.srStatus}</c:otherwise>
                     </c:choose>
                   </td>
+                  <td><fmt:formatDate value="${r.srDate}" pattern="yyyy-MM-dd"/></td>
                   <td>
-                    <!-- TODO: 상세 페이지 구현 후 링크 연결 -->
-                    <span class="btn" style="pointer-events:none;opacity:.6;">보기</span>
+                    <a href="/admin/reservation/detail?srId=${r.srId}" class="btn-edit">상세보기</a>
                   </td>
                 </tr>
               </c:forEach>

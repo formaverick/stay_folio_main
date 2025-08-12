@@ -53,7 +53,7 @@
 						<div class="stay-item" data-stay-id="${stay.siId }">
 							<div class="search-stay-image">
 								<img src="${s3BaseUrl}${stay.spUrl}" alt="${stay.siName }" />
-								<button class="search-stay-wishlist stay-wishlist" data-wishlist="true" data-si-id="${stay.siId}">
+								<button class="search-stay-wishlist stay-wishlist" data-wishlist="true" data-stay-id="${stay.siId}">
 									<i class="ph ph-heart"></i>
 								</button>
 							</div>

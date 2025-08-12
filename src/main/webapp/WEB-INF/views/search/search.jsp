@@ -268,7 +268,7 @@
 								<div class="search-stay-image">
 									<img src="${s3BaseUrl}${stay.spUrl}" alt="${stay.siName}" />
 									<button class="search-stay-wishlist stay-wishlist"
-										data-wishlist="${stay.bookmarked }">
+										data-wishlist="${stay.bookmarked }" data-stay-id="${stay.siId }">
 										<i class="ph ph-heart"></i>
 									</button>
 									<c:if test="${stay.siDiscount > 0}">

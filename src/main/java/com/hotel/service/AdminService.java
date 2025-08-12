@@ -9,6 +9,8 @@ import com.hotel.domain.MemberVO;
 import com.hotel.domain.RecommendCategoryVO;
 import com.hotel.domain.ReservationStatsDTO;
 import com.hotel.domain.StayVO;
+import com.hotel.domain.AdminReservationCriteria;
+import com.hotel.domain.AdminReservationListDTO;
 
 public interface AdminService {
 	
@@ -52,4 +54,8 @@ public interface AdminService {
     
     // keywordUpdate
     void updateKeyword(RecommendCategoryVO keyword);
+
+    // Reservation List (Admin)
+    List<AdminReservationListDTO> getReservationList(AdminReservationCriteria cri);
+    int getReservationListCount(AdminReservationCriteria cri);
 }

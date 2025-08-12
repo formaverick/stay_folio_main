@@ -544,5 +544,19 @@
 		INSERT INTO t_stay_recommend (rc_id, si_id)
 		VALUES (#{rcId}, #{siId})
 	</insert>
+	
+	<!-- 북마크 수 증가 -->
+	<update id="incBookmarkCount">
+		UPDATE t_stay_info
+		SET si_book = NVL(si_book, 0) + 1
+		WHERE si_id = #{siId}
+	</update>
+	
+	<!-- 북마크 수 감소-->
+	<update id="decBookmarkCount">
+		UPDATE t_stay_info
+		SET si_book = GREATEST(NVL(si_book,0) - 1, 0)
+		WHERE si_id = #{siId}
+</update>
 
 </mapper>

@@ -36,7 +36,7 @@ public class CommonServiceImpl implements CommonService {
 	    
 	    // 로그인 시 북마크 정보 불러옴
 	    if (miId != null) {
-	        List<Long> bookmarked = bookmarkService.getBookmarkList(miId); // 북마크된 숙소 ID 목록
+	        List<Integer> bookmarked = bookmarkService.getBookmarkList(miId); // 북마크된 숙소 ID 목록
 	        for (StayVO stay : stays) {
 	            stay.setBookmarked(bookmarked.contains(stay.getSiId()));
 	        }
@@ -58,13 +58,11 @@ public class CommonServiceImpl implements CommonService {
 
 	@Override
 	public boolean isEmailDuplicate(String email) {
-		System.out.println("isEmailDuplicate : " + commonMapper.countByEmail(email));
 		return commonMapper.countByEmail(email) > 0;
 	}
 
 	@Override
 	public boolean isPhoneDuplicate(String phone) {
-		System.out.println("isPhoneDuplicate : " + commonMapper.countByPhone(phone));
 		return commonMapper.countByPhone(phone) > 0;
 	}
 

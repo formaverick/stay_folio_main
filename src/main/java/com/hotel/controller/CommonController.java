@@ -1,5 +1,6 @@
 package com.hotel.controller;
 
+import java.net.URI;
 import java.security.Principal;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -11,6 +12,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,11 +75,34 @@ public class CommonController {
 
 	// 로그인 페이지
 	@GetMapping("/login")
-	public String loginPage(String error, Model model) {
-		log.info("CommonController - loginPage");
+	public String loginPage(String error, HttpServletRequest request, Model model) {
 		if (error != null) {
 			model.addAttribute("error", "아이디 혹은 비밀번호가 잘못되었습니다.");
 		}
+		
+		String referer = request.getHeader("Referer");
+		if (referer != null) {
+	        try {
+	            URI u = URI.create(referer);
+
+	            // 같은 호스트에서 온 요청만 허용 (외부 차단)
+	            boolean sameHost = (u.getHost() == null) || u.getHost().equalsIgnoreCase(request.getServerName());
+	            String path = (u.getPath() != null) ? u.getPath() : "";
+
+	            // 로그인/로그아웃/회원가입 등은 prevPage로 저장하지 않음
+	            boolean blockSelf =
+	                path.startsWith(request.getContextPath() + "/login") ||
+	                path.startsWith(request.getContextPath() + "/logout") ||
+	                path.startsWith(request.getContextPath() + "/register");
+
+	            if (sameHost && !blockSelf) {
+	                request.getSession().setAttribute("prevPage", referer);
+	            }
+	        } catch (IllegalArgumentException ignore) {
+	            // 잘못된 Referer 형식이면 무시
+	        }
+	    }
+		
 		return "login/login";
 	}
 
@@ -122,15 +147,11 @@ public class CommonController {
 	// 회원가입 처리
 	@PostMapping("/register")
 	public String handleRegister(MemberVO vo) {
-		log.info("CommonController - handleRegister");
-		System.out.println("vo : " + vo);
 		int result = commonService.handleRegister(vo);
 
 		if (result == 1) {
-			log.info("sign up ok");
 			return "login/signupSuccess";
 		}
-		log.info("sign up fail");
 		return "/";
 	}
 

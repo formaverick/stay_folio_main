@@ -11,6 +11,8 @@ import com.hotel.domain.MemberVO;
 import com.hotel.domain.RecommendCategoryVO;
 import com.hotel.domain.ReservationStatsDTO;
 import com.hotel.domain.StayVO;
+import com.hotel.domain.AdminReservationListDTO;
+import com.hotel.domain.AdminReservationCriteria;
 
 public interface AdminMapper {
 
@@ -56,5 +58,9 @@ public interface AdminMapper {
 	
 	// keywordUpdate
 	void updateKeyword(RecommendCategoryVO keyword);
+
+	// Reservation List (Admin)
+	List<AdminReservationListDTO> selectReservationList(AdminReservationCriteria cri);
+	int countReservationList(AdminReservationCriteria cri);
 
 }

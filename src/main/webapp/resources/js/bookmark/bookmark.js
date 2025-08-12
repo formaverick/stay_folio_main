@@ -5,7 +5,7 @@ function wishEvent() {
     e.stopPropagation();
 
     const isWishlisted = $(this).attr("data-wishlist") === "true";
-    const siId = $(this).closest(".stay-item").data("stay-id");
+    const siId = $(this).data("stay-id");
 
     const url = isWishlisted ? "/api/bookmark/remove" : "/api/bookmark/add";
 

@@ -13,5 +13,6 @@ public interface BookmarkMapper {
 	public int deleteBookmark(@Param("miId") String miId, @Param("siId") int siId);
 	
 	// 회원별 북마크 된 숙소번호 리스트
-	public List<Long> getBookmarkList(String miId);
+	public List<Integer> getBookmarkList(String miId);
+
 }

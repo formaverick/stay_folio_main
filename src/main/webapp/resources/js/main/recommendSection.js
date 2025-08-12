@@ -58,7 +58,7 @@ function loadRecommendations(rc_id) {
               <img src="${imageUrl}" alt="${stay.siName}" />
 
               ${promoBadge}
-              <button class="stay-wishlist" data-wishlist="${stay.bookmarked}">
+              <button class="stay-wishlist" data-wishlist="${stay.bookmarked}" data-stay-id="${stay.siId }">
                 <i class="ph ph-heart"></i>
               </button>
             </div>

@@ -17,4 +17,6 @@ $(document).ready(function () {
       $content.show();
     }
   });
+  
+  wishEvent();
 });

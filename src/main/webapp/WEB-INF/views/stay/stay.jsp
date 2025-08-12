@@ -3,8 +3,8 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<c:set var="s3BaseUrl"
-	value="https://stayfolio-upload-bucket.s3.us-east-1.amazonaws.com/" />
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="s3BaseUrl" value="https://stayfolio-upload-bucket.s3.us-east-1.amazonaws.com/" />
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -12,31 +12,21 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>숙소 상세 - STAY FOLIO</title>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/common.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/header.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/stay/stay.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/stay/stayCarousel.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/stay/stay.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/stay/stayCarousel.css" />
 
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
 <!-- kakao api -->
-<script type="text/javascript"
-	src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=23c99c1ca832c53450f37e55c5731901&libraries=services"></script>
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=23c99c1ca832c53450f37e55c5731901&libraries=services"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Carousel JS -->
-<script
-	src="${pageContext.request.contextPath}/resources/js/stay/stayCarousel.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/stay/stayNavigation.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/stay/stay.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/bookmark/bookmark.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/stay/stayCarousel.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/stay/stayNavigation.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/stay/stay.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/bookmark/bookmark.js"></script>
 </head>
 
 <body>
@@ -105,8 +95,7 @@
 			<div class="stay-header">
 				<div class="title-row">
 					<h1>${stay.siName}</h1>
-					<button class="heart-btn stay-wishlist"
-						data-wishlist="${stay.bookmarked }">
+					<button class="heart-btn stay-wishlist" data-wishlist="${stay.bookmarked }" data-stay-id="${stay.siId }">
 						<i class="ph ph-heart"></i>
 					</button>
 				</div>
@@ -380,9 +369,11 @@
 							<span class="accordion-icon"><i class="ph ph-caret-down"></i></span>
 						</div>
 						<div class="accordion-content">
-							<p>기준인원 초과 시 추가 금액이 부과될 수 있습니다.</p>
+							<c:if test="${stay.siExtra != 0 }">
+								<p>기준인원 초과 시 추가 금액이 부과될 수 있습니다.</p>
+							</c:if>
 							<p>기준인원을 초과한 예약에는 추가 침구가 제공됩니다.</p>
-							<p>반려 동물 동반이 [가능/불가능] 한 숙소입니다.</p>
+							<p>반려 동물 동반이 ${detail.siPet ? '가능' : '불가능' }한 숙소입니다.</p>
 						</div>
 					</div>
 
@@ -393,13 +384,13 @@
 							<span class="accordion-icon"><i class="ph ph-caret-down"></i></span>
 						</div>
 						<div class="accordion-content">
-							<p>체크인은 [체크인 시간]시, 체크아웃은 [체크아웃 시간]시 입니다.</p>
+							<p>체크인은 ${fn:substring(detail.siCheckin, 0, 2)}시, 체크아웃은 ${fn:substring(detail.siCheckout, 0, 2)}시 입니다.</p>
 							<p>미성년자의 경우 보호자(법정대리인)의 동행 없이 투숙이 불가능합니다.</p>
 							<p>화재 위험 및 쾌적한 환경 유지를 위해 실내 흡연은 절대 불가합니다.</p>
 							<p>침구나 비품의 오염, 파손 및 분실 시 변상비가 청구됩니다.</p>
 							<p>귀중품 분실에 대해서는 책임지지 않습니다.</p>
-							<p>주차 [가능/불가능]한 숙소입니다.</p>
-							<p>취식이 [가능/불가능]한 숙소입니다.</p>
+							<p>주차 ${detail.siParking ? '가능' : '불가능'}한 숙소입니다.</p>
+							<p>취식이 ${detail.siFood ? '가능' : '불가능'}한 숙소입니다.</p>
 						</div>
 					</div>
 
@@ -425,7 +416,21 @@
 		</div>
 	</section>
 	<!-- 숙소 정보 끝 -->
-
+	
+	<!-- 모달 시작 -->
+    <div class="modal-overlay" id="commonModal">
+		<div class="modal-content">
+			<p class="modal-message">
+				로그인 후 사용 가능합니다.<br />로그인 하시겠습니까?
+			</p>
+			<div class="modal-buttons">
+				<button class="btn btn-cancel" onclick="closeModal()">취소</button>
+				<button class="btn btn-confirm"
+					onclick="location.href='${pageContext.request.contextPath}/login'">확인</button>
+			</div>
+		</div>
+	</div>
+    <!-- 모달 끝 -->
 
 	<!-- 푸터 인클루드 -->
 	<jsp:include page="../includes/footer.jsp" />
@@ -470,6 +475,13 @@
 								}
 							});
 		};
+		
+		function openModal() {
+			document.getElementById("commonModal").style.display = "flex";
+		}
+		function closeModal() {
+			document.getElementById("commonModal").style.display = "none";
+		}
 	</script>
 </body>
 </html>

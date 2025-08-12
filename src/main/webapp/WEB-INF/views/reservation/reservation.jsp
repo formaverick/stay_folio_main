@@ -35,17 +35,16 @@
 
 <body>
 	<jsp:include page="../includes/header.jsp" />
-	<!-- 중복예약, 최대인원 알람 -->
-	<c:if test="${not empty duplicate}">
-		<script>
-			alert("이미 해당 날짜에 예약된 객실입니다.");
-		</script>
-	</c:if>
-	<c:if test="${not empty error}">
-		<script>
-			alert("${error}");
-		</script>
-	</c:if>
+	    
+	    <!-- 서버에서 내려온 모달 메시지 셋업 (JS에서 읽어 사용) -->
+	    <c:set var="serverModalMessage" value="" />
+	    <c:if test="${not empty error}">
+	      <c:set var="serverModalMessage" value="${error}" />
+	    </c:if>
+	    <c:if test="${empty serverModalMessage and not empty duplicate}">
+	      <c:set var="serverModalMessage" value="이미 해당 날짜에 예약된 객실입니다." />
+	    </c:if>
+
 
 	<div class="main-container">
 		<div class="content-wrapper">
@@ -289,8 +288,21 @@
 
 		</div>
 	</div>
-	<!-- 푸터 인클루드 -->
-	<jsp:include page="../includes/footer.jsp" />
+	    <!-- 푸터 인클루드 -->
+    <jsp:include page="../includes/footer.jsp" />
+
+    <!-- 공통 모달 시작 (JS로 제어) -->
+    <div class="modal-overlay" id="commonModal">
+        <div class="modal-content">
+            <p class="modal-message"></p>
+            <div class="modal-buttons">
+                <button type="button" class="btn btn-cancel">확인</button>
+            </div>
+        </div>
+    </div>
+    <!-- 공통 모달 끝 -->
+    <!-- 서버 메시지 전달용 히든 필드 -->
+    <input type="hidden" id="serverModalMessage" value="<c:out value='${serverModalMessage}' />" />
 
 </body>
 
@@ -311,6 +323,22 @@
       });
     });
   });
+  // 서버 전달 메시지(JS로 모달 오픈)
+  (function(){
+    var msgInput = document.getElementById('serverModalMessage');
+    var msg = msgInput ? msgInput.value : '';
+    if (msg) {
+      if (typeof showModal === 'function') {
+        showModal(msg);
+      } else {
+        // fallback
+        var el = document.querySelector('#commonModal .modal-message');
+        if (el) el.textContent = msg;
+        var modal = document.getElementById('commonModal');
+        if (modal) modal.style.display = 'flex';
+      }
+    }
+  })();
 </script>
 
 </html>

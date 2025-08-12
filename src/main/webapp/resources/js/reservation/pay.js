@@ -96,7 +96,17 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.appendChild(form);
         form.submit();
       } else {
-        alert("결제 실패: " + rsp.error_msg);
+        // 결제 실패: 공통 모달로 표시 (fallback 포함)
+        var msg = "결제 실패: " + rsp.error_msg;
+        if (typeof showModal === "function") {
+          showModal(msg);
+        } else {
+          var el = document.querySelector("#commonModal .modal-message");
+          if (el) el.textContent = msg;
+          var modal = document.getElementById("commonModal");
+          if (modal) modal.style.display = "flex";
+          else alert(msg);
+        }
       }
     });
   };

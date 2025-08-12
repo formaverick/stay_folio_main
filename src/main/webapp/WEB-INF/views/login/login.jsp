@@ -45,6 +45,7 @@ pageEncoding="UTF-8"%>
           />
           <div class="form-group">
             <label for="username">아이디</label>
+
             <input
               type="text"
               id="username"
@@ -84,6 +85,13 @@ pageEncoding="UTF-8"%>
           <button
             type="button"
             class="btn-join"
+            onclick="location.href='${pageContext.request.contextPath}/guest/reservation'"
+          >
+            비회원 로그인
+          </button>
+          <button
+            type="button"
+            class="btn-join"
             onclick="location.href='/register'"
           >
             신규 회원 가입
@@ -94,9 +102,8 @@ pageEncoding="UTF-8"%>
 
       <!-- 모달 시작 -->
       <div
-        class="modal-overlay"
+        class="modal-overlay ${empty error ? '' : 'is-open'}"
         id="commonModal"
-        style="display:${empty error ? 'none' : 'flex'};"
       >
         <div class="modal-content">
           <p class="modal-message">${error }</p>

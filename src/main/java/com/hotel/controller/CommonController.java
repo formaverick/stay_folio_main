@@ -100,8 +100,9 @@ public class CommonController {
 	
 	// 비회원 예약 조회 페이지
 	@GetMapping("/guest/reservation")
-	public void guestReservationPage() {
+	public String guestReservationPage() {
 		// 예약자 명, 예약번호 입력 폼
+		return "login/guestLogin";
 	}
 	
 	// 비회원 예약 조회

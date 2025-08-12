@@ -20,17 +20,32 @@ public class SecurityAuditHandler implements
         AuthenticationSuccessHandler, AuthenticationFailureHandler,
         AuthenticationEntryPoint, AccessDeniedHandler {
 
-    @Override // 로그인 성공
-    public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse res,
-                                        Authentication auth) throws IOException, ServletException {
-        String roles = auth.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.joining(","));
-        log.info(String.format("[LOGIN SUCCESS] user=%s ip=%s roles=[%s] ua=%s",
-                auth.getName(), clientIp(req), roles, req.getHeader("User-Agent")));
+	@Override
+	public void onAuthenticationSuccess(HttpServletRequest req, HttpServletResponse res,
+	                                    Authentication auth) throws IOException, ServletException {
+	    String roles = auth.getAuthorities().stream()
+	            .map(a -> a.getAuthority()).collect(Collectors.joining(","));
+	    log.info(String.format("[LOGIN SUCCESS] user=%s ip=%s roles=[%s] ua=%s",
+	            auth.getName(), clientIp(req), roles, req.getHeader("User-Agent")));
 
-        SavedRequest saved = new HttpSessionRequestCache().getRequest(req, res);
-        String target = (saved != null) ? saved.getRedirectUrl() : (req.getContextPath() + "/");
-        res.sendRedirect(target);
-    }
+	    // 보호된 URL에서 튕겨온 경우: SavedRequest 우선
+	    SavedRequest saved = new HttpSessionRequestCache().getRequest(req, res);
+	    if (saved != null) {
+	        res.sendRedirect(saved.getRedirectUrl());
+	        return;
+	    }
+
+	    // 공개 페이지에서 온 경우: prevPage 사용(일회성)
+	    HttpSession session = req.getSession(false);
+	    String prev = (session != null) ? (String) session.getAttribute("prevPage") : null;
+	    if (session != null) session.removeAttribute("prevPage");
+
+	    String target = safeInternalUrl(prev, req);
+	    if (target == null) {
+	        target = req.getContextPath() + "/"; // 최종 fallback
+	    }
+	    res.sendRedirect(target);
+	}
 
     @Override // 로그인 실패
     public void onAuthenticationFailure(HttpServletRequest req, HttpServletResponse res,
@@ -62,5 +77,29 @@ public class SecurityAuditHandler implements
     private String clientIp(HttpServletRequest req) {
         String h = req.getHeader("X-Forwarded-For");
         return (h != null && !h.isEmpty()) ? h.split(",")[0].trim() : req.getRemoteAddr();
+    }
+    
+    /** 외부 도메인 차단 + 동일 호스트의 내부 경로만 허용 */
+    private String safeInternalUrl(String url, HttpServletRequest req) {
+        if (url == null || url.isEmpty()) return null;
+        try {
+            java.net.URI uri = java.net.URI.create(url);
+
+            // 절대 URL이면 동일 스킴/호스트/포트만 허용
+            if (uri.isAbsolute()) {
+                boolean sameScheme = uri.getScheme().equalsIgnoreCase(req.getScheme());
+                boolean sameHost = uri.getHost() != null && uri.getHost().equalsIgnoreCase(req.getServerName());
+                int port = (uri.getPort() == -1) ? ("https".equalsIgnoreCase(uri.getScheme()) ? 443 : 80) : uri.getPort();
+                if (!(sameScheme && sameHost && port == req.getServerPort())) return null;
+
+                String pathAndQuery = uri.getRawPath()
+                        + (uri.getRawQuery() != null ? "?" + uri.getRawQuery() : "");
+                return pathAndQuery; // 컨텍스트패스 포함되어 있으면 그대로
+            }
+            // 상대 경로면 OK
+            return url;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

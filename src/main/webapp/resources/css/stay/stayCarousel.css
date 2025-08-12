@@ -1,9 +1,10 @@
 /* 캐러셀 컨테이너 */
 .carousel-container {
-  width: 100%;
+  max-width: 1280px;
   height: 40rem; /* 580px */
   position: relative;
   overflow: hidden;
+  margin: 0 auto;
   z-index: 999;
 }
 

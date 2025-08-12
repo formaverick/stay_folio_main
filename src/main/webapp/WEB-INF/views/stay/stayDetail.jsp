@@ -401,8 +401,7 @@
 						<div class="booking-price-info">
 							<c:if test="${discountRate > 0}">
 								<div class="stay-price-original">
-									₩
-									<fmt:formatNumber value="${roomPrice}" type="number" />
+									₩<fmt:formatNumber value="${roomPrice}" type="number" />
 								</div>
 							</c:if>
 							<div class="stay-price-main">
@@ -439,34 +438,25 @@
 			</div>
 		</div>
 	</div>
+	<!-- 모달 시작 -->
+    <div class="modal-overlay" id="commonModal">
+      <div class="modal-content">
+        <p class="modal-message">체크인/체크아웃 날짜를 선택해주세요.</p>
+        <div class="modal-buttons">
+          <button class="btn btn-cancel" onclick="closeModal()">확인</button>
+        </div>
+      </div>
+    </div>
+    <!-- 모달 끝 -->
 
 	<!-- 푸터 인클루드 -->
 	<jsp:include page="../includes/footer.jsp" />
-
+	
 	<script>
-	document.addEventListener("DOMContentLoaded", function () {
-		  const bookingBtn = document.querySelector(".booking-button");
-		  if (!bookingBtn) return;
-
-		  const siId = bookingBtn.getAttribute("data-si-id");
-		  const riId = bookingBtn.getAttribute("data-ri-id");
-
-		  bookingBtn.addEventListener("click", function (e) {
-		    e.preventDefault(); 
-		    const checkin = document.getElementById("checkinInput")?.value || "";
-		    const checkout = document.getElementById("checkoutInput")?.value || "";
-		    const adult = document.getElementById("adultInput")?.value || "";
-		    const child = document.getElementById("childInput")?.value || "";
-
-		    const query = `?checkin=${checkin}&checkout=${checkout}&adult=${adult}&child=${child}`;
-		    const url = `/reservation/${siId}/${riId}`;
-		    console.log("최종 URL:", url + query);
-		    window.location.href = url+query;
-		  });
-		});
-
-</script>
-
+		function closeModal() {
+			document.getElementById("commonModal").style.display = "none";
+		}
+	</script>
 
 </body>
 </html>

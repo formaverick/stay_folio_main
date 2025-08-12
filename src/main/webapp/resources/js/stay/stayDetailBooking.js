@@ -1,15 +1,21 @@
 $(document).ready(function () {
-	function getQueryParam(name) {
+  function getQueryParam(name) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(name);
   }
-
+  
+  // 모달 열기
+  function openModal() {
+    document.getElementById("commonModal").style.display = "flex";
+  }
+  
   // 초기값 설정
   let selectedRegion = "all";
   let queryAdult = getQueryParam("adult");
   let queryChild = getQueryParam("child");
   let queryCheckin = getQueryParam("checkin");
   let queryCheckout = getQueryParam("checkout");
+  const hasQuery = !!(queryCheckin && queryCheckout);
   
   let adultCount = queryAdult ? parseInt(queryAdult) : 2;
   let childCount = queryChild ? parseInt(queryChild) : 0;
@@ -34,12 +40,12 @@ $(document).ready(function () {
   oneYearLater.setFullYear(today.getFullYear() + 1);
 
   // 날짜 관련 변수
-  let startDate = queryCheckin ? new Date(queryCheckin) : today;
-  let endDate = queryCheckout ? new Date(queryCheckout) : new Date(new Date().setDate(new Date().getDate() + 1));
+  let startDate = queryCheckin ? new Date(queryCheckin) : null;
+  let endDate = queryCheckout ? new Date(queryCheckout) : null;
   
   // 임시 날짜 변수 (적용 버튼 누르기 전까지 실제로 적용되지 않음)
-  let tempStartDate = new Date(startDate);
-  let tempEndDate = new Date(endDate);
+  let tempStartDate = startDate ? new Date(startDate) : null;
+  let tempEndDate   = endDate   ? new Date(endDate)   : null;
 
   // 요일 이름 배열
   const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
@@ -60,10 +66,16 @@ $(document).ready(function () {
     return `${year}-${month}-${day}`;
   }
 
-  // 날짜 표시 함수
+  // 날짜 표시 함수 (없으면 "일정")
   function updateDateDisplay() {
-    $("#startDate").text(formatDate(startDate));
-    $("#endDate").text(formatDate(endDate));
+    const $display = $("#dateDisplay");
+    if (startDate && endDate) {
+      const s = formatDate(startDate);
+      const e = formatDate(endDate);
+      $display.html(`<span id="startDate">${s}</span> - <span id="endDate">${e}</span>`);
+    } else {
+      $display.html(`<span class="date-placeholder">일정</span>`);
+    }
   }
 
   // 날짜 유효성 검사 함수
@@ -124,7 +136,7 @@ $(document).ready(function () {
     inline: true,
     mode: "range",
     dateFormat: "Y-m-d",
-    defaultDate: [startDate, endDate],
+    defaultDate: hasQuery ? [startDate, endDate] : null,
     minDate: "today",
     maxDate: new Date().fp_incr(365), // 1년 후까지만 선택 가능
     disable: unavailableCheckin,
@@ -374,17 +386,43 @@ $(document).ready(function () {
     instance.calendarContainer.querySelectorAll(".can-end").forEach(el => el.classList.remove("can-end"));
   }
 
+  // 날짜 선택 해제
+  function clearDateSelection() {
+    startDate = null;
+    endDate = null;
+    tempStartDate = null;
+    tempEndDate = null;
+
+    datePicker.clear();              // 달력에서 선택 제거
+    updateDateDisplay();             // "일정" placeholder로 표시
+    $("#dateApply").prop("disabled", true).css("opacity", 0.5);
+
+    // 체크아웃 후보 상태 초기화(쓰고 있다면)
+    if (datePicker && datePicker.calendarContainer) {
+      datePicker.calendarContainer.classList.remove("picking-end");
+      datePicker.calendarContainer.querySelectorAll(".can-end")
+        .forEach(el => el.classList.remove("can-end"));
+    }
+
+    // (선택) hidden input 동기화 함수가 있다면 호출
+    if (typeof syncHiddenFields === "function") syncHiddenFields();
+  }
+
   // 날짜 선택 클릭 이벤트
   $("#dateSelect").on("click", function (e) {
     e.stopPropagation();
     toggleDropdown(this);
 
-    // 플랫피커 날짜 초기화 (현재 선택된 날짜로)
-    datePicker.setDate([startDate, endDate]);
-    tempStartDate = new Date(startDate);
-    tempEndDate = new Date(endDate);
+    if (startDate && endDate) {
+      datePicker.setDate([startDate, endDate]);
+    } else {
+      datePicker.clear();
+    }
+
+    tempStartDate = startDate ? new Date(startDate) : null;
+    tempEndDate = endDAte ? new Date(endDate) : null;
     $("#dateError").hide();
-    $("#dateApply").prop("disabled", false).css("opacity", 1);
+    $("#dateApply").prop("disabled", !(tempStartDAte && tempEndDAte)).css("opacity", (tempStartDate && tempEndDAte) ? 1 : 0.5);
 
     // 월 네비게이션 버튼 이벤트 재설정 (fallback)
     setTimeout(() => {
@@ -616,6 +654,28 @@ $(document).ready(function () {
     }
   });
 
+  bookingBtn.addEventListener("click", function (e) {
+		e.preventDefault(); 
+
+    if (!startDate || !endDate) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      openModal();
+      $("#dataSelect").trigger("click");
+      return false;
+    }
+    
+    const checkin = document.getElementById("checkinInput")?.value || "";
+    const checkout = document.getElementById("checkoutInput")?.value || "";
+    const adult = document.getElementById("adultInput")?.value || "";
+    const child = document.getElementById("childInput")?.value || "";
+
+    const query = `?checkin=${checkin}&checkout=${checkout}&adult=${adult}&child=${child}`;
+    const url = `/reservation/${siId}/${riId}`;
+    console.log("최종 URL:", url + query);
+    window.location.href = url+query;
+  });
+
   // 체크인, 체크아웃 불가 날짜 불러오기
   fetch(`/stay/room/unavailable-dates/${siId}/${riId}`)
     .then((res) => res.json())
@@ -624,11 +684,19 @@ $(document).ready(function () {
       checkoutOnly = data.checkoutOnly || [];
        // disable에는 '체크인 불가'만 넣는다 (checkoutOnly는 제외)
       unavailableCheckin = rawUnavailable.filter(d => !checkoutOnly.includes(d));
-      console.log(unavailableCheckin);
 
       // 달력에 비활성 날짜 설정
       datePicker.set("disable", unavailableCheckin);
       datePicker.redraw();
+
+      if (startDate) {
+        const startStr = formatDateForServer(startDate);
+        if (rawUnavailable.includes(startStr)) {
+          clearDateSelection();
+        }
+      } else {
+        updateDateDisplay();
+      }
     })
     .catch((err) => console.error("예약 불가 날짜 불러오기 실패:", err));
 });

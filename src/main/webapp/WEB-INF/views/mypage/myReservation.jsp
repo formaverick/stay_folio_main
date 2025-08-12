@@ -51,7 +51,7 @@
 					<div class="reserv-box">
 						<div class="reserv-info">
 							<div>
-								<span class="label ready">예약 완료</span>
+								<span class="label-completed">예약 완료</span>
 
 								<h3>${reserv.siName }</h3>
 								<p class="reserv-day">
@@ -86,10 +86,10 @@
 						<div class="reserv-info">
 							<div>
 								<c:if test="${reserv.srStatus eq 'a'}">
-									<span class="label ready">예약 완료</span>
+									<span class="label-completed">예약 완료</span>
 								</c:if>
 								<c:if test="${reserv.srStatus eq 'c'}">
-									<span class="label ready">예약 취소</span>
+									<span class="label-cancle">예약 취소</span>
 								</c:if>
 								<h3>${reserv.siName }</h3>
 								<p class="reserv-day">

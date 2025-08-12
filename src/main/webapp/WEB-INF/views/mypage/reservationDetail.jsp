@@ -116,7 +116,7 @@
 					<table class="reservation-info-table">
 						<tr>
 							<td class="reservation-info-title">01. 예약 번호</td>
-							<td class="reservation-info-content">${reserv.srId } ( <c:choose>
+							<td class="reservation-info-content">${reserv.srId }( <c:choose>
 									<c:when test="${reserv.srStatus eq 'a'}">예약 완료</c:when>
 									<c:when test="${reserv.srStatus eq 'b'}">취소대기</c:when>
 									<c:when test="${reserv.srStatus eq 'c'}">취소완료</c:when>
@@ -160,8 +160,7 @@
 						</tr>
 						<tr>
 							<td class="reservation-info-title">07. 예약자 정보</td>
-							<td class="reservation-info-content">
-								예약자 이름 : ${empty reserv.srName ? '정보 없음' : reserv.srName}<br />
+							<td class="reservation-info-content">예약자 이름 : ${empty reserv.srName ? '정보 없음' : reserv.srName}<br />
 								예약자 이메일 : ${empty reserv.srEmail ? '정보 없음' : reserv.srEmail}<br />
 								예약자 전화번호 : ${empty reserv.srPhone ? '정보 없음' : reserv.srPhone}
 							</td>
@@ -202,8 +201,7 @@
 						</tr>
 						<tr>
 							<td class="reservation-info-title">02. 결제 방법</td>
-							<td class="reservation-info-content">${reserv.srPayment } (
-								<c:choose>
+							<td class="reservation-info-content">${reserv.srPayment }( <c:choose>
 									<c:when test="${reserv.srPaymentstatus eq 'a'}">결제 대기</c:when>
 									<c:when test="${reserv.srPaymentstatus eq 'b'}">결제 완료</c:when>
 									<c:when test="${reserv.srPaymentstatus eq 'c'}">결제 취소</c:when>
@@ -223,10 +221,10 @@
 				</div>
 				<div class="reservation-detail-section">
 					<div class="detail-bottom-buttons">
-						<c:if test="${reserv.srCheckin gt now }">
+						<c:if test="${reserv.srStatus eq 'a' and reserv.srCheckin gt now}">
 							<button
-								onclick="location.href='${pageContext.request.contextPath}/mypage/reservations/${reserv.srId }/cancel'">예약
-								취소</button>
+								onclick="location.href='${pageContext.request.contextPath}/mypage/reservations/${reserv.srId}/cancel'">
+								예약 취소</button>
 						</c:if>
 						<button>이용 안내 및 환불 규정</button>
 					</div>

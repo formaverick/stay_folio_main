@@ -95,7 +95,7 @@
 			<div class="stay-header">
 				<div class="title-row">
 					<h1>${stay.siName}</h1>
-					<button class="heart-btn stay-wishlist" data-wishlist="${stay.bookmarked }">
+					<button class="heart-btn stay-wishlist" data-wishlist="${stay.bookmarked }" data-stay-id="${stay.siId }">
 						<i class="ph ph-heart"></i>
 					</button>
 				</div>
@@ -399,7 +399,21 @@
 		</div>
 	</section>
 	<!-- 숙소 정보 끝 -->
-
+	
+	<!-- 모달 시작 -->
+    <div class="modal-overlay" id="commonModal">
+		<div class="modal-content">
+			<p class="modal-message">
+				로그인 후 사용 가능합니다.<br />로그인 하시겠습니까?
+			</p>
+			<div class="modal-buttons">
+				<button class="btn btn-cancel" onclick="closeModal()">취소</button>
+				<button class="btn btn-confirm"
+					onclick="location.href='${pageContext.request.contextPath}/login'">확인</button>
+			</div>
+		</div>
+	</div>
+    <!-- 모달 끝 -->
 
 	<!-- 푸터 인클루드 -->
 	<jsp:include page="../includes/footer.jsp" />
@@ -444,6 +458,13 @@
 								}
 							});
 		};
+		
+		function openModal() {
+			document.getElementById("commonModal").style.display = "flex";
+		}
+		function closeModal() {
+			document.getElementById("commonModal").style.display = "none";
+		}
 	</script>
 </body>
 </html>

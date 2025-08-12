@@ -47,6 +47,11 @@
 				<button type="submit" class="btn-login">LOGIN</button>
 				<button type="button" class="btn-kakao">카카오로 3초 만에 시작하기</button>
 				<button type="button" class="btn-join" onclick="location.href='/register'">신규 회원 가입</button>
+				<button type="button" class="btn-join"
+        onclick="location.href='${pageContext.request.contextPath}/guestLogin'">
+  비회원 예약 조회
+</button>
+
 			</form>
 		</div>
 		<!-- 로그인 끝 -->

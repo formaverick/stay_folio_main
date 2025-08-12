@@ -228,27 +228,27 @@
 									<div class="form-row form-radio">
 										<span class="amenity-item radio-label">반려동물 동반</span> <label><input
 											type="radio" name="siPet" value="1"
-											<c:if test="${detail.siPet == 1}">checked</c:if>> 가능</label>
+											<c:if test="${detail.siPet}">checked</c:if>> 가능</label>
 										<label><input type="radio" name="siPet" value="0"
-											<c:if test="${detail.siPet == 0}">checked</c:if>> 불가능</label>
+											<c:if test="${!detail.siPet}">checked</c:if>> 불가능</label>
 									</div>
 
 									<div class="form-row form-radio">
 										<span class="amenity-item radio-label">주차</span> <label><input
 											type="radio" name="siParking" value="1"
-											<c:if test="${detail.siParking == 1}">checked</c:if>>
+											<c:if test="${detail.siParking}">checked</c:if>>
 											가능</label> <label><input type="radio" name="siParking"
 											value="0"
-											<c:if test="${detail.siParking == 0}">checked</c:if>>
+											<c:if test="${!detail.siParking}">checked</c:if>>
 											불가능</label>
 									</div>
 
 									<div class="form-row form-radio">
 										<span class="amenity-item radio-label">취식</span> <label><input
 											type="radio" name="siFood" value="1"
-											<c:if test="${detail.siFood == 1}">checked</c:if>> 가능</label>
+											<c:if test="${detail.siFood}">checked</c:if>> 가능</label>
 										<label><input type="radio" name="siFood" value="0"
-											<c:if test="${detail.siFood == 0}">checked</c:if>>
+											<c:if test="${!detail.siFood}">checked</c:if>>
 											불가능</label>
 									</div>
 

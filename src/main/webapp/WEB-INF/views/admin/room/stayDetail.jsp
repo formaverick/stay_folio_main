@@ -244,15 +244,15 @@
 							</div>
 							<div class="form-group">
 								<label class="form-label">반려동물</label>
-								<div class="form-text-readonly">${detail.siPet == '1' ? '가능' : '불가능'}</div>
+								<div class="form-text-readonly">${detail.siPet ? '가능' : '불가능'}</div>
 							</div>
 							<div class="form-group">
 								<label class="form-label">주차</label>
-								<div class="form-text-readonly">${detail.siParking == '1' ? '가능' : '불가능'}</div>
+								<div class="form-text-readonly">${detail.siParking ? '가능' : '불가능'}</div>
 							</div>
 							<div class="form-group">
 								<label class="form-label">취식</label>
-								<div class="form-text-readonly">${detail.siFood == '1' ? '가능' : '불가능'}</div>
+								<div class="form-text-readonly">${detail.siFood ? '가능' : '불가능'}</div>
 							</div>
 						</div>
 					</div>

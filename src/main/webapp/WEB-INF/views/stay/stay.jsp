@@ -105,7 +105,8 @@
 			<div class="stay-header">
 				<div class="title-row">
 					<h1>${stay.siName}</h1>
-					<button class="heart-btn stay-wishlist" data-wishlist="${stay.bookmarked }">
+					<button class="heart-btn stay-wishlist"
+						data-wishlist="${stay.bookmarked }">
 						<i class="ph ph-heart"></i>
 					</button>
 				</div>
@@ -292,20 +293,37 @@
 									</div>
 
 									<c:set var="adult"
-										value="${empty param.adult ? 2 : param.adult}" />
+										value="${empty param.adult ? baseAdult : param.adult}" />
 									<c:set var="child"
 										value="${empty param.child ? 0 : param.child}" />
-									<c:set var="currentPerson" value="${adult + child}" />
 
+									<%-- 숫자 보장 (문자열 덧셈 방지) --%>
+									<fmt:parseNumber value="${adult}" integerOnly="true"
+										var="adultN" />
+									<fmt:parseNumber value="${child}" integerOnly="true"
+										var="childN" />
+									<c:set var="currentPerson" value="${adultN + childN}" />
+
+
+									<c:url var="roomUrl" value="/stay/${stay.siId}/${room.riId}">
+										<c:if test="${not empty param.checkin}">
+											<c:param name="checkin" value="${param.checkin}" />
+										</c:if>
+										<c:if test="${not empty param.checkout}">
+											<c:param name="checkout" value="${param.checkout}" />
+										</c:if>
+										<c:param name="adult" value="${adultN}" />
+										<c:param name="child" value="${childN}" />
+									</c:url>
+
+									<%-- 버튼 표시: 인원 초과면 비활성 --%>
 									<c:choose>
-										<c:when test="${currentPerson <= room.riMaxperson}">
-											<button class="room-select-btn"
-												onclick="location.href='/stay/${stay.siId}/${room.riId}?checkin=${param.checkin}&checkout=${param.checkout}&adult=${param.adult}&child=${param.child}'">
-												객실 선택</button>
+										<c:when test="${currentPerson le room.riMaxperson}">
+											<a class="room-select-btn" href="${roomUrl}">객실 선택</a>
 										</c:when>
 										<c:otherwise>
 											<button class="room-select-btn disabled" disabled
-												style="opacity: 0.5; cursor: not-allowed;">인원 초과</button>
+												style="opacity: .5; cursor: not-allowed;">인원 초과</button>
 										</c:otherwise>
 									</c:choose>
 

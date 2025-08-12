@@ -64,6 +64,12 @@ function handleSubmit(e) {
   // 유효하면 로그인 시도
   if (isEmailValid && isPasswordValid) {
     console.log("로그인 시도:", email);
+    // 실패 시에도 아이디가 유지되도록 저장 (리다이렉트 대비)
+    try {
+      sessionStorage.setItem("login_last_username", email);
+    } catch (e) {
+      // storage가 막힌 환경은 무시
+    }
     // 실제 서버로 폼 제출
     $form[0].submit();
   }
@@ -92,6 +98,17 @@ $(document).ready(function () {
   // 모든 에러 메시지를 초기에는 숨김
   $(".error-message").hide();
 
+  // 서버에서 값이 오지 않는 경우(리다이렉트 등) sessionStorage에서 아이디 복원
+  try {
+    const saved = sessionStorage.getItem("login_last_username");
+    const $username = $("#username");
+    if ($username.val().trim() === "" && saved) {
+      $username.val(saved);
+    }
+  } catch (e) {
+    // storage가 막힌 환경은 무시
+  }
+
   // 사용자 이름(이메일)과 비밀번호 필드 이벤트 리스너 등록
   $("#username, #password").on({
     // 필드에서 포커스를 잃었을 때 (blur 이벤트)
@@ -114,4 +131,16 @@ $(document).ready(function () {
   // $(".btn-kakao").on("click", function () {
   //   // 카카오 로그인 추가 시 구현
   // });
+
+  // 로그인 실패 모달 닫기 처리
+  const $modal = $("#commonModal");
+  $("#modalCloseBtn").on("click", function () {
+    $modal.hide();
+  });
+  // 오버레이 배경 클릭 시 닫기
+  $modal.on("click", function (e) {
+    if (e.target === this) {
+      $modal.hide();
+    }
+  });
 });

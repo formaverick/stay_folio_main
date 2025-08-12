@@ -19,9 +19,9 @@ public class StayDetailVO {
 	private String siBizname; // 상호명
 	private String siBiznum; // 사업자번호
 	private String siCeo; // 대표자명
-	private String siPet; // 반려동물 동반 가능여부
-	private String siParking; // 주차 가능 여부
-	private String siFood; // 취식 가능 여부
+	private boolean siPet; // 반려동물 동반 가능여부
+	private boolean siParking; // 주차 가능 여부
+	private boolean siFood; // 취식 가능 여부
 	private String siCheckin; // 체크인
 	private String siCheckout; // 체크아웃
 	private String siFeatTitle1; // 특징1 제목

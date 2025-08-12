@@ -31,7 +31,7 @@
 			<nav class="admin-nav">
 				<ul>
 					<li><a href="/admin/dashboard" class="nav-item">대시보드</a></li>
-					<li><a href="/admin/reservation" class="nav-item">예약관리</a></li>
+					<li><a href="/admin/reservation/list" class="nav-item">예약관리</a></li>
 					<li><a href="/admin/stay/staylist" class="nav-item active">숙소관리</a></li>
 					<li><a href="/admin/member/list" class="nav-item">회원관리</a></li>
 					<li><a href="/admin/dashboard#category-section"
@@ -227,29 +227,29 @@
 									<div class="form-row form-radio">
 										<label class="amenity-item radio-label">반려동물 동반</label> <label><input
 											type="radio" name="siPet" value="1"
-											<c:if test="${detail.siPet == 1}">checked</c:if>> <span
+											<c:if test="${detail.siPet}">checked</c:if>> <span
 											class="amenity-text">가능</span></label> <label><input
 											type="radio" name="siPet" value="0"
-											<c:if test="${detail.siPet == 0}">checked</c:if>> <span
+											<c:if test="${!detail.siPet}">checked</c:if>> <span
 											class="amenity-text">불가능</span></label>
 									</div>
 
 									<div class="form-row form-radio">
 										<label class="amenity-item radio-label">주차</label> <label><input
 											type="radio" name="siParking" value="1"
-											<c:if test="${detail.siParking == 1}">checked</c:if>>
+											<c:if test="${detail.siParking}">checked</c:if>>
 											가능</label> <label><input type="radio" name="siParking"
 											value="0"
-											<c:if test="${detail.siParking == 0}">checked</c:if>>
+											<c:if test="${!detail.siParking}">checked</c:if>>
 											불가능</label>
 									</div>
 
 									<div class="form-row form-radio">
 										<label class="amenity-item radio-label">취식</label> <label><input
 											type="radio" name="siFood" value="1"
-											<c:if test="${detail.siFood == 1}">checked</c:if>> 가능</label>
+											<c:if test="${detail.siFood}">checked</c:if>> 가능</label>
 										<label><input type="radio" name="siFood" value="0"
-											<c:if test="${detail.siFood == 0}">checked</c:if>>
+											<c:if test="${!detail.siFood}">checked</c:if>>
 											불가능</label>
 									</div>
 								</div>

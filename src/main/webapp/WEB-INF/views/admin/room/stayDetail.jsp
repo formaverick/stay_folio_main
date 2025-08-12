@@ -1,7 +1,9 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set var="s3BaseUrl"
-	value="https://stayfolio-upload-bucket.s3.us-east-1.amazonaws.com/" />
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> <%@
+taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set
+  var="s3BaseUrl"
+  value="https://stayfolio-upload-bucket.s3.us-east-1.amazonaws.com/"
+/>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -244,15 +246,15 @@
 							</div>
 							<div class="form-group">
 								<label class="form-label">반려동물</label>
-								<div class="form-text-readonly">${detail.siPet == '1' ? '가능' : '불가능'}</div>
+								<div class="form-text-readonly">${detail.siPet ? '가능' : '불가능'}</div>
 							</div>
 							<div class="form-group">
 								<label class="form-label">주차</label>
-								<div class="form-text-readonly">${detail.siParking == '1' ? '가능' : '불가능'}</div>
+								<div class="form-text-readonly">${detail.siParking ? '가능' : '불가능'}</div>
 							</div>
 							<div class="form-group">
 								<label class="form-label">취식</label>
-								<div class="form-text-readonly">${detail.siFood == '1' ? '가능' : '불가능'}</div>
+								<div class="form-text-readonly">${detail.siFood ? '가능' : '불가능'}</div>
 							</div>
 						</div>
 					</div>

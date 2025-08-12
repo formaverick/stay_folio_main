@@ -49,8 +49,6 @@ public class MypageController {
         model.addAttribute("upcomingList", upcomingList);
         model.addAttribute("completedList", completedList);
         
-        log.info(upcomingList);
-        
         return "mypage/myReservation";
     }
     
@@ -63,8 +61,6 @@ public class MypageController {
         
         model.addAttribute("travelCount", travelCount);
         model.addAttribute("reserv", reserv);
-        
-        log.info(reserv);
         
         return "mypage/reservationDetail";
     }
@@ -141,12 +137,9 @@ public class MypageController {
     
     @GetMapping("/bookmarks")
     public String getMyBookmarks(Principal principal, Model model) {
-    	log.info("MypageController - getMyBookmarks");
         String miId = principal.getName();
-        log.info("miid : " + miId);
         int travelCount = mypageService.getCompletedStayCount(miId);
         List<StayVO> bookmarkList = mypageService.getBookMarkList(miId);
-        log.info(bookmarkList);
         
         model.addAttribute("travelCount", travelCount);
         model.addAttribute("bookmarkList", bookmarkList);

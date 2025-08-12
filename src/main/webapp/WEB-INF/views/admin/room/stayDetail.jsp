@@ -1,7 +1,9 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:set var="s3BaseUrl"
-	value="https://stayfolio-upload-bucket.s3.us-east-1.amazonaws.com/" />
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> <%@
+taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:set
+  var="s3BaseUrl"
+  value="https://stayfolio-upload-bucket.s3.us-east-1.amazonaws.com/"
+/>
 
 <!DOCTYPE html>
 <html lang="ko">

@@ -1,6 +1,6 @@
 $(document).ready(function () {
   console.log("roomRegister.js 기본 유효성 검사만 활성화");
-  
+
   // 파일 클릭 시 siId 검사
   $(".file-input").on("click", function (e) {
     const siId = $("#image-siId").val();
@@ -11,7 +11,7 @@ $(document).ready(function () {
       return false;
     }
   });
-  
+
   $(".room-file-input").on("click", function (e) {
     const riId = $("#image-riId").val();
 
@@ -21,8 +21,8 @@ $(document).ready(function () {
       return false;
     }
   });
-  
-    // 파일 선택 시 파일명 표시
+
+  // 파일 선택 시 파일명 표시
   $(".file-input").on("change", function () {
     const fileName = this.files[0]?.name || "파일을 선택해주세요.";
     const inputId = $(this).attr("id");
@@ -34,7 +34,10 @@ $(document).ready(function () {
   $(".form-input, .form-select, .form-textarea").on("blur", validateField);
 
   // 에러 스타일 적용
-  $("<style>").prop("type", "text/css").html(`
+  $("<style>")
+    .prop("type", "text/css")
+    .html(
+      `
     .form-input.error,
     .form-select.error,
     .form-textarea.error {
@@ -47,7 +50,9 @@ $(document).ready(function () {
       margin-top: 0.25rem;
       font-weight: 500;
     }
-  `).appendTo("head");
+  `
+    )
+    .appendTo("head");
 });
 
 // 필드 유효성 검사
@@ -104,7 +109,10 @@ function validateField(e) {
 
     case "siMinperson":
     case "siMaxperson":
-      if (value && (isNaN(value) || parseInt(value) < 1 || parseInt(value) > 20)) {
+      if (
+        value &&
+        (isNaN(value) || parseInt(value) < 1 || parseInt(value) > 20)
+      ) {
         isValid = false;
         errorMessage = "인원은 1~20명 사이로 입력해주세요.";
       }

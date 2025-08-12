@@ -9,7 +9,7 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>숙소 상세 - STAY FOLIO</title>
+    <title>숙소 상세 - STAY FOLIO ADMIN</title>
     <link
       rel="stylesheet"
       href="${pageContext.request.contextPath}/resources/css/common.css"

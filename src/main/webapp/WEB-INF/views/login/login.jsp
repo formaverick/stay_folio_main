@@ -30,7 +30,7 @@
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 				<div class="form-group">
 					<label for="username">아이디</label>
-					<input type="text" id="username" name="username" placeholder="아이디를 입력해주세요." />
+					<input type="text" id="username" name="username" value="${not empty param.username ? param.username : (not empty sessionScope['SPRING_SECURITY_LAST_USERNAME'] ? sessionScope['SPRING_SECURITY_LAST_USERNAME'] : '')}" placeholder="아이디를 입력해주세요." />
 					<p class="error-message" style="display: none">
 						아이디 형식이 올바르지 않습니다.<br />이메일 기반이어야 합니다.
 					</p>
@@ -56,7 +56,7 @@
 	      <div class="modal-content">
 	        <p class="modal-message">${error }</p>
 	        <div class="modal-buttons">
-	          <a href="${pageContext.request.contextPath}/login" class="btn btn-cancel">확인</a>
+	          <button type="button" class="btn btn-cancel" id="modalCloseBtn">확인</button>
 	        </div>
 	      </div>
 	    </div>

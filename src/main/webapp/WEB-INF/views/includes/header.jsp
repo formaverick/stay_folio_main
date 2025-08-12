@@ -11,7 +11,10 @@ uri="http://www.springframework.org/security/tags" prefix="sec"%>
     </h1>
 
     <!-- 검색창 -->
-    <a href="${pageContext.request.contextPath}/stay/search?lcId=0" class="search-box">
+    <a
+      href="${pageContext.request.contextPath}/stay/search?lcId=0"
+      class="search-box"
+    >
       <span class="search-icon"><i class="ph ph-magnifying-glass"></i></span>
       <span class="search-placeholder">어디로 떠날까요?</span>
     </a>
@@ -19,13 +22,21 @@ uri="http://www.springframework.org/security/tags" prefix="sec"%>
     <!-- GNB -->
     <nav class="gnb">
       <ul>
-        <li><a href="#">FIND STAY</a></li>
+        <li>
+          <a href="${pageContext.request.contextPath}/stay/search?lcId=0"
+            >FIND STAY</a
+          >
+        </li>
         <li><a href="#">PROMOTION</a></li>
         <li><a href="#">JOURNAL</a></li>
         <li><a href="#">PRE-ORDER</a></li>
         <!-- ROLE_ADMIN이면 DASHBOARD 메뉴 추가 -->
         <sec:authorize access="hasRole('ROLE_ADMIN')">
-          <li><a href="/admin/dashboard">DASHBOARD</a></li>
+          <li>
+            <a href="${pageContext.request.contextPath}/admin/dashboard"
+              >DASHBOARD</a
+            >
+          </li>
         </sec:authorize>
         <li class="separator">|</li>
         <sec:authorize access="!isAuthenticated()">

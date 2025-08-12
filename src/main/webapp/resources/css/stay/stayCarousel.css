@@ -86,9 +86,6 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
-.carousel-btn span:hover {
-  color: #007bff;
-}
 
 .carousel-btn span {
   font-size: 3rem;

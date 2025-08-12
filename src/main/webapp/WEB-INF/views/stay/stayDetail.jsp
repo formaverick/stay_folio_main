@@ -10,7 +10,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>숙소 상세 - STAY FOLIO</title>
+<title>객실 상세 - STAY FOLIO</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/stay/stayCarousel.css" />
@@ -30,7 +30,6 @@
 <script src="${pageContext.request.contextPath}/resources/js/stay/stayDetail.js"></script>
 </head>
 <body>
-	<!-- 헤더 인클루드 -->
 	<jsp:include page="../includes/header.jsp" />
 	<div class="booking-modal-overlay" id="bookingModalOverlay"></div>
 

@@ -6,7 +6,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-<title>숙소 관리 - STAY FOLIO</title>
+<title>숙소 관리 - STAY FOLIO ADMIN</title>
 
 <!-- CSS -->
 <link rel="stylesheet"

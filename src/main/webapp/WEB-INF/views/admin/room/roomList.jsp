@@ -5,7 +5,7 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>객실 관리 - STAY FOLIO</title>
+    <title>객실 관리 - STAY FOLIO ADMIN</title>
     <!-- CSS -->
     <link
       rel="stylesheet"

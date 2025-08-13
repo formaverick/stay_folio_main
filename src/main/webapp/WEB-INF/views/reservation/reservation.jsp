@@ -237,7 +237,7 @@
 							type="hidden" name="miId" value="${miId}" /> <input
 							type="hidden" name="srAdult" value="${srAdult}" /> <input
 							type="hidden" name="srChild" value="${srChild}" /> <input
-							type="hidden" name="srRoomPrice" value="${info.srRoomprice}" />
+							type="hidden" name="srRoomprice" value="${info.srRoomprice}" />
 						<input type="hidden" name="srDiscount" value="${info.srDiscount}" />
 						<input type="hidden" name="srAddpersonFee"
 							value="${info.srAddpersonFee}" /> <input type="hidden"

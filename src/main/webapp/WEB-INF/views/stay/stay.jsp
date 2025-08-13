@@ -130,7 +130,7 @@
 			<c:if test="${not empty detail.siNotice}">
 				<div class="amenity-title">공지사항</div>
 				<div class="stay-amenities">
-					<div class="amenity">
+					<div class="notice">
 						<span>${detail.siNotice}</span>
 					</div>
 				</div>

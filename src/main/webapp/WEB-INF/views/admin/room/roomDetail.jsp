@@ -186,7 +186,7 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 					<!-- 이미지 -->
 					<div class="form-section">
-						<h2 class="section-title">숙소 이미지</h2>
+						<h2 class="section-title">객실 이미지</h2>
 
 						<label class="form-label">대표 이미지</label>
 						<c:forEach var="photo" items="${roomPhotos.main}">

@@ -2,6 +2,8 @@ package com.hotel.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.hotel.domain.AmenityVO;
 import com.hotel.domain.Criteria;
 import com.hotel.domain.FacilityVO;
 import com.hotel.domain.MemberVO;
@@ -86,6 +89,29 @@ public class AdminController {
 		model.addAttribute("riId", riId);
 		model.addAttribute("facilityList", stayService.getAllFacilities());
 		model.addAttribute("amenityList", roomService.getAllAmenities());
+		
+		// 객실 번호가 있을 경우
+        if (riId != null) {
+            RoomVO room = roomService.getRoomById(siId, riId);
+            List<FacilityVO> roomFacilities = roomService.getFacilitiesByRoomId(siId, riId);
+            List<AmenityVO> roomAmenities = roomService.getAmenitiesByRoomId(siId, riId);
+            
+            // 선택된 시설들의 fiId, aiIdx만 추출
+            List<Integer> selectedFacilityIds = roomFacilities.stream().map(FacilityVO::getFiId)
+                    .collect(Collectors.toList());
+            List<Integer> selectedAmenityIds = roomAmenities.stream().map(AmenityVO::getAiIdx)
+                    .collect(Collectors.toList());
+            
+             Map<Integer, Boolean> selectedFacilityMap = selectedFacilityIds.stream()
+                     .collect(Collectors.toMap(i -> i, i -> true, (a,b)->a));
+             Map<Integer, Boolean> selectedAmenityMap = selectedAmenityIds.stream()
+                     .collect(Collectors.toMap(i -> i, i -> true, (a,b)->a));
+            
+            model.addAttribute("room", room);
+            model.addAttribute("selectedFacilityMap", selectedFacilityMap);
+            model.addAttribute("selectedAmenityMap", selectedAmenityMap);
+        }
+		
 		return "admin/room/roomRegister";
 	}
 

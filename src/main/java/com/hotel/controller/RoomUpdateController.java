@@ -99,6 +99,7 @@ public class RoomUpdateController {
 		// 숙소, 객실 id 반환
 		rttr.addAttribute("siId", room.getSiId());
 		rttr.addAttribute("riId", room.getRiId());
+		rttr.addFlashAttribute("alert", "수정이 완료되었습니다.");
 		
 		return "redirect:/admin/room/detail";
 

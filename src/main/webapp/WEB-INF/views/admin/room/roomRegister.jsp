@@ -67,69 +67,74 @@
 								<div class="form-group">
 									<label class="form-label" for="riName">객실 이름</label> <input
 										type="text" name="riName" id="riName" required
-										class="form-input" placeholder="객실 이름을 입력해주세요." />
+										class="form-input" placeholder="객실 이름을 입력해주세요."
+										value="${not empty room and not empty room.riName ? room.riName : ''}"/>
 								</div>
 								<div class="form-group">
-									<label class="form-label" for="riType">객실 형태</label> <select
-										name="riType" id="riType" class="form-select" required>
+									<label class="form-label" for="riType">객실 형태</label>
+									<select name="riType" id="riType" class="form-select" required>
 										<option value="">-- 객실 형태를 선택하세요 --</option>
-										<option value="a">기본형</option>
-										<option value="b">독채형</option>
-										<option value="c">원룸형</option>
-										<option value="d">도미토리</option>
-										<option value="e">복층형</option>
+										<option value="a" ${not empty room and room.riType eq 'a' ? 'selected' : ''}>기본형</option>
+										<option value="b" ${not empty room and room.riType eq 'b' ? 'selected' : ''}>독채형</option>
+										<option value="c" ${not empty room and room.riType eq 'c' ? 'selected' : ''}>원룸형</option>
+										<option value="d" ${not empty room and room.riType eq 'd' ? 'selected' : ''}>도미토리</option>
+										<option value="e" ${not empty room and room.riType eq 'e' ? 'selected' : ''}>복층형</option>
 									</select>
 								</div>
 							</div>
 
 							<div class="form-group full-width">
 								<label for="riDesc" class="form-label">객실 설명</label>
-								<textarea class="form-textarea" name="riDesc" id="riDesc"
-									rows="3" placeholder="객실 설명을 입력해주세요.(500자 이내)"></textarea>
+								<textarea class="form-textarea" name="riDesc" id="riDesc" 
+									rows="3" placeholder="객실 설명을 입력해주세요.(500자 이내)">${not empty room ? room.riDesc : '' }</textarea>
 							</div>
 
 							<div class="form-grid">
 								<div class="form-group">
-									<label class="form-label">기준 인원</label><input type="number"
-										name="riPerson" id="riPerson" required class="form-input"
-										placeholder="1" min="1" required />
+									<label class="form-label">기준 인원</label>
+									<input type="number" name="riPerson" id="riPerson" 
+										class="form-input" placeholder="1" min="1" required 
+										value="${not empty room ? room.riPerson : '' }"/>
 								</div>
 								<div class="form-group">
-									<label class="form-label">최대 인원</label><input type="number"
-										name="riMaxperson" id="riMaxperson" required
-										class="form-input" placeholder="4" min="1" required />
+									<label class="form-label">최대 인원</label>
+									<input type="number" name="riMaxperson" id="riMaxperson"
+                                        class="form-input" placeholder="4" min="1" required 
+                                        value="${not empty room ? room.riMaxperson : '' }"/>
 								</div>
 
 								<div class="form-group">
-									<label class="form-label" for="riArea">면적(m²)</label> <input
-										type="number" id="riArea" name="riArea" class="form-input"
-										step="0.01" min="0" placeholder="32.5" />
+									<label class="form-label" for="riArea">면적(m²)</label>
+                                    <input type="number" id="riArea" name="riArea" class="form-input"
+                                        step="0.01" min="0" placeholder="32.5" 
+                                        value="${not empty room ? room.riArea : ''}" />
 								</div>
 								<div class="form-group">
-									<label class="form-label" for="riPrice">기본 가격</label> <input
-										type="number" id="riPrice" name="riPrice" placeholder="50000"
-										class="form-input" min="0" required />
+									<label class="form-label" for="riPrice">기본 가격</label>
+                                    <input type="number" id="riPrice" name="riPrice" placeholder="50000"
+                                        class="form-input" min="0" required 
+                                        value="${not empty room ? room.riPrice : ''}"/>
 								</div>
 								<div class="form-group">
-									<label class="form-label" for="riBed">침대 종류</label> <input
-										type="text" id="riBed" name="riBed"
+									<label class="form-label" for="riBed">침대 종류</label>
+                                    <input type="text" id="riBed" name="riBed"
 										placeholder="킹 침대 1 / 더블 침대 1" class="form-input"
-										maxlength="30" />
+										maxlength="30" value="${not empty room ? room.riBed : ''}"/>
 								</div>
 								<div class="form-group">
-									<label class="form-label" for="riBedcnt">침대 개수</label> <input
-										type="number" id="riBedcnt" name="riBedcnt" class="form-input"
-										min="0" placeholder="1" />
+									<label class="form-label" for="riBedcnt">침대 개수</label>
+                                    <input type="number" id="riBedcnt" name="riBedcnt" class="form-input"
+                                        min="0" placeholder="1" value="${not empty room ? room.riBedcnt : ''}"/>
 								</div>
 								<div class="form-group">
-									<label class="form-label" for="riBedroom">침실 수</label> <input
-										type="number" id="riBedroom" name="riBedroom"
-										class="form-input" value="1" placeholder="1" />
+									<label class="form-label" for="riBedroom">침실 수</label>
+                                    <input type="number" id="riBedroom" name="riBedroom" min = "1" step="1"
+                                        class="form-input" value="${not empty room ? room.riBedroom : 1 }" placeholder="1" />
 								</div>
 								<div class="form-group">
-									<label class="form-label" for="riBathroom">욕실 수</label> <input
-										type="number" id="riBathroom" name="riBathroom"
-										class="form-input" value="1" placeholder="1" />
+									<label class="form-label" for="riBathroom">욕실 수</label>
+                                    <input type="number" id="riBathroom" name="riBathroom" min = "1" step="1"
+                                        class="form-input" value="${not empty room ? room.riBathroom : 1 }" placeholder="1" />
 								</div>
 							</div>
 
@@ -138,9 +143,10 @@
 								<div class="amenities-grid">
 									<c:if test="${not empty facilityList}">
 										<c:forEach var="fac" items="${facilityList}">
-											<label class="amenity-item"> <input type="checkbox"
-												name="facilities" value="${fac.fiId}"
-												<c:if test="${checked}">checked</c:if> /> ${fac.fiName}
+											<label class="amenity-item">
+                                                <input type="checkbox" name="facilities" value="${fac.fiId}"
+                                                    <c:if test="${not empty selectedFacilityMap and selectedFacilityMap[fac.fiId]}">checked</c:if> />
+                                                    <c:out value="${fac.fiName}"/>
 											</label>
 										</c:forEach>
 									</c:if>
@@ -152,9 +158,10 @@
 								<div class="amenities-grid">
 									<c:if test="${not empty amenityList}">
 										<c:forEach var="ame" items="${amenityList}">
-											<label class="amenity-item"> <input type="checkbox"
-												name="amenities" value="${ame.aiIdx}"
-												<c:if test="${checked}">checked</c:if> /> ${ame.raName}
+											<label class="amenity-item">
+                                                <input type="checkbox" name="amenities" value="${ame.aiIdx}"
+                                                    <c:if test="${not empty selectedAmenityMap and selectedAmenityMap[ame.aiIdx]}">checked</c:if> />
+                                                    <c:out value="${ame.raName}"/>
 											</label>
 										</c:forEach>
 									</c:if>
@@ -167,7 +174,7 @@
 								name="siId" value="${siId}" />
 
 							<div class="form-actions">
-								<button type="submit" class="btn btn-primary">객실 정보 저장</button>
+								<button type="submit" class="btn btn-primary" <c:if test="${not empty riId}">disabled</c:if>>객실 정보 저장</button>
 							</div>
 						</section>
 					</div>
@@ -200,18 +207,13 @@
 						<label class="form-label">추가 이미지 (최대 10개)</label>
 						<div class="simple-upload-container">
 							<div class="additional-images-grid">
-								<c:forEach var="i" begin="1" end="11">
+								<c:forEach var="i" begin="1" end="10">
 									<div class="file-upload-wrapper">
-										<label for="image-${i}" class="file-upload-label"> <span
-											class="file-icon"><i class="ph ph-folder"></i></span> <span
-											class="file-text"> <c:choose>
-													<c:when test="${i le 2}">추가 이미지 ${i}</c:when>
-													<c:when test="${i le 5}">주요 특징 이미지 ${i-2}</c:when>
-													<c:when test="${i le 8}">특징1 이미지 ${i-5}</c:when>
-													<c:otherwise>특징2 이미지 ${i-8}</c:otherwise>
-												</c:choose>
-										</span>
-										</label> <input type="file" class="file-input room-file-input"
+										<label for="image-${i}" class="file-upload-label">
+                                            <span class="file-icon"><i class="ph ph-folder"></i></span>
+                                            <span class="file-text"> 추가 이미지 ${i} </span>
+                                        </label>
+                                        <input type="file" class="file-input room-file-input"
 											id="image-${i}" name="imageFiles[]" data-spidx="${i}"
 											accept="image/*" />
 									</div>
@@ -246,8 +248,54 @@
 					</table>
 				</div>
 			</div>
+			
+			<!-- 모달 시작 -->
+		    <div class="modal-overlay" id="commonModal">
+		      <div class="modal-content">
+		        <p class="modal-message"></p>
+		        <div class="modal-buttons">
+		          <button class="btn btn-cancel" onclick="closeModal()">확인</button>
+		        </div>
+		      </div>
+		    </div>
+		    <!-- 모달 끝 -->
 
 			<script>
+			  /* 모달 창 열고 닫기 */
+			  function openModal() {
+			    document.getElementById("commonModal").style.display = "flex";
+			  }
+
+			  function closeModal() {
+			    document.getElementById("commonModal").style.display = "none";
+			  }
+			  
+			  // 모달을 띄우고, 확인 누르면 이동.
+			  function openModalAndRedirect(message, targetUrl) {
+			    const modal = document.getElementById('commonModal');
+			    const okBtn = document.getElementById('modal-ok');
+			    const msgBox = modal.querySelector('.modal-message');
+
+			    msgBox.textContent = message || '';
+			    modal.style.display = 'flex';
+
+			    let didGo = false;
+			    let timer = null;
+
+			    const go = () => {
+			      if (didGo) return;
+			      didGo = true;
+			      // 필요하면 여기서 버튼 disable 등 처리
+			      closeModal();
+			      window.location.href = targetUrl;
+			    };
+
+			    // 확인 버튼 한 번만 반응
+			    const onOk = () => { clearTimeout(timer); okBtn.removeEventListener('click', onOk); go(); };
+			    okBtn.addEventListener('click', onOk, { once: true });
+			  }
+
+			
 			
 			$(document).ready(function () {
 				  // siId, riId 파라미터를 hidden input에 설정
@@ -260,9 +308,11 @@
 				  
 				  if (riId) {
 					   $("#image-riId").val(riId);
-					   alert("객실 정보가 등록되었습니다. 이미지를 추가해주세요.");
-				  }else if(siId){
+				       $(".modal-message").text("객실 정보가 등록되었습니다. 이미지를 추가해주세요.");
+				       openModal();
+				  } else if(siId){
 					  // 객실 리스트에서 들어왔을 경우
+					  console.log(siId);
 					  refreshRoomList(siId);
 				  }
 
@@ -271,19 +321,22 @@
   					const siId = $("#image-siId").val();
 
   					if (!siId) {
-    					alert("⚠️ 숙소 정보가 없습니다. 다시 시도해주세요.");
+  						$(".modal-message").text("⚠️ 숙소 정보가 없습니다. 다시 시도해주세요.");
+  						openModal();
     					return;
   					}
 
   				   // 객실이 하나 이상 등록되어 있는지 확인
   				   $.get(`/admin/stay/rooms/list`, { siId }, function (roomList) {
     					if (!Array.isArray(roomList) || roomList.length === 0) {
-      						alert("⚠️ 객실이 1개 이상 등록되어야 상세 페이지로 이동할 수 있습니다.");
+    						$(".modal-message").text("⚠️ 객실이 1개 이상 등록되어야 상세 페이지로 이동할 수 있습니다.");
+    						openModal();
     					} else {
       						location.href = `/admin/stay/detail?siId=${siId}`;
     					}
   				  	}).fail(function () {
-    					alert("⚠️ 객실 정보를 불러오지 못했습니다.");
+  				  		$(".modal-message").text("⚠️ 객실 정보를 불러오지 못했습니다.");
+  				  		openModal();
   					});
 				  });
 
@@ -298,9 +351,10 @@
 				    const riId = $("#image-riId").val();
 
 				    if (!siId || !riId) {
-				      alert("객실 이미지 업로드는 객실 정보 등록 이후 가능합니다");
-				      $imgSubmitBtn.prop("disabled", false).text("이미지 업로드");
-				      return;
+				    	$(".modal-message").text("객실 이미지 업로드는 객실 정보 등록 이후 가능합니다");
+				    	openModal();
+				    	$imgSubmitBtn.prop("disabled", false).text("이미지 업로드");
+				    	return;
 				    }
 
 				    const formData = new FormData();
@@ -321,9 +375,10 @@
 				    });
 
 				    if (!atLeastOneSelected) {
-				      alert("⚠️ 대표 이미지는 필수 항목입니다. 반드시 하나 이상 선택해주세요.");
-				      $imgSubmitBtn.prop("disabled", false).text("이미지 업로드");
-				      return;
+				    	$(".modal-message").text("⚠️ 대표 이미지는 필수 항목입니다. 반드시 하나 이상 선택해주세요.");
+				    	openModal();
+				    	$imgSubmitBtn.prop("disabled", false).text("이미지 업로드");
+				    	return;
 				    }
 
 				    $.ajax({
@@ -333,18 +388,19 @@
 				      processData: false,
 				      contentType: false,
 				      success: function (res) {
-				        alert("✅ " + res);
-				        
-				        refreshRoomList(siId);
-						
-				        $("#image-upload-form")[0].reset();
-				        $("#image-riId").val("");
-				        
-				        location.href = `/admin/rooms?siId=${siId}`;
+				    	  openModalAndRedirect(`✅ ${res}\n확인을 누르면 목록으로 이동합니다.`, `/admin/rooms?siId=${siId}`);
+				    	  
+				    	  refreshRoomList(siId);
+				    	  
+				    	  $("#image-upload-form")[0].reset();
+				    	  $("#image-riId").val("");
+				    	  
+				    	  location.href = `/admin/rooms?siId=${siId}`;
 				      },
 				      error: function (xhr) {
-				        alert("⚠️ " + xhr.responseText);
-				        $imgSubmitBtn.prop("disabled", false).text("이미지 업로드");
+				    	  $(".modal-message").text("⚠️ " + xhr.responseText);
+				    	  openModal();
+				    	  $imgSubmitBtn.prop("disabled", false).text("이미지 업로드");
 				      }
 				    });
 				  });
@@ -354,10 +410,12 @@
 				function refreshRoomList(siId) {
 				  $.get("/admin/stay/rooms/list", { siId }, function (roomList) {
 				    if (!Array.isArray(roomList)) {
-				      alert("객실 목록 응답이 배열이 아닙니다.");
-				      return;
+				    	$(".modal-message").text("객실 목록 응답이 배열이 아닙니다. 관리자에게 문의해주세요.");
+				    	openModal();
+				    	return;
 				    }
 
+				    console.log(roomList);
 				    let html = "";
 				    roomList.forEach(room => {
 				      html += '<tr>';

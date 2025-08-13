@@ -106,7 +106,23 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
                   <tr>
                     <td>${room.riId}</td>
                     <td>${room.riName}</td>
-                    <td>${room.riType}</td>
+                    <c:set var="typeLabel" value="" />
+                    <c:if test="${room.riType == 'a'}">
+                      <c:set var="typeLabel" value="기본형" />
+                    </c:if>
+                    <c:if test="${room.riType == 'b'}">
+                      <c:set var="typeLabel" value="독채형" />
+                    </c:if>
+                    <c:if test="${room.riType == 'c'}">
+                      <c:set var="typeLabel" value="원룸형" />
+                    </c:if>
+                    <c:if test="${room.riType == 'd'}">
+                      <c:set var="typeLabel" value="도미토리" />
+                    </c:if>
+                    <c:if test="${room.riType == 'e'}">
+                      <c:set var="typeLabel" value="복층형" />
+                    </c:if>
+                    <td>${typeLabel}</td>
                     <td>${room.riDate.substring(0, 10)}</td>
                     <td>
                       <a

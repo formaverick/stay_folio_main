@@ -99,7 +99,7 @@ public class AdminListController {
 		RoomVO room = roomService.getRoomById(siId, riId);
 		List<FacilityVO> roomFacilities = roomService.getFacilitiesByRoomId(siId, riId);
 		List<AmenityVO> roomAmenities = roomService.getAmenitiesByRoomId(siId, riId);
-		Map<String, List<RoomPhotoVO>> roomPhotos = roomService.getRoomPhotosByCategory(siId, riId);
+		List<RoomPhotoVO> roomPhotos = roomService.getAllRoomPhotos(siId, riId);
 
 		model.addAttribute("siId", siId);
 		model.addAttribute("room", room);

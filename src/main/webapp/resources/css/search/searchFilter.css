@@ -378,7 +378,7 @@
   max-width: none !important;
   display: inline-block !important;
   vertical-align: top !important;
-  margin-right: 20px !important;
+  margin-right: 10px !important;
 }
 
 .dayContainer:last-child {
@@ -387,7 +387,7 @@
 
 .flatpickr-day {
   border-radius: 50% !important;
-  margin: 3px !important;
+  margin: 4px !important;
   height: 38px !important;
   width: 38px !important;
   line-height: 38px !important;

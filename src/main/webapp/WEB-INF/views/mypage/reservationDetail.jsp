@@ -1,55 +1,71 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
-<c:set var="s3BaseUrl"
-	value="https://stayfolio-upload-bucket.s3.us-east-1.amazonaws.com/" />
+pageEncoding="UTF-8"%> <%@ taglib prefix="c"
+uri="http://java.sun.com/jsp/jstl/core"%> <%@ taglib prefix="fmt"
+uri="http://java.sun.com/jsp/jstl/fmt"%> <%@ taglib prefix="sec"
+uri="http://www.springframework.org/security/tags"%>
+<c:set
+  var="s3BaseUrl"
+  value="https://stayfolio-upload-bucket.s3.us-east-1.amazonaws.com/"
+/>
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>STAY FOLIO</title>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/common.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/header.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/mypage/mypageCommon.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/mypage/reservationDetail.css" />
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
-<script src="https://unpkg.com/@phosphor-icons/web"></script>
-<!-- Font Awesome -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
-	<!-- Header Include -->
-	<jsp:include page="../includes/header.jsp" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>예약 상세 - STAY FOLIO</title>
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/common.css"
+    />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/header.css"
+    />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/mypage/mypageCommon.css"
+    />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/mypage/reservationDetail.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
+    />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <!-- Header Include -->
+    <jsp:include page="../includes/header.jsp" />
 
-	<main class="mypage-main">
-		<div class="mypage-header">
-			<sec:authentication property="principal" var="pinfo" />
-			<h2 class="mypage-title">${pinfo.member.miName}님반가워요!</h2>
-			<p class="mypage-subtitle">
-				<fmt:formatDate value="${pinfo.member.miDate}" pattern="yyyy년 MM월" />
-				부터 ${travelCount}번의 여행을 했어요.
-			</p>
-		</div>
-		<div class="mypage-page">
-			<div class="mypage-submenu">
-				<ul>
-					<li class="active"><a href="/mypage/reservations">예약 정보</a></li>
-					<li><a href="/mypage/bookmarks">북마크</a></li>
-					<li><a href="#">회원정보 수정</a></li>
-				</ul>
-			</div>
+    <main class="mypage-main">
+      <div class="mypage-header">
+        <sec:authentication property="principal" var="pinfo" />
+        <h2 class="mypage-title">${pinfo.member.miName}님반가워요!</h2>
+        <p class="mypage-subtitle">
+          <fmt:formatDate
+            value="${pinfo.member.miDate}"
+            pattern="yyyy년 MM월"
+          />
+          부터 ${travelCount}번의 여행을 했어요.
+        </p>
+      </div>
+      <div class="mypage-page">
+        <div class="mypage-submenu">
+          <ul>
+            <li class="active"><a href="/mypage/reservations">예약 정보</a></li>
+            <li><a href="/mypage/bookmarks">북마크</a></li>
+            <li><a href="#">회원정보 수정</a></li>
+          </ul>
+        </div>
 
 			<div class="mypage-main">
 				<div class="reserv-title">
@@ -182,20 +198,20 @@
 							<td class="reservation-info-content">
 								<p>
 									객실 요금:
-									<fmt:formatNumber value="${reserv.srRoomprice}" type="currency" />
+									₩<fmt:formatNumber value="${reserv.srRoomprice}" type="number" groupingUsed="true" />
 								</p>
 								<p>
 									요금 할인:
-									<fmt:formatNumber value="${reserv.srDiscount}" type="currency" />
+									₩<fmt:formatNumber value="${reserv.srDiscount}" type="number" groupingUsed="true" />
 								</p>
 								<p class="payment-add">
 									인원 추가:
-									<fmt:formatNumber value="${reserv.srAddpersonFee}"
-										type="currency" />
+									₩<fmt:formatNumber value="${reserv.srAddpersonFee}" type="number" groupingUsed="true" />
 								</p>
 								<div class="payment-summary">
-									총 결제 금액 <span><fmt:formatNumber
-											value="${reserv.srTotalprice}" type="currency" /></span>
+									총 결제 금액 <span>
+									₩<fmt:formatNumber value="${reserv.srTotalprice}" type="number" groupingUsed="true" />
+									</span>
 								</div>
 							</td>
 						</tr>

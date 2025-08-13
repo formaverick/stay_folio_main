@@ -7,43 +7,58 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 	value="https://stayfolio-upload-bucket.s3.us-east-1.amazonaws.com/" />
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-<meta charset="UTF-8" />
-<title>객실 상세 - STAY FOLIO</title>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/common.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/admin/room/roomList.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/admin/room/roomRegister.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/admin/room/roomDetail.css" />
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
-<script src="https://unpkg.com/@phosphor-icons/web"></script>
-</head>
-<body>
-	<div class="admin-container">
-		<aside class="admin-sidebar">
-			<div class="admin-logo">
-				<div class="logo-text">
-					STAY<br />FOLIO
-				</div>
-				<div class="admin-text">ADMIN</div>
-			</div>
-			<nav class="admin-nav">
-				<ul>
-					<li><a href="/admin/dashboard" class="nav-item">대시보드</a></li>
-					<li><a href="/admin/reservation/list" class="nav-item">예약관리</a>
-					</li>
-					<li><a href="/admin/stay/staylist" class="nav-item active">숙소관리</a>
-					</li>
-					<li><a href="/admin/member/list" class="nav-item">회원관리</a></li>
-					<li><a href="/admin/dashboard#category-section"
-						class="nav-item">페이지관리</a></li>
-				</ul>
-			</nav>
-		</aside>
+  <head>
+    <meta charset="UTF-8" />
+    <title>객실 상세 - STAY FOLIO ADMIN</title>
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/common.css"
+    />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/admin/room/roomList.css"
+    />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/admin/room/roomRegister.css"
+    />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/admin/room/roomDetail.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
+    />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  </head>
+  <body>
+    <div class="admin-container">
+      <aside class="admin-sidebar">
+        <div class="admin-logo">
+          <div class="logo-text">STAY<br />FOLIO</div>
+          <div class="admin-text">ADMIN</div>
+        </div>
+        <nav class="admin-nav">
+          <ul>
+            <li><a href="/admin/dashboard" class="nav-item">대시보드</a></li>
+            <li>
+              <a href="/admin/reservation/list" class="nav-item">예약관리</a>
+            </li>
+            <li>
+              <a href="/admin/stay/staylist" class="nav-item active"
+                >숙소관리</a
+              >
+            </li>
+            <li><a href="/admin/member/list" class="nav-item">회원관리</a></li>
+            <li>
+              <a href="/admin/dashboard#category-section" class="nav-item"
+                >페이지관리</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </aside>
 
 		<main class="admin-main">
 			<div class="admin-header">

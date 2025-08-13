@@ -176,6 +176,10 @@ img {
   z-index: 9999;
 }
 
+.modal-overlay.is-open {
+  display: flex;
+}
+
 .modal-content {
   background: white;
   padding: 2rem;

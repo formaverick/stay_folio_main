@@ -5,7 +5,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>카테고리 수정- STAY FOLIO</title>
+    <title>키워드 수정- STAY FOLIO ADMIN</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <link
       rel="stylesheet"

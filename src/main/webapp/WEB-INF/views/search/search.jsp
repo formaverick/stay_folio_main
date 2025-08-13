@@ -11,7 +11,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>검색 결과 - STAY FOLIO</title>
+<title>숙소 조회 - STAY FOLIO</title>
 <!-- CSS -->
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/common.css" />
@@ -37,8 +37,7 @@
     />
   </head>
   <body>
-    <%@ include file="../includes/header.jsp" %>
-    <!-- 헤더 끝 -->
+	<jsp:include page="../includes/header.jsp" />
 	<!-- 검색 필터 시작 -->
 	<section class="search-filter-container">
 		<div class="search-filter-inner">

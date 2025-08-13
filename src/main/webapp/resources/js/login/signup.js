@@ -70,6 +70,15 @@ $(document).ready(function () {
           "비밀번호는 8자 이상, 영문, 숫자, 특수문자를 포함해야 합니다.";
         isValid = false;
       }
+    } else if (fieldId === "passwordConfirm") {
+      const original = $("#password").val().trim();
+      if (!value) {
+        errorMessage = "비밀번호 확인을 입력해주세요.";
+        isValid = false;
+      } else if (value !== original) {
+        errorMessage = "비밀번호가 일치하지 않습니다.";
+        isValid = false;
+      }
     } else if (fieldId === "name") {
       if (!value) {
         errorMessage = "이름을 입력해주세요.";
@@ -105,17 +114,28 @@ $(document).ready(function () {
     // 각 필드의 현재 값 가져오기
     const email = $("#email").val().trim();
     const password = $("#password").val().trim();
+    const passwordConfirm = $("#passwordConfirm").val().trim();
     const name = $("#name").val().trim();
     const phone = $("#phone").val().trim();
 
     // 모든 필드에 대해 validateField 함수 호출하여 유효성 검사 수행
     const isEmailValid = validateField($("#email"), email);
     const isPasswordValid = validateField($("#password"), password);
+    const isPasswordConfirmValid = validateField(
+      $("#passwordConfirm"),
+      passwordConfirm
+    );
     const isNameValid = validateField($("#name"), name);
     const isPhoneValid = validateField($("#phone"), phone); // 전화번호는 필수 항목
 
     // 모든 필드가 유효한 경우에만 true 반환
-    return isEmailValid && isPasswordValid && isNameValid && isPhoneValid;
+    return (
+      isEmailValid &&
+      isPasswordValid &&
+      isPasswordConfirmValid &&
+      isNameValid &&
+      isPhoneValid
+    );
   }
 
   /**
@@ -128,7 +148,7 @@ $(document).ready(function () {
       $(".checkbox-group.required").length;
 
     if (!requiredChecked) {
-      alert("필수 약관에 모두 동의해주세요.");
+      openModal();
       return false;
     }
 
@@ -154,7 +174,7 @@ $(document).ready(function () {
   const debouncedValidate = debounce(function ($field) {
     validateField($field, $field.val());
   }, 500);
-  
+
   /* 모달 창 열고 닫기 */
   function openModal() {
     document.getElementById("commonModal").style.display = "flex";
@@ -172,7 +192,9 @@ $(document).ready(function () {
       const response = await fetch(`/api/check/${type}?${type}=${value}`);
       const result = await response.text();
       if (result === "true") {
-      	$(".modal-message").text(`이미 사용중인 ${type === "email" ? "이메일" : "전화번호"}입니다.`);
+        $(".modal-message").text(
+          `이미 사용중인 ${type === "email" ? "이메일" : "전화번호"}입니다.`
+        );
         openModal();
         return true; // 중복됨
       }
@@ -204,6 +226,14 @@ $(document).ready(function () {
       if ($this.attr("id") === "phone") {
         const formatted = formatPhoneNumber($this.val());
         $this.val(formatted);
+      }
+
+      // 비밀번호 변경 시 비밀번호 확인 필드 재검증
+      if ($this.attr("id") === "password") {
+        const $confirm = $("#passwordConfirm");
+        if ($confirm.val()) {
+          validateField($confirm, $confirm.val());
+        }
       }
     });
   });
@@ -305,7 +335,7 @@ $(document).ready(function () {
   $(".btn-login").on("click", function () {
     window.location.href = "login.html"; // 로그인 페이지로 이동
   });
-  
+
   // 모달 닫기
   $("#commonModal .btn-cancel").on("click", closeModal);
 });

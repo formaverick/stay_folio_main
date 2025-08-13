@@ -9,7 +9,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>대시보드 - STAY FOLIO</title>
+    <title>대시보드 - STAY FOLIO ADMIN</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <link
       rel="stylesheet"

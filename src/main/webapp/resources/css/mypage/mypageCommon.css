@@ -36,6 +36,12 @@
   flex: 0 0 20%;
 }
 
+.submenu {
+  max-height: 8rem;
+  position: sticky;
+  top: 6rem;
+}
+
 .mypage-submenu .active {
   font-weight: 700;
 }
@@ -56,5 +62,5 @@
 }
 
 .mypage-main {
-	flex: 0 0 80%;
+  flex: 0 0 80%;
 }

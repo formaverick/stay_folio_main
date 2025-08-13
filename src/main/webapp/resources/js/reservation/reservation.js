@@ -1,3 +1,20 @@
+// 공통 모달 헬퍼
+function openModal() {
+  const modal = document.getElementById("commonModal");
+  if (modal) modal.style.display = "flex";
+}
+
+function closeModal() {
+  const modal = document.getElementById("commonModal");
+  if (modal) modal.style.display = "none";
+}
+
+function showModal(message) {
+  const msgEl = document.querySelector(".modal-message");
+  if (msgEl) msgEl.textContent = message;
+  openModal();
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   //1. 약관 전체 동의 체크 처리
   const agreeAllCheckbox = document.getElementById("agree-all");
@@ -27,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!isLogin) {
       const nameInput = document.getElementById("srName");
       if (!nameInput.value.trim()) {
-        alert("이름을 입력해주세요.");
+        showModal("이름을 입력해주세요.");
         nameInput.focus();
         return;
       }
@@ -36,11 +53,11 @@ document.addEventListener("DOMContentLoaded", function () {
       const emailInput = document.getElementById("srEmail");
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailInput.value.trim()) {
-        alert("이메일을 입력해주세요.");
+        showModal("이메일을 입력해주세요.");
         emailInput.focus();
         return;
       } else if (!emailRegex.test(emailInput.value)) {
-        alert("이메일 형식이 올바르지 않습니다.");
+        showModal("이메일 형식이 올바르지 않습니다.");
         emailInput.focus();
         return;
       }
@@ -49,11 +66,11 @@ document.addEventListener("DOMContentLoaded", function () {
       const phoneInput = document.getElementById("srPhone");
       const phoneRegex = /^010-\d{4}-\d{4}$/;
       if (!phoneInput.value.trim()) {
-        alert("전화번호를 입력해주세요.");
+        showModal("전화번호를 입력해주세요.");
         phoneInput.focus();
         return;
       } else if (!phoneRegex.test(phoneInput.value)) {
-        alert("전화번호 형식이 올바르지 않습니다. 예: 010-1234-5678");
+        showModal("전화번호 형식이 올바르지 않습니다. 예: 010-1234-5678");
         phoneInput.focus();
         return;
       }
@@ -67,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function () {
       (cb) => cb.checked
     );
     if (!allRequiredAgreed) {
-      alert("필수 약관에 모두 동의해야 결제를 진행할 수 있습니다.");
+      showModal("필수 약관에 모두 동의해야 결제를 진행할 수 있습니다.");
       return; //약관 안 했으면 중단
     }
 
@@ -77,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
     const price = parseInt(totalPriceInput?.value || "0");
     if (isNaN(price) || price <= 0) {
-      alert("결제 금액이 유효하지 않습니다.");
+      showModal("결제 금액이 유효하지 않습니다.");
       return;
     }
     //(6) 예약 날짜 겹침 체크 (DB 조회)
@@ -96,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((res) => res.json())
       .then((data) => {
         if (!data.available) {
-          alert("이미 예약된 날짜입니다. 다른 날짜를 선택해주세요.");
+          showModal("이미 예약된 날짜입니다. 다른 날짜를 선택해주세요.");
           return;
         }
         // 가능하면 결제 진행
@@ -104,7 +121,19 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .catch((err) => {
         console.error(err);
-        alert("예약 가능 여부 확인 중 오류가 발생했습니다.");
+        showModal("예약 가능 여부 확인 중 오류가 발생했습니다.");
       });
   });
+
+  // 모달 닫기 이벤트
+  const closeBtn = document.querySelector("#commonModal .btn-cancel");
+  if (closeBtn) {
+    closeBtn.addEventListener("click", closeModal);
+  }
+  const overlay = document.getElementById("commonModal");
+  if (overlay) {
+    overlay.addEventListener("click", function (e) {
+      if (e.target === overlay) closeModal();
+    });
+  }
 });

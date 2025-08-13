@@ -10,7 +10,7 @@ uri="http://java.sun.com/jsp/jstl/functions"%>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>KEYWORD - STAY FOLIO</title>
+    <title>키워드 상세 - STAY FOLIO ADMIN</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <link
       rel="stylesheet"

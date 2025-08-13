@@ -6,7 +6,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>객실 등록 - STAY FOLIO</title>
+<title>객실 등록 - STAY FOLIO ADMIN</title>
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/common.css">
 <link rel="stylesheet"

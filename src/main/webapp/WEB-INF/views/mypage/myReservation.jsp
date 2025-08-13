@@ -9,7 +9,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>로그인 - STAY FOLIO</title>
+<title>예약 정보 - STAY FOLIO</title>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/header.css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/mypage/mypageCommon.css" />
@@ -33,7 +33,7 @@
 		</div>
 		<div class="mypage-page">
 			<div class="mypage-submenu">
-				<ul>
+				<ul class="submenu">
 					<li class="active"><a href="/mypage/reservations">예약 정보</a></li>
 					<li><a href="/mypage/bookmarks">북마크</a></li>
 					<li><a href="#">회원정보 수정</a></li>
@@ -51,7 +51,7 @@
 					<div class="reserv-box">
 						<div class="reserv-info">
 							<div>
-								<span class="label ready">예약 완료</span>
+								<span class="label-	completed">예약 완료</span>
 
 								<h3>${reserv.siName }</h3>
 								<p class="reserv-day">
@@ -86,10 +86,10 @@
 						<div class="reserv-info">
 							<div>
 								<c:if test="${reserv.srStatus eq 'a'}">
-									<span class="label ready">예약 완료</span>
+									<span class="label-completed">예약 완료</span>
 								</c:if>
 								<c:if test="${reserv.srStatus eq 'c'}">
-									<span class="label ready">예약 취소</span>
+									<span class="label-cancle">예약 취소</span>
 								</c:if>
 								<h3>${reserv.siName }</h3>
 								<p class="reserv-day">

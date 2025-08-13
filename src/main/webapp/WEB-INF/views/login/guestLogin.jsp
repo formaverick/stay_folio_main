@@ -5,28 +5,36 @@
 <meta name="_csrf_header" content="${_csrf.headerName}"/>	
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>로그인 - STAY FOLIO</title>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/common.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/header.css" />
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/login/login.css" />
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
-<script src="https://unpkg.com/@phosphor-icons/web"></script>
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
-	<!-- Header Include -->
-	<jsp:include page="../includes/header.jsp" />
-	<div class="login-page">
-		<h2 class="login-title">LOGIN</h2>
-		<p class="login-subtitle">비회원 로그인</p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>비회원 로그인 - STAY FOLIO</title>
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/common.css"
+    />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/header.css"
+    />
+    <link
+      rel="stylesheet"
+      href="${pageContext.request.contextPath}/resources/css/login/login.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
+    />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <!-- Header Include -->
+    <jsp:include page="../includes/header.jsp" />
+    <div class="login-page">
+      <h2 class="login-title">LOGIN</h2>
+      <p class="login-subtitle">비회원 로그인</p>
 
 		<form class="login-form">
 			<div class="form-group">

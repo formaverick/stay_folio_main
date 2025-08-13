@@ -10,7 +10,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>예약상세 - STAY FOLIO ADMIN</title>
+    <title>예약 상세 - STAY FOLIO ADMIN</title>
     <link
       rel="stylesheet"
       href="${pageContext.request.contextPath}/resources/css/common.css"
@@ -133,19 +133,33 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
                   <label class="form-label">예약 상태</label>
                   <div class="form-text-readonly">
                     <c:choose>
-                      <c:when test="${reservationDetailVO.srStatus eq 'a'}">예약 완료</c:when>
-                      <c:when test="${reservationDetailVO.srStatus eq 'b'}">취소 대기</c:when>
-                      <c:when test="${reservationDetailVO.srStatus eq 'c'}">취소 완료</c:when>
-                      <c:when test="${reservationDetailVO.srStatus eq 'd'}">예약 대기</c:when>
+                      <c:when test="${reservationDetailVO.srStatus eq 'a'}"
+                        >예약 완료</c:when
+                      >
+                      <c:when test="${reservationDetailVO.srStatus eq 'b'}"
+                        >취소 대기</c:when
+                      >
+                      <c:when test="${reservationDetailVO.srStatus eq 'c'}"
+                        >취소 완료</c:when
+                      >
+                      <c:when test="${reservationDetailVO.srStatus eq 'd'}"
+                        >예약 대기</c:when
+                      >
                       <c:otherwise>${reservationDetailVO.srStatus}</c:otherwise>
                     </c:choose>
                     :
                     <c:choose>
                       <c:when test="${reservationDetailVO.srStatus eq 'c'}">
-                        <fmt:formatDate value="${reservationDetailVO.srCancledate}" pattern="yyyy.MM.dd HH:mm" />
+                        <fmt:formatDate
+                          value="${reservationDetailVO.srCancledate}"
+                          pattern="yyyy.MM.dd HH:mm"
+                        />
                       </c:when>
                       <c:otherwise>
-                        <fmt:formatDate value="${reservationDetailVO.srDate}" pattern="yyyy.MM.dd HH:mm" />
+                        <fmt:formatDate
+                          value="${reservationDetailVO.srDate}"
+                          pattern="yyyy.MM.dd HH:mm"
+                        />
                       </c:otherwise>
                     </c:choose>
                   </div>

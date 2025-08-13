@@ -198,20 +198,20 @@ uri="http://www.springframework.org/security/tags"%>
 							<td class="reservation-info-content">
 								<p>
 									객실 요금:
-									<fmt:formatNumber value="${reserv.srRoomprice}" type="currency" />
+									₩<fmt:formatNumber value="${reserv.srRoomprice}" type="number" groupingUsed="true" />
 								</p>
 								<p>
 									요금 할인:
-									<fmt:formatNumber value="${reserv.srDiscount}" type="currency" />
+									₩<fmt:formatNumber value="${reserv.srDiscount}" type="number" groupingUsed="true" />
 								</p>
 								<p class="payment-add">
 									인원 추가:
-									<fmt:formatNumber value="${reserv.srAddpersonFee}"
-										type="currency" />
+									₩<fmt:formatNumber value="${reserv.srAddpersonFee}" type="number" groupingUsed="true" />
 								</p>
 								<div class="payment-summary">
-									총 결제 금액 <span><fmt:formatNumber
-											value="${reserv.srTotalprice}" type="currency" /></span>
+									총 결제 금액 <span>
+									₩<fmt:formatNumber value="${reserv.srTotalprice}" type="number" groupingUsed="true" />
+									</span>
 								</div>
 							</td>
 						</tr>

@@ -72,7 +72,7 @@
 							</div>
 							<div class="buttom">
 								<button class="btn-detail" onclick="location.href='${pageContext.request.contextPath}/mypage/reservations/${reserv.srId}'">예약 상세 확인</button>
-								<p class="reserv-price"><fmt:formatNumber value="${reserv.srTotalprice}" type="currency" /></p>
+								<p class="reserv-price">₩<fmt:formatNumber value="${reserv.srTotalprice}" type="number" groupingUsed="true" /></p>
 							</div>
 						</div>
 						<div class="reserv-image">
@@ -110,7 +110,7 @@
 							</div>
 							<div class="buttom">
 								<button class="btn-detail" onclick="location.href='${pageContext.request.contextPath}/mypage/reservations/${reserv.srId}'">예약 상세 확인</button>
-								<p class="reserv-price"><fmt:formatNumber value="${reserv.srTotalprice}" type="currency" /></p>
+								<p class="reserv-price">₩<fmt:formatNumber value="${reserv.srTotalprice}" type="number" groupingUsed="true" /></p>
 							</div>
 						</div>
 						<div class="reserv-image">

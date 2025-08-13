@@ -91,18 +91,20 @@ uri="http://www.springframework.org/security/tags" %>
 									<c:choose>
 										<c:when test="${stay.discount eq 0 }">
 											<div class="search-stay-price-main">
-												<span class="search-stay-price-current"><fmt:formatNumber value="${stay.siMinprice}" type="currency" />~</span>
+												<span class="search-stay-price-current">
+													₩<fmt:formatNumber value="${stay.siMinprice}" type="number" groupingUsed="true" />
+												~</span>
 											</div>
 										</c:when>
 										<c:otherwise>
 											<span class="search-stay-price-original">
-												<fmt:formatNumber value="${stay.siMinprice}" type="currency" />
+												₩<fmt:formatNumber value="${stay.siMinprice}" type="number" groupingUsed="true" />
 											</span>
 											<div class="search-stay-price-main">
 												<span class="search-stay-price-discount">
 													<fmt:formatNumber value="${stay.discount}" maxFractionDigits="0" />%
 												</span>
-												<span class="search-stay-price-current"><fmt:formatNumber value="${stay.discountedPrice }" type="currency" />~</span>
+												<span class="search-stay-price-current">₩<fmt:formatNumber value="${stay.discountedPrice}" type="number" groupingUsed="true" />~</span>
 											</div>
 										</c:otherwise>
 									</c:choose>

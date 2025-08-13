@@ -4,61 +4,78 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hotel.mapper.MypageMapper">
 
-    <resultMap id="reservationList"
-        type="com.hotel.domain.ReservationListVO">
-        <id column="sr_id" property="srId" />
-        <result column="si_id" property="siId" />
-        <result column="si_name" property="siName" />
-        <result column="ri_id" property="riId" />
-        <result column="ri_name" property="riName" />
-        <result column="sp_url" property="spUrl" />
-        <result column="sr_checkin" property="srCheckin" />
-        <result column="sr_checkout" property="srCheckout" />
-        <result column="sr_adult" property="srAdult" />
-        <result column="sr_child" property="srChild" />
-        <result column="sr_totalprice" property="srTotalprice" />
-        <result column="sr_status" property="srStatus" />
-    </resultMap>
+	<resultMap id="reservationList"
+		type="com.hotel.domain.ReservationListVO">
+		<id column="sr_id" property="srId" />
+		<result column="si_id" property="siId" />
+		<result column="si_name" property="siName" />
+		<result column="ri_id" property="riId" />
+		<result column="ri_name" property="riName" />
+		<result column="sp_url" property="spUrl" />
+		<result column="sr_checkin" property="srCheckin" />
+		<result column="sr_checkout" property="srCheckout" />
+		<result column="sr_adult" property="srAdult" />
+		<result column="sr_child" property="srChild" />
+		<result column="sr_totalprice" property="srTotalprice" />
+		<result column="sr_status" property="srStatus" />
+	</resultMap>
 
-    <resultMap id="reservationDetail" type="com.hotel.domain.ReservationDetailVO">
-        <id column="sr_id" property="srId" />
-        <result column="si_id" property="siId" />
-        <result column="si_name" property="siName" />
-        <result column="sp_url" property="spUrl" />
-        <result column="si_address" property="siAddress" />
-        <result column="si_phone" property="siPhone" />
-        <result column="si_email" property="siEmail" />
-        <result column="ri_id" property="riId" />
-        <result column="ri_name" property="riName" />
-        <result column="sr_name" property="srName" />
-        <result column="sr_email" property="srEmail" />
-        <result column="sr_phone" property="srPhone" />
-        <result column="sr_request" property="srRequest" />
-        <result column="sr_date" property="srDate" />
-        <result column="sr_adult" property="srAdult" />
-        <result column="sr_child" property="srChild" />
-        <result column="full_checkin" property="srCheckin" />
-        <result column="full_checkout" property="srCheckout" />
-        <result column="sr_roomprice" property="srRoomprice" />
-        <result column="sr_discount" property="srDiscount" />
-        <result column="sr_addperson_fee" property="srAddpersonFee" />
-        <result column="sr_totalprice" property="srTotalprice" />
-        <result column="sr_payment" property="srPayment" />
-        <result column="sr_paydate" property="srPaydate" />
-        <result column="sr_cancledate" property="srCancledate" />
-        <result column="sr_status" property="srStatus" />
-        <result column="sr_paymentstatus" property="srPaymentstatus" />
-    </resultMap>
+	<resultMap id="reservationDetail"
+		type="com.hotel.domain.ReservationDetailVO">
+		<id column="sr_id" property="srId" />
+		<result column="si_id" property="siId" />
+		<result column="si_name" property="siName" />
+		<result column="sp_url" property="spUrl" />
+		<result column="si_address" property="siAddress" />
+		<result column="si_phone" property="siPhone" />
+		<result column="si_email" property="siEmail" />
+		<result column="ri_id" property="riId" />
+		<result column="ri_name" property="riName" />
+		<result column="sr_name" property="srName" />
+		<result column="sr_email" property="srEmail" />
+		<result column="sr_phone" property="srPhone" />
+		<result column="sr_request" property="srRequest" />
+		<result column="sr_date" property="srDate" />
+		<result column="sr_adult" property="srAdult" />
+		<result column="sr_child" property="srChild" />
+		<result column="full_checkin" property="srCheckin" />
+		<result column="full_checkout" property="srCheckout" />
+		<result column="sr_roomprice" property="srRoomprice" />
+		<result column="sr_discount" property="srDiscount" />
+		<result column="sr_addperson_fee" property="srAddpersonFee" />
+		<result column="sr_totalprice" property="srTotalprice" />
+		<result column="sr_payment" property="srPayment" />
+		<result column="sr_paydate" property="srPaydate" />
+		<result column="sr_cancledate" property="srCancledate" />
+		<result column="sr_status" property="srStatus" />
+		<result column="sr_paymentstatus" property="srPaymentstatus" />
+	</resultMap>
 
-    <select id="getCompletedStayCount">
+	<resultMap id="memberMap" type="com.hotel.domain.MemberVO">
+		<id column="mi_id" property="miId" />
+		<result column="mi_pw" property="miPw" />
+		<result column="mi_name" property="miName" />
+		<result column="mi_gender" property="miGender" />
+		<result column="mi_birth" property="miBirth" />
+		<result column="mi_phone" property="miPhone" />
+		<result column="mi_isad" property="miIsad" />
+		<result column="mi_date" property="miDate" />
+		<result column="mi_enabled" property="miEnabled" />
+		<collection property="roles" ofType="string">
+			<result column="mr_name" />
+		</collection>
+	</resultMap>
+
+	<select id="getCompletedStayCount">
         <![CDATA[
             SELECT count(*) FROM t_stay_reservation 
             WHERE mi_id = #{id} AND sr_status = 'a' 
             AND sr_checkout < SYSDATE
         ]]>
-    </select>
+	</select>
 
-    <select id="getUpcomingReservationByMember" resultMap="reservationList">
+	<select id="getUpcomingReservationByMember"
+		resultMap="reservationList">
         <![CDATA[
             SELECT sr.sr_id, sr.si_id, si.si_name, sr.ri_id, ri.ri_name, sp.sp_url, sr.sr_checkin, sr.sr_checkout, 
             	sr.sr_adult, sr.sr_child, sr.sr_totalprice, sr.sr_status 
@@ -69,9 +86,10 @@
             WHERE sr.mi_id = #{id} AND sr.sr_status = 'a' AND sr.sr_checkout > SYSDATE 
             ORDER BY sr.sr_checkin 
         ]]>
-    </select>
+	</select>
 
-    <select id="getCompletedReservationsByMember" resultMap="reservationList">
+	<select id="getCompletedReservationsByMember"
+		resultMap="reservationList">
         <![CDATA[
             SELECT sr_id, sr.si_id, si_name, sr.ri_id, ri_name, sp_url, sr_checkin, sr_checkout, sr_adult, sr_child, sr_totalprice, sr_status 
             FROM t_stay_reservation sr 
@@ -81,38 +99,106 @@
             WHERE mi_id = #{id} AND ((sr_status = 'a' AND sr_checkout < SYSDATE) OR sr_status = 'c') 
             ORDER BY sr_date desc
         ]]>
-    </select>
+	</select>
 
-    <select id="getReservationDetail" resultMap="reservationDetail">
-        SELECT  sr.sr_id, sr.si_id, si.si_name, sp.sp_url, sid.si_phone, sid.si_email, sid.si_address, sr.ri_id, 
-            ri.ri_name, sr.sr_name, sr.sr_email, sr.sr_phone, sr.sr_request, sr.sr_date, sr.sr_adult, sr.sr_child, 
-            TO_DATE(TO_CHAR(sr.sr_checkin, 'YYYY-MM-DD') || ' ' || sid.si_checkin, 'YYYY-MM-DD HH24:MI') AS full_checkin, 
-            TO_DATE(TO_CHAR(sr.sr_checkout, 'YYYY-MM-DD') || ' ' || sid.si_checkout, 'YYYY-MM-DD HH24:MI') AS full_checkout, 
-            sr.sr_roomprice, sr.sr_discount, sr.sr_addperson_fee, sr.sr_totalprice, 
-            sr.sr_payment, sr.sr_paydate, sr.sr_cancledate, sr.sr_status, sr.sr_paymentstatus 
-        FROM t_stay_reservation sr
-        LEFT JOIN t_stay_info si ON sr.si_id = si.si_id
-        LEFT JOIN t_stay_info_detail sid ON sr.si_id = sid.si_id 
-        LEFT JOIN t_room_info ri ON sr.si_id = ri.si_id AND sr.ri_id = ri.ri_id
-        LEFT JOIN t_stay_photo sp ON sr.si_id = sp.si_id AND sp.sp_idx = 0
-        WHERE sr.sr_id = #{id}
-    </select>
-    
-    <select id="getBookMarkList" resultType="com.hotel.domain.StayVO">
-        SELECT
-			si.si_id AS siId,
-			si.si_name AS siName,
-			si.si_loca AS siLoca,
-			si.si_minperson AS siMinperson,
-			si.si_minprice AS siMinprice,
-			ROUND((1 - si.si_discount) * si.si_minprice) AS discountedPrice,
-			si.si_discount * 100 AS discount,
-			si.si_maxperson AS siMaxperson,
-			sp.sp_url AS spUrl
-		FROM t_stay_bookmarks sb 
-		LEFT JOIN t_stay_info si on sb.si_id = si.si_id 
-		LEFT JOIN t_stay_photo sp on sb.si_id = sp.si_id AND sp.sp_idx = 0 
+	<select id="getReservationDetail" resultMap="reservationDetail">
+		SELECT sr.sr_id,
+		sr.si_id, si.si_name, sp.sp_url, sid.si_phone,
+		sid.si_email,
+		sid.si_address, sr.ri_id,
+		ri.ri_name, sr.sr_name, sr.sr_email,
+		sr.sr_phone, sr.sr_request, sr.sr_date,
+		sr.sr_adult, sr.sr_child,
+		TO_DATE(TO_CHAR(sr.sr_checkin, 'YYYY-MM-DD') || ' ' || sid.si_checkin,
+		'YYYY-MM-DD HH24:MI') AS
+		full_checkin,
+		TO_DATE(TO_CHAR(sr.sr_checkout,
+		'YYYY-MM-DD') || ' ' || sid.si_checkout, 'YYYY-MM-DD HH24:MI') AS
+		full_checkout,
+		sr.sr_roomprice, sr.sr_discount, sr.sr_addperson_fee,
+		sr.sr_totalprice,
+		sr.sr_payment, sr.sr_paydate, sr.sr_cancledate,
+		sr.sr_status, sr.sr_paymentstatus
+		FROM t_stay_reservation sr
+		LEFT JOIN
+		t_stay_info si ON sr.si_id = si.si_id
+		LEFT JOIN t_stay_info_detail sid
+		ON sr.si_id = sid.si_id
+		LEFT JOIN t_room_info ri ON sr.si_id = ri.si_id
+		AND sr.ri_id = ri.ri_id
+		LEFT JOIN t_stay_photo sp ON sr.si_id =
+		sp.si_id AND sp.sp_idx = 0
+		WHERE sr.sr_id = #{id}
+	</select>
+
+	<select id="getBookMarkList"
+		resultType="com.hotel.domain.StayVO">
+		SELECT
+		si.si_id AS siId,
+		si.si_name AS siName,
+		si.si_loca AS
+		siLoca,
+		si.si_minperson AS siMinperson,
+		si.si_minprice AS siMinprice,
+		ROUND((1 - si.si_discount) * si.si_minprice) AS discountedPrice,
+		si.si_discount * 100 AS discount,
+		si.si_maxperson AS siMaxperson,
+		sp.sp_url AS spUrl
+		FROM t_stay_bookmarks sb
+		LEFT JOIN t_stay_info si on
+		sb.si_id = si.si_id
+		LEFT JOIN t_stay_photo sp on sb.si_id = sp.si_id
+		AND sp.sp_idx = 0
 		WHERE sb.mi_id = #{id}
-    </select>
+	</select>
+
+	<!-- 프로필 업데이트 (비번/권한/사용여부 제외) -->
+	<update id="updateProfile"
+		parameterType="com.hotel.domain.MemberVO">
+		UPDATE t_member_info
+		<set>
+			<if test="miName != null">mi_name = #{miName},</if>
+			<if test="miGender != null">mi_gender = #{miGender},</if>
+
+			<!-- mi_birth 가 VARCHAR2 라면 그대로, DATE 라면 TO_DATE 로 변경 -->
+			<if test="miBirth != null">mi_birth = #{miBirth},</if>
+
+			<if test="miPhone != null">mi_phone = #{miPhone},</if>
+
+			<!-- boolean -> CHAR(1)/NUMBER(1) 매핑: '1' / '0' -->
+			<if test="_parameter != null">
+				mi_isad =
+				<choose>
+					<when test="miIsad"> '1' </when>
+					<otherwise> '0' </otherwise>
+				</choose>
+				,
+			</if>
+		</set>
+		WHERE mi_id = #{miId}
+	</update>
+
+	<!-- 비밀번호 변경 -->
+	<update id="updatePassword">
+		UPDATE t_member_info
+		SET mi_pw = #{miPw}
+		WHERE mi_id =
+		#{miId}
+	</update>
+
+	<select id="countByPhoneNormalized" resultType="int">
+		SELECT COUNT(*)
+		FROM t_member_info
+		WHERE REPLACE(mi_phone, '-', '') = #{phone}
+	</select>
+
+	<select id="countByPhoneNormalizedExceptSelf" resultType="int">
+		  <![CDATA[
+    			SELECT COUNT(*)
+    			FROM t_member_info
+    			WHERE REPLACE(mi_phone, '-', '') = #{phone}
+      			AND mi_id <> #{miId}
+  		 ]]>
+	</select>
 
 </mapper>

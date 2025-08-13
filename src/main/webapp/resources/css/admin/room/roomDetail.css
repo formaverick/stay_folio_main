@@ -36,15 +36,19 @@
 }
 
 /* 텍스트 출력 */
-.form-text-readonly {
-  font-size: 0.95rem;
-  color: #222;
-  padding: 0.75rem 1rem;
-  background-color: #fdfdfd;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  white-space: pre-wrap;
-  line-height: 1.6;
+.form-text-readonly{
+  display:block; width:100%; 
+  box-sizing:border-box;
+  padding:0.75rem 1rem; 
+  border:1px solid #e0e0e0; 
+  border-radius:6px;
+  background:#fdfdfd; 
+  line-height:1.6; 
+  font-size:0.95rem; 
+  color:#222;
+  white-space:nowrap; 
+  overflow:hidden; 
+  text-overflow:ellipsis;
 }
 
 /* 편의시설 표시용 아이콘 목록 */

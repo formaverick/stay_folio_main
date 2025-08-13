@@ -41,7 +41,7 @@ uri="http://www.springframework.org/security/tags" prefix="sec"%>
             <ul class="login-dropdown">
               <li><a href="/mypage/reservations">예약정보</a></li>
               <li><a href="/mypage/bookmarks">북마크</a></li>
-              <li><a href="#">회원정보 수정</a></li>
+              <li><a href="/mypage/member/edit">회원정보 수정</a></li>
               <li>
                 <form
                   action="${pageContext.request.contextPath}/logout"

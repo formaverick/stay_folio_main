@@ -36,7 +36,7 @@
 				<ul>
 					<li class="active"><a href="/mypage/reservations">예약 정보</a></li>
 					<li><a href="/mypage/bookmarks">북마크</a></li>
-					<li><a href="#">회원정보 수정</a></li>
+					<li><a href="/mypage/member/edit">회원정보 수정</a></li>
 				</ul>
 			</div>
 

@@ -1,0 +1,67 @@
+<!-- 헤더 -->
+<link rel="stylesheet" href="../../../resources/css/common.css" />
+<link rel="stylesheet" href="../../../resources/css/header.css" />
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
+/>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Custom JS -->
+<script src="../../../resources/js/signup.js"></script>
+<!-- Custom JS -->
+<script src="../../../resources/js/login.js"></script>
+<!-- header.html -->
+<header class="header">
+  <div class="header-inner">
+    <!-- 로고 -->
+    <h1 class="logo">
+      <a href="main.html">STAY<br />FOLIO</a>
+    </h1>
+
+    <!-- 검색창 -->
+    <a href="search.jsp" class="search-box">
+      <span class="search-icon"><i class="ph ph-magnifying-glass"></i></span>
+      <span class="search-placeholder">어디로 떠날까요?</span>
+    </a>
+
+    <!-- GNB -->
+    <nav class="gnb">
+      <ul>
+        <li><a href="#">FIND STAY</a></li>
+        <li><a href="#">PROMOTION</a></li>
+        <li><a href="#">JOURNAL</a></li>
+        <li><a href="#">PRE-ORDER</a></li>
+        <li class="separator">|</li>
+        <!-- 로그아웃 상태 -->
+        <li class="login logged-out">
+          <a href="#"><i class="ph ph-door"></i> LOGIN</a>
+        </li>
+        <!-- 로그인 상태 (처음에는 숨김) -->
+        <li class="login logged-in" style="display: none">
+          <a href="#"><i class="ph ph-user"></i> MY</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<!-- 헤더 끝 -->
+
+<!-- 회원가입 완료 컨텐츠 -->
+<link rel="stylesheet" href="../../../resources/css/login/signupSuccess.css" />
+<div class="signup-success-container">
+  <div class="success-icon">
+    <i class="ph ph-check-circle"></i>
+  </div>
+  <h2>회원가입이 완료되었습니다!</h2>
+  <p class="welcome-message">
+    STAY FOLIO의 회원이 되신 것을 환영합니다.<br />
+    다양한 서비스와 혜택을 만나보세요.
+  </p>
+
+  <div class="next-steps">
+    <a href="login.html" class="btn-login">로그인 하기</a>
+    <a href="main.html" class="btn-main">메인으로 가기</a>
+  </div>
+</div>

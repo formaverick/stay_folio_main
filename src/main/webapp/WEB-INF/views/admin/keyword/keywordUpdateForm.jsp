@@ -59,7 +59,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
         <div class="admin-header">
           <div class="header-content">
             <div class="header-left">
-              <h1 class="page-title">카테고리 수정</h1>
+              <h1 class="page-title">키워드 수정</h1>
               <p class="page-subtitle">등록된 카테고리 정보를 수정합니다.</p>
             </div>
             <div class="header-right">

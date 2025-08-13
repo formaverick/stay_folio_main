@@ -51,6 +51,10 @@
   text-overflow:ellipsis;
 }
 
+.form-text-inline{
+  white-space: normal;
+}
+
 /* 편의시설 표시용 아이콘 목록 */
 .facility-list {
   display: flex;

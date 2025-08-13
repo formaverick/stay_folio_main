@@ -426,6 +426,18 @@ body {
   color: #666;
 }
 
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  padding: 0.5rem 0;
+  flex: 1 1 100%;
+  min-width: 100%;
+  white-space: normal;
+}
+
+
 /* 편의시설 반응형 */
 @media (max-width: 992px) {
   .amenity {

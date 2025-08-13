@@ -68,7 +68,7 @@ uri="http://www.springframework.org/security/tags" %>
           <ul>
             <li><a href="/mypage/reservations">예약 정보</a></li>
             <li class="active"><a href="/mypage/bookmarks">북마크</a></li>
-            <li><a href="#">회원정보 수정</a></li>
+            <li><a href="/mypage/member/edit">회원정보 수정</a></li>
           </ul>
         </div>
 
@@ -91,18 +91,20 @@ uri="http://www.springframework.org/security/tags" %>
 									<c:choose>
 										<c:when test="${stay.discount eq 0 }">
 											<div class="search-stay-price-main">
-												<span class="search-stay-price-current"><fmt:formatNumber value="${stay.siMinprice}" type="currency" />~</span>
+												<span class="search-stay-price-current">
+													₩<fmt:formatNumber value="${stay.siMinprice}" type="number" groupingUsed="true" />
+												~</span>
 											</div>
 										</c:when>
 										<c:otherwise>
 											<span class="search-stay-price-original">
-												<fmt:formatNumber value="${stay.siMinprice}" type="currency" />
+												₩<fmt:formatNumber value="${stay.siMinprice}" type="number" groupingUsed="true" />
 											</span>
 											<div class="search-stay-price-main">
 												<span class="search-stay-price-discount">
 													<fmt:formatNumber value="${stay.discount}" maxFractionDigits="0" />%
 												</span>
-												<span class="search-stay-price-current"><fmt:formatNumber value="${stay.discountedPrice }" type="currency" />~</span>
+												<span class="search-stay-price-current">₩<fmt:formatNumber value="${stay.discountedPrice}" type="number" groupingUsed="true" />~</span>
 											</div>
 										</c:otherwise>
 									</c:choose>

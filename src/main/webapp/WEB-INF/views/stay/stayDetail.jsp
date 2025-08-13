@@ -129,10 +129,10 @@
 					<div class="amenity-title">공간정보</div>
 					<div class="space-info-list">
 						<div class="space-info-item">
-							<span class="space-label">• 객실면적 59m²</span>
+							<span class="space-label">• 객실면적 ${room.riArea}m²</span>
 						</div>
 						<div class="space-info-item">
-							<span class="space-label">• 퀸 침대</span>
+							<span class="space-label">• ${room.riBed}</span>
 						</div>
 					</div>
 				</section>

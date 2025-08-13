@@ -119,9 +119,7 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
                 <div class="form-group">
                   <label class="form-label">객실 형태</label>
-                  <div class="form-text-readonly">
-                    ${room.riType}. ${typeLabel}
-                  </div>
+                  <div class="form-text-readonly">${typeLabel}</div>
                 </div>
 
                 <div class="form-group">
@@ -188,52 +186,21 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
             <!-- 이미지 -->
             <div class="form-section">
-              <h2 class="section-title">숙소 이미지</h2>
-
-              <label class="form-label">대표 이미지</label>
-              <c:forEach var="photo" items="${roomPhotos.main}">
-                <img
-                  class="preview"
-                  src="${s3BaseUrl}${photo.spUrl}"
-                  alt="대표 이미지"
-                />
-              </c:forEach>
-
-              <label class="form-label">추가 이미지</label>
-              <c:forEach var="photo" items="${roomPhotos.additional}">
-                <img
-                  class="preview"
-                  src="${s3BaseUrl}${photo.spUrl}"
-                  alt="추가 이미지"
-                />
-              </c:forEach>
-
-              <label class="form-label">주요 특징 이미지</label>
-              <c:forEach var="photo" items="${roomPhotos.feature}">
-                <img
-                  class="preview"
-                  src="${s3BaseUrl}${photo.spUrl}"
-                  alt="주요 특징 이미지"
-                />
-              </c:forEach>
-
-              <label class="form-label">특징1 이미지</label>
-              <c:forEach var="photo" items="${roomPhotos.feat1}">
-                <img
-                  class="preview"
-                  src="${s3BaseUrl}${photo.spUrl}"
-                  alt="특징1 이미지"
-                />
-              </c:forEach>
-
-              <label class="form-label">특징2 이미지</label>
-              <c:forEach var="photo" items="${roomPhotos.feat2}">
-                <img
-                  class="preview"
-                  src="${s3BaseUrl}${photo.spUrl}"
-                  alt="특징2 이미지"
-                />
-              </c:forEach>
+            	<h2 class="section-title">숙소 이미지</h2>
+            	
+            	<label class="form-label">대표 이미지</label>
+            	<c:if test="${not empty roomPhotos}">
+            		<img class="preview" 
+            			src="${s3BaseUrl}${roomPhotos[0].spUrl}"
+            			alt="대표 이미지" />
+            	</c:if>
+            	
+            	<label class="form-label">추가 이미지</label>
+            	<c:forEach var="photo" items="${roomPhotos}" begin="1">
+            		<img class="preview"
+            			src="${s3BaseUrl}${photo.spUrl}"
+            			alt="추가 이미지" />
+            	</c:forEach>
             </div>
           </div>
         </div>

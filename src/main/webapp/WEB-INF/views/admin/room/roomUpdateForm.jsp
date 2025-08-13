@@ -184,7 +184,7 @@
 								<div class="form-group full-width">
 									<div class="simple-upload-container">
 										<div class="additional-images-grid">
-											<c:forEach var="i" begin="0" end="11">
+											<c:forEach var="i" begin="0" end="10">
 												<c:set var="photo" value="${photoMap[i]}" />
 												<div class="file-upload-wrapper"
 													style="display: grid; grid-template-columns: 120px 1fr; align-items: center; gap: 20px; margin-bottom: 20px;">
@@ -203,10 +203,7 @@
 															<span class="file-icon"><i class="ph ph-folder"></i></span>
 															<span class="file-text"> <c:choose>
 																	<c:when test="${i == 0}">대표 이미지</c:when>
-																	<c:when test="${i le 2}">추가 이미지 ${i}</c:when>
-																	<c:when test="${i le 5}">주요 특징 이미지 ${i-2}</c:when>
-																	<c:when test="${i le 8}">특징1 이미지 ${i-5}</c:when>
-																	<c:otherwise>특징2 이미지 ${i-8}</c:otherwise>
+																	<c:otherwise>추가 이미지 ${i}</c:otherwise>
 																</c:choose>
 														</span>
 														</label> <input type="file" class="file-input" id="image-${i}"

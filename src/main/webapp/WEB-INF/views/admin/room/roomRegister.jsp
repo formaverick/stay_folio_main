@@ -67,69 +67,74 @@
 								<div class="form-group">
 									<label class="form-label" for="riName">객실 이름</label> <input
 										type="text" name="riName" id="riName" required
-										class="form-input" placeholder="객실 이름을 입력해주세요." />
+										class="form-input" placeholder="객실 이름을 입력해주세요."
+										value="${not empty room and not empty room.riName ? room.riName : ''}"/>
 								</div>
 								<div class="form-group">
-									<label class="form-label" for="riType">객실 형태</label> <select
-										name="riType" id="riType" class="form-select" required>
+									<label class="form-label" for="riType">객실 형태</label>
+									<select name="riType" id="riType" class="form-select" required>
 										<option value="">-- 객실 형태를 선택하세요 --</option>
-										<option value="a">기본형</option>
-										<option value="b">독채형</option>
-										<option value="c">원룸형</option>
-										<option value="d">도미토리</option>
-										<option value="e">복층형</option>
+										<option value="a" ${not empty room and room.riType eq 'a' ? 'selected' : ''}>기본형</option>
+										<option value="b" ${not empty room and room.riType eq 'b' ? 'selected' : ''}>독채형</option>
+										<option value="c" ${not empty room and room.riType eq 'c' ? 'selected' : ''}>원룸형</option>
+										<option value="d" ${not empty room and room.riType eq 'd' ? 'selected' : ''}>도미토리</option>
+										<option value="e" ${not empty room and room.riType eq 'e' ? 'selected' : ''}>복층형</option>
 									</select>
 								</div>
 							</div>
 
 							<div class="form-group full-width">
 								<label for="riDesc" class="form-label">객실 설명</label>
-								<textarea class="form-textarea" name="riDesc" id="riDesc"
-									rows="3" placeholder="객실 설명을 입력해주세요.(500자 이내)"></textarea>
+								<textarea class="form-textarea" name="riDesc" id="riDesc" 
+									rows="3" placeholder="객실 설명을 입력해주세요.(500자 이내)">${not empty room ? room.riDesc : '' }</textarea>
 							</div>
 
 							<div class="form-grid">
 								<div class="form-group">
-									<label class="form-label">기준 인원</label><input type="number"
-										name="riPerson" id="riPerson" required class="form-input"
-										placeholder="1" min="1" required />
+									<label class="form-label">기준 인원</label>
+									<input type="number" name="riPerson" id="riPerson" 
+										class="form-input" placeholder="1" min="1" required 
+										value="${not empty room ? room.riPerson : '' }"/>
 								</div>
 								<div class="form-group">
-									<label class="form-label">최대 인원</label><input type="number"
-										name="riMaxperson" id="riMaxperson" required
-										class="form-input" placeholder="4" min="1" required />
+									<label class="form-label">최대 인원</label>
+									<input type="number" name="riMaxperson" id="riMaxperson"
+                                        class="form-input" placeholder="4" min="1" required 
+                                        value="${not empty room ? room.riMaxperson : '' }"/>
 								</div>
 
 								<div class="form-group">
-									<label class="form-label" for="riArea">면적(m²)</label> <input
-										type="number" id="riArea" name="riArea" class="form-input"
-										step="0.01" min="0" placeholder="32.5" />
+									<label class="form-label" for="riArea">면적(m²)</label>
+                                    <input type="number" id="riArea" name="riArea" class="form-input"
+                                        step="0.01" min="0" placeholder="32.5" 
+                                        value="${not empty room ? room.riArea : ''}" />
 								</div>
 								<div class="form-group">
-									<label class="form-label" for="riPrice">기본 가격</label> <input
-										type="number" id="riPrice" name="riPrice" placeholder="50000"
-										class="form-input" min="0" required />
+									<label class="form-label" for="riPrice">기본 가격</label>
+                                    <input type="number" id="riPrice" name="riPrice" placeholder="50000"
+                                        class="form-input" min="0" required 
+                                        value="${not empty room ? room.riPrice : ''}"/>
 								</div>
 								<div class="form-group">
-									<label class="form-label" for="riBed">침대 종류</label> <input
-										type="text" id="riBed" name="riBed"
+									<label class="form-label" for="riBed">침대 종류</label>
+                                    <input type="text" id="riBed" name="riBed"
 										placeholder="킹 침대 1 / 더블 침대 1" class="form-input"
-										maxlength="30" />
+										maxlength="30" value="${not empty room ? room.riBed : ''}"/>
 								</div>
 								<div class="form-group">
-									<label class="form-label" for="riBedcnt">침대 개수</label> <input
-										type="number" id="riBedcnt" name="riBedcnt" class="form-input"
-										min="0" placeholder="1" />
+									<label class="form-label" for="riBedcnt">침대 개수</label>
+                                    <input type="number" id="riBedcnt" name="riBedcnt" class="form-input"
+                                        min="0" placeholder="1" value="${not empty room ? room.riBedcnt : ''}"/>
 								</div>
 								<div class="form-group">
-									<label class="form-label" for="riBedroom">침실 수</label> <input
-										type="number" id="riBedroom" name="riBedroom"
-										class="form-input" value="1" placeholder="1" />
+									<label class="form-label" for="riBedroom">침실 수</label>
+                                    <input type="number" id="riBedroom" name="riBedroom" min = "1" step="1"
+                                        class="form-input" value="${not empty room ? room.riBedroom : 1 }" placeholder="1" />
 								</div>
 								<div class="form-group">
-									<label class="form-label" for="riBathroom">욕실 수</label> <input
-										type="number" id="riBathroom" name="riBathroom"
-										class="form-input" value="1" placeholder="1" />
+									<label class="form-label" for="riBathroom">욕실 수</label>
+                                    <input type="number" id="riBathroom" name="riBathroom" min = "1" step="1"
+                                        class="form-input" value="${not empty room ? room.riBathroom : 1 }" placeholder="1" />
 								</div>
 							</div>
 
@@ -138,9 +143,10 @@
 								<div class="amenities-grid">
 									<c:if test="${not empty facilityList}">
 										<c:forEach var="fac" items="${facilityList}">
-											<label class="amenity-item"> <input type="checkbox"
-												name="facilities" value="${fac.fiId}"
-												<c:if test="${checked}">checked</c:if> /> ${fac.fiName}
+											<label class="amenity-item">
+                                                <input type="checkbox" name="facilities" value="${fac.fiId}"
+                                                    <c:if test="${not empty selectedFacilityMap and selectedFacilityMap[fac.fiId]}">checked</c:if> />
+                                                    <c:out value="${fac.fiName}"/>
 											</label>
 										</c:forEach>
 									</c:if>
@@ -152,9 +158,10 @@
 								<div class="amenities-grid">
 									<c:if test="${not empty amenityList}">
 										<c:forEach var="ame" items="${amenityList}">
-											<label class="amenity-item"> <input type="checkbox"
-												name="amenities" value="${ame.aiIdx}"
-												<c:if test="${checked}">checked</c:if> /> ${ame.raName}
+											<label class="amenity-item">
+                                                <input type="checkbox" name="amenities" value="${ame.aiIdx}"
+                                                    <c:if test="${not empty selectedAmenityMap and selectedAmenityMap[ame.aiIdx]}">checked</c:if> />
+                                                    <c:out value="${ame.raName}"/>
 											</label>
 										</c:forEach>
 									</c:if>
@@ -200,18 +207,13 @@
 						<label class="form-label">추가 이미지 (최대 10개)</label>
 						<div class="simple-upload-container">
 							<div class="additional-images-grid">
-								<c:forEach var="i" begin="1" end="11">
+								<c:forEach var="i" begin="1" end="10">
 									<div class="file-upload-wrapper">
-										<label for="image-${i}" class="file-upload-label"> <span
-											class="file-icon"><i class="ph ph-folder"></i></span> <span
-											class="file-text"> <c:choose>
-													<c:when test="${i le 2}">추가 이미지 ${i}</c:when>
-													<c:when test="${i le 5}">주요 특징 이미지 ${i-2}</c:when>
-													<c:when test="${i le 8}">특징1 이미지 ${i-5}</c:when>
-													<c:otherwise>특징2 이미지 ${i-8}</c:otherwise>
-												</c:choose>
-										</span>
-										</label> <input type="file" class="file-input room-file-input"
+										<label for="image-${i}" class="file-upload-label">
+                                            <span class="file-icon"><i class="ph ph-folder"></i></span>
+                                            <span class="file-text"> 추가 이미지 ${i} </span>
+                                        </label>
+                                        <input type="file" class="file-input room-file-input"
 											id="image-${i}" name="imageFiles[]" data-spidx="${i}"
 											accept="image/*" />
 									</div>
@@ -261,8 +263,9 @@
 				  if (riId) {
 					   $("#image-riId").val(riId);
 					   alert("객실 정보가 등록되었습니다. 이미지를 추가해주세요.");
-				  }else if(siId){
+				  } else if(siId){
 					  // 객실 리스트에서 들어왔을 경우
+					  console.log(siId);
 					  refreshRoomList(siId);
 				  }
 
@@ -358,6 +361,7 @@
 				      return;
 				    }
 
+				    console.log(roomList);
 				    let html = "";
 				    roomList.forEach(room => {
 				      html += '<tr>';

@@ -9,6 +9,102 @@
   z-index: 10;
 }
 
+.keyword-filter {
+  max-width: 1400px;
+  margin: 0 auto 1rem;
+  width: 100%;
+  background-color: transparent;
+  padding: 12px 28px;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+}
+
+.keyword-content {
+  width: 100%;
+  max-width: 700px;
+  height: 72px;
+  min-height: 72px;
+  background-color: #fff;
+  border-radius: 9999px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 10px 0 10px 40px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+/* Keyword option (icon + input) */
+.keyword-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  cursor: text;
+}
+.keyword-option i {
+  font-size: 20px;
+  color: #666;
+  margin-right: 4px;
+}
+.keyword-option input[type="text"] {
+  flex: 1;
+  min-width: 140px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  color: #111;
+  padding: 8px 0;
+  caret-color: #111;
+}
+.keyword-option input::placeholder {
+  color: #9ca3af;
+}
+
+/* Hover/Focus visuals */
+.keyword-content:hover {
+  border-color: #d1d5db;
+}
+.keyword-content:focus-within {
+  box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.08);
+}
+
+/* Keyword suggestions panel */
+.keyword-suggestions {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  z-index: 150;
+  display: none;
+}
+
+.keyword-suggestions-list {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.keyword-suggestion-item {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #444;
+  cursor: pointer;
+}
+
+.keyword-suggestion-item:hover {
+  background-color: #f7f7f7;
+  color: #111;
+}
+
 .search-filter-inner {
   max-width: 1400px;
   margin: 0 auto;
@@ -39,14 +135,6 @@
   position: relative;
   flex: 1;
   transition: all 0.3s ease;
-}
-
-/* 필터 구분선 */
-.filter-divider {
-  width: 1px;
-  height: 40px;
-  background-color: #e0e0e0;
-  margin: 0 24px;
 }
 
 .filter-content {
@@ -848,6 +936,11 @@
     padding: 0 16px;
   }
 
+  .keyword-filter {
+    width: calc(100% - 32px);
+    max-width: none;
+  }
+
   .pill-filter {
     padding: 12px 24px;
     height: 72px;
@@ -885,6 +978,13 @@
 
   .search-filter-inner {
     padding: 0 12px;
+  }
+
+  .keyword-filter {
+    width: calc(100% - 24px);
+    max-width: none;
+    border-radius: 16px;
+    padding: 10px 14px;
   }
 
   .pill-filter {
@@ -949,6 +1049,11 @@
 @media (max-width: 480px) {
   .search-filter-inner {
     padding: 0 8px;
+  }
+
+  .keyword-filter {
+    width: calc(100% - 16px);
+    max-width: none;
   }
 
   .pill-filter {

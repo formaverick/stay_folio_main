@@ -65,59 +65,80 @@ uri="http://www.springframework.org/security/tags" %>
       </div>
       <div class="mypage-page">
         <div class="mypage-submenu">
-          <ul>
+          <ul class="submenu">
             <li><a href="/mypage/reservations">예약 정보</a></li>
             <li class="active"><a href="/mypage/bookmarks">북마크</a></li>
             <li><a href="#">회원정보 수정</a></li>
           </ul>
         </div>
 
-			<div class="mypage-main">
-				<div class="results-group">
-					<c:forEach var="stay" items="${bookmarkList }">
-						<div class="stay-item" data-stay-id="${stay.siId }">
-							<div class="search-stay-image">
-								<img src="${s3BaseUrl}${stay.spUrl}" alt="${stay.siName }" />
-								<button class="search-stay-wishlist stay-wishlist" data-wishlist="true" data-stay-id="${stay.siId}">
-									<i class="ph ph-heart"></i>
-								</button>
-							</div>
-							<div class="search-stay-content">
-								<h3 class="search-stay-name">${stay.siName }</h3>
-								<div class="search-stay-location">
-									<i class="ph ph-map-pin"></i> ${stay.siLoca }
-								</div>
-								<div class="search-stay-price">
-									<c:choose>
-										<c:when test="${stay.discount eq 0 }">
-											<div class="search-stay-price-main">
-												<span class="search-stay-price-current">
-													₩<fmt:formatNumber value="${stay.siMinprice}" type="number" groupingUsed="true" />
-												~</span>
-											</div>
-										</c:when>
-										<c:otherwise>
-											<span class="search-stay-price-original">
-												₩<fmt:formatNumber value="${stay.siMinprice}" type="number" groupingUsed="true" />
-											</span>
-											<div class="search-stay-price-main">
-												<span class="search-stay-price-discount">
-													<fmt:formatNumber value="${stay.discount}" maxFractionDigits="0" />%
-												</span>
-												<span class="search-stay-price-current">₩<fmt:formatNumber value="${stay.discountedPrice}" type="number" groupingUsed="true" />~</span>
-											</div>
-										</c:otherwise>
-									</c:choose>
-								</div>
-							</div>
-						</div>
-					</c:forEach>
-				</div>
-			</div>
-		</div>
-	</main>
-	
-	<jsp:include page="../includes/footer.jsp" />
-	
-</body>
+        <div class="mypage-main">
+          <div class="results-group">
+            <c:forEach var="stay" items="${bookmarkList }">
+              <div class="stay-item" data-stay-id="${stay.siId }">
+                <div class="search-stay-image">
+                  <img src="${s3BaseUrl}${stay.spUrl}" alt="${stay.siName }" />
+                  <button
+                    class="search-stay-wishlist stay-wishlist"
+                    data-wishlist="true"
+                    data-stay-id="${stay.siId}"
+                  >
+                    <i class="ph ph-heart"></i>
+                  </button>
+                </div>
+                <div class="search-stay-content">
+                  <h3 class="search-stay-name">${stay.siName }</h3>
+                  <div class="search-stay-location">
+                    <i class="ph ph-map-pin"></i> ${stay.siLoca }
+                  </div>
+                  <div class="search-stay-price">
+                    <c:choose>
+                      <c:when test="${stay.discount eq 0 }">
+                        <div class="search-stay-price-main">
+                          <span class="search-stay-price-current">
+                            ₩<fmt:formatNumber
+                              value="${stay.siMinprice}"
+                              type="number"
+                              groupingUsed="true"
+                            />
+                            ~</span
+                          >
+                        </div>
+                      </c:when>
+                      <c:otherwise>
+                        <span class="search-stay-price-original">
+                          ₩<fmt:formatNumber
+                            value="${stay.siMinprice}"
+                            type="number"
+                            groupingUsed="true"
+                          />
+                        </span>
+                        <div class="search-stay-price-main">
+                          <span class="search-stay-price-discount">
+                            <fmt:formatNumber
+                              value="${stay.discount}"
+                              maxFractionDigits="0"
+                            />%
+                          </span>
+                          <span class="search-stay-price-current"
+                            >₩<fmt:formatNumber
+                              value="${stay.discountedPrice}"
+                              type="number"
+                              groupingUsed="true"
+                            />~</span
+                          >
+                        </div>
+                      </c:otherwise>
+                    </c:choose>
+                  </div>
+                </div>
+              </div>
+            </c:forEach>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <jsp:include page="../includes/footer.jsp" />
+  </body>
 </html>

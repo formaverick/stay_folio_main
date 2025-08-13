@@ -78,12 +78,18 @@ public interface StayService {
 	// admin - 숙소 편의 시설 수정
 	void updateStayFacilities(int siId, List<Integer> facilityIds);
 
-	// admin 숙소 상세페이지 - 키워드
-	List<RecommendCategoryVO> getKeywordByStayId(int siId);
-	
-	// admin - 숙소 id로 키워드 추가, 삭제
-	List<RecommendCategoryVO> getAllKeywords();
-	List<Integer> getKeywordIdsByStayId(int siId);
-	void updateStayKeywords(int siId, List<Integer> keywordIds);
+	  // admin 숙소 상세페이지 - 키워드
+  List<RecommendCategoryVO> getKeywordByStayId(int siId);
+  
+  // admin - 숙소 id로 키워드 추가, 삭제
+  List<RecommendCategoryVO> getAllKeywords();
+  List<Integer> getKeywordIdsByStayId(int siId);
+  void updateStayKeywords(int siId, List<Integer> keywordIds);
 
+  // 키워드 검색 (숙소명, 지역명)
+	List<StayVO> searchStaysByKeyword(String keyword);
+	
+	// 키워드 추천 검색 (자동완성용, 최대 5개)
+	List<StayVO> searchStaysSuggestions(String keyword);
+  
 }

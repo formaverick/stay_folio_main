@@ -27,13 +27,6 @@ if (!window.StayFolioStayCarousel.initialized) {
         return;
       }
 
-      console.log(
-        "moveToSlide called with:",
-        slideIndex,
-        "currentSlide was:",
-        currentSlide
-      );
-
       // 인덱스 범위 체크
       if (slideIndex < 0) {
         slideIndex = totalSlides - 1;

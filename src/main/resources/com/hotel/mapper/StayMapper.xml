@@ -539,11 +539,11 @@
 		WHERE si_id = #{siId}
 	</delete>
 
-	<!-- 키워드 추가 (단건) -->
-	<insert id="insertKeywordForStay">
-		INSERT INTO t_stay_recommend (rc_id, si_id)
-		VALUES (#{rcId}, #{siId})
-	</insert>
+ 	<!-- 키워드 추가 (단건) -->
+ 	<insert id="insertKeywordForStay">
+ 		INSERT INTO t_stay_recommend (rc_id, si_id)
+ 		VALUES (#{rcId}, #{siId})
+ 	</insert>
 	
 	<!-- 북마크 수 증가 -->
 	<update id="incBookmarkCount">
@@ -551,12 +551,72 @@
 		SET si_book = NVL(si_book, 0) + 1
 		WHERE si_id = #{siId}
 	</update>
-	
+
 	<!-- 북마크 수 감소-->
 	<update id="decBookmarkCount">
 		UPDATE t_stay_info
 		SET si_book = GREATEST(NVL(si_book,0) - 1, 0)
 		WHERE si_id = #{siId}
-</update>
+	</update>
+
+	<!-- 키워드 검색: 숙소명/지역명 LIKE 검색 (대소문자 무시) -->
+	<select id="searchStaysByKeyword" parameterType="string"
+		resultType="com.hotel.domain.StayVO">
+		SELECT
+			s.si_id AS siId,
+			s.si_name AS siName,
+			s.si_desc AS siDesc,
+			s.si_loca AS siLoca,
+			s.lc_id AS lcId,
+			s.si_book AS siBook,
+			s.si_review AS siReview,
+			s.si_minperson AS siMinperson,
+			s.si_maxperson AS siMaxperson,
+			s.si_minprice AS siMinprice,
+			s.si_extra AS siExtra,
+			s.si_peak AS siPeak,
+			s.si_off AS siOff,
+			s.si_discount AS siDiscount,
+			s.si_show AS siShow,
+			s.si_delete AS siDelete,
+			s.si_date AS siDate,
+			p.sp_url AS spUrl,
+			CASE WHEN b.si_id IS NOT NULL THEN 'true' ELSE 'false' END AS bookmarked
+		FROM t_stay_info s
+		LEFT JOIN (
+			SELECT si_id, sp_url
+			FROM t_stay_photo
+			WHERE sp_order = 1
+		) p ON s.si_id = p.si_id
+		LEFT JOIN t_bookmark b ON s.si_id = b.si_id
+		WHERE s.si_show = '1'
+		  AND s.si_delete = '0'
+		  AND (
+				UPPER(s.si_name) LIKE '%' || UPPER(#{keyword}) || '%'
+				OR UPPER(s.si_loca) LIKE '%' || UPPER(#{keyword}) || '%'
+			)
+		ORDER BY s.si_name
+	</select>
+
+	<!-- 키워드 추천 검색: 자동완성용 (최대 5개) -->
+	<select id="searchStaysSuggestions" parameterType="string"
+		resultType="com.hotel.domain.StayVO">
+		SELECT * FROM (
+			SELECT
+				s.si_id AS siId,
+				s.si_name AS siName,
+				s.si_loca AS siLoca
+			FROM t_stay_info s
+			WHERE s.si_show = '1'
+			  AND s.si_delete = '0'
+			  AND (
+					UPPER(s.si_name) LIKE '%' || UPPER(#{keyword}) || '%'
+					OR UPPER(s.si_loca) LIKE '%' || UPPER(#{keyword}) || '%'
+				)
+			ORDER BY 
+				CASE WHEN UPPER(s.si_name) LIKE UPPER(#{keyword}) || '%' THEN 1 ELSE 2 END,
+				s.si_name
+			) WHERE ROWNUM &lt;= 5
+		</select>
 
 </mapper>

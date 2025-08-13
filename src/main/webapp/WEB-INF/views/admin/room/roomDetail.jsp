@@ -206,5 +206,16 @@ prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
         </div>
       </main>
     </div>
+    
+    <!-- 모달 시작 -->
+	<div class="modal-overlay ${empty alert ? '' : 'is-open'}" id="commonModal">
+	  <div class="modal-content">
+	    <p class="modal-message">${alert}</p>
+	    <div class="modal-buttons">
+	      <a href="${selfUrl}" class="btn btn-cancel">확인</a>
+	    </div>
+	  </div>
+	</div>
+	<!-- 모달 끝 -->
   </body>
 </html>

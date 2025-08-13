@@ -397,13 +397,35 @@
 			<!-- 객실 등록 버튼 끝-->
 		</main>
 	</div>
+	
+	<!-- 모달 시작 -->
+    <div class="modal-overlay" id="commonModal">
+      <div class="modal-content">
+        <p class="modal-message"></p>
+        <div class="modal-buttons">
+          <button class="btn btn-cancel" onclick="closeModal()">확인</button>
+        </div>
+      </div>
+    </div>
+    <!-- 모달 끝 -->
 
 	<script>
+	  /* 모달 창 열고 닫기 */
+	  function openModal() {
+	    document.getElementById("commonModal").style.display = "flex";
+	  }
+
+	  function closeModal() {
+	    document.getElementById("commonModal").style.display = "none";
+	  }
+	
   $(document).ready(function () {
+	  
     // 숙소 ID 값 세팅
     <c:if test="${not empty newSiId}">
       $("#image-siId").val("${newSiId}");
-      alert("숙소 정보가 등록되었습니다. 이미지를 추가해주세요.");
+      $(".modal-message").text("숙소 정보가 등록되었습니다. 이미지를 추가해주세요.");
+      openModal();
     </c:if>
 
     // 숙소 상세 정보 저장 버튼 비활성화 처리
@@ -425,7 +447,8 @@
       
 
       if (!siId || siId.trim() === "") {
-        alert("숙소 이미지 업로드는 숙소 정보 등록 이후 가능합니다");
+    	$(".modal-message").text("숙소 이미지 업로드는 숙소 정보 등록 이후 가능합니다");
+        openModal();
         $imgSubmitBtn.prop("disabled", false).text("이미지 업로드");
         return;
       }
@@ -444,13 +467,12 @@
           formData.append("imageFiles", file);
           formData.append("spIdxes", spIdx);
           atLeastOneSelected = true;
-        } else {
-        	alert("⚠️ 파일 미선택");
-        }
+        } 
       });
 
       if (!atLeastOneSelected) {
-        alert("⚠️ 대표 이미지는 필수 항목입니다. 반드시 하나 이상 선택해주세요.");
+      	$(".modal-message").text("⚠️ 대표 이미지는 필수 항목입니다. 반드시 하나 이상 선택해주세요.");
+        openModal();
         return;
       }
 
@@ -461,13 +483,15 @@
         processData: false,
         contentType: false,
         success: function (res) {
-          alert("✅ 이미지 업로드 완료: " + res);
+          $(".modal-message").text("✅ 이미지 업로드 완료: " + res);
+          openModal();
           $("#image-upload-form")[0].reset();
           $("#image-riId").val("");
           $imgSubmitBtn.prop("disabled", true).text("이미지 업로드");
         },
         error: function (xhr) {
-          alert("⚠️ 오류 발생: " + xhr.responseText);
+          $(".modal-message").text("⚠️ 오류 발생: " + xhr.responseText);
+          openModal();
           $imgSubmitBtn.prop("disabled", false).text("이미지 업로드");
         }
       });

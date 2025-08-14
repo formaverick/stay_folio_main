@@ -20,8 +20,6 @@ if (!window.StayFolioCarousel.initialized) {
     const totalSlides = $slides.length;
     let isTransitioning = false;
 
-    console.log("Carousel initialized with", totalSlides, "slides");
-
     /**
      * description 특정 슬라이드로 이동시키는 함수
      * param {number} slideIndex - 이동할 슬라이드의 인덱스
@@ -31,13 +29,6 @@ if (!window.StayFolioCarousel.initialized) {
       if (isTransitioning) {
         return;
       }
-
-      console.log(
-        "moveToSlide called with:",
-        slideIndex,
-        "currentSlide was:",
-        currentSlide
-      );
 
       // 인덱스 범위 체크 및 순환
       if (slideIndex < 0) {

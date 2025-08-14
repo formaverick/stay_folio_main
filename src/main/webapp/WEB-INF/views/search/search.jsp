@@ -40,6 +40,14 @@
 	<jsp:include page="../includes/header.jsp" />
 	<!-- 검색 필터 시작 -->
 	<section class="search-filter-container">
+		<div class="keyword-filter">
+			        <div class="keyword-content">
+          <div class="keyword-option">
+            <i class="ph ph-magnifying-glass"></i>
+            <input type="text" id="keyword" name="keyword" placeholder="지역, 숙소명을 검색해보세요." autocomplete="off" data-api="${pageContext.request.contextPath}/search/keyword" data-context="${pageContext.request.contextPath}" />
+          </div>
+        </div>
+		</div>
 		<div class="search-filter-inner">
 			<form id="searchForm" method="POST" action="/search/results">
 				<!-- 숨겨진 입력 필드들 -->
@@ -79,7 +87,6 @@
 						</div>
 					</div>
 
-					<div class="filter-divider"></div>
 
 					<!-- 일정 선택 -->
 					<div class="filter-item date-filter">
@@ -148,6 +155,11 @@
 							</div>
 						</div>
 					</div>
+					<!-- 키워드 검색 -->
+				<div class="filter-divider"></div>
+
+				
+
 				</div>
 			</form>
 		</div>
@@ -394,7 +406,33 @@
 	<script
 		src="${pageContext.request.contextPath}/resources/js/search/search.js"></script>
 	<script
+		src="${pageContext.request.contextPath}/resources/js/search/keyword.js"></script>
+	<script
 		src="${pageContext.request.contextPath}/resources/js/search/searchCategory.js"></script>
+	<script>
+	  // 임시: 키워드 입력창 추천 패널 토글
+	  (function(){
+	    const input = document.getElementById('keyword');
+	    const panel = document.getElementById('keywordSuggestions');
+	    const content = document.querySelector('.keyword-content');
+	    if(!input || !panel || !content) return;
+
+	    function show(){ panel.style.display = 'block'; }
+	    function hide(){ panel.style.display = 'none'; }
+
+	    // 기본: 포커스/입력 시 표시 (임시이므로 입력 여부와 무관하게 표시)
+	    input.addEventListener('focus', show);
+	    input.addEventListener('input', show);
+
+	    // ESC로 닫기
+	    input.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ hide(); } });
+
+	    // 외부 클릭 시 닫기
+	    document.addEventListener('click', function(e){
+	      if(!content.contains(e.target)) hide();
+	    });
+	  })();
+	</script>
 	<%@ include file="../includes/footer.jsp"%>
 </body>
 

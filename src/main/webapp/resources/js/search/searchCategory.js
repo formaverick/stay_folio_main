@@ -21,26 +21,7 @@ $(document).ready(function () {
     };
 
     $(".search-results-title").text(categoryNames[category] || "검색 결과");
-
-    // 로딩 효과 (선택사항)
-    //showLoadingEffect();
-
-    // 실제 구현에서는 여기서 API 호출하여 결과 업데이트
-    setTimeout(() => {
-      hideLoadingEffect();
-      // updateResultsGrid(filteredResults);
-    }, 500);
   }
-
-  // 로딩 효과 표시
-  // function showLoadingEffect() {
-  //   $(".search-results-grid").css("opacity", "0.5");
-  // }
-
-  // // 로딩 효과 숨김
-  // function hideLoadingEffect() {
-  //   $(".search-results-grid").css("opacity", "1");
-  // }
 
   // 카테고리 스크롤 기능 (모바일에서 유용)
   function initCategoryScroll() {

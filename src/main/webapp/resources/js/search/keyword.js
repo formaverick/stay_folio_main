@@ -136,7 +136,7 @@
   function search(keyword) {
     const q = (keyword || "").trim();
     if (q.length === 0) {
-      if ($suggestions.length) $suggestions.hide();
+      hideAndDestroySuggestions();
       return;
     }
     const filters = readFilters();
@@ -231,7 +231,7 @@
         e.stopImmediatePropagation();
 
         // 추천 리스트 바로 숨기기
-        if ($suggestions.length) $suggestions.hide();
+        hideAndDestroySuggestions();
 
         const stayId = stay.siId;
         if (stayId) {
@@ -250,10 +250,8 @@
             "&child=" +
             encodeURIComponent(filters.child);
 
-          // 즉시 이동
-          setTimeout(function () {
-            window.location.href = detailUrl;
-          }, 10);
+          // 즉시 이동 (지연 없이 사용자 제스처 유지)
+          window.location.assign(detailUrl);
         }
       };
 

@@ -41,12 +41,12 @@
 	<!-- 검색 필터 시작 -->
 	<section class="search-filter-container">
 		<div class="keyword-filter">
-			        <div class="keyword-content">
-          <div class="keyword-option">
-            <i class="ph ph-magnifying-glass"></i>
-            <input type="text" id="keyword" name="keyword" placeholder="지역, 숙소명을 검색해보세요." autocomplete="off" data-api="${pageContext.request.contextPath}/search/keyword" data-context="${pageContext.request.contextPath}" />
-          </div>
-        </div>
+			<div class="keyword-content">
+				<div class="keyword-option">
+					<i class="ph ph-magnifying-glass"></i>
+					<input type="text" id="keyword" name="keyword" placeholder="지역, 숙소명을 검색해보세요." autocomplete="off" data-api="${pageContext.request.contextPath}/search/keyword" data-context="${pageContext.request.contextPath}" />
+				</div>
+			</div>
 		</div>
 		<div class="search-filter-inner">
 			<form id="searchForm" method="POST" action="/search/results">
@@ -136,7 +136,7 @@
 										<span>아동</span>
 										<div class="counter">
 											<button type="button" class="counter-btn decrease"
-												data-type="	child">-</button>
+												data-type="child">-</button>
 											<span class="count" id="childCount">0</span>
 											<button type="button" class="counter-btn increase"
 												data-type="child">+</button>

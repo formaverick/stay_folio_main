@@ -115,17 +115,17 @@ body {
 @media (max-width: 768px) {
   .header-inner {
     flex-direction: column;
+    gap: 4px;
     align-items: flex-start;
   }
 
   .search-box {
-    width: 100%;
-    margin-top: 1rem;
+    display: none;
   }
 
   .gnb ul {
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.5rem;
     margin-top: 1rem;
   }
 }
@@ -237,4 +237,11 @@ body {
 
 .gnb .login-dropdown form {
   margin: 0;
+}
+
+/* Hide header search box on narrower screens */
+@media (max-width: 1000px) {
+  .search-box {
+    display: none;
+  }
 }

@@ -176,14 +176,14 @@
 							<div class="detail-bottom-buttons">
 								<button type="button"
 									onclick="location.href='${pageContext.request.contextPath}/'">
-									예약 홈으로</button>
+									홈으로</button>
 								<button type="button"
 									onclick="location.href='${pageContext.request.contextPath}/guestLogin'">
 									다른 예약 조회</button>
 								<c:if
 									test="${fn:toLowerCase(reservation.srStatus) eq 'a' and checkin gt today}">
 									<button
-										onclick="location.href='${pageContext.request.contextPath}/guest/reservations/${reservation.srId}/cancel'">
+										onclick="location.href='${pageContext.request.contextPath}/reservation/guest/${reservation.srId}/cancel'">
 										예약 취소</button>
 								</c:if>
 							</div>

@@ -33,7 +33,7 @@
       </div>
 
       <form id="cancelForm"
-            action="${pageContext.request.contextPath}/reservations/${reservation.srId}/cancel"
+            action="${pageContext.request.contextPath}/reservation/${reservation.srId}/cancel"
             method="post">
         <sec:csrfInput/>
 
@@ -68,7 +68,7 @@
         </div>
 
         <div class="cancel-buttons">
-          <button type="button" class="cancel-back" onclick="history.back()">뒤로가기</button>
+          <button type="button" class="cancel-back" onclick="location.href='${pageContext.request.contextPath}/guest/reservation/${reservation.srId}/cancel'">뒤로가기</button>
           <button type="submit" class="cancel-submit">예약 취소</button>
         </div>
       </form>

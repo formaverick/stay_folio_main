@@ -51,7 +51,7 @@ $(document).ready(function () {
     const lcId = $("#lcId").val() || 0;
     const rcId = $("#rcId").val() || 0;
 
-    // ✅ 체크인/체크아웃 값이 비어 있으면 기본값 설정
+    // 체크인/체크아웃 값이 비어 있으면 기본값 설정
     let checkin = $("input[name='checkin']").val();
     let checkout = $("input[name='checkout']").val();
 
@@ -411,7 +411,7 @@ $(document).ready(function () {
   $(".counter-btn").on("click", function (e) {
     e.stopPropagation();
 
-    const type = $(this).data("type");
+    const type = String($(this).data("type") || "").trim();
     const isIncrease = $(this).hasClass("increase");
 
     if (type === "adult") {
@@ -518,16 +518,16 @@ $(document).ready(function () {
     $(".category-item").removeClass("active");
     $(this).addClass("active");
 
-    $("#rcId").val(selectedRcId); // ✅ 선택한 카테고리 저장
+    $("#rcId").val(selectedRcId); // 선택한 카테고리 저장
 
-    triggerSearch(); // ✅ 중복 방지, 이 한 줄로 끝냄!
+    triggerSearch(); // 중복 방지
   });
 
   $(document).on("click", ".category-item", function () {
     const selectedRcId = $(this).data("rc-id") || 0;
     const currentRcId = $("#rcId").val();
 
-    // ✅ 이미 선택된 카테고리면 무시 → 무한루프 방지 핵심!
+    // 이미 선택된 카테고리면 무시
     if (String(selectedRcId) === String(currentRcId)) return;
 
     console.log("카테고리 클릭:", selectedRcId);
@@ -553,7 +553,7 @@ $(document).ready(function () {
         const newSection = $(data).find("#searchResultsSection").html();
         $("#searchResultsSection").html(newSection);
 
-        // 선택한 카테고리 저장 (중복 방지를 위함)
+        // 선택한 카테고리 저장
         $("#rcId").val(selectedRcId);
       },
       error: function () {

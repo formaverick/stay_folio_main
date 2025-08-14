@@ -1,29 +1,33 @@
 /* 검색 필터 컨테이너 */
 .search-filter-container {
   max-width: 1400px;
-  margin: 0 auto;
+  margin: 1rem auto;
   width: 100%;
   background-color: transparent;
-  padding: 16px 0;
-  position: relative;
-  z-index: 10;
-}
-
-.keyword-filter {
-  max-width: 1400px;
-  margin: 0 auto 1rem;
-  width: 100%;
-  background-color: transparent;
-  padding: 12px 28px;
+  padding: 16px 20px;
   position: relative;
   z-index: 10;
   display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 16px;
+  flex-wrap: nowrap;
+}
+
+.keyword-filter {
+  margin: 0;
+  background-color: transparent;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 0 1 30%;
 }
 
 .keyword-content {
   width: 100%;
-  max-width: 700px;
+  max-width: 868px;
   height: 72px;
   min-height: 72px;
   background-color: #fff;
@@ -106,12 +110,19 @@
 }
 
 .search-filter-inner {
-  max-width: 1400px;
-  margin: 0 auto;
+  margin: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 0 28px;
+  justify-content: flex-start;
+  padding: 0;
+  flex: 1 1 70%;
+  width: 100%;
+  min-width: 0; /* allow children to shrink and fill */
+}
+
+.search-filter-inner > form {
+  width: 100%;
+  display: block;
 }
 
 /* 필 필터 스타일 */
@@ -122,19 +133,41 @@
   border-radius: 50px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   padding: 16px 36px;
-  min-width: 700px;
+  min-width: 0;
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
   height: 72px;
   min-height: 72px;
+}
+
+/* Responsive: stack vertically on smaller screens */
+@media (max-width: 1024px) {
+  .search-filter-container {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .keyword-filter,
+  .search-filter-inner {
+    flex: 1 1 100%;
+  }
+  .search-filter-inner {
+    justify-content: center;
+  }
+  .pill-filter {
+    max-width: 100%;
+  }
 }
 
 /* 필터 아이템 공통 스타일 */
 .filter-item {
   position: relative;
   flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: all 0.3s ease;
+  text-align: center;
 }
 
 .filter-content {
@@ -149,6 +182,7 @@
   font-size: 15px;
   display: flex;
   align-items: center;
+  justify-content: center;
   transition: all 0.25s ease;
   color: #333;
   font-weight: 500;
@@ -158,6 +192,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   min-width: 0;
+  text-align: center;
 }
 
 .selected-option i {
@@ -189,7 +224,7 @@
 .dropdown-container {
   position: absolute;
   top: calc(100% + 24px);
-  left: 0;
+  left: -100px;
   width: 320px;
   background-color: #fff;
   border: 1px solid #e5e5e5;
@@ -251,7 +286,7 @@
 .people-selector-container {
   position: absolute;
   top: calc(100% + 24px);
-  right: 0;
+  right: -100px;
   width: 360px;
   background-color: #fff;
   border: 1px solid #e5e5e5;
@@ -869,55 +904,66 @@
 /* 반응형 미디어 쿼리 */
 
 /* 대형 데스크톱 (1600px 이상) */
-@media (min-width: 1600px) {
+@media (min-width: 1400px) {
   .search-filter-container {
-    max-width: 1800px;
+    max-width: 1280px;
+    margin: 1rem auto;
   }
 
   .search-filter-inner {
-    max-width: 1800px;
-    padding: 0 32px;
+    max-width: none;
+    width: 100%;
+    padding: 0px;
   }
 
   .pill-filter {
-    max-width: 1800px;
-    padding: 24px 48px;
-    height: 80px;
-    min-height: 80px;
+    max-width: none;
+    width: 100%;
+    height: 72px;
+    min-height: 72px;
   }
 }
 
 /* 중형 데스크톱 (1200px - 1599px) */
 @media (max-width: 1599px) {
   .search-filter-container {
-    max-width: 1400px;
+    max-width: 1280px;
+    margin: 0.7rem auto;
   }
 
   .search-filter-inner {
-    max-width: 1400px;
+    max-width: none;
+    width: 100%;
   }
 
   .pill-filter {
-    max-width: 1400px;
+    max-width: none;
+    width: 100%;
   }
 }
 
 /* 소형 데스크톱 및 태블릿 (768px - 1199px) */
 @media (max-width: 1199px) {
   .search-filter-container {
-    max-width: 1200px;
+    max-width: 900px;
   }
 
   .search-filter-inner {
-    max-width: 1200px;
+    max-width: none;
+    width: 100%;
     padding: 0 20px;
+  }
+  .keyword-filter {
+    width: calc(100% - 20px);
+    max-width: none;
   }
 
   .pill-filter {
-    max-width: 1200px;
+    max-width: none;
+    width: 100%;
     padding: 16px 32px;
-    height: 80px;
-    min-height: 80px;
+    height: 72px;
+    min-height: 72px;
   }
 
   .filter-item {
@@ -944,7 +990,7 @@
   .pill-filter {
     padding: 12px 24px;
     height: 72px;
-    min-width: 700px;
+    min-width: 0;
     min-height: 72px;
     flex-wrap: nowrap;
     overflow-x: auto;

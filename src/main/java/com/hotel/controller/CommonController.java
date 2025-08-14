@@ -28,11 +28,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.hotel.domain.MemberVO;
-import com.hotel.domain.ReservationCancelCheckVO;
 import com.hotel.domain.ReservationDetailVO;
 import com.hotel.service.CommonService;
 import com.hotel.service.MypageService;
-import com.hotel.service.ReservationService;
 
 import lombok.extern.log4j.Log4j;
 
@@ -42,6 +40,9 @@ public class CommonController {
 
 	@Autowired
 	private CommonService commonService;
+	
+	@Autowired
+	private MypageService mypageService;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
@@ -112,13 +113,12 @@ public class CommonController {
 		return "login/guestLogin";
 	}
 
-	@Autowired
-	private MypageService mypageService;
+	
 
 	// 예약자 json으로 넘겨줘서 검증
 	@PostMapping(value = "/guest/reservation/find.json", produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public Map<String, Object> findGuestReservationJson(@RequestParam String srId, @RequestParam String srName) {
+	public Map<String, Object> findGuestReservationJson(@RequestParam String srId, @RequestParam String srName, HttpSession session) {
 		Map<String, Object> res = new HashMap<>();
 		ReservationDetailVO vo = mypageService.getReservationDetail(srId);
 		if (vo == null) {
@@ -133,8 +133,14 @@ public class CommonController {
 			res.put("msg", "예약자 성명이 다릅니다.");
 			return res;
 		}
+		
+		// 세션에 저장
+	    session.setAttribute("guestEmail", vo.getSrEmail());
+	    // 필요하면 예약번호도 저장
+	    session.setAttribute("guestSrId", srId);
+	    
 		res.put("code", "OK");
-		res.put("redirect", "/guest/reservation?srId=" + srId);
+		res.put("redirect", "reservation/guest/?srId=" + srId);
 		return res;
 	}
 
@@ -169,77 +175,9 @@ public class CommonController {
 		return commonService.isPhoneDuplicate(phone) ? "true" : "false";
 	}
 
-	// 비회원 예약 조회 페이지
-	@GetMapping("/guest/reservation")
-	public String guestReservationDetail(@RequestParam String srId, Model model, RedirectAttributes rttr) {
-		ReservationDetailVO vo = mypageService.getReservationDetail(srId);
 
-		if (vo == null) {
-			rttr.addFlashAttribute("error", "예약번호가 다릅니다.");
-			return "redirect:/guestLogin";
-		}
-		model.addAttribute("reservation", vo);
 
-		return "guest/reservationDetail";
-	}
-
-	@Autowired
-	private ReservationService reservationService;
-
-	// 비회원 예약 취소
-	@GetMapping("/guest/reservations/{id}/cancel")
-	public String reservationCancelPage(@PathVariable String id, @RequestParam(required = false) String email,
-			HttpSession session, Model model, RedirectAttributes rttr) {
-		// 1. 예약 조회
-		ReservationCancelCheckVO reserv = reservationService.getReservationById(id);
-		if (reserv == null) {
-			rttr.addFlashAttribute("error", "예약이 존재하지 않습니다.");
-			return "redirect:/";
-		}
-		boolean isValidUser = false;
-		// 2. 비회원 본인확인만
-		String guestEmail = (String) session.getAttribute("guestEmail");
-		if (guestEmail != null && guestEmail.equals(reserv.getSrEmail())) {
-			isValidUser = true;
-		}
-		if (!isValidUser) {
-			rttr.addFlashAttribute("error", "예약 정보를 확인할 수 없습니다.");
-			log.warn("예약 정보를 확인할 수 없습니다.");
-			log.warn("id : " + id + "reserv : " + reserv);
-			return "redirect:/";
-		}
-		
-		// 3. 체크인 날짜(당일 제외)
-		ZoneId KST = ZoneId.of("Asia/Seoul");
-		LocalDate today = LocalDate.now(KST);
-		Date raw = reserv.getSrCheckin(); 
-		
-		LocalDate checkinDate = (raw == null) ? null : new java.sql.Date(raw.getTime()).toLocalDate();
-		if (!checkinDate.isAfter(today)) { // 오늘이면 불가
-			rttr.addFlashAttribute("reason", "체크인 날짜가 지나 예약을 취소할 수 없습니다.");
-			return "redirect:/guest/reservation?srId=" + id;
-		}
-
-		// 4. 이미 취소된 예약인지
-		if ("b".equalsIgnoreCase(reserv.getSrStatus()) || "c".equalsIgnoreCase(reserv.getSrStatus())) {
-			rttr.addFlashAttribute("reason", "이미 취소된 예약입니다.");
-			return "redirect:/guest/reservationDetail?srId=" + id;
-		}
-
-		// OK: 정상 접근
-		model.addAttribute("reservation", reserv);
-		return "guest/reservationCancel";
-	}
-
-	// POST: 취소 실행(회원/비회원 겸용)
-	@PostMapping("/reservations/{id}/cancel")
-	public String cancelReservation(@PathVariable String id, RedirectAttributes rttr) {
-		int result = reservationService.cancelReservation(id);
-
-		if (result == 1) {
-			rttr.addFlashAttribute("msg", "예약이 취소되었습니다.");
-		}
-		return "redirect:/";
-	}
+	
+	
 
 }

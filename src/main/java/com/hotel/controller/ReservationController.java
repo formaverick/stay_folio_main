@@ -4,10 +4,13 @@ import java.security.Principal;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +25,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.hotel.domain.ReservationCancelCheckVO;
 import com.hotel.domain.ReservationDetailVO;
 import com.hotel.domain.ReservationPriceResultDTO;
+import com.hotel.service.MypageService;
 import com.hotel.service.ReservationService;
 
 import lombok.RequiredArgsConstructor;
@@ -37,6 +42,9 @@ import lombok.extern.log4j.Log4j;
 public class ReservationController {
 
 	private final ReservationService reservationService;
+	
+	@Autowired
+	private MypageService mypageService;
 
 	// 예약 페이지 (숙소 id에 따라 예약 화면 제공)
 	@GetMapping("/{si_id}/{ri_id}")
@@ -100,23 +108,18 @@ public class ReservationController {
 		}
 
 	}
-	//결제전 체크인 체크아웃 체크
+
+	// 결제전 체크인 체크아웃 체크
 	@GetMapping(value = "/check-available", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public ResponseEntity<Map<String, Object>> checkAvailable(
-	        @RequestParam int siId,
-	        @RequestParam int riId,
-	        @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate checkin,
-	        @RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate checkout) {
+	public ResponseEntity<Map<String, Object>> checkAvailable(@RequestParam int siId, @RequestParam int riId,
+			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate checkin,
+			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate checkout) {
 
-	    boolean dup = reservationService.isDuplicateReservation(
-	            siId, riId,
-	            Timestamp.valueOf(checkin.atStartOfDay()),
-	            Timestamp.valueOf(checkout.atStartOfDay())
-	    );
-	    return ResponseEntity.ok(Map.of("available", !dup));
+		boolean dup = reservationService.isDuplicateReservation(siId, riId, Timestamp.valueOf(checkin.atStartOfDay()),
+				Timestamp.valueOf(checkout.atStartOfDay()));
+		return ResponseEntity.ok(Map.of("available", !dup));
 	}
-
 
 	// 예약 처리
 	@PostMapping("/submit")
@@ -133,7 +136,7 @@ public class ReservationController {
 			return "redirect:/reservation/" + dto.getSiId() + "/" + dto.getRiId();
 		}
 		try {
-			int r = reservationService.reserve(dto); 
+			int r = reservationService.reserve(dto);
 			if (r < 0) {
 				String msg = (r == -1) ? "이미 예약된 기간입니다."
 						: (dto.getMessage() != null ? dto.getMessage() : "결제에 실패했습니다. 다시 시도해주세요.");
@@ -162,5 +165,77 @@ public class ReservationController {
 				reservation.getSrAdult(), reservation.getSrChild());
 		model.addAttribute("info", pageInfo);
 		return "reservation/complete";
+	}
+	
+	// 비회원 예약 조회 페이지
+	@GetMapping("/guest")
+	public String guestReservationDetail(@RequestParam String srId, Model model, RedirectAttributes rttr, HttpSession session) {
+		ReservationDetailVO vo = mypageService.getReservationDetail(srId);
+		
+		log.info("🔍 guestEmail in session = " + session.getAttribute("guestEmail"));
+
+		if (vo == null) {
+			rttr.addFlashAttribute("error", "예약번호가 다릅니다.");
+			return "redirect:/guestLogin";
+		}
+		model.addAttribute("reservation", vo);
+
+		return "guest/reservationDetail";
+	}
+
+	// 비회원 예약 취소
+	@GetMapping("/guest/{id}/cancel")
+	public String reservationCancelPage(@PathVariable String id, @RequestParam(required = false) String email,
+			HttpSession session, Model model, RedirectAttributes rttr) {
+		// 1. 예약 조회
+		ReservationCancelCheckVO reserv = reservationService.getReservationById(id);
+		if (reserv == null) {
+			rttr.addFlashAttribute("error", "예약이 존재하지 않습니다.");
+			return "redirect:/";
+		}
+		boolean isValidUser = false;
+		// 2. 비회원 본인확인만
+		String guestEmail = (String) session.getAttribute("guestEmail");
+		if (guestEmail != null && guestEmail.equals(reserv.getSrEmail())) {
+			isValidUser = true;
+		}
+		if (!isValidUser) {
+			rttr.addFlashAttribute("error", "예약 정보를 확인할 수 없습니다.");
+			log.warn("예약 정보를 확인할 수 없습니다.");
+			log.warn("id : " + id + "reserv : " + reserv);
+			return "redirect:/";
+		}
+
+		// 3. 체크인 날짜(당일 제외)
+		ZoneId KST = ZoneId.of("Asia/Seoul");
+		LocalDate today = LocalDate.now(KST);
+		Date raw = reserv.getSrCheckin();
+
+		LocalDate checkinDate = (raw == null) ? null : new java.sql.Date(raw.getTime()).toLocalDate();
+		if (!checkinDate.isAfter(today)) { // 오늘이면 불가
+			rttr.addFlashAttribute("reason", "체크인 날짜가 지나 예약을 취소할 수 없습니다.");
+			return "redirect:/guest/reservation?srId=" + id;
+		}
+
+		// 4. 이미 취소된 예약인지
+		if ("b".equalsIgnoreCase(reserv.getSrStatus()) || "c".equalsIgnoreCase(reserv.getSrStatus())) {
+			rttr.addFlashAttribute("reason", "이미 취소된 예약입니다.");
+			return "redirect:/guest/reservationDetail?srId=" + id;
+		}
+
+		// OK: 정상 접근
+		model.addAttribute("reservation", reserv);
+		return "guest/reservationCancel";
+	}
+
+	// POST: 취소 실행(회원/비회원 겸용)
+	@PostMapping("/{id}/cancel")
+	public String cancelReservation(@PathVariable String id, RedirectAttributes rttr) {
+		int result = reservationService.cancelReservation(id);
+
+		if (result == 1) {
+			rttr.addFlashAttribute("msg", "예약이 취소되었습니다.");
+		}
+		return "redirect:/";
 	}
 }

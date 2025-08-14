@@ -559,7 +559,7 @@
 		WHERE si_id = #{siId}
 	</update>
 
-	<!-- 키워드 검색: 숙소명/지역명 LIKE 검색 (대소문자 무시) -->
+	<!-- 키워드 검색 -->
 	<select id="searchStaysByKeyword" parameterType="string"
 		resultType="com.hotel.domain.StayVO">
 		SELECT
@@ -598,7 +598,7 @@
 		ORDER BY s.si_name
 	</select>
 
-	<!-- 키워드 추천 검색: 자동완성용 (최대 5개) -->
+	<!-- 자동완성용 -->
 	<select id="searchStaysSuggestions" parameterType="string"
 		resultType="com.hotel.domain.StayVO">
 		SELECT * FROM (

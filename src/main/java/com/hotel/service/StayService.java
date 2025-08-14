@@ -86,10 +86,10 @@ public interface StayService {
   List<Integer> getKeywordIdsByStayId(int siId);
   void updateStayKeywords(int siId, List<Integer> keywordIds);
 
-  // 키워드 검색 (숙소명, 지역명)
+  // 키워드 검색
 	List<StayVO> searchStaysByKeyword(String keyword);
 	
-	// 키워드 추천 검색 (자동완성용, 최대 5개)
+	// 자동완성용ㄴ
 	List<StayVO> searchStaysSuggestions(String keyword);
   
 }

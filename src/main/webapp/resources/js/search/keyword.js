@@ -7,7 +7,40 @@
   const $grid = $("#searchResultsGrid");
   const $count = $("#resultsCount");
   const $title = $("#searchTitle");
-  const $suggestions = $("#keywordSuggestions");
+  const $wrapper = $input.closest(".keyword-content");
+  // 최근 자동완성 요청 질의어 추적 (레이트 응답 무시용)
+  let lastSuggestQuery = "";
+
+  // 추천 컨테이너 접근/관리 유틸
+  function getSuggestionsContainer() {
+    return $wrapper.find("#keywordSuggestions, .keyword-suggestions").first();
+  }
+
+  function hideAndDestroySuggestions() {
+    const $s = getSuggestionsContainer();
+    if ($s.length) {
+      $s.hide();
+      $s.remove();
+    }
+  }
+
+  function ensureSuggestionsContainer() {
+    let $s = getSuggestionsContainer();
+    if (!$s.length) {
+      $s = $(
+        '<div class="keyword-suggestions" id="keywordSuggestions" aria-label="검색 추천" role="listbox"><ul class="keyword-suggestions-list"></ul></div>'
+      );
+      $wrapper.append($s);
+    }
+    // 컨테이너만 있고 UL이 없다면 UL 추가 보장
+    if (!$s.find(".keyword-suggestions-list").length) {
+      $s.append('<ul class="keyword-suggestions-list"></ul>');
+    }
+    return $s;
+  }
+
+  // 초기 상태: 제안 패널 제거
+  hideAndDestroySuggestions();
 
   const apiUrl =
     $input.data("api") || window.KEYWORD_SEARCH_API || "/search/keyword";
@@ -23,14 +56,6 @@
     const child = $("#child").val() || $("#childrenInput").val() || 0;
     const region = $("#regionInput").val() || "all";
     return { checkin, checkout, adult, child, region };
-  }
-
-  function debounce(fn, delay) {
-    let t;
-    return function (...args) {
-      clearTimeout(t);
-      t = setTimeout(() => fn.apply(this, args), delay);
-    };
   }
 
   function sanitize(str) {
@@ -50,16 +75,17 @@
     return fallback;
   }
 
-  function formatPrice(num) {
-    if (num == null || isNaN(num)) return "";
-    try {
-      return Number(num).toLocaleString("ko-KR");
-    } catch (e) {
-      return String(num);
-    }
+  // 제안 표시 가능 여부 체크
+  function canShowSuggestions($list) {
+    const now = ($input.val() || "").trim();
+    if (!$input.is(":focus")) return false;
+    if (now.length === 0) return false;
+    if (now !== lastSuggestQuery) return false;
+    if (!$list || $list.children().length === 0) return false;
+    return true;
   }
 
-  function buildCard(stay, filters) {
+  function buildCard(stay) {
     const siId = pick(stay, ["siId", "id", "stayId"], "");
     const name = sanitize(pick(stay, ["siName", "name", "title"], ""));
     const loca = sanitize(pick(stay, ["siLoca", "location"], ""));
@@ -93,9 +119,8 @@
 
   function renderResults(results, keyword) {
     if (!$grid.length) return;
-    const filters = readFilters();
     if (!Array.isArray(results)) results = [];
-    const html = results.map((s) => buildCard(s, filters)).join("");
+    const html = results.map((s) => buildCard(s)).join("");
     $grid.html(html || `<div class="search-empty">검색 결과가 없습니다.</div>`);
     if ($count.length) $count.text(results.length);
     if ($title.length)
@@ -138,7 +163,7 @@
       })
       .always(function () {
         setLoading(false);
-        if ($suggestions.length) $suggestions.hide();
+        hideAndDestroySuggestions();
       });
   }
 
@@ -146,9 +171,12 @@
   function loadSuggestions(keyword) {
     const q = (keyword || "").trim();
     if (q.length === 0) {
-      if ($suggestions.length) $suggestions.hide();
+      hideAndDestroySuggestions();
       return;
     }
+
+    // 현재 질의어 기록
+    lastSuggestQuery = q;
 
     $.ajax({
       url: ctx + "/search/suggestions",
@@ -157,24 +185,35 @@
       data: { keyword: q },
     })
       .done(function (results) {
+        // 입력 값이 변경되었거나 비었으면 무시 및 숨김
+        const now = ($input.val() || "").trim();
+        if (
+          now.length === 0 ||
+          now !== lastSuggestQuery ||
+          !$input.is(":focus")
+        ) {
+          hideAndDestroySuggestions();
+          return;
+        }
         updateSuggestions(results);
       })
       .fail(function () {
-        if ($suggestions.length) $suggestions.hide();
+        hideAndDestroySuggestions();
       });
   }
 
   // 추천 리스트 업데이트
   function updateSuggestions(results) {
-    if (!$suggestions.length) return;
-
-    const $list = $suggestions.find(".keyword-suggestions-list");
-    $list.empty();
-
-    if (!results || results.length === 0) {
-      $suggestions.hide();
+    // 입력이 비었거나 결과가 없으면 UI 제거
+    const nowVal = ($input.val() || "").trim();
+    if (nowVal.length === 0 || !results || results.length === 0) {
+      hideAndDestroySuggestions();
       return;
     }
+
+    const $s = ensureSuggestionsContainer();
+    const $list = $s.find(".keyword-suggestions-list");
+    $list.empty();
 
     results.forEach(function (stay) {
       const $item = $('<li class="keyword-suggestion-item"></li>')
@@ -183,24 +222,20 @@
         .attr("data-stay-location", stay.siLoca)
         .css("cursor", "pointer");
 
-      // 숙소명과 지역을 구분해서 표시
       const displayText = stay.siName + " (" + stay.siLoca + ")";
       $item.text(displayText);
 
-      // 다중 이벤트 바인딩으로 확실한 클릭 처리
       const handleClick = function (e) {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
 
-        console.log("클릭됨:", stay.siName, stay.siId); // 디버깅용
-
-        // 추천 리스트 즉시 숨기기
+        // 추천 리스트 바로 숨기기
         if ($suggestions.length) $suggestions.hide();
 
         const stayId = stay.siId;
         if (stayId) {
-          // 숙소 상세 페이지로 이동
+          // 숙소 상세 페이지 이동
           const filters = readFilters();
           const detailUrl =
             ctx +
@@ -215,38 +250,37 @@
             "&child=" +
             encodeURIComponent(filters.child);
 
-          console.log("이동할 URL:", detailUrl); // 디버깅용
-
           // 즉시 이동
           setTimeout(function () {
             window.location.href = detailUrl;
-          }, 50);
+          }, 10);
         }
       };
 
-      // 여러 이벤트에 바인딩
-      $item.on("click", handleClick);
-      $item.on("mousedown", handleClick);
-      $item.on("touchstart", handleClick);
+      $item.on("pointerdown", handleClick);
 
       $list.append($item);
     });
 
-    $suggestions.show();
+    // 검색 결과/상태 검사 후에만 표시
+    const hasItems = $list.children().length > 0 && nowVal.length > 0;
+    if (
+      !hasItems ||
+      nowVal !== lastSuggestQuery ||
+      !canShowSuggestions($list)
+    ) {
+      hideAndDestroySuggestions();
+      return;
+    }
+    $s.show();
   }
-
-  const debouncedSearch = debounce(function () {
-    search($input.val());
-  }, 300);
 
   $input.on("input", function () {
     const value = $(this).val();
     if (value.trim().length > 0) {
-      // debounce 없이 즉시 API 호출
       loadSuggestions(value);
     } else {
-      debouncedSearch();
-      if ($suggestions.length) $suggestions.hide();
+      hideAndDestroySuggestions();
     }
   });
 
@@ -254,26 +288,39 @@
     if (e.key === "Enter") {
       e.preventDefault();
       search($input.val());
-      if ($suggestions.length) $suggestions.hide();
+      hideAndDestroySuggestions();
     } else if (e.key === "Escape") {
-      if ($suggestions.length) $suggestions.hide();
+      hideAndDestroySuggestions();
     }
   });
 
-  // 포커스 시 추천 표시
+  // 포커스 시: 값 있을 때만 추천 표시, 없으면 숨김
   $input.on("focus", function () {
     const value = $(this).val();
     if (value.trim().length > 0) {
       loadSuggestions(value);
+    } else {
+      hideAndDestroySuggestions();
     }
   });
 
-  // 기존 이벤트 위임 방식 제거 - 이제 직접 바인딩 방식 사용
+  // 클릭 시도 동일 동작: 빈 값이면 숨김
+  $input.on("click", function () {
+    const value = $(this).val();
+    if (value.trim().length === 0) {
+      hideAndDestroySuggestions();
+    }
+  });
+
+  // 포커스 아웃 시에도 항상 숨김 (의도치 않은 잔상 방지)
+  $input.on("blur", function () {
+    hideAndDestroySuggestions();
+  });
 
   // 외부 클릭 시 추천 숨기기
   $(document).on("click", function (e) {
     if (!$(e.target).closest(".keyword-content").length) {
-      if ($suggestions.length) $suggestions.hide();
+      hideAndDestroySuggestions();
     }
   });
 })(window.jQuery);

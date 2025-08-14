@@ -242,7 +242,7 @@ public class StayServiceImpl implements StayService {
 		}
 	}
 
-	// 키워드 검색 (숙소명/지역명)
+	// 키워드 검색
 	@Override
 	public List<StayVO> searchStaysByKeyword(String keyword) {
 		if (keyword == null || keyword.trim().isEmpty()) {
@@ -251,7 +251,7 @@ public class StayServiceImpl implements StayService {
 		return stayMapper.searchStaysByKeyword(keyword.trim());
 	}
 
-	// 키워드 추천 검색 (자동완성용, 최대 5개)
+	// 자동완성용
 	@Override
 	public List<StayVO> searchStaysSuggestions(String keyword) {
 		if (keyword == null || keyword.trim().isEmpty()) {

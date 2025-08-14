@@ -21,7 +21,7 @@ public class SearchController {
     @Autowired
     private StayService stayService;
 
-    // AJAX: 키워드 검색 (숙소명/지역명)
+    // 키워드 검색
     @GetMapping(value = "/search/keyword", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public List<StayVO> searchByKeyword(@RequestParam(name = "keyword", required = false) String keyword) {
@@ -36,7 +36,7 @@ public class SearchController {
         return results;
     }
 
-    // AJAX: 키워드 추천 (자동완성용, 최대 5개)
+    // 자동완성용 
     @GetMapping(value = "/search/suggestions", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public List<StayVO> getSuggestions(@RequestParam(name = "keyword", required = false) String keyword) {

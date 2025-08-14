@@ -41,17 +41,12 @@
 	<!-- 검색 필터 시작 -->
 	<section class="search-filter-container">
 		<div class="keyword-filter">
-			<div class="keyword-content">
-				<div class="keyword-option">
-					<i class="ph ph-magnifying-glass"></i>
-					<input type="text" id="keyword" name="keyword" placeholder="숙소명을 검색해보세요." autocomplete="off" data-api="${pageContext.request.contextPath}/search/keyword" data-context="${pageContext.request.contextPath}" />
-				</div>
-				<!-- 임시 검색 추천 패널 -->
-				<div class="keyword-suggestions" id="keywordSuggestions" aria-label="검색 추천" role="listbox">
-					<ul class="keyword-suggestions-list">
-					</ul>
-				</div>
-			</div>
+			        <div class="keyword-content">
+          <div class="keyword-option">
+            <i class="ph ph-magnifying-glass"></i>
+            <input type="text" id="keyword" name="keyword" placeholder="지역, 숙소명을 검색해보세요." autocomplete="off" data-api="${pageContext.request.contextPath}/search/keyword" data-context="${pageContext.request.contextPath}" />
+          </div>
+        </div>
 		</div>
 		<div class="search-filter-inner">
 			<form id="searchForm" method="POST" action="/search/results">

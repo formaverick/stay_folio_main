@@ -33,8 +33,7 @@
 					<li><a href="/admin/reservation/list" class="nav-item">예약관리</a></li>
 					<li><a href="/admin/stay/staylist" class="nav-item active">숙소관리</a></li>
 					<li><a href="/admin/member/list" class="nav-item">회원관리</a></li>
-					<li><a href="/admin/dashboard#category-section"
-						class="nav-item">페이지관리</a></li>
+					<li><a href="/admin/dashboard#category-section" class="nav-item">페이지관리</a></li>
 				</ul>
 			</nav>
 		</aside>
@@ -62,64 +61,53 @@
 							<h2 class="section-title">기본 정보</h2>
 							<div class="form-grid">
 								<div class="form-group">
-									<label class="form-label">숙소명</label><input name="siName"
-										value="${stay.siName}" required class="form-input"
-										placeholder="숙소 이름을 입력해주세요." />
+									<label class="form-label">숙소명</label>
+									<input name="siName" value="${stay.siName}" required class="form-input" placeholder="숙소 이름을 입력해주세요." />
 								</div>
 								<div class="form-group">
-									<label class="form-label">짧은 설명</label><input name="siDesc"
-										class="form-input" value="${stay.siDesc}"
-										placeholder="숙소에 대한 간단한 설명을 입력해주세요.(100자 이내)" maxlength="200" />
+									<label class="form-label">짧은 설명</label>
+									<input name="siDesc" class="form-input" value="${stay.siDesc}" placeholder="숙소에 대한 간단한 설명을 입력해주세요.(100자 이내)" maxlength="200" />
 								</div>
 								<div class="form-group">
-									<label class="form-label">지역 상세</label><input name="siLoca"
-										value="${stay.siLoca}" required class="form-input"
-										placeholder="(예: 서울, 은평구)" />
+									<label class="form-label">지역 상세</label>
+									<input name="siLoca" value="${stay.siLoca}" required class="form-input" placeholder="(예: 서울, 은평구)" />
 								</div>
 								<div class="form-group">
-									<label class="form-label">지역 선택</label><select name="lcId"
-										class="form-select" required>
+									<label class="form-label">지역 선택</label>
+									<select name="lcId" class="form-select" required>
 										<option value="">-- 선택 --</option>
 										<c:forEach var="loc" items="${locationList}">
-											<option value="${loc.lcId}"
-												<c:if test="${loc.lcId eq stay.lcId}">selected</c:if>>${loc.lcName}</option>
+											<option value="${loc.lcId}" <c:if test="${loc.lcId eq stay.lcId}">selected</c:if>>${loc.lcName}</option>
 										</c:forEach>
 									</select>
 								</div>
 								<div class="form-group">
-									<label class="form-label">최소 인원</label><input type="number"
-										name="siMinperson" value="${stay.siMinperson}" required
-										class="form-input" placeholder="1" min="1" required />
+									<label class="form-label">최소 인원</label>
+									<input type="number" name="siMinperson" value="${stay.siMinperson}" class="form-input" placeholder="1" min="1" required />
 								</div>
 								<div class="form-group">
-									<label class="form-label">최대 인원</label><input type="number"
-										name="siMaxperson" value="${stay.siMaxperson}" required
-										class="form-input" placeholder="4" min="1" required />
+									<label class="form-label">최대 인원</label>
+									<input type="number" name="siMaxperson" value="${stay.siMaxperson}" class="form-input" placeholder="4" min="1" required />
 								</div>
 								<div class="form-group">
-									<label class="form-label">기본 요금</label><input type="number"
-										name="siMinprice" value="${stay.siMinprice}" required
-										class="form-input" placeholder="50000" required />
+									<label class="form-label">기본 요금</label>
+									<input type="number" name="siMinprice" value="${stay.siMinprice}" class="form-input" placeholder="50000" required />
 								</div>
 								<div class="form-group">
-									<label class="form-label">추가 인원 요금</label><input type="number"
-										name="siExtra" value="${stay.siExtra}" required
-										class="form-input" placeholder="10000" />
+									<label class="form-label">추가 인원 요금</label>
+									<input type="number" name="siExtra" value="${stay.siExtra}" required class="form-input" placeholder="10000" />
 								</div>
 								<div class="form-group">
-									<label class="form-label">성수기 요율</label><input type="number"
-										name="siPeak" value="${stay.siPeak}" step="0.1" required
-										class="form-input" placeholder="1.2" />
+									<label class="form-label">성수기 요율</label>
+									<input type="number" name="siPeak" value="${stay.siPeak}" step="0.1" required class="form-input" placeholder="1.2" />
 								</div>
 								<div class="form-group">
-									<label class="form-label">비성수기 요율</label><input type="number"
-										name="siOff" value="${stay.siOff}" step="0.1" required
-										class="form-input" placeholder="0.8" />
+									<label class="form-label">비성수기 요율</label>
+									<input type="number" name="siOff" value="${stay.siOff}" step="0.1" required class="form-input" placeholder="0.8" />
 								</div>
 								<div class="form-group">
-									<label class="form-label">할인율 (%)</label><input type="number"
-										name="siDiscount" value="${stay.siDiscount}" step="0.01"
-										required class="form-input" placeholder="0.2" />
+									<label class="form-label">할인율 (%)</label>
+									<input type="number" name="siDiscount" value="${stay.siDiscount}" step="0.01" required class="form-input" placeholder="0.2" />
 								</div>
 							</div>
 						</section>
@@ -130,92 +118,72 @@
 							<h2 class="section-title">상세 정보</h2>
 							<div class="form-group full-width">
 								<label class="form-label">공지사항</label>
-								<textarea name="siNotice" class="form-textarea"
-									placeholder="공지사항을 입력해주세요.(400자 이내)">${detail.siNotice}</textarea>
+								<textarea name="siNotice" class="form-textarea" placeholder="공지사항을 입력해주세요.(400자 이내)">${detail.siNotice}</textarea>
 							</div>
 							<div class="form-group full-width">
 								<label class="form-label">상세 설명 1</label>
-								<textarea name="siDesc1" class="form-textarea"
-									placeholder="이미지 1에 대한 설명을 입력해주세요.(3000자 이하)" maxlength="2000">${detail.siDesc1}</textarea>
+								<textarea name="siDesc1" class="form-textarea" placeholder="이미지 1에 대한 설명을 입력해주세요.(3000자 이하)" maxlength="2000">${detail.siDesc1}</textarea>
 							</div>
 							<div class="form-group full-width">
 								<label class="form-label">상세 설명 2</label>
-								<textarea name="siDesc2" class="form-textarea"
-									placeholder="이미지 2에 대한 설명을 입력해주세요.(3000자 이하)" maxlength="2000">${detail.siDesc2}</textarea>
+								<textarea name="siDesc2" class="form-textarea" placeholder="이미지 2에 대한 설명을 입력해주세요.(3000자 이하)" maxlength="2000">${detail.siDesc2}</textarea>
 							</div>
 							<div class="form-group full-width">
-								<label class="form-label">특징 제목 1</label><input
-									name="siFeatTitle1" value="${detail.siFeatTitle1}"
-									class="form-input"
-									placeholder="특징 1에 대한 제목을 간력히 입력해주세요.(예: TERRACE, 독서)" />
+								<label class="form-label">특징 제목 1</label>
+								<input name="siFeatTitle1" value="${detail.siFeatTitle1}" class="form-input" placeholder="특징 1에 대한 제목을 간력히 입력해주세요.(예: TERRACE, 독서)" />
 							</div>
 							<div class="form-group full-width">
 								<label class="form-label">특징 설명 1</label>
-								<textarea name="siFeat1" class="form-textarea"
-									placeholder="특징 1에 대한 설명을 입력해주세요.(800자 이하)" maxlength="700">${detail.siFeat1}</textarea>
+								<textarea name="siFeat1" class="form-textarea" placeholder="특징 1에 대한 설명을 입력해주세요.(800자 이하)" maxlength="700">${detail.siFeat1}</textarea>
 							</div>
 							<div class="form-group full-width">
-								<label class="form-label">특징 제목 2</label><input
-									name="siFeatTitle2" value="${detail.siFeatTitle2}"
-									class="form-input"
-									placeholder="특징 2에 대한 제목을 간력히 입력해주세요.(예: TERRACE, 독서)" />
+								<label class="form-label">특징 제목 2</label>
+								<input name="siFeatTitle2" value="${detail.siFeatTitle2}" class="form-input" placeholder="특징 2에 대한 제목을 간력히 입력해주세요.(예: TERRACE, 독서)" />
 							</div>
 							<div class="form-group full-width">
 								<label class="form-label">특징 설명 2</label>
-								<textarea name="siFeat2" class="form-textarea"
-									placeholder="특징 2에 대한 설명을 입력해주세요.(800자 이하)" maxlength="700">${detail.siFeat2}</textarea>
+								<textarea name="siFeat2" class="form-textarea" placeholder="특징 2에 대한 설명을 입력해주세요.(800자 이하)" maxlength="700">${detail.siFeat2}</textarea>
 							</div>
 							<div class="form-grid">
 								<div class="form-group">
-									<label class="form-label">주소</label><input name="siAddress"
-										value="${detail.siAddress}" class="form-input"
-										placeholder="상세주소를 입력해주세요." />
+									<label class="form-label">주소</label>
+									<input name="siAddress" value="${detail.siAddress}" class="form-input" placeholder="상세주소를 입력해주세요." />
 								</div>
 								<div class="form-group">
-									<label class="form-label">주소 설명</label><input name="siAddrdesc"
-										value="${detail.siAddrdesc}" class="form-input"
-										placeholder="주소에 대한 추가 설명을 입력해주세요." />
+									<label class="form-label">주소 설명</label>
+									<input name="siAddrdesc" value="${detail.siAddrdesc}" class="form-input" placeholder="주소에 대한 추가 설명을 입력해주세요." />
 								</div>
 								<div class="form-group">
-									<label class="form-label">전화번호</label><input name="siPhone"
-										value="${detail.siPhone}" class="form-input"
-										placeholder="전화번호를 입력해주세요. (예: 010-2345-678)" />
+									<label class="form-label">전화번호</label>
+									<input name="siPhone" value="${detail.siPhone}" class="form-input" placeholder="전화번호를 입력해주세요. (예: 010-2345-678)" />
 								</div>
 								<div class="form-group">
-									<label class="form-label">이메일</label><input name="siEmail"
-										value="${detail.siEmail}" class="form-input"
-										placeholder="이메일 주소를 입력해주세요." />
+									<label class="form-label">이메일</label>
+									<input name="siEmail" value="${detail.siEmail}" class="form-input" placeholder="이메일 주소를 입력해주세요." />
 								</div>
 								<div class="form-group">
-									<label class="form-label">인스타그램</label><input
-										name="siInstagram" value="${detail.siInstagram}"
-										class="form-input"
-										placeholder="인스타그램 계정을 입력해주세요. (예: @stayfolio)" />
+									<label class="form-label">인스타그램</label>
+									<input name="siInstagram" value="${detail.siInstagram}" class="form-input" placeholder="인스타그램 계정을 입력해주세요. (예: @stayfolio)" />
 								</div>
 								<div class="form-group">
-									<label class="form-label">사업자명</label><input name="siBizname"
-										value="${detail.siBizname}" class="form-input"
-										placeholder="사업자명을 입력해주세요." />
+									<label class="form-label">사업자명</label>
+									<input name="siBizname" value="${detail.siBizname}" class="form-input" placeholder="사업자명을 입력해주세요." />
 								</div>
 								<div class="form-group">
-									<label class="form-label">사업자번호</label><input name="siBiznum"
-										value="${detail.siBiznum}" class="form-input"
-										placeholder="사업자번호를 입력해주세요. (예: 123-45-67890)" />
+									<label class="form-label">사업자번호</label>
+									<input name="siBiznum" value="${detail.siBiznum}" class="form-input" placeholder="사업자번호를 입력해주세요. (예: 123-45-67890)" />
 								</div>
 								<div class="form-group">
-									<label class="form-label">대표자명</label><input name="siCeo"
-										value="${detail.siCeo}" class="form-input"
-										placeholder="대표자명을 입력해주세요." />
+									<label class="form-label">대표자명</label>
+									<input name="siCeo" value="${detail.siCeo}" class="form-input" placeholder="대표자명을 입력해주세요." />
 								</div>
 								<div class="form-group">
-									<label class="form-label">체크인</label><input name="siCheckin"
-										value="${detail.siCheckin}" class="form-input"
-										placeholder="15:00" />
+									<label class="form-label">체크인</label>
+									<input name="siCheckin" value="${detail.siCheckin}" class="form-input" placeholder="15:00" />
 								</div>
 								<div class="form-group">
-									<label class="form-label">체크아웃</label><input name="siCheckout"
-										value="${detail.siCheckout}" class="form-input"
-										placeholder="11:00" />
+									<label class="form-label">체크아웃</label>
+									<input name="siCheckout" value="${detail.siCheckout}" class="form-input" placeholder="11:00" />
 								</div>
 							</div>
 
@@ -226,32 +194,22 @@
 								<div class="amenities-grid form-radio-grid">
 
 									<div class="form-row form-radio">
-										<span class="amenity-item radio-label">반려동물 동반</span> <label><input
-											type="radio" name="siPet" value="1"
-											<c:if test="${detail.siPet}">checked</c:if>> 가능</label>
-										<label><input type="radio" name="siPet" value="0"
-											<c:if test="${!detail.siPet}">checked</c:if>> 불가능</label>
+										<span class="amenity-item radio-label">반려동물 동반</span>
+										<label><input type="radio" name="siPet" value="1" <c:if test="${detail.siPet}">checked</c:if>> 가능</label>
+										<label><input type="radio" name="siPet" value="0" <c:if test="${!detail.siPet}">checked</c:if>> 불가능</label>
 									</div>
 
 									<div class="form-row form-radio">
-										<span class="amenity-item radio-label">주차</span> <label><input
-											type="radio" name="siParking" value="1"
-											<c:if test="${detail.siParking}">checked</c:if>>
-											가능</label> <label><input type="radio" name="siParking"
-											value="0"
-											<c:if test="${!detail.siParking}">checked</c:if>>
-											불가능</label>
+										<span class="amenity-item radio-label">주차</span>
+										<label><input type="radio" name="siParking" value="1" <c:if test="${detail.siParking}">checked</c:if>> 가능</label>
+										<label><input type="radio" name="siParking" value="0" <c:if test="${!detail.siParking}">checked</c:if>> 불가능</label>
 									</div>
 
 									<div class="form-row form-radio">
-										<span class="amenity-item radio-label">취식</span> <label><input
-											type="radio" name="siFood" value="1"
-											<c:if test="${detail.siFood}">checked</c:if>> 가능</label>
-										<label><input type="radio" name="siFood" value="0"
-											<c:if test="${!detail.siFood}">checked</c:if>>
-											불가능</label>
+										<span class="amenity-item radio-label">취식</span>
+										<label><input type="radio" name="siFood" value="1" <c:if test="${detail.siFood}">checked</c:if>> 가능</label>
+										<label><input type="radio" name="siFood" value="0" <c:if test="${!detail.siFood}">checked</c:if>> 불가능</label>
 									</div>
-
 								</div>
 							</div>
 
@@ -259,11 +217,10 @@
 
 							<div class="form-group full-width">
 								<label class="form-label">편의시설 선택</label>
-								<div class="amenities-grid"
-									style="display: flex; flex-wrap: wrap; gap: 12px;">
+								<div class="amenities-grid">
 									<c:forEach var="fac" items="${allFacilities}">
-										<label class="amenity-item radio-item"> <input
-											type="checkbox" name="facilityIds" value="${fac.fiId}"
+										<label class="amenity-item radio-item">
+											<input type="checkbox" name="facilityIds" value="${fac.fiId}"
 											<c:forEach var="id" items="${selectedFacilityIds}">
 												<c:if test="${id == fac.fiId}">checked</c:if>
 											</c:forEach> />
@@ -275,11 +232,10 @@
 
 							<div class="form-group full-width">
 								<label class="form-label">키워드 선택</label>
-								<div class="amenities-grid"
-									style="display: flex; flex-wrap: wrap; gap: 12px;">
+								<div class="amenities-grid">
 									<c:forEach var="key" items="${allKeyword}">
-										<label class="amenity-item radio-item"> <input
-											type="checkbox" name="keywordIds" value="${key.rcId}"
+										<label class="amenity-item radio-item">
+											<input type="checkbox" name="keywordIds" value="${key.rcId}"
 											<c:forEach var="id" items="${selectedKeywordIds}">
 												<c:if test="${id == key.rcId}">checked</c:if>
 											</c:forEach> />
@@ -289,21 +245,13 @@
 								</div>
 							</div>
 
-
 							<br>
 
 							<div class="form-group full-width">
 								<label class="form-label">게시 여부</label>
-								<div class="amenities-grid"
-									style="display: flex; flex-direction: column; gap: 12px;">
-									<div class="form-row"
-										style="display: flex; align-items: center; gap: 20px;">
-										<label><input type="radio" name="siShow" value="1"
-											<c:if test="${stay.siShow == '1'}">checked</c:if>> 게시</label>
-										<label><input type="radio" name="siShow" value="0"
-											<c:if test="${stay.siShow == '0'}">checked</c:if>>
-											미게시</label>
-									</div>
+								<div class="form-row form-radio">
+									<label><input type="radio" name="siShow" value="1" <c:if test="${stay.siShow == '1'}">checked</c:if>> 게시</label>
+									<label><input type="radio" name="siShow" value="0" <c:if test="${stay.siShow == '0'}">checked</c:if>> 미게시</label>
 								</div>
 							</div>
 						</section>
@@ -315,19 +263,16 @@
 									<div class="additional-images-grid">
 										<c:forEach var="i" begin="0" end="11">
 											<c:set var="photo" value="${photoMap[i]}" />
-											<div class="file-upload-wrapper"
-												style="display: grid; grid-template-columns: 120px 1fr; align-items: center; gap: 20px; margin-bottom: 20px;">
+											<div class="file-upload-wrapper with-preview">
 												<c:choose>
 													<c:when test="${not empty photo}">
-														<img src="${s3BaseUrl}${photo.spUrl}" width="120"
-															class="preview" />
+														<img src="${s3BaseUrl}${photo.spUrl}" width="120" class="preview" />
 													</c:when>
 													<c:otherwise>
 														<span style="color: gray;">등록된 이미지 없음</span>
 													</c:otherwise>
 												</c:choose>
-												<div
-													style="display: flex; flex-direction: column; gap: 8px;">
+												<div class="file-upload-inner">
 													<label for="image-${i}" class="file-upload-label">
 														<span class="file-icon"><i class="ph ph-folder"></i></span>
 														<span class="file-text"> <c:choose>
@@ -338,43 +283,15 @@
 																<c:otherwise>특징2 이미지 ${i-8}</c:otherwise>
 															</c:choose>
 													</span>
-													</label> <input type="file" class="file-input" id="image-${i}"
-														name="replaceImage_${i}" data-spidx="${i}"
-														accept="image/*" />
+													</label>
+													<input type="file" class="file-input" id="image-${i}" name="replaceImage_${i}" data-spidx="${i}" accept="image/*" />
 												</div>
 											</div>
 										</c:forEach>
 									</div>
 								</div>
 							</div>
-							<script>
-								document
-										.addEventListener(
-												'DOMContentLoaded',
-												function() {
-													document
-															.querySelectorAll(
-																	'.file-input')
-															.forEach(
-																	function(
-																			input) {
-																		input
-																				.addEventListener(
-																						'change',
-																						function() {
-																							const label = input.previousElementSibling;
-																							const fileName = input.files.length > 0 ? input.files[0].name
-																									: '선택된 파일 없음';
-																							const fileText = label
-																									.querySelector('.file-text');
-																							if (fileText)
-																								fileText.textContent = fileName;
-																						});
-																	});
-												});
-							</script>
 						</section>
-
 					</div>
 					<br>
 					<div class="form-actions">
@@ -385,5 +302,19 @@
 			</div>
 		</main>
 	</div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			document.querySelectorAll('.file-input').forEach(function(input) {
+				input.addEventListener('change', function() {
+					const label = input.previousElementSibling;
+					const fileName = input.files.length > 0 ? input.files[0].name : '선택된 파일 없음';
+					const fileText = label.querySelector('.file-text');
+					if (fileText)
+						fileText.textContent = fileName;
+				});
+			});
+		});
+	</script>
 </body>
 </html>

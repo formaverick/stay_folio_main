@@ -286,6 +286,12 @@ body {
   gap: 6px;
 }
 
+.amenities-grid {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
 /* 이미지 업로드 스타일 - 간소화된 디자인 */
 .simple-upload-container {
   width: 100%;
@@ -302,10 +308,26 @@ body {
   position: relative;
   margin-bottom: 1rem;
   transition: all 0.2s ease;
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  gap: 20px;
+}
+
+.file-upload-wrapper.with-preview .preview {
+	width: 120px;
+	
 }
 
 .file-upload-wrapper:last-child {
   margin-bottom: 0;
+}
+
+.file-upload-inner {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	min-width: 0;
 }
 
 .file-input {
@@ -328,7 +350,7 @@ body {
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.3, 0, 0.5, 1);
   font-size: 0.95rem;
-  width: 240px;
+  width: 100%;
   box-sizing: border-box;
   white-space: nowrap;
   overflow: hidden;
@@ -439,6 +461,11 @@ body {
 }
 
 /* 대표 이미지 스타일 - 평범한 스타일로 변경 */
+.main-image-wrapper {
+	display: grid;
+	grid-template-columns: 1fr;
+}
+
 .main-image-wrapper .file-upload-label {
   border: 1px solid #e9ecef;
   background-color: #f8f9fa;
@@ -495,6 +522,13 @@ body {
 /* 추가 이미지 스타일 */
 .additional-images-grid .file-upload-wrapper {
   margin-bottom: 1.25rem;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.file-upload-wrapper.with-preview {
+	grid-template-columns: 120px 1fr;
+	gap: 20px;
 }
 
 .additional-images-grid .file-upload-label {

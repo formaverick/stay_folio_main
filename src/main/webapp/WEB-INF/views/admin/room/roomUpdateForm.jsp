@@ -135,8 +135,7 @@
 								<div class="amenities-grid"
 									style="display: flex; flex-wrap: wrap; gap: 12px;">
 									<c:forEach var="fac" items="${allFacilities}">
-										<label class="amenity-item"
-											style="display: flex; align-items: center; gap: 6px;">
+										<label class="amenity-item">
 											<input type="checkbox" name="facilityIds" value="${fac.fiId}"
 											<c:forEach var="id" items="${selectedFacilityIds}">
 												<c:if test="${id == fac.fiId}">checked</c:if>
@@ -152,8 +151,7 @@
 								<div class="amenities-grid"
 									style="display: flex; flex-wrap: wrap; gap: 12px;">
 									<c:forEach var="ame" items="${allAmenities}">
-										<label class="amenity-item"
-											style="display: flex; align-items: center; gap: 6px;">
+										<label class="amenity-item">
 											<input type="checkbox" name="amenityIds" value="${ame.aiIdx}"
 											<c:forEach var="id" items="${selectedAmenityIds}">
 												<c:if test="${id == ame.aiIdx}">checked</c:if>
@@ -186,8 +184,7 @@
 										<div class="additional-images-grid">
 											<c:forEach var="i" begin="0" end="10">
 												<c:set var="photo" value="${photoMap[i]}" />
-												<div class="file-upload-wrapper"
-													style="display: grid; grid-template-columns: 120px 1fr; align-items: center; gap: 20px; margin-bottom: 20px;">
+												<div class="file-upload-wrapper with-preview">
 													<c:choose>
 														<c:when test="${not empty photo}">
 															<img src="${s3BaseUrl}${photo.spUrl}" width="120"

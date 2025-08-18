@@ -7,58 +7,35 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 	value="https://stayfolio-upload-bucket.s3.us-east-1.amazonaws.com/" />
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <title>객실 상세 - STAY FOLIO ADMIN</title>
-    <link
-      rel="stylesheet"
-      href="${pageContext.request.contextPath}/resources/css/common.css"
-    />
-    <link
-      rel="stylesheet"
-      href="${pageContext.request.contextPath}/resources/css/admin/room/roomList.css"
-    />
-    <link
-      rel="stylesheet"
-      href="${pageContext.request.contextPath}/resources/css/admin/room/roomRegister.css"
-    />
-    <link
-      rel="stylesheet"
-      href="${pageContext.request.contextPath}/resources/css/admin/room/roomDetail.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
-    />
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-  </head>
-  <body>
-    <div class="admin-container">
-      <aside class="admin-sidebar">
-        <div class="admin-logo">
-          <div class="logo-text">STAY<br />FOLIO</div>
-          <div class="admin-text">ADMIN</div>
-        </div>
-        <nav class="admin-nav">
-          <ul>
-            <li><a href="/admin/dashboard" class="nav-item">대시보드</a></li>
-            <li>
-              <a href="/admin/reservation/list" class="nav-item">예약관리</a>
-            </li>
-            <li>
-              <a href="/admin/stay/staylist" class="nav-item active"
-                >숙소관리</a
-              >
-            </li>
-            <li><a href="/admin/member/list" class="nav-item">회원관리</a></li>
-            <li>
-              <a href="/admin/dashboard#category-section" class="nav-item"
-                >페이지관리</a
-              >
-            </li>
-          </ul>
-        </nav>
-      </aside>
+<head>
+<meta charset="UTF-8" />
+<title>객실 상세 - STAY FOLIO ADMIN</title>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/common.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/admin/room/roomList.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/admin/room/roomRegister.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/admin/room/roomDetail.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+	<div class="admin-container">
+		<aside class="admin-sidebar">
+			<div class="admin-logo">
+				<div class="logo-text">
+					STAY<br />FOLIO
+				</div>
+				<div class="admin-text">ADMIN</div>
+			</div>
+			<nav class="admin-nav">
+				<ul>
+					<li><a href="/admin/dashboard" class="nav-item">대시보드</a></li>
+					<li><a href="/admin/reservation/list" class="nav-item">예약관리</a></li>
+					<li><a href="/admin/stay/staylist" class="nav-item active">숙소관리</a></li>
+					<li><a href="/admin/member/list" class="nav-item">회원관리</a></li>
+					<li><a href="/admin/dashboard#category-section" class="nav-item">페이지관리</a></li>
+				</ul>
+			</nav>
+		</aside>
 
 		<main class="admin-main">
 			<div class="admin-header">
@@ -68,15 +45,13 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 						<p class="page-subtitle">등록된 객실 정보를 확인하세요.</p>
 					</div>
 					<div class="header-right">
-						<form action="/admin/rooms/form" method="get"
-							style="display: inline-block; margin-right: 1rem">
+						<form action="/admin/rooms/form" method="get" style="display: inline-block; margin-right: 1rem">
 							<input type="hidden" name="siId" value="${siId}" /> <input
 								type="hidden" name="riId" value="${room.riId}" />
 							<button type="submit" class="btn-save">객실 수정</button>
 						</form>
 
-						<form action="/admin/room/roomlist" method="get"
-							style="display: inline-block">
+						<form action="/admin/room/roomlist" method="get" style="display: inline-block">
 							<input type="hidden" name="siId" value="${siId}" />
 							<button type="submit" class="btn-save">객실 목록 보기</button>
 						</form>
@@ -181,38 +156,35 @@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 							</c:forEach>
 						</div>
 					</section>
-            <!-- 이미지 -->
-            <div class="form-section">
-            	<h2 class="section-title">객실 이미지</h2>
-            	
-            	<label class="form-label">대표 이미지</label>
-            	<c:if test="${not empty roomPhotos}">
-            		<img class="preview" 
-            			src="${s3BaseUrl}${roomPhotos[0].spUrl}"
-            			alt="대표 이미지" />
-            	</c:if>
-            	
-            	<label class="form-label">추가 이미지</label>
-            	<c:forEach var="photo" items="${roomPhotos}" begin="1">
-            		<img class="preview"
-            			src="${s3BaseUrl}${photo.spUrl}"
-            			alt="추가 이미지" />
-            	</c:forEach>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
-    
-    <!-- 모달 시작 -->
-	<div class="modal-overlay ${empty alert ? '' : 'is-open'}" id="commonModal">
-	  <div class="modal-content">
-	    <p class="modal-message">${alert}</p>
-	    <div class="modal-buttons">
-	      <a href="${selfUrl}" class="btn btn-cancel">확인</a>
-	    </div>
-	  </div>
+					<!-- 이미지 -->
+					<div class="form-section">
+						<h2 class="section-title">객실 이미지</h2>
+
+						<label class="form-label">대표 이미지</label>
+						<c:if test="${not empty roomPhotos}">
+							<img class="preview" src="${s3BaseUrl}${roomPhotos[0].spUrl}" alt="대표 이미지" />
+						</c:if>
+
+						<label class="form-label">추가 이미지</label>
+						<c:forEach var="photo" items="${roomPhotos}" begin="1">
+							<img class="preview" src="${s3BaseUrl}${photo.spUrl}" alt="추가 이미지" />
+						</c:forEach>
+					</div>
+				</div>
+			</div>
+		</main>
+	</div>
+
+	<!-- 모달 시작 -->
+	<div class="modal-overlay ${empty alert ? '' : 'is-open'}"
+		id="commonModal">
+		<div class="modal-content">
+			<p class="modal-message">${alert}</p>
+			<div class="modal-buttons">
+				<a href="${selfUrl}" class="btn btn-cancel">확인</a>
+			</div>
+		</div>
 	</div>
 	<!-- 모달 끝 -->
-  </body>
+</body>
 </html>

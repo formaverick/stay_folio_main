@@ -34,8 +34,7 @@
 					<li><a href="/admin/reservation/list" class="nav-item">예약관리</a></li>
 					<li><a href="/admin/stay/staylist" class="nav-item active">숙소관리</a></li>
 					<li><a href="/admin/member/list" class="nav-item">회원관리</a></li>
-					<li><a href="/admin/dashboard#category-section"
-						class="nav-item">페이지관리</a></li>
+					<li><a href="/admin/dashboard#category-section" class="nav-item">페이지관리</a></li>
 				</ul>
 			</nav>
 		</aside>
@@ -88,17 +87,17 @@
 								</div>
 								<div class="form-group">
 									<label class="form-label">최소 인원</label><input type="number"
-										name="siMinperson" value="${stay.siMinperson}" required
+										name="siMinperson" value="${stay.siMinperson}" 
 										class="form-input" placeholder="1" min="1" required />
 								</div>
 								<div class="form-group">
 									<label class="form-label">최대 인원</label><input type="number"
-										name="siMaxperson" value="${stay.siMaxperson}" required
+										name="siMaxperson" value="${stay.siMaxperson}" 
 										class="form-input" placeholder="4" min="1" required />
 								</div>
 								<div class="form-group">
 									<label class="form-label">기본 요금</label><input type="number"
-										name="siMinprice" value="${stay.siMinprice}" required
+										name="siMinprice" value="${stay.siMinprice}" 
 										class="form-input" placeholder="50000" required />
 								</div>
 								<div class="form-group">

@@ -46,7 +46,7 @@
   line-height:1.6; 
   font-size:0.95rem; 
   color:#222;
-  white-space:nowrap; 
+  word-break: keep-all;
   overflow:hidden; 
   text-overflow:ellipsis;
 }

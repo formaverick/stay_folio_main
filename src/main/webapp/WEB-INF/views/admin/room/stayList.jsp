@@ -154,23 +154,21 @@
 	</div>
 	<!-- 지역 select -->
 	<script>
-		document.getElementById("region-filter").addEventListener("change",
-				function() {
-					document.getElementById("search-form").submit();
-				});
+		document.getElementById("region-filter").addEventListener("change", function() {
+			document.getElementById("search-form").submit();
+		});
 	</script>
 	<!-- 초기화 버튼 -->
 	<script>
-		document.getElementById("reset-btn").addEventListener("click",
-				function() {
-					// 검색어 input 초기화
-					document.getElementById("member-search").value = "";
-					// 지역 select 초기화
-					document.getElementById("region-filter").value = "";
-					// 페이지 번호 초기화 (원한다면 hidden input 초기화도 여기서)
-					// form 제출
-					document.getElementById("search-form").submit();
-				});
+		document.getElementById("reset-btn").addEventListener("click", function() {
+			// 검색어 input 초기화
+			document.getElementById("member-search").value = "";
+			// 지역 select 초기화
+			document.getElementById("region-filter").value = "";
+			// 페이지 번호 초기화 (원한다면 hidden input 초기화도 여기서)
+			// form 제출
+			document.getElementById("search-form").submit();
+		});
 	</script>
 </body>
 </html>

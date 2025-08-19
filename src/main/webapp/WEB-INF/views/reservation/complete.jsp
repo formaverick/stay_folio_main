@@ -76,8 +76,9 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
 
       <div class="reservation-status">
         <h3 class="status-title">예약 상태</h3>
+        <jsp:useBean id="now" class="java.util.Date" />
         <div class="status-steps">
-          <div class="step step-01">
+          <div class="step step-01 active">
             <div class="icon">
               <i class="ph ph-file-plus"></i>
             </div>
@@ -86,7 +87,7 @@ uri="http://java.sun.com/jsp/jstl/fmt"%>
               예약 신청이 완료되었으며, 호스트의 예약 확정 대기 상태입니다.
             </p>
           </div>
-          <div class="step step-02 active">
+          <div class="step step-02">
             <div class="icon">
               <i class="ph ph-check-circle"></i>
             </div>

@@ -21,11 +21,8 @@ function validateField($field, value) {
 
   // 값이 없는경우
   if (value.trim() === "") {
-    $errorMessage
-      .text(
-        fieldId === "username"
-          ? "이메일을 입력해주세요."
-          : "비밀번호를 입력해주세요."
+    $errorMessage.text(
+        fieldId === "username" ? "이메일을 입력해주세요." : "비밀번호를 입력해주세요."
       )
       .show();
     isValid = false;

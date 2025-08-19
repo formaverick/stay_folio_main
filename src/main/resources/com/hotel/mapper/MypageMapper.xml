@@ -103,53 +103,46 @@
 
 	<select id="getReservationDetail" resultMap="reservationDetail">
 		SELECT sr.sr_id,
-		sr.si_id, si.si_name, sp.sp_url, sid.si_phone,
-		sid.si_email,
-		sid.si_address, sr.ri_id,
-		ri.ri_name, sr.sr_name, sr.sr_email,
-		sr.sr_phone, sr.sr_request, sr.sr_date,
-		sr.sr_adult, sr.sr_child,
-		TO_DATE(TO_CHAR(sr.sr_checkin, 'YYYY-MM-DD') || ' ' || sid.si_checkin,
-		'YYYY-MM-DD HH24:MI') AS
-		full_checkin,
-		TO_DATE(TO_CHAR(sr.sr_checkout,
-		'YYYY-MM-DD') || ' ' || sid.si_checkout, 'YYYY-MM-DD HH24:MI') AS
-		full_checkout,
-		sr.sr_roomprice, sr.sr_discount, sr.sr_addperson_fee,
-		sr.sr_totalprice,
-		sr.sr_payment, sr.sr_paydate, sr.sr_cancledate,
-		sr.sr_status, sr.sr_paymentstatus
+			sr.si_id, si.si_name, sp.sp_url, sid.si_phone,
+			sid.si_email,
+			sid.si_address, sr.ri_id,
+			ri.ri_name, sr.sr_name, sr.sr_email,
+			sr.sr_phone, sr.sr_request, sr.sr_date,
+			sr.sr_adult, sr.sr_child,
+			TO_DATE(TO_CHAR(sr.sr_checkin, 'YYYY-MM-DD') || ' ' || sid.si_checkin,
+			'YYYY-MM-DD HH24:MI') AS
+			full_checkin,
+			TO_DATE(TO_CHAR(sr.sr_checkout,
+			'YYYY-MM-DD') || ' ' || sid.si_checkout, 'YYYY-MM-DD HH24:MI') AS
+			full_checkout,
+			sr.sr_roomprice, sr.sr_discount, sr.sr_addperson_fee,
+			sr.sr_totalprice,
+			sr.sr_payment, sr.sr_paydate, sr.sr_cancledate,
+			sr.sr_status, sr.sr_paymentstatus
 		FROM t_stay_reservation sr
-		LEFT JOIN
-		t_stay_info si ON sr.si_id = si.si_id
-		LEFT JOIN t_stay_info_detail sid
-		ON sr.si_id = sid.si_id
-		LEFT JOIN t_room_info ri ON sr.si_id = ri.si_id
-		AND sr.ri_id = ri.ri_id
-		LEFT JOIN t_stay_photo sp ON sr.si_id =
-		sp.si_id AND sp.sp_idx = 0
+		LEFT JOIN t_stay_info si ON sr.si_id = si.si_id
+		LEFT JOIN t_stay_info_detail sid ON sr.si_id = sid.si_id
+		LEFT JOIN t_room_info ri ON sr.si_id = ri.si_id AND sr.ri_id = ri.ri_id
+		LEFT JOIN t_stay_photo sp ON sr.si_id = sp.si_id AND sp.sp_idx = 0
 		WHERE sr.sr_id = #{id}
 	</select>
 
-	<select id="getBookMarkList"
-		resultType="com.hotel.domain.StayVO">
+	<select id="getBookMarkList" resultType="com.hotel.domain.StayVO">
 		SELECT
-		si.si_id AS siId,
-		si.si_name AS siName,
-		si.si_loca AS
-		siLoca,
-		si.si_minperson AS siMinperson,
-		si.si_minprice AS siMinprice,
-		ROUND((1 - si.si_discount) * si.si_minprice) AS discountedPrice,
-		si.si_discount * 100 AS discount,
-		si.si_maxperson AS siMaxperson,
-		sp.sp_url AS spUrl
+			si.si_id AS siId,
+			si.si_name AS siName,
+			si.si_loca AS
+			siLoca,
+			si.si_minperson AS siMinperson,
+			si.si_minprice AS siMinprice,
+			ROUND((1 - si.si_discount) * si.si_minprice) AS discountedPrice,
+			si.si_discount * 100 AS discount,
+			si.si_maxperson AS siMaxperson,
+			sp.sp_url AS spUrl
 		FROM t_stay_bookmarks sb
-		LEFT JOIN t_stay_info si on
-		sb.si_id = si.si_id
-		LEFT JOIN t_stay_photo sp on sb.si_id = sp.si_id
-		AND sp.sp_idx = 0
-		WHERE sb.mi_id = #{id}
+		LEFT JOIN t_stay_info si on sb.si_id = si.si_id
+		LEFT JOIN t_stay_photo sp on sb.si_id = sp.si_id AND sp.sp_idx = 0
+		WHERE sb.mi_id = #{id} AND si.si_show = 1
 	</select>
 
 	<!-- 프로필 업데이트 (비번/권한/사용여부 제외) -->

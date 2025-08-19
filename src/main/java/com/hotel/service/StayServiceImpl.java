@@ -86,6 +86,7 @@ public class StayServiceImpl implements StayService {
 
 	// admin - 숙소 등록
 	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public void insertStayInfo(StayVO stay, StayDetailVO detail, List<Integer> facilityIds, List<Integer> keyword) {
 		// 숙소 기본 정보
 		stayMapper.insertStayInfo(stay);

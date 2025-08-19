@@ -51,7 +51,7 @@
 					<div class="reserv-box">
 						<div class="reserv-info">
 							<div>
-								<span class="label-	completed">예약 완료</span>
+								<span class="label-completed">예약 완료</span>
 
 								<h3>${reserv.siName }</h3>
 								<p class="reserv-day">
@@ -119,7 +119,6 @@
 					</div>
 				</c:forEach>
 			</div>
-
 
 		</div>
 		<!-- 마이페이지 끝 -->

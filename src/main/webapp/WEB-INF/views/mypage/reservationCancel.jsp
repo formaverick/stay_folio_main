@@ -159,6 +159,17 @@ uri="http://www.springframework.org/security/tags"%>
         </div>
       </div>
     </main>
+    
+    <!-- 모달 시작 -->
+    <div class="modal-overlay" id="commonModal">
+      <div class="modal-content">
+        <p class="modal-message"></p>
+        <div class="modal-buttons">
+          <button class="btn btn-cancel">확인</button>
+        </div>
+      </div>
+    </div>
+    <!-- 모달 끝 -->
 
     <jsp:include page="../includes/footer.jsp" />
   </body>

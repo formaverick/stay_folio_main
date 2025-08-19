@@ -254,7 +254,7 @@
 		      <div class="modal-content">
 		        <p class="modal-message"></p>
 		        <div class="modal-buttons">
-		          <button class="btn btn-cancel" onclick="closeModal()">확인</button>
+		          <button id="modal-ok" class="btn btn-confirm">확인</button>
 		        </div>
 		      </div>
 		    </div>
@@ -270,28 +270,26 @@
 			    document.getElementById("commonModal").style.display = "none";
 			  }
 			  
-			  // 모달을 띄우고, 확인 누르면 이동.
+			  // 메시지 표시 후, 링크가 있으면 확인 시 이동 / 없으면 닫기
 			  function openModalAndRedirect(message, targetUrl) {
-			    const modal = document.getElementById('commonModal');
-			    const okBtn = document.getElementById('modal-ok');
-			    const msgBox = modal.querySelector('.modal-message');
+			    const modal  = document.getElementById('commonModal');
+			    const msgBox = modal?.querySelector('.modal-message');
+			    const okBtn  = modal?.querySelector('#modal-ok');
 
+			    if (!modal || !okBtn) {
+			      console.error('Modal or OK button not found');
+			      return;
+			    }
+			
 			    msgBox.textContent = message || '';
 			    modal.style.display = 'flex';
 
-			    let didGo = false;
-			    let timer = null;
-
-			    const go = () => {
-			      if (didGo) return;
-			      didGo = true;
-			      // 필요하면 여기서 버튼 disable 등 처리
+			    const hasUrl = !!(targetUrl && String(targetUrl).trim());
+			    const onOk = () => {
 			      closeModal();
-			      window.location.href = targetUrl;
+			      if (hasUrl) location.href = targetUrl;  // 링크가 있으면 이동
 			    };
-
-			    // 확인 버튼 한 번만 반응
-			    const onOk = () => { clearTimeout(timer); okBtn.removeEventListener('click', onOk); go(); };
+			
 			    okBtn.addEventListener('click', onOk, { once: true });
 			  }
 
@@ -308,8 +306,8 @@
 				  
 				  if (riId) {
 					   $("#image-riId").val(riId);
-				       $(".modal-message").text("객실 정보가 등록되었습니다. 이미지를 추가해주세요.");
-				       openModal();
+				       openModalAndRedirect("객실 정보가 등록되었습니다. 이미지를 추가해주세요.");
+				       refreshRoomList(siId);
 				  } else if(siId){
 					  // 객실 리스트에서 들어왔을 경우
 					  console.log(siId);
@@ -321,22 +319,19 @@
   					const siId = $("#image-siId").val();
 
   					if (!siId) {
-  						$(".modal-message").text("⚠️ 숙소 정보가 없습니다. 다시 시도해주세요.");
-  						openModal();
+ 				        openModalAndRedirect("⚠️ 숙소 정보가 없습니다. 다시 시도해주세요.");
     					return;
   					}
 
   				   // 객실이 하나 이상 등록되어 있는지 확인
   				   $.get(`/admin/stay/rooms/list`, { siId }, function (roomList) {
     					if (!Array.isArray(roomList) || roomList.length === 0) {
-    						$(".modal-message").text("⚠️ 객실이 1개 이상 등록되어야 상세 페이지로 이동할 수 있습니다.");
-    						openModal();
+    						openModalAndRedirect("⚠️ 객실이 1개 이상 등록되어야 상세 페이지로 이동할 수 있습니다.");
     					} else {
       						location.href = `/admin/stay/detail?siId=${siId}`;
     					}
   				  	}).fail(function () {
-  				  		$(".modal-message").text("⚠️ 객실 정보를 불러오지 못했습니다.");
-  				  		openModal();
+ 				        openModalAndRedirect("⚠️ 객실 정보를 불러오지 못했습니다.");
   					});
 				  });
 
@@ -351,8 +346,7 @@
 				    const riId = $("#image-riId").val();
 
 				    if (!siId || !riId) {
-				    	$(".modal-message").text("객실 이미지 업로드는 객실 정보 등록 이후 가능합니다");
-				    	openModal();
+					    openModalAndRedirect("객실 이미지 업로드는 객실 정보 등록 이후 가능합니다");
 				    	$imgSubmitBtn.prop("disabled", false).text("이미지 업로드");
 				    	return;
 				    }
@@ -375,8 +369,7 @@
 				    });
 
 				    if (!atLeastOneSelected) {
-				    	$(".modal-message").text("⚠️ 대표 이미지는 필수 항목입니다. 반드시 하나 이상 선택해주세요.");
-				    	openModal();
+					    openModalAndRedirect("⚠️ 대표 이미지는 필수 항목입니다. 반드시 하나 이상 선택해주세요.");
 				    	$imgSubmitBtn.prop("disabled", false).text("이미지 업로드");
 				    	return;
 				    }
@@ -388,18 +381,11 @@
 				      processData: false,
 				      contentType: false,
 				      success: function (res) {
-				    	  openModalAndRedirect(`✅ ${res}\n확인을 누르면 목록으로 이동합니다.`, `/admin/rooms?siId=${siId}`);
-				    	  
-				    	  refreshRoomList(siId);
-				    	  
-				    	  $("#image-upload-form")[0].reset();
-				    	  $("#image-riId").val("");
-				    	  
-				    	  location.href = `/admin/rooms?siId=${siId}`;
+				    	  console.log(siId);
+				    	  openModalAndRedirect("객실이 등록되었습니다.", `/admin/rooms?siId=${siId}`);
 				      },
 				      error: function (xhr) {
-				    	  $(".modal-message").text("⚠️ " + xhr.responseText);
-				    	  openModal();
+					      openModalAndRedirect("오류가 발생했습니다. " + xhr.responseText);
 				    	  $imgSubmitBtn.prop("disabled", false).text("이미지 업로드");
 				      }
 				    });
@@ -410,8 +396,7 @@
 				function refreshRoomList(siId) {
 				  $.get("/admin/stay/rooms/list", { siId }, function (roomList) {
 				    if (!Array.isArray(roomList)) {
-				    	$(".modal-message").text("객실 목록 응답이 배열이 아닙니다. 관리자에게 문의해주세요.");
-				    	openModal();
+					    openModalAndRedirect("객실 목록 응답이 배열이 아닙니다. 관리자에게 문의해주세요.");
 				    	return;
 				    }
 

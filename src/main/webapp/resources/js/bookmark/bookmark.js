@@ -1,5 +1,4 @@
 function wishEvent() {
-  // 찜 버튼 이벤트 위임 (fetch 사용)
   $(document).off("click", ".stay-wishlist").on("click", ".stay-wishlist", function (e) {
     e.preventDefault();
     e.stopPropagation();

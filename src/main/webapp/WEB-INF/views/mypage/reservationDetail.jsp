@@ -93,9 +93,7 @@ uri="http://www.springframework.org/security/tags"%>
             <h3 class="status-title">예약 상태</h3>
             <jsp:useBean id="now" class="java.util.Date" />
             <div class="status-steps">
-              <div
-                class="step step-01 ${reserv.srStatus eq 'a' and reserv.srCheckin gt now ? 'active' : ''}"
-              >
+              <div class="step step-01 ${reserv.srStatus eq 'a' and reserv.srCheckin gt now ? 'active' : ''}">
                 <div class="icon">
                   <i class="ph ph-file-plus"></i>
                 </div>
@@ -105,9 +103,7 @@ uri="http://www.springframework.org/security/tags"%>
                   스테이의 환불규정에 따라 환불이 진행됩니다.
                 </p>
               </div>
-              <div
-                class="step step-02 ${reserv.srStatus eq 'a' and reserv.srCheckin lt now and reserv.srCheckout gt now ? 'active' : ''}"
-              >
+              <div class="step step-02 ${reserv.srStatus eq 'a' and reserv.srCheckin lt now and reserv.srCheckout gt now ? 'active' : ''}">
                 <div class="icon">
                   <i class="ph ph-check-circle"></i>
                 </div>
@@ -117,9 +113,7 @@ uri="http://www.springframework.org/security/tags"%>
                   체크인 안내를 드리고 있습니다.
                 </p>
               </div>
-              <div
-                class="step step-03 ${reserv.srStatus eq 'a' and reserv.srCheckout lt now ? 'active' : ''}"
-              >
+              <div class="step step-03 ${reserv.srStatus eq 'a' and reserv.srCheckout lt now ? 'active' : ''}">
                 <div class="icon">
                   <i class="ph ph-suitcase-simple"></i>
                 </div>
@@ -144,16 +138,10 @@ uri="http://www.springframework.org/security/tags"%>
                   :
                   <c:choose>
                     <c:when test="${reserv.srStatus eq 'c'}">
-                      <fmt:formatDate
-                        value="${reserv.srCancledate }"
-                        pattern="yyyy.MM.dd HH:mm"
-                      />
+                      <fmt:formatDate value="${reserv.srCancledate }" pattern="yyyy.MM.dd HH:mm" />
                     </c:when>
                     <c:otherwise>
-                      <fmt:formatDate
-                        value="${reserv.srDate }"
-                        pattern="yyyy.MM.dd HH:mm"
-                      />
+                      <fmt:formatDate value="${reserv.srDate }" pattern="yyyy.MM.dd HH:mm" />
                     </c:otherwise>
                   </c:choose>
                   )

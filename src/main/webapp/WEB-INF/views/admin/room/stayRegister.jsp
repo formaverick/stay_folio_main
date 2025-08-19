@@ -389,7 +389,7 @@
 
 					<c:otherwise>
 						<button type="button" class="btn-save"
-							onclick="alert('⚠️ 숙소 정보를 등록해주세요.')">객실 등록하러 가기</button>
+							onclick="openModalAndRedirect('⚠️ 숙소 정보를 등록해주세요.')">객실 등록하러 가기</button>
 					</c:otherwise>
 				</c:choose>
 			</div>
@@ -402,7 +402,7 @@
       <div class="modal-content">
         <p class="modal-message"></p>
         <div class="modal-buttons">
-          <button class="btn btn-cancel" onclick="closeModal()">확인</button>
+          <button id="modal-ok" class="btn btn-confirm">확인</button>
         </div>
       </div>
     </div>
@@ -417,14 +417,36 @@
 	  function closeModal() {
 	    document.getElementById("commonModal").style.display = "none";
 	  }
+	  
+	  // 메시지 표시 후, 링크가 있으면 확인 시 이동 / 없으면 닫기
+	  function openModalAndRedirect(message, targetUrl) {
+	    const modal  = document.getElementById('commonModal');
+	    const msgBox = modal?.querySelector('.modal-message');
+	    const okBtn  = modal?.querySelector('#modal-ok');
+
+	    if (!modal || !okBtn) {
+	      console.error('Modal or OK button not found');
+	      return;
+	    }
+	
+	    msgBox.textContent = message || '';
+	    modal.style.display = 'flex';
+
+	    const hasUrl = !!(targetUrl && String(targetUrl).trim());
+	    const onOk = () => {
+	      closeModal();
+	      if (hasUrl) location.href = targetUrl;  // 링크가 있으면 이동
+	    };
+	
+	    okBtn.addEventListener('click', onOk, { once: true });
+	  }
 	
   $(document).ready(function () {
 	  
     // 숙소 ID 값 세팅
     <c:if test="${not empty newSiId}">
       $("#image-siId").val("${newSiId}");
-      $(".modal-message").text("숙소 정보가 등록되었습니다. 이미지를 추가해주세요.");
-      openModal();
+      openModalAndRedirect("숙소 정보가 등록되었습니다. 이미지를 추가해주세요.");
     </c:if>
 
     // 숙소 상세 정보 저장 버튼 비활성화 처리
@@ -446,8 +468,7 @@
       
 
       if (!siId || siId.trim() === "") {
-    	$(".modal-message").text("숙소 이미지 업로드는 숙소 정보 등록 이후 가능합니다");
-        openModal();
+        openModalAndRedirect("숙소 이미지 업로드는 숙소 정보 등록 이후 가능합니다");
         $imgSubmitBtn.prop("disabled", false).text("이미지 업로드");
         return;
       }
@@ -470,8 +491,7 @@
       });
 
       if (!atLeastOneSelected) {
-      	$(".modal-message").text("⚠️ 대표 이미지는 필수 항목입니다. 반드시 하나 이상 선택해주세요.");
-        openModal();
+        openModalAndRedirect("대표 이미지는 필수 항목입니다. 반드시 선택해주세요.");
         return;
       }
 
@@ -482,15 +502,13 @@
         processData: false,
         contentType: false,
         success: function (res) {
-          $(".modal-message").text("✅ 이미지 업로드 완료: " + res);
-          openModal();
+          openModalAndRedirect("이미지 업로드가 완료되었습니다.");
           $("#image-upload-form")[0].reset();
           $("#image-riId").val("");
           $imgSubmitBtn.prop("disabled", true).text("이미지 업로드");
         },
         error: function (xhr) {
-          $(".modal-message").text("⚠️ 오류 발생: " + xhr.responseText);
-          openModal();
+          openModalAndRedirect("이미지 등록 중 오류가 발생했습니다. " + xhr.responseText);
           $imgSubmitBtn.prop("disabled", false).text("이미지 업로드");
         }
       });

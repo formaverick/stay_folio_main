@@ -69,8 +69,8 @@ public class MypageController {
 
 	// 예약 취소
 	@GetMapping("/reservations/{id}/cancel")
-	public String reservationCancelPage(@PathVariable String id, Principal principal, HttpSession session, Model model,
-			RedirectAttributes rttr) {
+	public String reservationCancelPage(@PathVariable String id, Principal principal, 
+			HttpSession session, Model model, RedirectAttributes rttr) {
 		// 예약 조회
 		ReservationCancelCheckVO reserv = reservationService.getReservationById(id);
 		if (reserv == null) {
@@ -90,14 +90,7 @@ public class MypageController {
 			if (reserv.getMiId() != null && reserv.getMiId().equals(loginId)) {
 				isValidUser = true;
 			}
-		} else {
-			// 비회원인 경우: 세션 정보로 비교
-//            String guestEmail = (String) session.getAttribute("guestEmail");
-//
-//            if (guestEmail != null && guestEmail.equals(reserv.getSrEmail())) {
-//                isValidUser = true;
-//            }
-		}
+		} 
 
 		if (!isValidUser) {
 			rttr.addFlashAttribute("error", "예약 정보를 확인할 수 없습니다.");

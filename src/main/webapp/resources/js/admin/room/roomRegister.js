@@ -6,7 +6,7 @@ $(document).ready(function () {
     const siId = $("#image-siId").val();
 
     if (!siId || siId.trim() === "") {
-      alert("⚠️ 숙소 정보를 먼저 등록해주세요.");
+      openModalAndRedirect("⚠️ 숙소 정보를 먼저 등록해주세요.");
       e.preventDefault();
       return false;
     }
@@ -16,7 +16,7 @@ $(document).ready(function () {
     const riId = $("#image-riId").val();
 
     if (!riId || riId.trim() === "") {
-      alert("⚠️ 객실 정보를 먼저 등록해주세요.");
+      openModalAndRedirect("⚠️ 객실 정보를 먼저 등록해주세요.");
       e.preventDefault();
       return false;
     }

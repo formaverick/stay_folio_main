@@ -138,16 +138,10 @@ uri="http://www.springframework.org/security/tags"%>
                   :
                   <c:choose>
                     <c:when test="${reserv.srStatus eq 'c'}">
-                      <fmt:formatDate
-                        value="${reserv.srCancledate }"
-                        pattern="yyyy.MM.dd HH:mm"
-                      />
+                      <fmt:formatDate value="${reserv.srCancledate }" pattern="yyyy.MM.dd HH:mm" />
                     </c:when>
                     <c:otherwise>
-                      <fmt:formatDate
-                        value="${reserv.srDate }"
-                        pattern="yyyy.MM.dd HH:mm"
-                      />
+                      <fmt:formatDate value="${reserv.srDate }" pattern="yyyy.MM.dd HH:mm" />
                     </c:otherwise>
                   </c:choose>
                   )

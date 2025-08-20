@@ -23,7 +23,8 @@
 		ri_bedroom AS riBedroom,
 		ri_bathroom AS
 		riBathroom,
-		ri_show AS riShow
+		ri_show AS riShow,
+		ri_delete AS riDelete
 		FROM t_room_info
 		WHERE si_id = #{siId} AND
 		ri_id = #{riId}

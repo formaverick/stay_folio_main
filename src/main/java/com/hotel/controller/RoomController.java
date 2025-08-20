@@ -117,6 +117,12 @@ public class RoomController {
 
 		boolean viewable = roomperson != null && "0".equals(roomperson.getRiDelete()) && "1".equals(roomperson.getRiShow());
 		
+		log.info(roomperson);
+		log.info(roomperson != null);
+		log.info("0".equals(roomperson.getRiDelete()));
+		log.info("1".equals(roomperson.getRiShow()));
+		log.info(viewable);
+		
 		if (!viewable) {
 			return "redirect:/stay/" + siId;
 		}

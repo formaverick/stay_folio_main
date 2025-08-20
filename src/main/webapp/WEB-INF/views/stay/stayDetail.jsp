@@ -336,9 +336,9 @@
 							<div class="filter-item date-filter">
 								<div class="filter-content" id="dateSelect">
 									<div class="selected-option">
-
-										<span id="dateDisplay"> <span id="startDate"></span> -
-											<span id="endDate"></span>
+										<i class="ph ph-calendar"></i>
+										<span id="dateDisplay"> 
+											<span id="startDate"></span> - <span id="endDate"></span>
 										</span>
 									</div>
 									<div class="date-picker-container">

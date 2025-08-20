@@ -4,9 +4,6 @@
   const $input = $("#keyword");
   if ($input.length === 0) return;
 
-  const $grid = $("#searchResultsGrid");
-  const $count = $("#resultsCount");
-  const $title = $("#searchTitle");
   const $wrapper = $input.closest(".keyword-content");
   // 최근 자동완성 요청 질의어 추적 (레이트 응답 무시용)
   let lastSuggestQuery = "";
@@ -42,8 +39,6 @@
   // 초기 상태: 제안 패널 제거
   hideAndDestroySuggestions();
 
-  const apiUrl =
-    $input.data("api") || window.KEYWORD_SEARCH_API || "/search/keyword";
   const ctx =
     $input.data("context") ||
     (typeof window !== "undefined" && window.APP_CONTEXT) ||
@@ -106,65 +101,6 @@
           </div>
         </div>
       </a>`;
-  }
-
-  function setLoading(on) {
-    if (!$grid.length) return;
-    if (on) {
-      $grid.css("opacity", 0.5);
-    } else {
-      $grid.css("opacity", 1);
-    }
-  }
-
-  function renderResults(results, keyword) {
-    if (!$grid.length) return;
-    if (!Array.isArray(results)) results = [];
-    const html = results.map((s) => buildCard(s)).join("");
-    $grid.html(html || `<div class="search-empty">검색 결과가 없습니다.</div>`);
-    if ($count.length) $count.text(results.length);
-    if ($title.length)
-      $title.text(keyword ? `${keyword} 검색 결과` : "검색 결과");
-
-    if (typeof window.wishEvent === "function") {
-      try {
-        window.wishEvent();
-      } catch (e) {}
-    }
-  }
-
-  function search(keyword) {
-    const q = (keyword || "").trim();
-    if (q.length === 0) {
-      hideAndDestroySuggestions();
-      return;
-    }
-    const filters = readFilters();
-    setLoading(true);
-
-    $.ajax({
-      url: apiUrl,
-      method: "GET",
-      dataType: "json",
-      data: {
-        keyword: q,
-        checkin: filters.checkin,
-        checkout: filters.checkout,
-        adult: filters.adult,
-        child: filters.child,
-        region: filters.region,
-      },
-    })
-      .done(function (res) {
-        renderResults(res, q);
-      })
-      .fail(function () {
-        renderResults([], q);
-      })
-      .always(function () {
-        setLoading(false);
-        hideAndDestroySuggestions();
-      });
   }
 
   // 추천 검색 함수
@@ -273,47 +209,31 @@
     $s.show();
   }
 
-  $input.on("input", function () {
-    const value = $(this).val();
+  // 중복 제거를 위한 공통 함수
+  function handleInputEvent() {
+    const value = $input.val();
     if (value.trim().length > 0) {
       loadSuggestions(value);
     } else {
       hideAndDestroySuggestions();
     }
-  });
+  }
 
-  $input.on("keydown", function (e) {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      search($input.val());
-      hideAndDestroySuggestions();
-    } else if (e.key === "Escape") {
-      hideAndDestroySuggestions();
-    }
-  });
+  $input.on("input", handleInputEvent);
 
   // 포커스 시: 값 있을 때만 추천 표시, 없으면 숨김
-  $input.on("focus", function () {
-    const value = $(this).val();
-    if (value.trim().length > 0) {
-      loadSuggestions(value);
-    } else {
-      hideAndDestroySuggestions();
-    }
-  });
+  $input.on("focus", handleInputEvent);
 
   // 클릭 시도 동일 동작: 빈 값이면 숨김
   $input.on("click", function () {
-    const value = $(this).val();
+    const value = $input.val();
     if (value.trim().length === 0) {
       hideAndDestroySuggestions();
     }
   });
 
   // 포커스 아웃 시에도 항상 숨김 (의도치 않은 잔상 방지)
-  $input.on("blur", function () {
-    hideAndDestroySuggestions();
-  });
+  $input.on("blur", hideAndDestroySuggestions);
 
   // 외부 클릭 시 추천 숨기기
   $(document).on("click", function (e) {

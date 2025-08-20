@@ -105,9 +105,6 @@ public interface StayMapper {
 	int incBookmarkCount(@Param("siId") int siId); // +1
 	int decBookmarkCount(@Param("siId") int siId); // -1 (최소 0)
 
-	// 키워드 검색 (숙소명, 지역명)
-	List<StayVO> searchStaysByKeyword(@Param("keyword") String keyword);
-	
 	// 키워드 추천 검색 (자동완성용, 최대 5개)
 	List<StayVO> searchStaysSuggestions(@Param("keyword") String keyword);
 }

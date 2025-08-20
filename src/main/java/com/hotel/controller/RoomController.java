@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -52,8 +54,16 @@ public class RoomController {
 
 	// 숙소 상세페이지
 	@GetMapping("/{siId}")
-	public String StayDetail(@PathVariable("siId") Integer siId, Model model, Principal principal) {
+	public String StayDetail(@PathVariable("siId") Integer siId, Model model, Principal principal, HttpServletResponse resp) {
 		StayVO stayInfo = stayService.getStayInfo(siId);
+		
+		boolean viewable = stayInfo != null && "0".equals(stayInfo.getSiDelete()) && "1".equals(stayInfo.getSiShow());
+		
+		if (!viewable) {
+			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return "stay/stayNotFound";
+		}
+		
 		StayDetailVO stayDetail = stayService.getStayDetail(siId);
 		List<RoomVO> rooms = stayService.getRoomsByStayId(siId);
 		List<FacilityVO> stayFacilities = stayService.getFacilitiesByStayId(siId);
@@ -102,8 +112,15 @@ public class RoomController {
 			checkin = LocalDate.now();
 			checkout = checkin.plusDays(1);
 		}
-
+		
 		RoomVO roomperson = roomService.getRoomById(siId, riId);
+
+		boolean viewable = roomperson != null && "0".equals(roomperson.getRiDelete()) && "1".equals(roomperson.getRiShow());
+		
+		if (!viewable) {
+			return "redirect:/stay/" + siId;
+		}
+		
 		int basePerson = roomperson.getRiPerson(); // 기준 인원 (예: 1 또는 2)
 
 		if (adult == null)

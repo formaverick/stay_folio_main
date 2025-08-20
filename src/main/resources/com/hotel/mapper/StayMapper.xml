@@ -87,7 +87,8 @@
 		riBathroom
 		FROM
 		t_room_info
-		WHERE si_id = #{siId}
+		WHERE si_id = #{siId} AND ri_show = 1 AND ri_delete = 0 
+		ORDER BY ri_id
 	</select>
 
 	<!-- 숙소 편의시설 목록 조회 -->

@@ -243,15 +243,6 @@ public class StayServiceImpl implements StayService {
 		}
 	}
 
-	// 키워드 검색
-	@Override
-	public List<StayVO> searchStaysByKeyword(String keyword) {
-		if (keyword == null || keyword.trim().isEmpty()) {
-			return new ArrayList<>();
-		}
-		return stayMapper.searchStaysByKeyword(keyword.trim());
-	}
-
 	// 자동완성용
 	@Override
 	public List<StayVO> searchStaysSuggestions(String keyword) {

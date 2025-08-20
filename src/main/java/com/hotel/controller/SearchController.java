@@ -21,21 +21,6 @@ public class SearchController {
     @Autowired
     private StayService stayService;
 
-    // 키워드 검색
-    @GetMapping(value = "/search/keyword", produces = "application/json; charset=UTF-8")
-    @ResponseBody
-    public List<StayVO> searchByKeyword(@RequestParam(name = "keyword", required = false) String keyword) {
-        String q = (keyword == null) ? "" : keyword.trim();
-        if (q.isEmpty()) {
-            return Collections.emptyList();
-        }
-        List<StayVO> results = stayService.searchStaysByKeyword(q);
-        if (log.isDebugEnabled()) {
-            log.debug("Keyword search q='" + q + "' -> results=" + (results == null ? 0 : results.size()));
-        }
-        return results;
-    }
-
     // 자동완성용 
     @GetMapping(value = "/search/suggestions", produces = "application/json; charset=UTF-8")
     @ResponseBody

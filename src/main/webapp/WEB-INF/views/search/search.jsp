@@ -40,14 +40,7 @@
 	<jsp:include page="../includes/header.jsp" />
 	<!-- 검색 필터 시작 -->
 	<section class="search-filter-container">
-		<div class="keyword-filter">
-			<div class="keyword-content">
-				<div class="keyword-option">
-					<i class="ph ph-magnifying-glass"></i>
-					<input type="text" id="keyword" name="keyword" placeholder="지역, 숙소명을 검색해보세요." autocomplete="off" data-api="${pageContext.request.contextPath}/search/keyword" data-context="${pageContext.request.contextPath}" />
-				</div>
-			</div>
-		</div>
+	
 		<div class="search-filter-inner">
 			<form id="searchForm" method="POST" action="/search/results">
 				<!-- 숨겨진 입력 필드들 -->
@@ -162,6 +155,14 @@
 
 				</div>
 			</form>
+		</div>
+			<div class="keyword-filter">
+			<div class="keyword-content">
+				<div class="keyword-option">
+					<i class="ph ph-magnifying-glass"></i>
+					<input type="text" id="keyword" name="keyword" placeholder="지역, 숙소명을 검색해보세요." autocomplete="off" data-api="${pageContext.request.contextPath}/search/keyword" data-context="${pageContext.request.contextPath}" />
+				</div>
+			</div>
 		</div>
 	</section>
 	<!-- 검색 필터 끝 -->

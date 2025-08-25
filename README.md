@@ -1250,6 +1250,10 @@ sequenceDiagram
 
 ### 1️⃣ 관리자 대시보드 (Chart.js 시각화)
 
-![대시보드](https://github.com/user-attachments/assets/7e0807ba-929d-4121-8584-20eb7c0d4b19)
+https://github.com/user-attachments/assets/0f5893e5-7e0a-46d0-963d-b936e676c879
+
+### 2️⃣ 숙소/객실 등록
+
+https://github.com/user-attachments/assets/ffee1a38-0baa-4da0-9752-4d8f830fdf26
 
 

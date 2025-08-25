@@ -1,6 +1,8 @@
 # STAYPOLIO 스타일 숙소 사이트 웹구현 프로젝트
 
-![main2](https://github.com/user-attachments/assets/ca107229-293b-418b-8fb5-d15274705f6f)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/ca107229-293b-418b-8fb5-d15274705f6f" width="800" alt="메인화면" />
+</p>
 
 ---
 
@@ -28,8 +30,8 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 기획 → 설계 → 개발 → 테스트 → 배포로 이어지는 **프로젝트 라이프사이클 전체를 수행**했습니다.
 
 🔗 기획 자료  
-- [Figma 화면 설계](https://www.figma.com/...)  
-- [Google Sheets 데이터 구조/일정 관리](https://docs.google.com/spreadsheets/...)
+- [Figma 화면 설계]((https://www.figma.com/design/FYYxvzwGzkNBLJrTOa5ROW/Stay-folio?node-id=0-1&t=ekM1qKT06YyBd0Pw-1))  
+- [Google Sheets 데이터 구조/일정 관리]([https://docs.google.com/spreadsheets/...](https://docs.google.com/spreadsheets/d/1OQmVgNTZ_Yc10W1KOM3R84FSjb7fj2WZQVZQrMFWXYk/edit?usp=sharing))
 
 - 개발 기간 : 25/07/23 ~ 25/08/20
 
@@ -84,21 +86,22 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 
 - 📂 Figma 설계 : <[https://www.figma.com/...](https://www.figma.com/design/FYYxvzwGzkNBLJrTOa5ROW/Stay-folio?node-id=0-1&t=ekM1qKT06YyBd0Pw-1)>
 
-- 📂 Google Sheets 기획 : <https://docs.google.com/spreadsheets/d/1OQmVgNTZ_Yc10W1KOM3R84FSjb7fj2WZQVZQrMFWXYk/edit?usp=sharing>
+- 📂 Google Sheets 기획 : <[https://docs.google.com/...](https://docs.google.com/spreadsheets/d/1OQmVgNTZ_Yc10W1KOM3R84FSjb7fj2WZQVZQrMFWXYk/edit?usp=sharing)>
 
 - 📂 Team Github : <https://github.com/Spring-team-Project2025/stay_folio_main>
-<img width="1280" height="720" alt="슬라이드1" src="https://github.com/user-attachments/assets/b951c5d6-dfa7-4a2c-840f-069e02060ee5" />
-
+- 
 -📂 Diagram : <https://spring-team-project2025.github.io/stay_folio_documents/>
-<img width="762" height="701" alt="image" src="https://github.com/user-attachments/assets/dc3a3e57-7673-4770-8fc4-055623678e84" />
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/b951c5d6-dfa7-4a2c-840f-069e02060ee5" width="600" alt="슬라이드1" />
+</p>
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/dc3a3e57-7673-4770-8fc4-055623678e84" width="600" alt="다이어그램" />
+</p>
 
 ---
 
 ## 💻 핵심 기능
-
-
-
-
-## **🏠 도서 상세 페이지**
 
 

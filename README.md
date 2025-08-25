@@ -142,6 +142,12 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 <br>
 
 #### 2️⃣ 숙소/객실 이미지 업로드 (AWS S3 연동)
+
+<p align="center"> 
+	<img src="https://github.com/user-attachments/assets/3b7fa887-b9b6-48c7-9bae-3bc2adae8576" width="700" alt="관리자 대시보드 화면" />
+	<img width="700" alt="관리자 이미지 등록 화면" src="https://github.com/user-attachments/assets/4c1ec916-65ab-47b4-b872-cd8a08c51729" />
+</p>
+
 > **숙소/객실 이미지 업로드·수정**을 AWS S3에 저장하고, 업로드된 경로를 DB에 반영합니다.  
 > 업로드 키는 `stay/{siId}/{riId?}/{UUID}` 규칙으로 관리되어 충돌 없이 안전하게 저장됩니다.
 
@@ -211,7 +217,7 @@ public class AwsConfig {
 - AWS S3 접근을 위한 _AmazonS3 Bean_ 등록
 - application.properties에 저장된 액세스 키 / 시크릿 키 / 리전 정보를 불러와 인증
 
-##### (1) 업로드 (등록)
+#### (1) 업로드 (등록)
 ```java
 // UploadController.java
 @PostMapping("/stay/imageUpload")
@@ -282,7 +288,7 @@ public void uploadStayPhoto(int siId, Integer riId, int spIdx, MultipartFile fil
 
 <br>
 
-##### (2) 업로드 (수정)
+#### (2) 업로드 (수정)
 ```java
 // S3Uploader.java (수정)
 public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile file) throws IOException {
@@ -305,6 +311,42 @@ public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile fil
     }
 }
 ```
+##### 📌 설명
+
+- 기존 spIdx 위치에 이미지가 있으면 UPDATE
+- 없으면 새 레코드를 INSERT
+
+<br>
+
+```java
+<!-- StayMapper.xml -->
+<select id="existsStayPhoto" parameterType="com.hotel.domain.PhotoVO" resultType="boolean">
+  SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+  FROM t_stay_photo
+  WHERE si_id = #{siId} AND sp_idx = #{spIdx}
+    <choose>
+      <when test="riId == null">AND ri_id IS NULL</when>
+      <otherwise>AND ri_id = #{riId}</otherwise>
+    </choose>
+</select>
+
+<update id="updateStayPhoto" parameterType="com.hotel.domain.PhotoVO">
+  UPDATE t_stay_photo
+  SET sp_url = #{spUrl}
+  WHERE si_id = #{siId} AND sp_idx = #{spIdx}
+    <choose>
+      <when test="riId == null">AND ri_id IS NULL</when>
+      <otherwise>AND ri_id = #{riId}</otherwise>
+    </choose>
+</update>
+```
+
+##### 📌 설명
+
+- existsStayPhoto로 이미지 존재 여부 체크
+- 있으면 updateStayPhoto, 없으면 insertStayPhoto 수행
+
+<br>
 
 ---
 

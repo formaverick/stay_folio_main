@@ -531,10 +531,99 @@ public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile fil
     }
 }
 ```
+<details>
+	<summery>Service & Mapper (자세히 보기)</summery>
+
+ 	// S3Uploader.java
+ 	// 숙소 이미지 수정
+	public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile file) throws IOException {
+		String fileName = "stay/" + siId + "/" + UUID.randomUUID();
+		ObjectMetadata metadata = new ObjectMetadata();
+		metadata.setContentType(file.getContentType());
+		metadata.setContentDisposition("inline");
+		metadata.setContentLength(file.getSize());
+
+		PutObjectRequest request = new PutObjectRequest(bucket, fileName, file.getInputStream(), metadata);
+		amazonS3.putObject(request); // S3에 업로드
+
+		PhotoVO photo = new PhotoVO();
+		photo.setSiId(siId);
+		photo.setRiId(riId);
+		photo.setSpIdx(spIdx);
+		photo.setSpUrl(fileName);
+
+		System.out.println("PhotoVO riId: " + photo.getRiId());
+
+		boolean exists = stayMapper.existsStayPhoto(photo); // 이미지 존재 여부 확인
+
+		System.out.println("이미지 존재 여부: " + stayMapper.existsStayPhoto(photo));
+
+		if (exists) {
+			stayMapper.updateStayPhoto(photo); // UPDATE
+		} else {
+			stayMapper.insertStayPhoto(photo); // 비어있을 경우 INSERT
+		}
+	}
+
+	// 객실 이미지 수정
+	public void updateRoomImage(int siId, int riId, int spIdx, MultipartFile file) throws IOException {
+		String fileName = "stay/" + siId + "/" + riId + "/" + UUID.randomUUID();
+		ObjectMetadata metadata = new ObjectMetadata();
+		metadata.setContentType(file.getContentType());
+		metadata.setContentDisposition("inline");
+		metadata.setContentLength(file.getSize());
+
+		PutObjectRequest request = new PutObjectRequest(bucket, fileName, file.getInputStream(), metadata);
+		amazonS3.putObject(request); // S3에 업로드
+
+		RoomPhotoVO photo = new RoomPhotoVO();
+		photo.setSiId(siId);
+		photo.setRiId(riId);
+		photo.setSpIdx(spIdx);
+		photo.setSpUrl(fileName);
+
+		boolean exists = roomMapper.existsRoomPhoto(photo); // 이미지 존재 여부 확인
+
+		if (exists) {
+			roomMapper.updateRoomPhoto(photo); // UPDATE
+		} else {
+			roomMapper.insertRoomPhoto(photo); // 비어있을 경우 INSERT
+		}
+	}
+
+ 	<!-- StayMapper.xml -->
+  	<insert id="insertStayPhoto" parameterType="com.hotel.domain.PhotoVO">
+  		INSERT INTO t_stay_photo (si_id, ri_id, sp_idx, sp_url)
+  		VALUES (#{siId}, #{riId, jdbcType=NULL}, #{spIdx}, #{spUrl})
+	</insert>
+	
+ 	<select id="existsStayPhoto" parameterType="com.hotel.domain.PhotoVO" resultType="boolean">
+  		SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+  		FROM t_stay_photo
+  		WHERE si_id = #{siId} AND sp_idx = #{spIdx}
+    	<choose>
+      		<when test="riId == null">AND ri_id IS NULL</when>
+      		<otherwise>AND ri_id = #{riId}</otherwise>
+    	</choose>
+	</select>
+
+	<update id="updateStayPhoto" parameterType="com.hotel.domain.PhotoVO">
+  		UPDATE t_stay_photo
+  		SET sp_url = #{spUrl}
+  		WHERE si_id = #{siId} AND sp_idx = #{spIdx}
+    	<choose>
+      		<when test="riId == null">AND ri_id IS NULL</when>
+      		<otherwise>AND ri_id = #{riId}</otherwise>
+    	</choose>
+	</update>
+ 
+</details>
 ##### 📌 설명
 
 - 기존 spIdx 위치에 이미지가 있으면 UPDATE
 - 없으면 새 레코드를 INSERT
+- existsStayPhoto로 이미지 존재 여부 체크
+- 있으면 updateStayPhoto, 없으면 insertStayPhoto 수행
 
 <br>
 
@@ -561,10 +650,6 @@ public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile fil
 </update>
 ```
 
-##### 📌 설명
-
-- existsStayPhoto로 이미지 존재 여부 체크
-- 있으면 updateStayPhoto, 없으면 insertStayPhoto 수행
 
 <br>
 <br>

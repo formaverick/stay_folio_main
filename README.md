@@ -510,6 +510,8 @@ public void uploadStayPhoto(int siId, Integer riId, int spIdx, MultipartFile fil
 
 #### (2) 업로드 (수정)
 
+<p align="center"> <img width="700" alt="관리자 수정(이미지) 화면" src="https://github.com/user-attachments/assets/49fdc548-339f-4a03-afb0-35ff0d1eb418" /> </p>
+
 ```java
 // S3Uploader.java (수정)
 public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile file) throws IOException {
@@ -631,8 +633,6 @@ public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile fil
 
 <br>
 <br>
-
-
 
 ---
 

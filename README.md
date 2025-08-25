@@ -534,7 +534,7 @@ public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile fil
 ```
 
 <details>
-	<summery><b>Service & Mapper (자세히 보기)</b></summery>
+	<summary><b>Service & Mapper (자세히 보기)</b></summary>
 
  	// S3Uploader.java
  	// 숙소 이미지 수정

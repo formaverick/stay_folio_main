@@ -279,24 +279,24 @@ public String DashBoard(Model model) {
 
 	// AdminServiceImpl.java
  	@Override
-public ReservationStatsDTO getReservationStats() {
-    return adminMapper.getReservationStats();
-}
-@Override
-public int getMemberReservationCount() {
-    return adminMapper.getMemberReservationCount();
-}
-@Override
-public int getGuestReservationCount() {
-    return adminMapper.getGuestReservationCount();
-}
-@Override
-public List<LocationCategoryVO> getRegionStayStats() {
-    return adminMapper.getRegionStayStats();
-}
+	public ReservationStatsDTO getReservationStats() {
+    	return adminMapper.getReservationStats();
+	}
+	@Override
+	public int getMemberReservationCount() {
+    	return adminMapper.getMemberReservationCount();
+	}
+	@Override
+	public int getGuestReservationCount() {
+    	return adminMapper.getGuestReservationCount();
+	}
+	@Override
+	public List<LocationCategoryVO> getRegionStayStats() {
+    	return adminMapper.getRegionStayStats();
+	}
 
-// AdminMapper.xml
-<!-- 예약 현황 그래프 -->
+	// AdminMapper.xml
+	<!-- 예약 현황 그래프 -->
 	<select id="getReservationStats"
 		resultType="com.hotel.domain.ReservationStatsDTO">
 	<![CDATA[

@@ -145,6 +145,8 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 > **숙소/객실 이미지 업로드·수정**을 AWS S3에 저장하고, 업로드된 경로를 DB에 반영합니다.  
 > 업로드 키는 `stay/{siId}/{riId?}/{UUID}` 규칙으로 관리되어 충돌 없이 안전하게 저장됩니다.
 
+<br>
+
 ##### 🔁 동작 흐름
 
 ```mermaid
@@ -162,7 +164,7 @@ sequenceDiagram
     Service->>DB: INSERT or UPDATE photo record
     Controller-->>Admin: "success"
 ```
-📌 설명
+#####📌 설명
 
 - `Admin(웹)` : 관리자 페이지에서 이미지 선택 후 업로드 요청 전송
 
@@ -204,7 +206,7 @@ public class AwsConfig {
 }
 ```
 
-📌 설명
+#####📌 설명
 
 - AWS S3 접근을 위한 _AmazonS3 Bean_ 등록
 - application.properties에 저장된 액세스 키 / 시크릿 키 / 리전 정보를 불러와 인증
@@ -230,7 +232,7 @@ public String uploadStayImages(@RequestParam("siId") int siId,
 }
 ```
 
-📌 설명
+#####📌 설명
 
 - 다중 파일 업로드를 처리하는 컨트롤러
 - S3Uploader 서비스에 업로드 작업 위임
@@ -259,7 +261,7 @@ public void uploadStayPhoto(int siId, Integer riId, int spIdx, MultipartFile fil
 	stayMapper.insertStayPhoto(photo);
 }
 ```
-📌 설명
+#####📌 설명
 
 - UUID를 사용해 파일명을 고유하게 생성
 - S3에 업로드 후, 파일 경로(sp_url)를 DB에 INSERT
@@ -274,7 +276,7 @@ public void uploadStayPhoto(int siId, Integer riId, int spIdx, MultipartFile fil
 </insert>
 ```
 
-📌 설명
+#####📌 설명
 
 - 업로드된 이미지 정보를 t_stay_photo 테이블에 저장
 

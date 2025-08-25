@@ -89,7 +89,7 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 - 📂 Google Sheets 기획 : <[https://docs.google.com/...](https://docs.google.com/spreadsheets/d/1OQmVgNTZ_Yc10W1KOM3R84FSjb7fj2WZQVZQrMFWXYk/edit?usp=sharing)>
 
 - 📂 Team Github : <https://github.com/Spring-team-Project2025/stay_folio_main>
-- 
+
 -📂 Diagram : <https://spring-team-project2025.github.io/stay_folio_documents/>
 
 <p align="center">

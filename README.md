@@ -146,10 +146,6 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 > 업로드 키는 `stay/{siId}/{riId?}/{UUID}` 규칙으로 관리되어 충돌 없이 안전하게 저장됩니다.
 
 ##### 🔁 동작 흐름
-1. 관리자가 숙소/객실 등록 페이지에서 이미지 선택  
-2. `UploadController`가 요청을 받아 `S3Uploader`에 위임  
-3. `S3Uploader`가 AWS S3에 `PutObject`로 업로드  
-4. 업로드된 파일 경로(`sp_url`)를 DB(`t_stay_photo`, `t_room_photo`)에 INSERT or UPDATE
 
 ```mermaid
 sequenceDiagram
@@ -166,6 +162,19 @@ sequenceDiagram
     Service->>DB: INSERT or UPDATE photo record
     Controller-->>Admin: "success"
 ```
+📌 설명
+
+- `Admin(웹)` : 관리자 페이지에서 이미지 선택 후 업로드 요청 전송
+
+- `UploadController` : 업로드 요청을 받아 `S3Uploader` 서비스에 전달
+
+- `S3Uploader(Service)` : S3에 실제 업로드 수행 후 DB 반영
+
+- `AWS S3` : 이미지 파일 저장소 **(UUID 기반 키 관리)**
+
+- `Oracle DB` : 업로드된 파일 경로(sp_url)를 테이블에 INSERT/UPDATE
+
+<br>
 
 ##### 🧱 핵심 코드
 

@@ -175,6 +175,7 @@ public class AwsConfig {
             .build();
     }
 }
+```
 
 📌 설명
 
@@ -204,6 +205,7 @@ public String uploadStayImages(@RequestParam("siId") int siId,
 		}
     return "success";
 }
+```
 
 📌 설명
 

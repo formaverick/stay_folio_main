@@ -4,7 +4,9 @@
   <img src="https://github.com/user-attachments/assets/ca107229-293b-418b-8fb5-d15274705f6f" width="800" alt="메인화면" />
 </p>
 
+
 ---
+
 
 ## 목차
 
@@ -18,7 +20,9 @@
 
 - [주요기능 실행화면]()
 
+
 ---
+
 
 ## 📌 프로젝트 개요
 
@@ -35,7 +39,9 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 
 - 개발 기간 : 25/07/23 ~ 25/08/20
 
+
 ---
+
 
 ## 🎯 프로젝트 목표
 - **실무 수준 웹 서비스 구현**
@@ -69,7 +75,9 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
   - 역할 분담을 통한 DB·백엔드·프론트·클라우드 전 영역 경험  
   - 로그 분석·디버깅·리팩토링을 통한 실무 수준 문제 해결 역량 강화  
 
+
 ---
+
 
 ## 🔧 기술 스택
 
@@ -80,7 +88,9 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 - **Security**: `Spring Security`, `BCryptPasswordEncoder`  
 - **Tools**: `GitHub`, `SourceTree`, `STS`, `Google Sheets`, `Figma`
 
+
 ---
+
 
 ## 👾 프로젝트 설계, 구현 
 
@@ -90,7 +100,7 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 
 - 📂 Team Github : <https://github.com/Spring-team-Project2025/stay_folio_main>
 
--📂 Diagram : <https://spring-team-project2025.github.io/stay_folio_documents/>
+- 📂 Diagram : <https://spring-team-project2025.github.io/stay_folio_documents/>
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/b951c5d6-dfa7-4a2c-840f-069e02060ee5" width="600" alt="슬라이드1" />
@@ -100,7 +110,9 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
   <img src="https://github.com/user-attachments/assets/dc3a3e57-7673-4770-8fc4-055623678e84" width="600" alt="다이어그램" />
 </p>
 
+
 ---
+
 
 ## 💻 핵심 기능
 

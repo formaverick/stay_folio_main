@@ -7,6 +7,7 @@
 
 ---
 
+<br>
 
 ## 목차
 
@@ -41,9 +42,11 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 
 - 개발 기간 : 25/07/23 ~ 25/08/20
 
+<br>
 
 ---
 
+<br>
 
 ## 🎯 프로젝트 목표
 - **실무 수준 웹 서비스 구현**
@@ -52,11 +55,15 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
   - Oracle Cloud DB 기반 정규화, 제약조건, 외래키를 반영한 테이블 설계  
 
 - **핵심 기능 제공**
-  - 관리자 대시보드 (예약 통계, 숙소 누락 체크, 베스트 숙소 TOP5)
-  - 숙소/객실 등록·수정·삭제 (Admin 전용)  
+
+  **👑 관리자(Admin)**
+  - 관리자 대시보드 (예약 통계, 숙소 통계, 베스트 숙소 TOP5)  
+  - 숙소/객실 등록 · 수정 · 삭제 (숙소 정보, 객실 이미지, 편의시설/어메니티 관리)  
+
+  **🙋 사용자(User)**
   - 숙소 검색 및 상세 페이지 (지역, 추천, 날짜, 인원 필터 적용)  
   - 예약 기능 (체크인/체크아웃, 인원 기반 가용 여부 확인, 결제 모듈 연동)  
-  - 마이페이지 (회원 정보 수정, 예약 내역/취소 내역, 북마크 관리)  
+  - 마이페이지 (회원 정보 수정, 예약 내역/취소 내역, 북마크 관리)   
 
 - **보안 및 인증**
   - Spring Security 기반 회원/관리자 권한 분리  
@@ -77,9 +84,11 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
   - 역할 분담을 통한 DB·백엔드·프론트·클라우드 전 영역 경험  
   - 로그 분석·디버깅·리팩토링을 통한 실무 수준 문제 해결 역량 강화  
 
+<br>
 
 ---
 
+<br>
 
 ## 🔧 기술 스택
 
@@ -90,9 +99,11 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 - **Security**: `Spring Security`, `BCryptPasswordEncoder`  
 - **Tools**: `GitHub`, `SourceTree`, `STS`, `Google Sheets`, `Figma`
 
+<br>
 
 ---
 
+<br>
 
 ## 👾 프로젝트 설계, 구현 
 
@@ -112,10 +123,99 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
   <img src="https://github.com/user-attachments/assets/dc3a3e57-7673-4770-8fc4-055623678e84" width="600" alt="다이어그램" />
 </p>
 
+<br>
 
 ---
 
+<br>
 
 ## 💻 핵심 기능
+
+### 👑 관리자(Admin)
+
+#### 1️⃣ 관리자 대시보드
+> **예약 통계, 숙소 통계, 베스트 숙소 TOP5 제공**  
+관리자가 전체 현황을 한눈에 파악할 수 있는 대시보드 화면을 구현했습니다.
+
+<p align="center"> <img src="https://github.com/user-attachments/assets/62bc8c27-e34e-47fb-91ad-6def4bf40224" width="700" alt="관리자 대시보드 화면" /> </p>
+
+<br>
+
+#### 2️⃣ 숙소/객실 이미지 업로드 (AWS S3 연동)
+> **숙소/객실 이미지 업로드·수정**을 AWS S3에 저장하고, 업로드된 경로를 DB에 반영합니다.  
+> 업로드 키는 `stay/{siId}/{riId?}/{UUID}` 규칙으로 관리되어 충돌 없이 안전하게 저장됩니다.
+
+##### 🔁 동작 흐름
+1. 관리자가 숙소/객실 등록 페이지에서 이미지 선택  
+2. `UploadController`가 요청을 받아 `S3Uploader`에 위임  
+3. `S3Uploader`가 AWS S3에 `PutObject`로 업로드  
+4. 업로드된 파일 경로(`sp_url`)를 DB(`t_stay_photo`, `t_room_photo`)에 INSERT or UPDATE
+
+##### 🌐 AWS 연결 설정
+```java
+// AwsConfig.java
+@Configuration
+@PropertySource("classpath:application.properties")
+public class AwsConfig {
+    //S3와 통신하기 위한 AmazonS3 Bean을 생성
+
+    @Value("${cloud.aws.credentials.access-key}") private String accessKey;
+    @Value("${cloud.aws.credentials.secret-key}") private String secretKey;
+    @Value("${cloud.aws.region.static}") private String region;
+
+    @Bean
+    public AmazonS3 amazonS3() {
+        // AWS 인증 정보 생성
+        BasicAWSCredentials credentials = new BasicAWSCredentials(accessKey, secretKey);
+
+        // AmazonS3 클라이언트 생성 및 반환
+        return AmazonS3ClientBuilder.standard()
+            .withRegion(Regions.fromName(region))
+            .withCredentials(new AWSStaticCredentialsProvider(credentials))
+            .build();
+    }
+}
+
+📌 설명
+
+- AWS S3 접근을 위한 _AmazonS3 Bean_ 등록
+- application.properties에 저장된 액세스 키 / 시크릿 키 / 리전 정보를 불러와 인증
+
+
+
+##### 🧱 핵심 코드
+
+###### (1) 업로드 (등록)
+```java
+// UploadController.java
+@PostMapping("/stay/imageUpload")
+public String uploadStayImages(@RequestParam("siId") int siId,
+      @RequestParam(value = "riId", required = false) Integer riId,
+			@RequestParam("imageFiles") List<MultipartFile> imageFiles,
+      @RequestParam("spIdxes") List<Integer> spIdxes) throws IOException {
+
+    for (int i = 0; i < imageFiles.size(); i++) {
+			MultipartFile file = imageFiles.get(i);
+			int spIdx = spIdxes.get(i);
+
+			if (!file.isEmpty()) {
+				s3Uploader.uploadStayPhoto(siId, riId, spIdx, file);
+			}
+		}
+    return "success";
+}
+
+📌 설명
+
+- 다중 파일 업로드를 처리하는 컨트롤러
+- S3Uploader 서비스에 업로드 작업 위임
+
+<br>
+
+---
+
+<br>
+
+## 🖼 주요 기능 실행화면
 
 

@@ -134,9 +134,10 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 ### 👑 관리자(Admin)
 
 ### 1️⃣ 관리자 대시보드 (Chart.js 시각화)
-> **예약/회원/지역 지표를 서버에서 집계해 JSP에서 Chart.js로 시각화**  
+> **예약/회원/지역 지표를 서버에서 집계해 JSP에서 Chart.js로 시각화**
 
 - 관리자가 전체 현황을 한눈에 파악할 수 있는 대시보드 화면을 구현하기 위해 서버에서 통계를 집계한 후 JSP에서 Chart.js로 시각화했습니다.
+- 서버에서 가공한 통계를 JSP에서 JSTL로 안전하게 출력하여 차트를 구성했습니다.
 - 집계 지표: 총 예약 / 진행 / 완료 / 취소  
 - 회원 vs 비회원 예약 비율  
 - 지역별 숙소 등록 현황  
@@ -145,7 +146,7 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 
 ##### 🧱 핵심 코드
 
-###### 🧩 컨트롤러 (요약)
+###### 🧩 Controller (요약)
 ```java
 // AdminDashController.java
 @GetMapping("/dashboard")
@@ -186,6 +187,7 @@ public String DashBoard(Model model) {
 ```
 <details>
 	<summary><b>Script(Chart.js) (자세히 보기)</b></summary>
+	
 	<script>
       document.addEventListener("DOMContentLoaded", function () {
 
@@ -272,6 +274,74 @@ public String DashBoard(Model model) {
     </script>
 </details>
 
+<details> 
+	<summary><b>Service & Mapper (자세히 보기)</b></summary> 
+
+	// AdminServiceImpl.java
+ 	@Override
+public ReservationStatsDTO getReservationStats() {
+    return adminMapper.getReservationStats();
+}
+@Override
+public int getMemberReservationCount() {
+    return adminMapper.getMemberReservationCount();
+}
+@Override
+public int getGuestReservationCount() {
+    return adminMapper.getGuestReservationCount();
+}
+@Override
+public List<LocationCategoryVO> getRegionStayStats() {
+    return adminMapper.getRegionStayStats();
+}
+
+// AdminMapper.xml
+<!-- 예약 현황 그래프 -->
+	<select id="getReservationStats"
+		resultType="com.hotel.domain.ReservationStatsDTO">
+	<![CDATA[
+		SELECT
+			COUNT(*) AS totalCount,
+			COUNT(CASE WHEN sr_status = 'a' AND sr_checkout > SYSDATE THEN 1 END) AS inProgressCount,
+			COUNT(CASE WHEN sr_status = 'a' AND sr_checkout <= SYSDATE THEN 1 END) AS completedCount,
+			COUNT(CASE WHEN sr_status = 'c' THEN 1 END) AS canceledCount
+		FROM t_stay_reservation
+		WHERE sr_status IN ('a', 'c')
+	]]>
+	</select>
+
+	<!-- 회원, 비회원 예약 비율 -->
+	<select id="getMemberVsGuestRatio" resultType="map">
+		SELECT
+		COUNT(CASE
+		WHEN mi_id IS NOT NULL THEN 1 END) AS memberCount,
+		COUNT(CASE WHEN
+		mi_id IS NULL THEN 1 END) AS guestCount
+		FROM t_stay_reservation
+		WHERE
+		sr_status = 'a' -- 예약 완료된 건만
+	</select>
+
+	<!-- 지역 별 숙소 현황 그래프 -->
+	<select id="getStayCountByRegion"
+		resultType="com.hotel.domain.LocationCategoryVO">
+		SELECT
+		l.lc_id AS lcId,
+		l.lc_name AS lcName,
+		COUNT(s.si_id) AS
+		count
+		FROM
+		t_location_category l
+		LEFT JOIN
+		t_stay_info s ON l.lc_id =
+		s.lc_id AND s.si_show = '1'
+		GROUP BY
+		l.lc_id, l.lc_name
+		ORDER BY
+		l.lc_id
+	</select>
+ 
+ </details>
 <br>
 <br>
 

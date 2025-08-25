@@ -200,7 +200,7 @@ public class AwsConfig {
 - AWS S3 접근을 위한 _AmazonS3 Bean_ 등록
 - application.properties에 저장된 액세스 키 / 시크릿 키 / 리전 정보를 불러와 인증
 
-###### (1) 업로드 (등록)
+##### (1) 업로드 (등록)
 ```java
 // UploadController.java
 @PostMapping("/stay/imageUpload")
@@ -271,7 +271,7 @@ public void uploadStayPhoto(int siId, Integer riId, int spIdx, MultipartFile fil
 
 <br>
 
-###### (2) 업로드 (수정)
+##### (2) 업로드 (수정)
 ```java
 // S3Uploader.java (수정)
 public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile file) throws IOException {

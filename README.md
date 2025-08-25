@@ -143,10 +143,10 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 
 #### 2️⃣ 숙소/객실 이미지 업로드 (AWS S3 연동)
 
-<p align="center"> 
-	<img src="https://github.com/user-attachments/assets/3b7fa887-b9b6-48c7-9bae-3bc2adae8576" width="700" alt="관리자 대시보드 화면" />
-	<img width="700" alt="관리자 이미지 등록 화면" src="https://github.com/user-attachments/assets/4c1ec916-65ab-47b4-b872-cd8a08c51729" />
-</p>
+| 이미지 등록 화면 | 이미지 등록 완료 화면 |
+|----------------|------------------|
+| <img src="https://github.com/user-attachments/assets/3b7fa887-b9b6-48c7-9bae-3bc2adae8576" width="400"/> | <img src="https://github.com/user-attachments/assets/4c1ec916-65ab-47b4-b872-cd8a08c51729" width="400"/> |
+
 
 > **숙소/객실 이미지 업로드·수정**을 AWS S3에 저장하고, 업로드된 경로를 DB에 반영합니다.  
 > 업로드 키는 `stay/{siId}/{riId?}/{UUID}` 규칙으로 관리되어 충돌 없이 안전하게 저장됩니다.

@@ -151,7 +151,25 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 3. `S3Uploader`가 AWS S3에 `PutObject`로 업로드  
 4. 업로드된 파일 경로(`sp_url`)를 DB(`t_stay_photo`, `t_room_photo`)에 INSERT or UPDATE
 
-##### 🌐 AWS 연결 설정
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Admin as Admin(웹)
+    participant Controller as UploadController
+    participant Service as S3Uploader
+    participant S3 as AWS S3
+    participant DB as Oracle DB
+
+    Admin->>Controller: POST /admin/stay/imageUpload<br/>or /admin/room/imageUpload
+    Controller->>Service: uploadStayPhoto(...)<br/>uploadRoomPhoto(...)
+    Service->>S3: PutObject(bucket, key, fileStream, metadata)
+    Service->>DB: INSERT or UPDATE photo record
+    Controller-->>Admin: "success"
+```
+
+##### 🧱 핵심 코드
+
+###### 🌐 AWS 연결 설정
 ```java
 // AwsConfig.java
 @Configuration
@@ -182,10 +200,6 @@ public class AwsConfig {
 - AWS S3 접근을 위한 _AmazonS3 Bean_ 등록
 - application.properties에 저장된 액세스 키 / 시크릿 키 / 리전 정보를 불러와 인증
 
-
-
-##### 🧱 핵심 코드
-
 ###### (1) 업로드 (등록)
 ```java
 // UploadController.java
@@ -213,6 +227,73 @@ public String uploadStayImages(@RequestParam("siId") int siId,
 - S3Uploader 서비스에 업로드 작업 위임
 
 <br>
+
+```java
+// S3Uploader.java (등록)
+public void uploadStayPhoto(int siId, Integer riId, int spIdx, MultipartFile file) throws IOException {
+    String fileName = "stay/" + siId + "/" + UUID.randomUUID();
+
+    ObjectMetadata metadata = new ObjectMetadata();
+	metadata.setContentType(file.getContentType());
+	metadata.setContentDisposition("inline");
+	metadata.setContentLength(file.getSize());
+
+    PutObjectRequest request = new PutObjectRequest(bucket, fileName, file.getInputStream(), metadata);
+	amazonS3.putObject(request); // S3에 업로드
+
+    PhotoVO photo = new PhotoVO();
+	photo.setSiId(siId);
+	photo.setRiId(riId);
+	photo.setSpIdx(spIdx);
+	photo.setSpUrl(fileName);
+
+	stayMapper.insertStayPhoto(photo);
+}
+```
+📌 설명
+
+- UUID를 사용해 파일명을 고유하게 생성
+- S3에 업로드 후, 파일 경로(sp_url)를 DB에 INSERT
+
+<br>
+
+```java
+<!-- StayMapper.xml -->
+<insert id="insertStayPhoto" parameterType="com.hotel.domain.PhotoVO">
+  INSERT INTO t_stay_photo (si_id, ri_id, sp_idx, sp_url)
+  VALUES (#{siId}, #{riId, jdbcType=NULL}, #{spIdx}, #{spUrl})
+</insert>
+```
+
+📌 설명
+
+- 업로드된 이미지 정보를 t_stay_photo 테이블에 저장
+
+<br>
+
+###### (2) 업로드 (수정)
+```java
+// S3Uploader.java (수정)
+public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile file) throws IOException {
+    String key = "stay/" + siId + "/" + UUID.randomUUID();
+
+    ObjectMetadata meta = new ObjectMetadata();
+    meta.setContentType(file.getContentType());
+    meta.setContentLength(file.getSize());
+
+    amazonS3.putObject(new PutObjectRequest(bucket, key, file.getInputStream(), meta));
+
+    PhotoVO photo = new PhotoVO();
+    photo.setSiId(siId); photo.setRiId(riId);
+    photo.setSpIdx(spIdx); photo.setSpUrl(key);
+
+    if (stayMapper.existsStayPhoto(photo)) {
+        stayMapper.updateStayPhoto(photo); // UPDATE
+    } else {
+        stayMapper.insertStayPhoto(photo); // INSERT
+    }
+}
+```
 
 ---
 

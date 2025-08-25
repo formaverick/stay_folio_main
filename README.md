@@ -133,16 +133,32 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 
 ### 👑 관리자(Admin)
 
-#### 1️⃣ 관리자 대시보드
-> **예약 통계, 숙소 통계, 베스트 숙소 TOP5 제공**  
-관리자가 전체 현황을 한눈에 파악할 수 있는 대시보드 화면을 구현했습니다.
+#### 1️⃣ 관리자 대시보드 (Chart.js 시각화)
+> **예약/회원/지역 지표를 서버에서 집계해 JSP에서 Chart.js로 시각화**  
+
+- 관리자가 전체 현황을 한눈에 파악할 수 있는 대시보드 화면을 구현하기 위해 서버에서 통계를 집계한 후 JSP에서 Chart.js로 시각화했습니다.
+- 집계 지표: 총 예약 / 진행 / 완료 / 취소  
+- 회원 vs 비회원 예약 비율  
+- 지역별 숙소 등록 현황  
 
 <p align="center"> <img src="https://github.com/user-attachments/assets/62bc8c27-e34e-47fb-91ad-6def4bf40224" width="700" alt="관리자 대시보드 화면" /> </p>
 
+##### 🧱 핵심 코드
+
+###### 🧩 컨트롤러 (요약)
+```java
+@GetMapping("/dashboard")
+public String dashboard(Model model) {
+  model.addAttribute("stats", adminService.getReservationStats());
+  model.addAttribute("memberCount", adminService.getMemberReservationCount());
+  model.addAttribute("guestCount",  adminService.getGuestReservationCount());
+  model.addAttribute("regionStats", adminService.getRegionStayStats());
+  return "admin/dashboard";
+}
+```
+
 <br>
-
--------------
-
+<hr>
 <br>
 
 #### 2️⃣ 숙소/객실 이미지 업로드 (AWS S3 연동)
@@ -200,9 +216,6 @@ sequenceDiagram
 
 <br>
 
--------------
-
-<br>
 
 ##### 🧱 핵심 코드
 
@@ -238,8 +251,7 @@ public class AwsConfig {
 - application.properties에 저장된 액세스 키 / 시크릿 키 / 리전 정보를 불러와 인증
   
 <br>
--------------
-<br>
+
 
 #### (1) 업로드 (등록)
 ```java
@@ -312,10 +324,6 @@ public void uploadStayPhoto(int siId, Integer riId, int spIdx, MultipartFile fil
 
 <br>
 
--------------
-
-<br>
-
 #### (2) 업로드 (수정)
 ```java
 // S3Uploader.java (수정)
@@ -375,6 +383,10 @@ public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile fil
 - 있으면 updateStayPhoto, 없으면 insertStayPhoto 수행
 
 <br>
+<hr>
+<br>
+
+
 
 ---
 

@@ -1,7 +1,7 @@
 # STAYPOLIO 스타일 숙소 사이트 웹구현 프로젝트
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/ca107229-293b-418b-8fb5-d15274705f6f" width="800" alt="메인화면" />
+  <img width="800" alt="메인화면" src="https://github.com/user-attachments/assets/caba1a57-4232-479f-b5cd-48f96938d591" />
 </p>
 
 
@@ -58,11 +58,14 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 
   **👑 관리자(Admin)**
   - 관리자 대시보드 (예약 통계, 숙소 통계, 베스트 숙소 TOP5)  
-  - 숙소/객실 등록 · 수정 · 삭제 (숙소 정보, 객실 이미지, 편의시설/어메니티 관리)  
+  - 숙소/객실 등록 · 수정 · 삭제 (숙소 정보, 객실 이미지, 편의시설/어메니티 관리)
+  - 회원 조회 · 관리
+  - 예약 조회 · 관리
 
   **🙋 사용자(User)**
   - 숙소 검색 및 상세 페이지 (지역, 추천, 날짜, 인원 필터 적용)  
-  - 예약 기능 (체크인/체크아웃, 인원 기반 가용 여부 확인, 결제 모듈 연동)  
+  - 예약 기능 (체크인/체크아웃, 인원 기반 가용 여부 확인, 결제 모듈 연동)
+  - 회원가입/로그인 (Spring Security)
   - 마이페이지 (회원 정보 수정, 예약 내역/취소 내역, 북마크 관리)   
 
 - **보안 및 인증**
@@ -400,7 +403,6 @@ sequenceDiagram
 - `Oracle DB` : 업로드된 파일 경로(sp_url)를 테이블에 INSERT/UPDATE
 
 <br>
-
 
 ##### 🧱 핵심 코드
 
@@ -1127,7 +1129,127 @@ sequenceDiagram
 - 등록 후 리디렉트: siId,riId를 쿼리로 넘겨 이미지 업로드/추가 객실 등록 바로 진행
 
 <br>
+<br>
+
+### 4️⃣ 숙소 + 객실 수정 (정보 · 편의시설/어메니티 · 이미지)
+
+<p align="center">
+  <table>
+    <tr>
+      <th style="text-align:center;">숙소 수정 화면</th>
+      <th style="text-align:center;">객실 수정 화면</th>
+    </tr>
+    <tr>
+      <td align="center">
+		  <img width="450" alt="localhost_8082_admin_stay_form_siId=258_1" src="https://github.com/user-attachments/assets/0f3227a4-dde8-4a0c-be6d-93a8fb2efaf1" />
+		  <img width="450" alt="localhost_8082_admin_stay_form_siId=258_2" src="https://github.com/user-attachments/assets/36e9c77c-9608-4e30-b6f0-5a421f3cac0e" />
+      </td>
+      <td align="center">
+		<img width="450" alt="localhost_8082_admin_rooms_form_siId=258 riId=1_1" src="https://github.com/user-attachments/assets/fbc085bd-9af7-48da-a98e-1ede19437bd6" />
+		<img width="450" alt="localhost_8082_admin_rooms_form_siId=258 riId=1_2" src="https://github.com/user-attachments/assets/847cb401-68dd-4d24-ace1-3ac5f712c41b" />
+      </td>
+    </tr>
+  </table>
+</p>
+
+> 숙소와 객실의 기본/상세 정보, 편의시설, 키워드, 이미지까지 수정할 수 있는 기능을 제공합니다.
+> 기존 데이터를 불러와 수정 후 저장하며, 편의시설·키워드·어메니티는 **삭제 후 재삽입(Reset 방식)**으로 동기화합니다.
+
+<br>
+
+#### 🔁 동작 흐름 — 숙소/객실 이미지 수정 (S3)
+```mermaid
+sequenceDiagram
+  autonumber
+  participant Admin as Admin(웹)
+  participant C as StayUpdateController
+  participant S as StayService
+  participant DB as Oracle DB
+
+  Admin->>C: GET /admin/stay/update?siId={siId}
+  C-->>Admin: stayUpdate.jsp (기존 숙소/상세/편의시설/키워드 바인딩)
+
+  Admin->>C: POST /admin/stay/update (수정 제출)
+  C->>S: updateStay(stay), updateStayDetail(detail)
+  C->>S: updateStayFacilities(siId, facilities)
+  C->>S: updateStayKeywords(siId, keywords)
+  S->>DB: UPDATE t_stay_info / t_stay_info_detail
+  S->>DB: DELETE+INSERT t_stay_facility_rel / t_stay_recommend
+  C-->>Admin: redirect:/admin/stay/detail?siId=...
+```
+##### 📌 설명
+
+- 기존 정보 조회 후 수정 폼에 바인딩
+
+- 저장 시 기본/상세 정보는 UPDATE, 시설·키워드 관계는 전체 삭제 후 재삽입
+
+- 트랜잭션 적용으로 실패 시 롤백
+
+<br>
+
+#### 🔁 동작 흐름 — 숙소/객실 이미지 수정 (S3)
+```mermaid
+sequenceDiagram
+  autonumber
+  participant Admin as Admin(웹)
+  participant C as UploadController
+  participant U as S3Uploader
+  participant S3 as AWS S3
+  participant DB as Oracle DB
+
+  Admin->>C: POST /admin/stay/imageUpdate (siId, spIdx, file)
+  C->>U: updateStayImage(siId, riId?, spIdx, file)
+  U->>S3: PutObject(bucket, key=stay/{siId}/{riId?}/{UUID})
+  U->>DB: EXISTS? t_stay_photo / t_room_photo
+  U->>DB: UPDATE or INSERT sp_url
+  C-->>Admin: "success"
+```
+##### 📌 설명
+
+- 이미지 키 규칙: stay/{siId}/{riId?}/{UUID}
+
+- 동일 위치(spIdx, siId, riId?)에 있으면 UPDATE, 없으면 INSERT
+
+- DB의 sp_url 갱신
+
+<br>
+
+#### 🔁 동작 흐름 — 객실 수정
+```mermaid
+sequenceDiagram
+  autonumber
+  participant Admin as Admin(웹)
+  participant C as RoomUpdateController
+  participant R as RoomService
+  participant DB as Oracle DB
+
+  Admin->>C: GET /admin/room/update?siId={siId}&riId={riId}
+  C-->>Admin: roomUpdate.jsp (기존 객실/시설/어메니티 바인딩)
+
+  Admin->>C: POST /admin/room/update (수정 제출)
+  C->>R: updateRoom(vo, facilities, amenities)
+  R->>DB: UPDATE t_room_info
+  R->>DB: DELETE+INSERT t_room_facility_rel / t_room_amenities
+  C-->>Admin: redirect:/admin/rooms?siId=...&riId=...
+```
+##### 📌 설명
+
+- 객실 기본정보는 UPDATE
+
+- 시설/어메니티는 RESET 방식(삭제 후 재삽입)
+
+- 수정 폼은 등록 JSP와 동일 페이지를 재사용
+
+<br>
+
+##### 🧱 핵심 코드
+
+<br><br>
 
 ## 🖼 주요 기능 실행화면
+
+### 1️⃣ 관리자 대시보드 (Chart.js 시각화)
+
+![대시보드](https://github.com/user-attachments/assets/7e0807ba-929d-4121-8584-20eb7c0d4b19)
 
 

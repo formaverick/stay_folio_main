@@ -37,8 +37,8 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 기획 → 설계 → 개발 → 테스트 → 배포로 이어지는 **프로젝트 라이프사이클 전체를 수행**했습니다.
 
 🔗 기획 자료  
-- [Figma 화면 설계]((https://www.figma.com/design/FYYxvzwGzkNBLJrTOa5ROW/Stay-folio?node-id=0-1&t=ekM1qKT06YyBd0Pw-1))  
-- [Google Sheets 데이터 구조/일정 관리]([https://docs.google.com/spreadsheets/...](https://docs.google.com/spreadsheets/d/1OQmVgNTZ_Yc10W1KOM3R84FSjb7fj2WZQVZQrMFWXYk/edit?usp=sharing))
+- [Figma 화면 설계](https://www.figma.com/design/FYYxvzwGzkNBLJrTOa5ROW/Stay-folio?node-id=0-1&t=ekM1qKT06YyBd0Pw-1)  
+- [Google Sheets 데이터 구조/일정 관리](https://docs.google.com/spreadsheets/d/1OQmVgNTZ_Yc10W1KOM3R84FSjb7fj2WZQVZQrMFWXYk/edit?usp=sharing)
 
 - 개발 기간 : 25/07/23 ~ 25/08/20
 

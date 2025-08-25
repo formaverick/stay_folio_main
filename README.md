@@ -136,13 +136,13 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 ### 1️⃣ 관리자 대시보드 (Chart.js 시각화)
 > **예약/회원/지역 지표를 서버에서 집계해 JSP에서 Chart.js로 시각화**
 
+<p align="center"> <img src="https://github.com/user-attachments/assets/62bc8c27-e34e-47fb-91ad-6def4bf40224" width="700" alt="관리자 대시보드 화면" /> </p>
+
 - 관리자가 전체 현황을 한눈에 파악할 수 있는 대시보드 화면을 구현하기 위해 서버에서 통계를 집계한 후 JSP에서 Chart.js로 시각화했습니다.
 - 서버에서 가공한 통계를 JSP에서 JSTL로 안전하게 출력하여 차트를 구성했습니다.
 - 집계 지표: 총 예약 / 진행 / 완료 / 취소  
 - 회원 vs 비회원 예약 비율  
 - 지역별 숙소 등록 현황  
-
-<p align="center"> <img src="https://github.com/user-attachments/assets/62bc8c27-e34e-47fb-91ad-6def4bf40224" width="700" alt="관리자 대시보드 화면" /> </p>
 
 ##### 🧱 핵심 코드
 
@@ -347,6 +347,9 @@ public String DashBoard(Model model) {
 
 ### 2️⃣ 숙소/객실 이미지 업로드 (AWS S3 연동)
 
+> **숙소/객실 이미지 업로드·수정**을 AWS S3에 저장하고, 업로드된 경로를 DB에 반영합니다.  
+> 업로드 키는 `stay/{siId}/{riId?}/{UUID}` 규칙으로 관리되어 충돌 없이 안전하게 저장됩니다.
+
 <p align="center">
   <table>
     <tr>
@@ -364,8 +367,6 @@ public String DashBoard(Model model) {
   </table>
 </p>
 
-> **숙소/객실 이미지 업로드·수정**을 AWS S3에 저장하고, 업로드된 경로를 DB에 반영합니다.  
-> 업로드 키는 `stay/{siId}/{riId?}/{UUID}` 규칙으로 관리되어 충돌 없이 안전하게 저장됩니다.
 
 <br>
 
@@ -438,6 +439,7 @@ public class AwsConfig {
 
 
 #### (1) 업로드 (등록)
+###### 🧩 Controller (요약)
 ```java
 // UploadController.java
 @PostMapping("/stay/imageUpload")
@@ -634,7 +636,495 @@ public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile fil
 <br>
 <br>
 
----
+### 3️⃣ 숙소 + 객실 등록 (폼 → 검증/저장 → 다음 단계)
+
+<p align="center">
+  <table>
+    <tr>
+      <th style="text-align:center;">숙소 등록 화면</th>
+      <th style="text-align:center;">숙소 등록 요구 모달</th>
+    </tr>
+    <tr>
+      <td align="center">
+		  <img width="550" alt="admin_stay_add" src="https://github.com/user-attachments/assets/f9cd2943-375e-437e-ae6f-69e1e2263227" />
+      </td>
+      <td align="center">
+		<img width="250" src="https://github.com/user-attachments/assets/a985b053-1582-4e69-aac9-7d72e5569307" />
+      </td>
+    </tr>
+  </table>
+</p>
+
+> **숙소 기본정보/상세/편의시설/키워드 등록 → 즉시 객실 등록 화면으로 이동**  
+> 폼 제출 후 마지막 `siId`를 바인딩해 **연속 등록(숙소 → 객실 → 이미지)** 흐름을 지원합니다.
+
+<br>
+
+#### 🔁 동작 흐름
+```mermaid
+sequenceDiagram
+  autonumber
+  participant Admin as Admin(웹)
+  participant C as AdminController
+  participant S as StayService
+  participant R as RoomService
+  participant S3 as AWS S3
+  participant DB as Oracle DB
+
+  Admin->>C: GET /admin/stay/add (숙소 등록 폼)
+  C-->>Admin: stayRegister.jsp (지역/편의시설/키워드 선택)
+
+  Admin->>C: POST /admin/stay/add (숙소 등록)
+  C->>S: insertStayInfo(stay, detail, facilities, keywords)
+  S->>DB: INSERT t_stay_info / t_stay_info_detail / t_stay_facility_rel / t_stay_recommend
+  S-->>C: siId 반환(getLastInsertId)
+
+  C-->>Admin: stayRegister.jsp (newSiId 표시 & **이미지 업로드 진행 가능**)
+  Admin->>C: POST /admin/stay/imageUpload (siId, spIdx[], files)
+  C->>S3: PutObject (bucket, key, fileStream, metadata)
+  C->>DB: INSERT/UPDATE t_stay_photo
+  C-->>Admin: "success" (**이미지 업로드 완료** 알림)
+
+  Admin->>C: GET /admin/rooms?siId={siId} (**이미지 완료 후 이동**)
+  C-->>Admin: roomRegister.jsp (**객실 등록 폼**)
+  Admin->>C: POST /admin/stay/rooms/add
+  C->>R: insertRoom(vo, facilities, amenities)
+  R->>DB: INSERT t_room_info / t_room_facility_rel / t_room_amenity_rel
+  C-->>Admin: redirect:/admin/rooms?siId=...&riId=... (객실 이미지 추가 숙소와 동일)
+```
+
+##### 📌 설명
+- Admin(웹) : 관리자에서 숙소 등록 → 이미지 등록 → 객실 등록까지 순차 진행
+
+- AdminController : 숙소 등록 폼 제공, 등록 요청 처리, StayService/RoomService 호출
+
+- StayService : 숙소 기본정보·상세·편의시설·키워드를 DB에 저장, 마지막 siId 반환
+
+- AWS S3 : 업로드된 이미지 파일 저장 (key: stay/{siId}/{riId?}/{UUID})
+
+- Oracle DB : t_stay_info, t_stay_detail, t_stay_photo, t_room_info 등 INSERT/UPDATE
+
+- RoomService : 객실 정보와 선택된 편의시설·어메니티를 DB에 등록
+
+- 흐름 제약 : 반드시 이미지 등록을 완료해야만 객실 등록(roomRegister.jsp)으로 이동 가능
+
+<br>
+
+##### 🧱 핵심 코드
+###### 🧩 Controller (요약)
+```java
+	// AdminContriller.java
+	// 숙소 등록
+	@PostMapping("/stay/add")
+	public String addStay(StayVO stay, StayDetailVO detail,
+			@RequestParam(value = "facilities", required = false) List<Integer> facilities, @RequestParam(value = "keyword", required = false) List<Integer> keyword, Model model) {
+
+		// 숙소 정보 insert
+		stayService.insertStayInfo(stay, detail, facilities, keyword);
+
+		// 최근 si_id 가져오기
+		int siId = stayService.getLastInsertId();
+
+		if (facilities == null) {
+			facilities = new ArrayList<>();
+		}
+
+		List<FacilityVO> facilityList = stayService.getAllFacilities();
+
+		model.addAttribute("stay", stay); // 숙소 기본 정보
+		model.addAttribute("detail", detail); // 숙소 상세 정보
+		model.addAttribute("facilityList", facilityList); // 모든 편의 시설 목록
+		model.addAttribute("selectedFacilityIds", facilities); // 선택된 편의 시설
+		model.addAttribute("newSiId", siId); // insert 된 숙소 id
+
+		return "/admin/room/stayRegister"; // 같은 페이지로 돌아가서 이미지 등록 진행
+	}
+```
+###### 🧩 Service (요약)
+```java
+	// StayServiceImpl.java
+	// admin - 숙소 등록
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void insertStayInfo(StayVO stay, StayDetailVO detail, List<Integer> facilityIds, List<Integer> keyword) {
+		// 숙소 기본 정보
+		stayMapper.insertStayInfo(stay);
+
+		// 등록된 숙소 id
+		int siId = stayMapper.getLastInsertId();
+
+		// 상세 정보 id에 등록된 숙소 id 설정
+		detail.setSiId(siId);
+		// 숙소 상세 정보 등록
+		stayMapper.insertStayDetail(detail);
+
+		// 선택된 편의시설 등록
+		if (facilityIds != null) {
+			for (Integer fiId : facilityIds) {
+				stayMapper.insertFacilityRel(siId, fiId);
+			}
+		}
+
+		// 선택된 키워드 등록
+		if (keyword != null) {
+			for (Integer rcId : keyword) {
+				adminMapper.insertCategoryStay(rcId, siId);
+			}
+		}
+	}
+```
+
+<details> 
+	<summary><b>Controller (자세히 보기)</b></summary> 
+
+	@Controller
+	@RequestMapping("/admin")
+	public class AdminController {
+
+		@Autowired
+		private StayService stayService;
+
+		@Autowired
+		private RoomService roomService;
+
+		@Autowired
+		private AdminService adminService;
+
+		// 숙소 등록 페이지
+		@GetMapping("/stay/add")
+		public String StayForm(Model model) {
+			// 지역 선택 목록
+			model.addAttribute("locationList", stayService.getAllLocations());
+		
+			// 편의 시설 선택 목록
+			model.addAttribute("facilityList", stayService.getAllFacilities());
+
+			// 검색 키워드 선택 목록
+			model.addAttribute("keywordList", adminService.getRecommendKeyword());
+
+			return "admin/room/stayRegister";
+		}
+
+		// 숙소 등록
+		@PostMapping("/stay/add")
+		public String addStay(StayVO stay, StayDetailVO detail,
+			@RequestParam(value = "facilities", required = false) List<Integer> facilities, @RequestParam(value = "keyword", required = false) List<Integer> keyword, Model model) {
+
+			// 숙소 정보 insert
+			stayService.insertStayInfo(stay, detail, facilities, keyword);
+
+			// 최근 si_id 가져오기
+			int siId = stayService.getLastInsertId();
+
+			if (facilities == null) {
+				facilities = new ArrayList<>();
+			}
+
+			List<FacilityVO> facilityList = stayService.getAllFacilities();
+
+			model.addAttribute("stay", stay); // 숙소 기본 정보
+			model.addAttribute("detail", detail); // 숙소 상세 정보
+			model.addAttribute("facilityList", facilityList); // 모든 편의 시설 목록
+			model.addAttribute("selectedFacilityIds", facilities); // 선택된 편의 시설
+			model.addAttribute("newSiId", siId); // insert 된 숙소 id
+
+			return "/admin/room/stayRegister"; // 같은 페이지로 돌아가서 이미지 등록 진행
+		}
+	
+
+		@GetMapping("/rooms") // 숙소 등록에서 객실 등록 페이지 이동
+		public String showRoomRegister(@RequestParam("siId") int siId,
+			@RequestParam(value = "riId", required = false) Integer riId, Model model) {
+			model.addAttribute("siId", siId);
+			model.addAttribute("riId", riId);
+			model.addAttribute("facilityList", stayService.getAllFacilities());
+			model.addAttribute("amenityList", roomService.getAllAmenities());
+		
+			// 객실 번호가 있을 경우
+        	if (riId != null) {
+            	RoomVO room = roomService.getRoomById(siId, riId);
+            	List<FacilityVO> roomFacilities = roomService.getFacilitiesByRoomId(siId, riId);
+            	List<AmenityVO> roomAmenities = roomService.getAmenitiesByRoomId(siId, riId);
+            
+            	// 선택된 시설들의 fiId, aiIdx만 추출
+            	List<Integer> selectedFacilityIds = roomFacilities.stream().map(FacilityVO::getFiId)
+                    .collect(Collectors.toList());
+            	List<Integer> selectedAmenityIds = roomAmenities.stream().map(AmenityVO::getAiIdx)
+                    .collect(Collectors.toList());
+            
+             	Map<Integer, Boolean> selectedFacilityMap = selectedFacilityIds.stream()
+                     .collect(Collectors.toMap(i -> i, i -> true, (a,b)->a));
+             	Map<Integer, Boolean> selectedAmenityMap = selectedAmenityIds.stream()
+                     .collect(Collectors.toMap(i -> i, i -> true, (a,b)->a));
+            
+           	 	model.addAttribute("room", room);
+            	model.addAttribute("selectedFacilityMap", selectedFacilityMap);
+            	model.addAttribute("selectedAmenityMap", selectedAmenityMap);
+        	}
+		
+			return "admin/room/roomRegister";
+		}
+
+		@PostMapping("/stay/rooms/add") // 객실 등록
+		public String addRoom(RoomVO vo, @RequestParam(value = "facilities", required = false) List<Integer> facilities,
+			@RequestParam(value = "amenities", required = false) List<Integer> amenities, RedirectAttributes rttr) {
+
+			int riId = roomService.insertRoom(vo, facilities, amenities);
+
+			// 등록 된 객실, 숙소 마지막 id
+			rttr.addAttribute("siId", vo.getSiId());
+			rttr.addAttribute("riId", riId);
+
+			return "redirect:/admin/rooms";
+		}
+
+		// 등록 완료된 객실 리스트 출력
+		@GetMapping(value = "/stay/rooms/list", produces = "application/json")
+		@ResponseBody
+		public List<RoomVO> getRoomList(@RequestParam("siId") int siId) {
+			return stayService.getRoomsByStayId(siId);
+		}
+	}
+</details>
+
+<details> 
+	<summary><b>숙소 등록 Service & Mapper (자세히 보기)</b></summary> 
+
+ 	// StayServiceImpl.java (등록 부분 발췌)
+	// 편의시설 리스트
+	@Override
+	public List<FacilityVO> getAllFacilities() {
+		return stayMapper.getAllFacilities();
+	}
+
+	// admin - 숙소 등록
+	@Override
+	@Transactional(rollbackFor = Exception.class)
+	public void insertStayInfo(StayVO stay, StayDetailVO detail, List<Integer> facilityIds, List<Integer> keyword) {
+		// 숙소 기본 정보
+		stayMapper.insertStayInfo(stay);
+
+		// 등록된 숙소 id
+		int siId = stayMapper.getLastInsertId();
+
+		// 상세 정보 id에 등록된 숙소 id 설정
+		detail.setSiId(siId);
+		// 숙소 상세 정보 등록
+		stayMapper.insertStayDetail(detail);
+
+		// 선택된 편의시설 등록
+		if (facilityIds != null) {
+			for (Integer fiId : facilityIds) {
+				stayMapper.insertFacilityRel(siId, fiId);
+			}
+		}
+
+		// 선택된 키워드 등록
+		if (keyword != null) {
+			for (Integer rcId : keyword) {
+				adminMapper.insertCategoryStay(rcId, siId);
+			}
+		}
+	}
+
+	// 숙소 마지막 id 조회
+	@Override
+	public int getLastInsertId() {
+		return stayMapper.getLastInsertId();
+	}
+
+	@Override
+	public void insertStayDetail(StayDetailVO detail) {
+		stayMapper.insertStayDetail(detail);
+	}
+
+	@Override
+	public void insertFacilityRel(int siId, int fiId) {
+		stayMapper.insertFacilityRel(siId, fiId);
+	}
+
+	// StayMapper.xml (등록 부분 발췌)
+ 	<!-- admin insert 시작 -->
+	<!-- 지역 목록 조회 -->
+	<select id="getAllLocations"
+		resultType="com.hotel.domain.LocationCategoryVO">
+		SELECT lc_id AS lcId, lc_name AS lcName, lc_id AS lcId
+		FROM
+		t_location_category ORDER BY lc_id
+	</select>
+
+	<!-- 편의시설 목록 조회 -->
+	<select id="getAllFacilities"
+		resultType="com.hotel.domain.FacilityVO">
+		SELECT fi_id AS fiId, fi_name AS fiName FROM
+		t_facility_info ORDER BY fi_id
+	</select>
+
+	<!-- 숙소 기본 정보 등록 -->
+	<insert id="insertStayInfo"
+		parameterType="com.hotel.domain.StayVO">
+		INSERT INTO t_stay_info (
+		si_name, si_desc, si_loca,
+		lc_id,
+		si_book, si_review, si_minperson, si_maxperson, si_minprice,
+		si_extra, si_peak, si_off, si_discount,
+		si_show, si_delete, si_date
+		)
+		VALUES (
+		#{siName}, #{siDesc}, #{siLoca}, #{lcId},
+		#{siBook},
+		#{siReview}, #{siMinperson}, #{siMaxperson}, #{siMinprice},
+		#{siExtra}, #{siPeak}, #{siOff}, #{siDiscount},
+		#{siShow},
+		#{siDelete},
+		SYSDATE
+		)
+	</insert>
+
+	<!-- 가장 최근 siId -->
+	<select id="getLastInsertId" resultType="int">
+		SELECT MAX(si_id) FROM
+		t_stay_info
+	</select>
+
+	<!-- 숙소 상세 설명 등록 -->
+	<insert id="insertStayDetail"
+		parameterType="com.hotel.domain.StayDetailVO">
+		INSERT INTO t_stay_info_detail (
+		si_id, si_notice,
+		si_desc1, si_desc2, si_feat1, si_feat2,
+		si_feat_title1, si_feat_title2,
+		si_address, si_addrdesc, si_phone, si_email, si_instagram,
+		si_bizname,
+		si_biznum, si_ceo,
+		si_pet, si_parking, si_food, si_checkin, si_checkout
+		) VALUES (
+		#{siId}, #{siNotice, jdbcType=VARCHAR}, #{siDesc1},
+		#{siDesc2}, #{siFeat1}, #{siFeat2},
+		#{siFeatTitle1},
+		#{siFeatTitle2},
+		#{siAddress}, #{siAddrdesc}, #{siPhone},
+		#{siEmail}, #{siInstagram},
+		#{siBizname}, #{siBiznum}, #{siCeo},
+		#{siPet}, #{siParking}, #{siFood},
+		#{siCheckin}, #{siCheckout}
+		)
+	</insert>
+
+
+	<!-- 숙소-편의시설 매핑 등록 -->
+	<insert id="insertFacilityRel">
+		INSERT INTO t_stay_facility_rel (si_id, fi_id)
+		VALUES
+		(#{siId}, #{fiId})
+	</insert>
+
+	<!-- 이미지 insert -->
+	<insert id="insertStayPhoto"
+		parameterType="com.hotel.domain.PhotoVO">
+		INSERT INTO t_stay_photo (si_id, ri_id, sp_idx, sp_url)
+		VALUES (#{siId}, #{riId, jdbcType=NULL}, #{spIdx}, #{spUrl})
+	</insert>
+
+	<!-- admin insert 끝 -->
+</details>
+
+<details> 
+	<summary><b>객실 등록 Service & Mapper (자세히 보기)</b></summary> 
+
+	// RoomServiceImpl.java (등록 부분 발췌)
+ 	// admin - 객실 등록
+	@Override
+	public int insertRoom(RoomVO vo, List<Integer> facilities, List<Integer> amenities) {
+		// 객실 기본 정보 등록
+		roomMapper.insertRoom(vo);
+
+		int riId = vo.getRiId();
+		int siId = vo.getSiId();
+
+		// 객실 편의시설 insert
+		if (facilities != null) {
+			for (Integer fiId : facilities) {
+				roomMapper.insertRoomFacility(siId, riId, fiId);
+			}
+		}
+
+		// 객실 어메니티 insert
+		if (amenities != null) {
+			for (Integer aiIdx : amenities) {
+				roomMapper.insertRoomAmenity(siId, riId, aiIdx);
+			}
+		}
+
+		return riId;
+	}
+
+	// RoomMapper.xml (등록 부분 발췌)
+ 	<!-- admin 객실 등록 -->
+	<insert id="insertRoom" parameterType="com.hotel.domain.RoomVO">
+		<!-- siId에서 riId 최대값+1 조회 -->
+		<selectKey keyProperty="riId" resultType="int"
+			order="BEFORE">
+			SELECT NVL(MAX(ri_id), 0) + 1
+			FROM t_room_info
+			WHERE si_id =
+			#{siId}
+		</selectKey>
+
+		INSERT INTO t_room_info (
+		si_id, ri_id, ri_type, ri_name, ri_desc,
+		ri_person,
+		ri_maxperson,
+		ri_area, ri_bed, ri_bedcnt,
+		ri_price,
+		ri_bedroom,
+		ri_bathroom, ri_show,
+		ri_delete, ri_date
+		) VALUES (
+		#{siId},
+		#{riId}, #{riType},
+		#{riName}, #{riDesc},
+		#{riPerson},
+		#{riMaxperson},
+		#{riArea}, #{riBed},
+		#{riBedcnt},
+		#{riPrice},
+		#{riBedroom},
+		#{riBathroom}, #{riShow},
+		#{riDelete},
+		SYSDATE
+		)
+	</insert>
+
+	<insert id="insertRoomFacility">
+		INSERT INTO t_room_facility_rel (si_id, ri_id, fi_id)
+		VALUES (#{siId}, #{riId}, #{fiId})
+	</insert>
+
+	<insert id="insertRoomAmenity">
+		INSERT INTO t_room_amenities (si_id, ri_id, ai_idx)
+		VALUES (#{siId}, #{riId}, #{aiIdx, jdbcType=INTEGER})
+	</insert>
+
+	<insert id="insertRoomPhoto"
+		parameterType="com.hotel.domain.RoomPhotoVO">
+		INSERT INTO t_room_photo (si_id, ri_id, sp_idx, sp_url)
+		VALUES (#{siId}, #{riId}, #{spIdx}, #{spUrl})
+	</insert>
+</details>
+
+##### 📌 설명
+
+- 연속 등록 UX: 숙소 등록 직후 siId를 유지해 객실/이미지로 자연스럽게 이동
+- 수정 진입 복원: riId가 있으면 선택된 편의시설/어메니티 체크 상태 복원
+- 관계 테이블 분리: 시설/어메니티는 매핑 테이블에 별도 INSERT
+
+##### 📝 화면/UX 포인트
+
+- 숙소 등록 폼: 지역/편의시설/키워드 선택 → 저장
+- 저장 직후: 같은 화면에서 newSiId 노출 → 객실 등록/이미지 업로드로 자연스럽게 이어감
+- 객실 등록 폼: 객실 유형/수용인원/침대/가격 + 편의시설/어메니티 다중 선택
+- 등록 후 리디렉트: siId,riId를 쿼리로 넘겨 이미지 업로드/추가 객실 등록 바로 진행
 
 <br>
 

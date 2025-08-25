@@ -509,6 +509,7 @@ public void uploadStayPhoto(int siId, Integer riId, int spIdx, MultipartFile fil
 <br>
 
 #### (2) 업로드 (수정)
+
 ```java
 // S3Uploader.java (수정)
 public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile file) throws IOException {
@@ -531,6 +532,7 @@ public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile fil
     }
 }
 ```
+
 <details>
 	<summery>Service & Mapper (자세히 보기)</summery>
 
@@ -618,37 +620,13 @@ public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile fil
 	</update>
  
 </details>
+
 ##### 📌 설명
 
 - 기존 spIdx 위치에 이미지가 있으면 UPDATE
 - 없으면 새 레코드를 INSERT
 - existsStayPhoto로 이미지 존재 여부 체크
 - 있으면 updateStayPhoto, 없으면 insertStayPhoto 수행
-
-<br>
-
-```java
-<!-- StayMapper.xml -->
-<select id="existsStayPhoto" parameterType="com.hotel.domain.PhotoVO" resultType="boolean">
-  SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
-  FROM t_stay_photo
-  WHERE si_id = #{siId} AND sp_idx = #{spIdx}
-    <choose>
-      <when test="riId == null">AND ri_id IS NULL</when>
-      <otherwise>AND ri_id = #{riId}</otherwise>
-    </choose>
-</select>
-
-<update id="updateStayPhoto" parameterType="com.hotel.domain.PhotoVO">
-  UPDATE t_stay_photo
-  SET sp_url = #{spUrl}
-  WHERE si_id = #{siId} AND sp_idx = #{spIdx}
-    <choose>
-      <when test="riId == null">AND ri_id IS NULL</when>
-      <otherwise>AND ri_id = #{riId}</otherwise>
-    </choose>
-</update>
-```
 
 
 <br>

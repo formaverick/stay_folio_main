@@ -133,7 +133,7 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 
 ### 👑 관리자(Admin)
 
-#### 1️⃣ 관리자 대시보드 (Chart.js 시각화)
+### 1️⃣ 관리자 대시보드 (Chart.js 시각화)
 > **예약/회원/지역 지표를 서버에서 집계해 JSP에서 Chart.js로 시각화**  
 
 - 관리자가 전체 현황을 한눈에 파악할 수 있는 대시보드 화면을 구현하기 위해 서버에서 통계를 집계한 후 JSP에서 Chart.js로 시각화했습니다.
@@ -147,21 +147,135 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 
 ###### 🧩 컨트롤러 (요약)
 ```java
+// AdminDashController.java
 @GetMapping("/dashboard")
-public String dashboard(Model model) {
-  model.addAttribute("stats", adminService.getReservationStats());
-  model.addAttribute("memberCount", adminService.getMemberReservationCount());
-  model.addAttribute("guestCount",  adminService.getGuestReservationCount());
-  model.addAttribute("regionStats", adminService.getRegionStayStats());
-  return "admin/dashboard";
+public String DashBoard(Model model) {
+	// 예약 현황 (총 예약 건수, 진행 중, 완료, 취소)
+	ReservationStatsDTO stats = adminService.getReservationStats();
+	// 회원, 비회원 예약 비율
+	Map<String, Integer> memberRatio = adminService.getMemberVsGuestRatio();
+	// 지역 별 숙소 현황
+	List<LocationCategoryVO> regionStats = adminService.getStayCountByRegion();
+
+	return "admin/adminDash";
 }
 ```
 
+###### 📊 adminDash.jsp (요약)
+```java
+<div class="admin-content"
+	style="margin-top: 40px; margin-bottom: 40px">
+	<div class="chart-grid">
+		<!-- 예약 현황 -->
+		<div class="chart-box">
+			<h2 style="margin-bottom: 16px">예약 현황</h2>
+			<canvas id="reservationChart" width="300" height="280"></canvas>
+		</div>
+		<!-- 예약 비율 -->
+		<div class="chart-box">
+			<h3 style="margin-bottom: 16px">회원 vs 비회원 예약 비율</h3>
+			<canvas id="memberGuestChart" width="250" height="250"></canvas>
+		</div>
+		<!-- 지역별 숙소 등록 -->
+		<div class="chart-box">
+			<h2 style="margin-bottom: 16px">지역별 숙소 등록 현황</h2>
+			<canvas id="regionChart" width="300" height="280"></canvas>
+		</div>
+	</div>
+</div>
+```
+<details>
+	<summary><b>Script(Chart.js) (자세히 보기)</b></summary>
+	<script>
+      document.addEventListener("DOMContentLoaded", function () {
+
+        // 예약 현황 (null-safe)
+        const total = ${stats.totalCount != null ? stats.totalCount : 0};
+        const inProgress = ${stats.inProgressCount != null ? stats.inProgressCount : 0};
+        const completed = ${stats.completedCount != null ? stats.completedCount : 0};
+        const canceled = ${stats.canceledCount != null ? stats.canceledCount : 0};
+
+        new Chart(document.getElementById("reservationChart"), {
+          type: "bar",
+          data: {
+            labels: ["총 예약", "진행 중", "완료", "취소"],
+            datasets: [{
+              label: "건수",
+              backgroundColor: ["#bbbbbb", "#888888", "#555555", "#dddddd"],
+              data: [total, inProgress, completed, canceled]
+            }]
+          },
+          options: {
+            responsive: true,
+            title: { display: true, text: "예약 현황 통계" },
+            legend: { display: false },
+            scales: {
+              yAxes: [{ ticks: { beginAtZero: true, precision: 0 } }]
+            }
+          }
+        });
+
+        // 회원/비회원
+        const member = ${memberCount != null ? memberCount : 0};
+        const guest = ${guestCount != null ? guestCount : 0};
+
+        console.log("member : ", member, "guest : ", guest);
+
+        new Chart(document.getElementById("memberGuestChart"), {
+          type: "doughnut",
+          data: {
+            labels: ["회원", "비회원"],
+            datasets: [{
+              data: [member, guest],
+              backgroundColor: ["#ccc", "#000"]
+            }]
+          },
+          options: {
+            responsive: true,
+            legend: { position: "bottom" }
+          }
+        });
+
+        // 지역별 숙소
+        const regionLabels = [
+          <c:forEach var="region" items="${regionStats}" varStatus="loop">
+            "${region.lcName}"<c:if test="${!loop.last}">,</c:if>
+          </c:forEach>
+        ];
+        const regionData = [
+          <c:forEach var="region" items="${regionStats}" varStatus="loop">
+            ${region.count}<c:if test="${!loop.last}">,</c:if>
+          </c:forEach>
+        ];
+
+        new Chart(document.getElementById("regionChart"), {
+          type: "bar",
+          data: {
+            labels: regionLabels,
+            datasets: [{
+              label: "숙소 개수",
+              backgroundColor: "#aaaaaa",
+              data: regionData
+            }]
+          },
+          options: {
+            responsive: true,
+            title: { display: true, text: "지역별 숙소 등록 통계" },
+            legend: { display: false },
+            scales: {
+              yAxes: [{ ticks: { beginAtZero: true, precision: 0 } }]
+            }
+          }
+        });
+
+      });
+    </script>
+</details>
+
 <br>
-<hr>
 <br>
 
-#### 2️⃣ 숙소/객실 이미지 업로드 (AWS S3 연동)
+### 2️⃣ 숙소/객실 이미지 업로드 (AWS S3 연동)
 
 <p align="center">
   <table>
@@ -383,7 +497,6 @@ public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile fil
 - 있으면 updateStayPhoto, 없으면 insertStayPhoto 수행
 
 <br>
-<hr>
 <br>
 
 

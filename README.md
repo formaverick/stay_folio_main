@@ -141,12 +141,28 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 
 <br>
 
+-------------
+
+<br>
+
 #### 2️⃣ 숙소/객실 이미지 업로드 (AWS S3 연동)
 
-| 이미지 등록 화면 | 이미지 등록 완료 화면 |
-|----------------|------------------|
-| <img src="https://github.com/user-attachments/assets/3b7fa887-b9b6-48c7-9bae-3bc2adae8576" width="400"/> | <img src="https://github.com/user-attachments/assets/4c1ec916-65ab-47b4-b872-cd8a08c51729" width="400"/> |
-
+<p align="center">
+  <table>
+    <tr>
+      <th style="text-align:center;">이미지 등록 화면</th>
+      <th style="text-align:center;">이미지 등록 완료 화면</th>
+    </tr>
+    <tr>
+      <td align="center">
+        <img src="https://github.com/user-attachments/assets/3b7fa887-b9b6-48c7-9bae-3bc2adae8576" width="450"/>
+      </td>
+      <td align="center">
+        <img src="https://github.com/user-attachments/assets/4c1ec916-65ab-47b4-b872-cd8a08c51729" width="450"/>
+      </td>
+    </tr>
+  </table>
+</p>
 
 > **숙소/객실 이미지 업로드·수정**을 AWS S3에 저장하고, 업로드된 경로를 DB에 반영합니다.  
 > 업로드 키는 `stay/{siId}/{riId?}/{UUID}` 규칙으로 관리되어 충돌 없이 안전하게 저장됩니다.
@@ -184,6 +200,10 @@ sequenceDiagram
 
 <br>
 
+-------------
+
+<br>
+
 ##### 🧱 핵심 코드
 
 ###### 🌐 AWS 연결 설정
@@ -216,6 +236,10 @@ public class AwsConfig {
 
 - AWS S3 접근을 위한 _AmazonS3 Bean_ 등록
 - application.properties에 저장된 액세스 키 / 시크릿 키 / 리전 정보를 불러와 인증
+  
+<br>
+-------------
+<br>
 
 #### (1) 업로드 (등록)
 ```java
@@ -285,6 +309,10 @@ public void uploadStayPhoto(int siId, Integer riId, int spIdx, MultipartFile fil
 ##### 📌 설명
 
 - 업로드된 이미지 정보를 t_stay_photo 테이블에 저장
+
+<br>
+
+-------------
 
 <br>
 

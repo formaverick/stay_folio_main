@@ -19,8 +19,6 @@
 
 - [핵심 기능]()
 
-- [주요기능 실행화면]()
-
 <br>
 
 ---
@@ -650,7 +648,7 @@ public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile fil
     </tr>
     <tr>
       <td align="center">
-		  <img width="550" alt="admin_stay_add" src="https://github.com/user-attachments/assets/f9cd2943-375e-437e-ae6f-69e1e2263227" />
+		  <img width="650" alt="admin_stay_add" src="https://github.com/user-attachments/assets/f9cd2943-375e-437e-ae6f-69e1e2263227" />
       </td>
       <td align="center">
 		<img width="250" src="https://github.com/user-attachments/assets/a985b053-1582-4e69-aac9-7d72e5569307" />
@@ -660,6 +658,10 @@ public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile fil
 </p>
 
 https://github.com/user-attachments/assets/ffee1a38-0baa-4da0-9752-4d8f830fdf26
+
+
+https://github.com/user-attachments/assets/44975120-63ce-45b0-961c-b26e430d0eda
+
 
 > **숙소 기본정보/상세/편의시설/키워드 등록 → 즉시 객실 등록 화면으로 이동**  
 > 폼 제출 후 마지막 `siId`를 바인딩해 **연속 등록(숙소 → 객실 → 이미지)** 흐름을 지원합니다.

@@ -12,10 +12,12 @@
 ## 목차
 
 - [개요]()
+  
+- [프로젝트 목표]()
 
 - [기술 스택]()
 
-- [프로젝트 설계](https://github.com/Spring-team-Project2025/stay_folio_main)
+- [프로젝트 설계]()
 
 - [핵심 기능]()
 

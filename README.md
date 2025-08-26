@@ -141,6 +141,8 @@ StayFolio 스타일의 **숙박 예약 웹 애플리케이션**으로,
 
 <p align="center"> <img src="https://github.com/user-attachments/assets/62bc8c27-e34e-47fb-91ad-6def4bf40224" width="700" alt="관리자 대시보드 화면" /> </p>
 
+https://github.com/user-attachments/assets/0f5893e5-7e0a-46d0-963d-b936e676c879
+
 - 관리자가 전체 현황을 한눈에 파악할 수 있는 대시보드 화면을 구현하기 위해 서버에서 통계를 집계한 후 JSP에서 Chart.js로 시각화했습니다.
 - 서버에서 가공한 통계를 JSP에서 JSTL로 안전하게 출력하여 차트를 구성했습니다.
 - 집계 지표: 총 예약 / 진행 / 완료 / 취소  
@@ -656,6 +658,8 @@ public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile fil
     </tr>
   </table>
 </p>
+
+https://github.com/user-attachments/assets/ffee1a38-0baa-4da0-9752-4d8f830fdf26
 
 > **숙소 기본정보/상세/편의시설/키워드 등록 → 즉시 객실 등록 화면으로 이동**  
 > 폼 제출 후 마지막 `siId`를 바인딩해 **연속 등록(숙소 → 객실 → 이미지)** 흐름을 지원합니다.
@@ -1244,16 +1248,389 @@ sequenceDiagram
 
 ##### 🧱 핵심 코드
 
-<br><br>
+###### 🧩숙소 수정 — StayServiceImpl.java (요약)
+```java
+	// admin - 숙소 기본 정보 수정
+	@Override
+	public void updateStay(StayVO stay) {
+		stayMapper.updateStay(stay);
+	}
 
-## 🖼 주요 기능 실행화면
+	// admin - 숙소 상세 정보 수정
+	@Override
+	public void updateStayDetail(StayDetailVO detail) {
+		stayMapper.updateStayDetail(detail);
+	}
 
-### 1️⃣ 관리자 대시보드 (Chart.js 시각화)
+	// admin - 숙소 편의 시설 수정
+	@Override
+	public void updateStayFacilities(int siId, List<Integer> facilityIds) {
+		// null이면 skip, 선택 전부 해지했을 경우
+		if (facilityIds == null || facilityIds.isEmpty()) {
+			System.out.println("❗ 시설 선택 없음");
+			stayMapper.deleteFacilitiesByStayId(siId); // 기존 것만 삭제
+			return;
+		}
 
-https://github.com/user-attachments/assets/0f5893e5-7e0a-46d0-963d-b936e676c879
+		// 먼저 기존 데이터 삭제
+		stayMapper.deleteFacilitiesByStayId(siId);
 
-### 2️⃣ 숙소/객실 등록
+		// 다시 insert
+		for (Integer fiId : facilityIds) {
+			stayMapper.insertFacilityRel(siId, fiId);
+		}
+	}
+```
 
-https://github.com/user-attachments/assets/ffee1a38-0baa-4da0-9752-4d8f830fdf26
+<details> 
+	<summary><b>숙소 수정 Controller (자세히 보기)</b></summary> 
 
+	// StayUpdateController.java (발췌)
+ 	// 숙소 수정 페이지
+	@GetMapping("/form")
+	public String showUpdateForm(@RequestParam("siId") int siId, Model model) {
+		StayVO stay = stayService.getStayInfo(siId);
+		StayDetailVO stayDetail = stayService.getStayDetail(siId);
+		List<FacilityVO> allFacilities = stayService.getAllFacilities();
+		List<FacilityVO> checkedFacilities = stayService.getFacilitiesByStayId(siId); // 선택된 것
+
+		Map<Integer, PhotoVO> photoMap = stayService.getAllStayPhotos(siId).stream()
+				.collect(Collectors.toMap(PhotoVO::getSpIdx, photo -> photo, (oldVal, newVal) -> oldVal));
+
+		// 선택된 시설들의 fiId만 추출
+		List<Integer> selectedFacilityIds = checkedFacilities.stream().map(FacilityVO::getFiId)
+				.collect(Collectors.toList());
+		
+		// 키워드
+		var allKeyword = stayService.getAllKeywords();
+	    var selectedKeywordIds = stayService.getKeywordIdsByStayId(siId);
+
+		model.addAttribute("stay", stay);
+		model.addAttribute("detail", stayDetail);
+		model.addAttribute("locationList", stayService.getAllLocations());
+		model.addAttribute("allFacilities", allFacilities);
+		model.addAttribute("selectedFacilityIds", selectedFacilityIds);
+		model.addAttribute("allKeyword", allKeyword);
+	    model.addAttribute("selectedKeywordIds", selectedKeywordIds);
+		model.addAttribute("photoMap", photoMap);
+		return "admin/room/stayUpdateForm";
+	}
+
+	// 숙소 수정
+	@PostMapping("/update")
+	public String updateStay(@ModelAttribute StayVO stay, @ModelAttribute StayDetailVO detail,
+			@RequestParam(value = "facilityIds", required = false) List<Integer> facilityIds,
+			@RequestParam(value = "keywordIds", required = false) List<Integer> keywordIds,
+			@RequestParam Map<String, MultipartFile> fileMap, RedirectAttributes rttr) throws IOException {
+
+		// 기본 숙소 정보
+		stayService.updateStay(stay);
+
+		// 상세 정보
+		detail.setSiId(stay.getSiId());
+		stayService.updateStayDetail(detail);
+
+		// 편의시설
+		stayService.updateStayFacilities(stay.getSiId(), facilityIds);
+		
+		// 키워드
+	    stayService.updateStayKeywords(stay.getSiId(), keywordIds);
+
+		// 이미지 파일 처리
+		for (Map.Entry<String, MultipartFile> entry : fileMap.entrySet()) {
+			String key = entry.getKey();
+			if (key.startsWith("replaceImage_")) {
+				int spIdx = Integer.parseInt(key.replace("replaceImage_", ""));
+				MultipartFile file = entry.getValue();
+				if (!file.isEmpty()) {
+					s3Uploader.updateStayImage(stay.getSiId(), null, spIdx, file);
+				}
+			}
+		}
+		
+		// 숙소 id 반환
+		rttr.addAttribute("siId", stay.getSiId());
+		
+		return "redirect:/admin/stay/detail";
+	}
+ 	
+</details>
+
+<details> 
+	<summary><b>숙소 수정 Service & Mapper (자세히 보기)</b></summary> 
+
+	// StayServiceImpl.java (발췌)
+ 	// admin - 숙소 기본 정보 수정
+	@Override
+	public void updateStay(StayVO stay) {
+		stayMapper.updateStay(stay);
+	}
+
+	// admin - 숙소 상세 정보 수정
+	@Override
+	public void updateStayDetail(StayDetailVO detail) {
+		stayMapper.updateStayDetail(detail);
+	}
+
+	// admin - 숙소 편의 시설 수정
+	@Override
+	public void updateStayFacilities(int siId, List<Integer> facilityIds) {
+		// null이면 skip, 선택 전부 해지했을 경우
+		if (facilityIds == null || facilityIds.isEmpty()) {
+			System.out.println("❗ 시설 선택 없음");
+			stayMapper.deleteFacilitiesByStayId(siId); // 기존 것만 삭제
+			return;
+		}
+
+		// 먼저 기존 데이터 삭제
+		stayMapper.deleteFacilitiesByStayId(siId);
+
+		// 다시 insert
+		for (Integer fiId : facilityIds) {
+			stayMapper.insertFacilityRel(siId, fiId);
+		}
+	}
+
+	// admin 숙소 상세페이지 - 키워드
+	@Override
+	public List<RecommendCategoryVO> getKeywordByStayId(int siId) {
+		return stayMapper.getKeywordByStayId(siId);
+	}
+
+	// admin - 숙소 id로 키워드 추가, 삭제
+	@Override
+	public List<RecommendCategoryVO> getAllKeywords() {
+		return stayMapper.getAllKeywords();
+	}
+
+	// StayMapper.xml (발췌)
+ 	<update id="updateStay">
+		UPDATE t_stay_info
+		SET
+		si_name = #{siName},
+		si_loca =
+		#{siLoca},
+		si_desc = #{siDesc},
+		si_minperson = #{siMinperson},
+		si_maxperson = #{siMaxperson},
+		si_minprice = #{siMinprice},
+		si_extra =
+		#{siExtra},
+		si_peak = #{siPeak},
+		si_off = #{siOff},
+		si_discount =
+		#{siDiscount},
+		si_show = #{siShow}
+		WHERE si_id = #{siId}
+	</update>
+
+	<update id="updateStayDetail">
+		UPDATE t_stay_info_detail
+		SET
+		si_notice = #{siNotice},
+		si_desc1 = #{siDesc1},
+		si_desc2 = #{siDesc2},
+		si_feat1 = #{siFeat1},
+		si_feat2 = #{siFeat2},
+		si_address = #{siAddress},
+		si_addrdesc =
+		#{siAddrdesc},
+		si_phone = #{siPhone},
+		si_email =
+		#{siEmail},
+		si_instagram
+		= #{siInstagram},
+		si_bizname = #{siBizname},
+		si_biznum = #{siBiznum},
+		si_ceo = #{siCeo},
+		si_pet = #{siPet},
+		si_parking = #{siParking},
+		si_food
+		= #{siFood},
+		si_checkin =
+		#{siCheckin},
+		si_checkout = #{siCheckout},
+		si_feat_title1 =
+		#{siFeatTitle1},
+		si_feat_title2 = #{siFeatTitle2}
+		WHERE
+		si_id = #{siId}
+	</update>
+
+	<delete id="deleteFacilitiesByStayId">
+		DELETE FROM t_stay_facility_rel WHERE si_id = #{siId}
+	</delete>
+
+	<insert id="insertFacility">
+		INSERT INTO t_stay_facility_rel (si_id, fi_id)
+		VALUES
+		(#{siId}, #{fiId})
+	</insert>
+
+	<select id="existsStayPhoto" resultType="boolean"
+		parameterType="com.hotel.domain.PhotoVO">
+		SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END
+		FROM t_stay_photo
+		WHERE
+		si_id = #{siId}
+		AND sp_idx = #{spIdx}
+		<choose>
+			<when test="riId == null">
+				AND ri_id IS NULL
+			</when>
+			<otherwise>
+				AND ri_id = #{riId}
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<update id="updateStayPhoto"
+		parameterType="com.hotel.domain.PhotoVO">
+		UPDATE t_stay_photo
+		SET sp_url = #{spUrl}
+		WHERE si_id = #{siId}
+		AND
+		sp_idx = #{spIdx}
+		<choose>
+			<when test="riId == null">
+				AND ri_id IS NULL
+			</when>
+			<otherwise>
+				AND ri_id = #{riId}
+			</otherwise>
+		</choose>
+	</update>
+
+
+	<!-- 숙소 키워드 목록 조회 -->
+	<select id="getKeywordByStayId"
+		resultType="com.hotel.domain.RecommendCategoryVO">
+		SELECT re.rc_id AS rcId, re.rc_name AS rcName
+		FROM
+		t_recommend_category re
+		JOIN
+		t_stay_recommend sre ON re.rc_id =
+		sre.rc_id
+		WHERE sre.si_id = #{siId} AND re.rc_name IS NOT NULL
+	</select>
+
+	<!-- 전체 키워드(추천 카테고리) -->
+	<select id="getAllKeywords"
+		resultType="com.hotel.domain.RecommendCategoryVO">
+		SELECT rc_id AS rcId, rc_name AS rcName
+		FROM t_recommend_category
+		WHERE rc_name IS NOT NULL
+		ORDER BY rc_name
+	</select>
+
+	<!-- 숙소에 이미 선택된 키워드 ID들 -->
+	<select id="getKeywordIdsByStayId" parameterType="int"
+		resultType="int">
+		SELECT rc_id
+		FROM t_stay_recommend
+		WHERE si_id = #{siId}
+	</select>
+
+	<!-- 숙소의 기존 키워드 관계 삭제 -->
+	<delete id="deleteKeywordsByStayId" parameterType="int">
+		DELETE FROM t_stay_recommend
+		WHERE si_id = #{siId}
+	</delete>
+
+ 	<!-- 키워드 추가 (단건) -->
+ 	<insert id="insertKeywordForStay">
+ 		INSERT INTO t_stay_recommend (rc_id, si_id)
+ 		VALUES (#{rcId}, #{siId})
+ 	</insert>
+</details>
+
+##### 📌 설명 — StayServiceImpl.java
+
+- updateStay, updateStayDetail는 각각 t_stay_info, t_stay_info_detail을 직접 UPDATE해 기본/상세 정보를 갱신합니다.
+
+- updateStayFacilities는 체크박스 동기화를 위해 RESET(전체 삭제 → 선택값 재삽입) 전략을 사용합니다.
+
+- 전달된 목록이 null/빈 배열이면 모두 해제(DELETE만 수행) 되어 UI와 DB가 일치합니다.
+
+- 중복/유실을 방지하고 일관성을 보장하기 위한 패턴입니다.
+
+<br>
+
+###### 🧩객실 수정 — RoomServiceImpl.java (요약)
+```java
+	@Override
+	public void updateRoomFacilities(int siId, int riId, List<Integer> facilityIds) {
+		// 선택 전부 해지했을 경우
+		if (facilityIds == null || facilityIds.isEmpty()) {
+			System.out.println("❗ 시설 선택 없음");
+			roomMapper.deleteFacilitiesByRoomId(siId, riId); // 기존 것만 삭제
+			return;
+		}
+
+		// 먼저 기존 데이터 삭제
+		roomMapper.deleteFacilitiesByRoomId(siId, riId);
+
+		// 다시 insert
+		for (Integer fiId : facilityIds) {
+			roomMapper.insertRoomFacility(siId, riId, fiId);
+		}
+
+	}
+```
+
+##### 📌 설명 — RoomServiceImpl.java
+
+- 객실 편의시설도 숙소와 동일하게 DELETE → INSERT 방식으로 완전 동기화합니다.
+
+- 목록이 없으면 해당 객실의 기존 매핑을 전부 삭제해 “전부 해제” 상태를 반영합니다.
+
+- siId + riId 기준으로 매핑을 재구성해 중복/누락을 예방합니다.
+
+- 등록/수정 폼 재사용 시에도 결과가 항상 결정적(idempotent) 이라 유지보수가 쉽습니다.
+
+<br>
+
+###### 🧩이미지 수정 - S3Uploader.java (요약)
+```java
+	// 숙소 이미지 수정
+	public void updateStayImage(int siId, Integer riId, int spIdx, MultipartFile file) throws IOException {
+		String fileName = "stay/" + siId + "/" + UUID.randomUUID();
+		ObjectMetadata metadata = new ObjectMetadata();
+		metadata.setContentType(file.getContentType());
+		metadata.setContentDisposition("inline");
+		metadata.setContentLength(file.getSize());
+
+		PutObjectRequest request = new PutObjectRequest(bucket, fileName, file.getInputStream(), metadata);
+		amazonS3.putObject(request); // S3에 업로드
+
+		PhotoVO photo = new PhotoVO();
+		photo.setSiId(siId);
+		photo.setRiId(riId);
+		photo.setSpIdx(spIdx);
+		photo.setSpUrl(fileName);
+
+		System.out.println("PhotoVO riId: " + photo.getRiId());
+
+		boolean exists = stayMapper.existsStayPhoto(photo); // 이미지 존재 여부 확인
+
+		System.out.println("이미지 존재 여부: " + stayMapper.existsStayPhoto(photo));
+
+		if (exists) {
+			stayMapper.updateStayPhoto(photo); // UPDATE
+		} else {
+			stayMapper.insertStayPhoto(photo); // 비어있을 경우 INSERT
+		}
+	}
+```
+
+##### 📌 설명 — S3Uploader.java
+
+- stay/{siId}/{UUID} 키로 업로드하여 파일명이 충돌 없이 고유해집니다(버전 관리 용이).
+
+- Content-Type/Length 등을 ObjectMetadata에 설정해 정상 미디어 응답을 보장합니다.
+
+- 업로드 후 해당 위치(siId, spIdx, riId?)에 기존 레코드가 있으면 UPDATE, 없으면 INSERT 처리합니다.
+
+- 기존 S3 객체는 삭제하지 않으므로 필요 시 정리(batch/TTL) 정책을 추가하면 좋습니다.
 

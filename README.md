@@ -1,4 +1,4 @@
-# STAYPOLIO 스타일 숙소 사이트 웹구현 프로젝트
+# STAYFOLIO 스타일 숙소 사이트 웹구현 프로젝트
 
 <p align="center">
   <img width="800" alt="메인화면" src="https://github.com/user-attachments/assets/caba1a57-4232-479f-b5cd-48f96938d591" />
